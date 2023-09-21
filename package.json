@@ -11,7 +11,27 @@
   },
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "@styled-system/theme-get": "^5.1.2",
+    "@vitejs/plugin-react": "^4.0.4",
+    "chart.js": "^2.9.4",
+    "clsx": "^1.1.1",
+    "date-fns": "^2.21.1",
+    "formik": "^2.2.6",
+    "lodash": "^4.17.20",
+    "nprogress": "^0.2.0",
+    "pure-react-carousel": "^1.27.6",
+    "react-bootstrap": "^2.8.0",
+    "react-chartjs-2": "^2.11.1",
+    "react-dropzone": "^11.2.4",
+    "react-paginate": "^7.0.0",
+    "react-router-dom": "^6.4.3",
+    "react-scroll": "^1.8.2",
+    "react-select": "^3.1.1",
+    "react-svg": "^11.2.1",
+    "styled-components": "^5.2.1",
+    "styled-system": "^5.1.5",
+    "yup": "^0.32.8"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

@@ -13,7 +13,12 @@ import Sticky from "../sticky/Sticky";
 import Topbar from "../topbar/Topbar";
 import { Helmet } from "react-helmet";
 
-const CustomerDashboardLayout: React.FC = ({
+type Props = {
+  title?: string;
+};
+
+
+const CustomerDashboardLayout: React.FC<Props> = ({
   title = "Latipe",
 }) => (
   <StyledAppLayout>

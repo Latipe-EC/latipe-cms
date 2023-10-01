@@ -6,6 +6,7 @@ import Topbar from "../topbar/Topbar";
 import React from "react";
 import StyledAppLayout from "./AppLayoutStyle";
 import { Helmet } from "react-helmet";
+import { Outlet } from "react-router-dom";
 
 type Props = {
   title?: string;
@@ -14,7 +15,6 @@ type Props = {
 };
 
 const AppLayout: React.FC<Props> = ({
-  children,
   navbar,
   title = "Latipe",
 }) => (
@@ -33,9 +33,9 @@ const AppLayout: React.FC<Props> = ({
 
     {navbar && <div className="section-after-sticky">{navbar}</div>}
     {!navbar ? (
-      <div className="section-after-sticky">{children}</div>
+      <div className="section-after-sticky"> <Outlet /></div>
     ) : (
-      children
+      <Outlet />
     )}
 
     <MobileNavigationBar />

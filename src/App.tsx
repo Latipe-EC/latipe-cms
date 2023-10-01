@@ -5,7 +5,7 @@ import { AppProvider } from './contexts/app/AppContext';
 import AppLayout from './components/layout/AppLayout';
 import { theme } from './utils/theme';
 import { lazy } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Outlet } from 'react-router-dom';
 import VendorDashboardLayout from './components/layout/VendorDashboardLayout';
 import CustomerDashboardLayout from './components/layout/CustomerDashboardLayout';
 import NavbarLayout from './components/layout/NavbarLayout';
@@ -101,10 +101,8 @@ function App() {
           <Routes>
 
             {/* <AppLayout> */}
-            <Route path="/" element={
-              <AppLayout />
-            }>
-              <Route path="" element={<IndexPage />} />
+            <Route path="/" element={<AppLayout />}>
+              <Route index element={<IndexPage />} />
               <Route path="about" element={<AboutPage />} />
               <Route path="cart" element={<Cart />} />
               <Route path="checkout-alternative" element={<CheckoutAlternative />} />
@@ -120,8 +118,6 @@ function App() {
               <Route path="sale-page-2" element={<SalePage2 />} />
               <Route path="shops" element={<ShopList />} />
               <Route path="signup" element={<SignUpPage />} />
-
-
               <Route path="*" element={<Error404 />} />
             </Route>
 
@@ -143,12 +139,11 @@ function App() {
               <Route path="" element={<TicketList />} />
             </Route>
 
+
             {/* Profile */}
-            <Route path="/profile/" element={
-              <CustomerDashboardLayout />
-            }>
-              <Route path="" element={<Profile />} />
-              <Route path="edit" element={ <ProfileEditor /> } />
+            <Route path="/profile/" element={<CustomerDashboardLayout />}>
+              <Route index element={<Profile />} />
+              <Route path="edit" element={<ProfileEditor />} />
             </Route>
 
             <Route path="/" element={
@@ -162,6 +157,9 @@ function App() {
               <Route path="wish-list" element={<WishList />} />
 
             </Route>
+
+
+
             {/* Vendor */}
             <Route path="/vendor/" element={
               <VendorDashboardLayout />

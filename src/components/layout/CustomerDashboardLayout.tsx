@@ -5,8 +5,9 @@ import Hidden from "../hidden/Hidden";
 import Navbar from "../navbar/Navbar";
 import CustomerDashboardNavigation from "./CustomerDashboardNavigation";
 import AppLayout from "./AppLayout";
+import { Outlet } from "react-router-dom";
 
-const CustomerDashboardLayout: React.FC = ({ children }: any) => (
+const CustomerDashboardLayout: React.FC = () => (
   <AppLayout navbar={<Navbar />}>
     <Container my="2rem">
       <Grid container spacing={6}>
@@ -14,7 +15,7 @@ const CustomerDashboardLayout: React.FC = ({ children }: any) => (
           <CustomerDashboardNavigation />
         </Hidden>
         <Grid item lg={9} xs={12}>
-          {children}
+        <Outlet />
         </Grid>
       </Grid>
     </Container>

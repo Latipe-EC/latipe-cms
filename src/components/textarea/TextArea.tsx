@@ -22,8 +22,8 @@ const TextArea: React.FC<TextAreaProps> = ({
   ...props
 }: TextAreaProps) => {
   // extract spacing props
-  let spacingProps = {};
-  let otherProps = {};
+  const spacingProps = {};
+  const otherProps = {};
 
   for (const key in props) {
     if (key.startsWith("m") || key.startsWith("p"))

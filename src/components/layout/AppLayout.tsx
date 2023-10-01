@@ -5,24 +5,25 @@ import Sticky from "../sticky/Sticky";
 import Topbar from "../topbar/Topbar";
 import React from "react";
 import StyledAppLayout from "./AppLayoutStyle";
+import { Helmet } from "react-helmet";
 
 type Props = {
   title?: string;
-  navbar?: React.ReactChild;
-  children?: any;
+  navbar?: React.ReactNode;
+  children?: React.ReactNode;
 };
 
 const AppLayout: React.FC<Props> = ({
   children,
   navbar,
-  title = "React Next.js Ecommerce Template",
+  title = "Latipe",
 }) => (
   <StyledAppLayout>
-    <header>
+    <Helmet>
       <title>{title}</title>
       <meta charSet="utf-8" />
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-    </header>
+    </Helmet>
 
     <Topbar />
 

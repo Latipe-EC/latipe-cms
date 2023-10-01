@@ -44,7 +44,7 @@ const Topbar: React.FC = () => {
           </FlexBox>
           <FlexBox alignItems="center" ml="20px">
             <Icon size="14px">mail</Icon>
-            <span>support@ui-lib.com</span>
+            <span>support@latipe.com</span>
           </FlexBox>
         </FlexBox>
         <FlexBox className="topbar-right" alignItems="center">

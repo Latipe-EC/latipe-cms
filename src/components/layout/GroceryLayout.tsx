@@ -4,23 +4,22 @@ import Navbar2 from "../navbar/Navbar2";
 import Sticky from "../sticky/Sticky";
 import React from "react";
 import StyledAppLayout from "./AppLayoutStyle";
-
+import { Helmet } from "react-helmet";
+import { Outlet } from "react-router-dom";
 type Props = {
   title?: string;
   navbar?: React.ReactChild;
-  children?: any;
 };
 
 const GroceryLayout: React.FC<Props> = ({
-  children,
-  title = "React Next.js Ecommerce Template",
+  title = "Latipe",
 }) => (
   <StyledAppLayout>
-    <header>
+    <Helmet>
       <title>{title}</title>
       <meta charSet="utf-8" />
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-    </header>
+    </Helmet>
 
     <Sticky fixedOn={0}>
       <GroceryHeader />
@@ -30,7 +29,7 @@ const GroceryLayout: React.FC<Props> = ({
       <Navbar2 />
     </div>
 
-    {children}
+    <Outlet />
 
     <MobileNavigationBar />
   </StyledAppLayout>

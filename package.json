@@ -10,8 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "@styled-system/theme-get": "^5.1.2",
     "@vitejs/plugin-react": "^4.0.4",
     "chart.js": "^2.9.4",
@@ -21,9 +19,12 @@
     "lodash": "^4.17.20",
     "nprogress": "^0.2.0",
     "pure-react-carousel": "^1.27.6",
+    "react": "^18.2.0",
     "react-bootstrap": "^2.8.0",
     "react-chartjs-2": "^2.11.1",
+    "react-dom": "^18.2.0",
     "react-dropzone": "^11.2.4",
+    "react-helmet": "^6.1.0",
     "react-paginate": "^7.0.0",
     "react-router-dom": "^6.4.3",
     "react-scroll": "^1.8.2",
@@ -43,6 +44,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
     "typescript": "^5.0.2",
+    "@types/styled-system": "^5.1.10",
     "vite": "^4.4.5"
   }
 }

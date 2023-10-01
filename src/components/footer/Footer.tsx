@@ -9,6 +9,7 @@ import FlexBox from "../FlexBox";
 import Grid from "../grid/Grid";
 import Icon from "../icon/Icon";
 import Typography, { Paragraph } from "../Typography";
+import './Footer.css';
 
 const StyledLink = styled.a`
   position: relative;
@@ -95,13 +96,13 @@ const Footer: React.FC = () => {
                   Contact Us
                 </Typography>
                 <Typography py="0.3rem" color="gray.500">
-                  70 Washington Square South, New York, NY 10012, United States
+                  NUMBER 1 VVN, THU DUC CITY, HO CHI MINH CITY, VIETNAM
                 </Typography>
                 <Typography py="0.3rem" color="gray.500">
-                  Email: uilib.help@gmail.com
+                  Email: support.help@latipe.com
                 </Typography>
                 <Typography py="0.3rem" mb="1rem" color="gray.500">
-                  Phone: +1 1123 456 780
+                  Phone: +84 123 456 789
                 </Typography>
 
                 <FlexBox className="flex" mx="-5px">

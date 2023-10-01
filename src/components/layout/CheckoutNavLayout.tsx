@@ -5,9 +5,9 @@ import Grid from "../grid/Grid";
 import Navbar from "../navbar/Navbar";
 import Stepper from "../stepper/Stepper";
 import AppLayout from "./AppLayout";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
-const CheckoutNavLayout: React.FC = ({ children }: any) => {
+const CheckoutNavLayout: React.FC = () => {
   const [selectedStep, setSelectedStep] = useState(0);
   const navigate = useNavigate();
   const pathname =window.location.pathname;
@@ -61,7 +61,7 @@ const CheckoutNavLayout: React.FC = ({ children }: any) => {
             </Grid>
           </Grid>
         </Box>
-        {children}
+        <Outlet />
       </Container>
     </AppLayout>
   );

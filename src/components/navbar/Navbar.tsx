@@ -24,7 +24,7 @@ interface Nav {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
-  const renderNestedNav = (list: any[], isRoot = false) => {
+  const renderNestedNav = (list: unknown[], isRoot = false) => {
     return list?.map((nav: Nav) => {
       if (isRoot) {
         if (nav.url && nav.extLink)

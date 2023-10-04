@@ -10,19 +10,51 @@ import Icon from "../icon/Icon";
 import TextField from "../text-field/TextField";
 import { H3, H5, H6, SemiSpan, Small, Span } from "../Typography";
 import { StyledSessionCard } from "./SessionStyle";
-import { useNavigate } from 'react-router-dom';
+import { useDispatch } from "react-redux";
+import { createAuthenticationToken } from "../../store/slices/auth-slice";
+import { AppThunkDispatch } from "store/store";
+import { toast } from "react-toastify";
+
 const Login: React.FC = () => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
-  const navigate = useNavigate();
 
   const togglePasswordVisibility = useCallback(() => {
     setPasswordVisibility((visible) => !visible);
   }, []);
+  const dispatch = useDispatch<AppThunkDispatch>();
 
   const handleFormSubmit = async (values) => {
-    navigate("/profile");
-    console.log(values);
-  };
+    const loadingToastId = toast.info('Logging...', {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: false,
+      hideProgressBar: true
+    });
+    dispatch(createAuthenticationToken({
+      username: values.email,
+      password: values.password
+    }))
+      .then((res) => {
+        toast.dismiss(loadingToastId)
+        if (!res.error) {
+          toast.success('Success Login !', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 1500
+          });
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 2000);
+        } else {
+          // handle error here
+          const error = res.error.message.includes('404') ? 'Wrong Email or Phone Number!' : 'Wrong password!';
+          toast.error(error, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 1500
+          });
+        }
+      })
+
+
+  }
 
   const {
     values,
@@ -146,21 +178,21 @@ const Login: React.FC = () => {
 
         <FlexBox justifyContent="center" mb="1.25rem">
           <SemiSpan>Don’t have account?</SemiSpan>
-            <a  href="/signup">
-              <H6 ml="0.5rem" borderBottom="1px solid" borderColor="gray.900">
-                Sign Up
-              </H6>
-            </a>
+          <a href="/signup">
+            <H6 ml="0.5rem" borderBottom="1px solid" borderColor="gray.900">
+              Sign Up
+            </H6>
+          </a>
         </FlexBox>
       </form>
 
       <FlexBox justifyContent="center" bg="gray.200" py="19px">
         <SemiSpan>Forgot your password?</SemiSpan>
-          <a href="/">
-            <H6 ml="0.5rem" borderBottom="1px solid" borderColor="gray.900">
-              Reset It
-            </H6>
-          </a>
+        <a href="/">
+          <H6 ml="0.5rem" borderBottom="1px solid" borderColor="gray.900">
+            Reset It
+          </H6>
+        </a>
       </FlexBox>
     </StyledSessionCard>
   );

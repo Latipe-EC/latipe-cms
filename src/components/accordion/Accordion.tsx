@@ -10,7 +10,7 @@ import { AccordionWrapper } from "./AccordionStyle";
 
 export interface AccordionProps {
   expanded?: boolean;
-  children: ReactElement[] | any;
+  children: ReactElement[] | unknown;
 }
 
 const Accordion: React.FC<AccordionProps> = ({
@@ -28,7 +28,7 @@ const Accordion: React.FC<AccordionProps> = ({
   };
 
   useEffect(() => {
-    let parent = ref.current;
+    const parent = ref.current;
 
     if (parent) {
       setHeaderHeight(parent.children[0].scrollHeight);

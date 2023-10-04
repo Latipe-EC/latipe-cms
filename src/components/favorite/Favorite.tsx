@@ -14,7 +14,7 @@ const Favorite: React.FC<FavoriteProps> = ({
   color,
   ...props
 }) => {
-  let id = Math.random().toString().split(".")[1];
+  const id = Math.random().toString().split(".")[1];
 
   return (
     <svg

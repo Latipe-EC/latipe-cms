@@ -10,7 +10,7 @@ import MenuItem from "../MenuItem";
 import TextField from "../text-field/TextField";
 import StyledSearchBox from "./SearchBoxStyle";
 
-export interface SearchBoxProps {}
+export interface SearchBoxProps { }
 
 const SearchBox: React.FC<SearchBoxProps> = () => {
   const [category, setCategory] = useState("All Categories");
@@ -55,6 +55,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
           fullwidth
           onChange={hanldeSearch}
         />
+
         <Menu
           className="category-dropdown"
           direction="right"

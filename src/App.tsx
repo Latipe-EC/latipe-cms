@@ -4,12 +4,13 @@ import { GlobalStyles } from './utils/globalStyles';
 import { AppProvider } from './contexts/app/AppContext';
 import AppLayout from './components/layout/AppLayout';
 import { theme } from './utils/theme';
-import { lazy } from 'react';
-import { BrowserRouter as Router, Route, Routes, Outlet } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import VendorDashboardLayout from './components/layout/VendorDashboardLayout';
 import CustomerDashboardLayout from './components/layout/CustomerDashboardLayout';
 import NavbarLayout from './components/layout/NavbarLayout';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // home pages
 const Address = lazy(() => import('./pages/address'));
@@ -59,6 +60,7 @@ const Error404 = lazy(() => import('./pages/404'));
 function App() {
   return (
     <ThemeProvider theme={theme}>
+      <ToastContainer />
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
@@ -96,88 +98,97 @@ function App() {
       </head>
       <GlobalStyles />
       <AppProvider>
-
         <Router>
-          <Routes>
-
-            {/* <AppLayout> */}
-            <Route path="/" element={<AppLayout />}>
-              <Route index element={<IndexPage />} />
-              <Route path="about" element={<AboutPage />} />
-              <Route path="cart" element={<Cart />} />
-              <Route path="checkout-alternative" element={<CheckoutAlternative />} />
-              <Route path="checkout" element={<Checkout />} />
-              <Route path="home-2" element={<Home2 />} />
-              <Route path="home-3" element={<Home3 />} />
-              <Route path="home-4" element={<Home4 />} />
-              <Route path="landing" element={<LandingPage />} />
-              <Route path="login" element={<LoginPage />} />
-              <Route path="mobile-category-nav" element={<MobileCategoryNav />} />
-              <Route path="payment" element={<CheckoutPage />} />
-              <Route path="sale-page-1" element={<SalePage1 />} />
-              <Route path="sale-page-2" element={<SalePage2 />} />
-              <Route path="shops" element={<ShopList />} />
-              <Route path="signup" element={<SignUpPage />} />
-              <Route path="*" element={<Error404 />} />
-            </Route>
-
-
-            {/* Navbar */}
-            <Route path="/" element={
-              <NavbarLayout />
-            }>
-              <Route path="products/:id" element={<ProductDetails />} />
-              <Route path="products/seach" element={<ProductSearchResult />} />
-              <Route path="shop/:id" element={<Shop />} />
-            </Route>
-
-            {/* Support Ticket */}
-            <Route path="/support-tickets/" element={
-              <CustomerDashboardLayout />
-            }>
-              <Route path=":id" element={<SupportTicketDetails />} />
-              <Route path="" element={<TicketList />} />
-            </Route>
+          <Suspense
+            fallback={
+              <div className="latipe-preloader-wrapper">
+                <div className="latipe-preloader">
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+            }
+          >
+            <Routes>
+              {/* <AppLayout> */}
+              <Route path="/" element={<AppLayout />}>
+                <Route index element={<IndexPage />} />
+                <Route path="about" element={<AboutPage />} />
+                <Route path="cart" element={<Cart />} />
+                <Route path="checkout-alternative" element={<CheckoutAlternative />} />
+                <Route path="checkout" element={<Checkout />} />
+                <Route path="home-2" element={<Home2 />} />
+                <Route path="home-3" element={<Home3 />} />
+                <Route path="home-4" element={<Home4 />} />
+                <Route path="landing" element={<LandingPage />} />
+                <Route path="login" element={<LoginPage />} />
+                <Route path="mobile-category-nav" element={<MobileCategoryNav />} />
+                <Route path="payment" element={<CheckoutPage />} />
+                <Route path="sale-page-1" element={<SalePage1 />} />
+                <Route path="sale-page-2" element={<SalePage2 />} />
+                <Route path="shops" element={<ShopList />} />
+                <Route path="signup" element={<SignUpPage />} />
+                <Route path="*" element={<Error404 />} />
+              </Route>
 
 
-            {/* Profile */}
-            <Route path="/profile/" element={<CustomerDashboardLayout />}>
-              <Route index element={<Profile />} />
-              <Route path="edit" element={<ProfileEditor />} />
-            </Route>
+              {/* Navbar */}
+              <Route path="/" element={
+                <NavbarLayout />
+              }>
+                <Route path="products/:id" element={<ProductDetails />} />
+                <Route path="products/seach" element={<ProductSearchResult />} />
+                <Route path="shop/:id" element={<Shop />} />
+              </Route>
 
-            <Route path="/" element={
-              <CustomerDashboardLayout />
-            }>
-              <Route path="address" element={<Address />} />
-              <Route path="orders" element={<Orders />} />
-              <Route path="orders/:id" element={<OrderDetails />} />
-              <Route path="payment-methods" element={<AddressList />} />
-              <Route path="payment-methods/add" element={<PaymentMethodEditor />} />
-              <Route path="wish-list" element={<WishList />} />
-
-            </Route>
-
+              {/* Support Ticket */}
+              <Route path="/support-tickets/" element={
+                <CustomerDashboardLayout />
+              }>
+                <Route path=":id" element={<SupportTicketDetails />} />
+                <Route path="" element={<TicketList />} />
+              </Route>
 
 
-            {/* Vendor */}
-            <Route path="/vendor/" element={
-              <VendorDashboardLayout />
-            }>
-              <Route path="dashboard" element={
-                <DashboardVendor />
-              }
-              />
-              <Route path="account-settings" element={<AccountSettings />} />
-              <Route path="add-product" element={<AddProduct />} />
-              <Route path="orders/:id" element={<OrderDetailsVendor />} />
-              <Route path="orders" element={<OrdersVendor />} />
-              <Route path="products/:id" element={<ProductDetailsVendor />} />
-              <Route path="products" element={<ProductsVendor />} />
-            </Route>
+              {/* Profile */}
+              <Route path="/profile/" element={<CustomerDashboardLayout />}>
+                <Route index element={<Profile />} />
+                <Route path="edit" element={<ProfileEditor />} />
+              </Route>
+
+              <Route path="/" element={
+                <CustomerDashboardLayout />
+              }>
+                <Route path="address" element={<Address />} />
+                <Route path="orders" element={<Orders />} />
+                <Route path="orders/:id" element={<OrderDetails />} />
+                <Route path="payment-methods" element={<AddressList />} />
+                <Route path="payment-methods/add" element={<PaymentMethodEditor />} />
+                <Route path="wish-list" element={<WishList />} />
+
+              </Route>
 
 
-          </Routes>
+
+              {/* Vendor */}
+              <Route path="/vendor/" element={
+                <VendorDashboardLayout />
+              }>
+                <Route path="dashboard" element={
+                  <DashboardVendor />
+                }
+                />
+                <Route path="account-settings" element={<AccountSettings />} />
+                <Route path="add-product" element={<AddProduct />} />
+                <Route path="orders/:id" element={<OrderDetailsVendor />} />
+                <Route path="orders" element={<OrdersVendor />} />
+                <Route path="products/:id" element={<ProductDetailsVendor />} />
+                <Route path="products" element={<ProductsVendor />} />
+              </Route>
+
+
+            </Routes>
+          </Suspense>
         </Router>
 
       </AppProvider>

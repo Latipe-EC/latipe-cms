@@ -6,7 +6,7 @@ export interface AvatarProps extends BorderProps, ColorProps {
   src?: string;
   size?: number;
   children?: React.ReactNode;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 const Avatar: React.FC<AvatarProps> = ({ src, size, children, ...props }) => {

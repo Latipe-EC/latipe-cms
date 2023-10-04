@@ -66,28 +66,28 @@ const MegaMenu1: React.FC<MegaMenuProps> = ({
           </Box>
 
           {rightImage && (
-              <a href={rightImage.href}>
-                <Box position="relative" width="153px" height="100%">
-                  <LazyImage
-                    src={rightImage.imgUrl}
-                    layout="fill"
-                    objectFit="contain"
-                  />
-                </Box>
-              </a>
+            <a href={rightImage.href}>
+              <Box position="relative" width="153px" height="100%">
+                <LazyImage
+                  src={rightImage.imgUrl}
+                  layout="fill"
+                  objectFit="contain"
+                />
+              </Box>
+            </a>
           )}
         </FlexBox>
 
         {bottomImage && (
-            <a href={bottomImage.href}>
-              <Box position="relative" height="170px">
-                <LazyImage
-                  src={bottomImage.imgUrl}
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </Box>
-            </a>
+          <a href={bottomImage.href}>
+            <Box position="relative" height="170px">
+              <LazyImage
+                src={bottomImage.imgUrl}
+                layout="fill"
+                objectFit="cover"
+              />
+            </Box>
+          </a>
         )}
       </Card>
     </StyledMegaMenu1>

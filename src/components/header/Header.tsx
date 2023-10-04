@@ -14,6 +14,9 @@ import Sidenav from "../sidenav/Sidenav";
 import { Tiny } from "../Typography";
 import StyledHeader from "./HeaderStyle";
 import UserLoginDialog from "./UserLoginDialog";
+import MenuItem from "../MenuItem";
+import Menu from "../Menu";
+import { useNavigate } from "react-router-dom";
 
 type HeaderProps = {
   isFixed?: boolean;
@@ -25,6 +28,19 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
   const toggleSidenav = () => setOpen(!open);
   const { state } = useAppContext();
   const { cartList } = state.cart;
+  const navigate = useNavigate();
+  const REACT_STARTER_AUTH = JSON.parse(localStorage.getItem("REACT_STARTER_AUTH"));
+
+  const logout = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('REACT_STARTER_AUTH');
+    window.location.href = '/';
+  }
+
+  const redirect = (path: string) => {
+    navigate(path);
+  }
 
   const cartHandle = (
     <FlexBox ml="20px" alignItems="flex-start">
@@ -60,9 +76,9 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
         height="100%"
       >
         <FlexBox className="logo" alignItems="center" mr="1rem">
-            <a href="/">
-              <Image src="/assets/images/logo.svg" alt="logo" />
-            </a>
+          <a href="/">
+            <Image src="/assets/images/logo.svg" alt="logo" />
+          </a>
 
           {isFixed && (
             <div className="category-holder">
@@ -81,17 +97,41 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
         </FlexBox>
 
         <FlexBox className="header-right" alignItems="center">
-          <UserLoginDialog
-            handle={
-              <IconButton ml="1rem" bg="gray.200" p="8px">
-                <Icon size="28px">user</Icon>
-              </IconButton>
-            }
-          >
-            <Box>
-              <Login />
-            </Box>
-          </UserLoginDialog>
+          {REACT_STARTER_AUTH && REACT_STARTER_AUTH.isAuthenticated ?
+            <Menu
+              className="category-dropdown"
+              direction="right"
+              handler={
+                <IconButton ml="1rem" bg="gray.200" p="8px">
+                  <Icon size="28px">user</Icon>
+                </IconButton>
+              }
+            >
+              <MenuItem key="1" onClick={() => redirect("/profile")}>
+                My Account
+              </MenuItem>
+              <MenuItem key="2" onClick={() => redirect("/orders")} >
+                Orders
+              </MenuItem>
+              <MenuItem key="3" onClick={logout} >
+                Logout
+              </MenuItem>
+            </Menu>
+            :
+            <UserLoginDialog
+              handle={
+                <IconButton ml="1rem" bg="gray.200" p="8px">
+                  <Icon size="28px">user</Icon>
+                </IconButton>
+              }
+            >
+              <Box>
+                <Login />
+              </Box>
+            </UserLoginDialog>
+
+          }
+
 
           <Sidenav
             handle={cartHandle}

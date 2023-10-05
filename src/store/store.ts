@@ -6,6 +6,8 @@ import {
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import authReducer from './slices/auth-slice';
+import userReducer from './slices/user-slice';
+
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 const persistConfig = {
     key: 'latipe',
@@ -16,6 +18,7 @@ const persistConfig = {
 
 export const rootReducer = combineReducers({
     auth: authReducer,
+    user: userReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -1,4 +1,4 @@
-import { LoginRequest, LoginResponse, RefreshTokenInput, RefreshTokenResponse } from 'api/Interface';
+import { CreateUserAddressRequest, LoginRequest, LoginResponse, RefreshTokenInput, RefreshTokenResponse, UserAddressResponse } from 'api/Interface';
 import axios, {
     AxiosInstance,
     AxiosRequestConfig,
@@ -228,5 +228,20 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
             }),
     };
     users = {
+        /**
+  * No description
+  *
+  * @tags auth-controller
+  * @name AddMyAddress
+  * @request POST:/auth/refresh-token
+  */
+        addMyAddress: (data: CreateUserAddressRequest, params: RequestParams = {}) =>
+            this.request<UserAddressResponse, unknown>({
+                path: `/users/my-address`,
+                method: 'POST',
+                body: data,
+                type: ContentType.Json,
+                ...params,
+            }),
     }
 }

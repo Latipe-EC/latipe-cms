@@ -3,8 +3,9 @@ export interface RefreshTokenInput {
 }
 
 export interface RefreshTokenResponse {
-    refreshToken: string
-    accessToken: string
+    refreshToken: string,
+    accessToken: string,
+    detail?: string
 }
 
 export interface LoginResponse {
@@ -18,7 +19,8 @@ export interface LoginResponse {
     role: string,
     lastActiveAt: Date
     refreshToken: string
-    accessToken: string
+    accessToken: string,
+    detail?: string
 }
 
 export interface LoginRequest {
@@ -54,6 +56,7 @@ export interface UserAddressResponse {
     wardName: string
     countryId: number,
     countryName: string;
+    detail?: string,
 }
 
 export interface District {
@@ -64,7 +67,7 @@ export interface District {
     path: string,
     path_with_type: string,
     code: number,
-    parent_code: number
+    parent_code: number,
 }
 
 export interface Ward {
@@ -75,7 +78,7 @@ export interface Ward {
     path: string,
     path_with_type: string,
     code: number,
-    parent_code: number
+    parent_code: number,
 }
 
 export interface Province {

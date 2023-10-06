@@ -9,14 +9,14 @@ import Pagination from "../../../src/components/pagination/Pagination";
 import TableRow from "../../../src/components/TableRow";
 import Typography from "../../../src/components/Typography";
 import { ModalHeader } from "react-bootstrap";
-import { FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalOverlay, Select, Toast, useToast } from "@chakra-ui/react";
+import { FormControl, FormErrorMessage, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalOverlay, Select, useToast } from "@chakra-ui/react";
 import provincesData from '../../data/province.json';
 import districtsData from '../../data/district.json';
 import wardsData from '../../data/ward.json';
 import { AppThunkDispatch } from "store/store";
 import { useDispatch } from "react-redux";
-import { addMyAddress } from "../../store/slices/user-slice";
-import { District, Province, Ward } from "api/Interface";
+import { addMyAddress, getMyAddress } from "../../store/slices/user-slice";
+import { District, Province, UserAddressResponse, Ward } from "api/Interface";
 
 
 const AddressList = () => {
@@ -24,18 +24,31 @@ const AddressList = () => {
   const [contactName, setContactName] = useState('');
   const [phone, setPhone] = useState('');
   const [detailAddress, setDetailAddress] = useState('');
+  const [isSaveDisabled, setIsSaveDisabled] = useState(true);
+  const [addresses, setAddresses] = useState<UserAddressResponse[]>([]);
   const dispatch = useDispatch<AppThunkDispatch>();
 
   // Data
-  const provinces: Province[] = provincesData;
-  const districts: District[] = districtsData;
-  const wards: Ward[] = wardsData;
+  const provinces: Province[] = provincesData as unknown as Province[];
+  const districts: District[] = districtsData as unknown as District[];
+  const wards: Ward[] = wardsData as unknown as Ward[];
 
   const [province, setProvince] = useState<Province>(null);
   const [district, setDistrict] = useState<District>(null);
   const [ward, setWard] = useState<Ward>(null);
+  const [phoneError, setPhoneError] = useState("");
 
-  const toast = useToast()
+  const toast = useToast();
+
+  useEffect(() => {
+    // get my address 
+    dispatch(getMyAddress({
+      page: 1,
+      limit: 10
+    })).unwrap().then((res) => {
+      setAddresses(res.data);
+    })
+  }, []);
 
   const handleProvinceChange = (event) => {
     const selectedProvince = JSON.parse(event.target.value);
@@ -46,7 +59,6 @@ const AddressList = () => {
 
   const handleDistrictChange = (event) => {
     const selectedDistrict = JSON.parse(event.target.value);
-    console.log(selectedDistrict);
     setDistrict(selectedDistrict);
     setWard(null);
   };
@@ -64,8 +76,26 @@ const AddressList = () => {
   };
 
   const handlePhoneChange = (event) => {
+    const phoneRegex = /^[0-9]{10}$/;
+    const isValid = phoneRegex.test(event.target.value);
     setPhone(event.target.value);
+    setPhoneError(isValid ? "" : "Phone number must be 10 digits");
   };
+
+  useEffect(() => {
+    const phoneRegex = /^[0-9]{10}$/;
+    setIsSaveDisabled(
+      contactName === "" ||
+      !phoneRegex.test(phone) ||
+      province == null ||
+      district == null ||
+      ward == null ||
+      province.name === "" ||
+      district.name === "" ||
+      ward.name === "" ||
+      detailAddress === ""
+    );
+  }, [contactName, phone, province, district, ward, detailAddress]);
 
 
   const handleDetailAddressChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -80,6 +110,7 @@ const AddressList = () => {
       status: 'info',
       duration: null,
       isClosable: true,
+      position: "top-right",
     })
 
     dispatch(addMyAddress({
@@ -95,9 +126,10 @@ const AddressList = () => {
       countryId: 84,
       countryName: "VietNam"
     }))
+      .unwrap()
       .then((res) => {
         toast.close(loadingToastId)
-        if (!res.error) {
+        if (res.status.toString().includes("20")) {
           toast({
             title: 'Success!',
             description: "Add address success",
@@ -113,16 +145,15 @@ const AddressList = () => {
           setDistrict(null);
           setWard(null);
         } else {
-          // handle error here
+          const errMsg = res.data.detail.includes("10 addresses") ? "You can only add up to 10 addresses" : "Some thing went wrong"
           toast({
             title: 'Error!',
-            description: "Some thing went wrong",
+            description: errMsg,
             status: 'error',
             duration: 2000,
             isClosable: true,
             position: "top-right",
           })
-
         }
       })
 
@@ -142,20 +173,20 @@ const AddressList = () => {
         }
       />
 
-      {orderList.map(() => (
+      {addresses.map((address) => (
         <TableRow my="1rem" padding="6px 18px">
           <Typography className="pre" m="6px" textAlign="left">
-            Ralf Edward
+            {address.contactName}
           </Typography>
           <Typography flex="1 1 260px !important" m="6px" textAlign="left">
-            777 Brockton Avenue, Abington MA 2351
+            {address.detailAddress}
           </Typography>
           <Typography className="pre" m="6px" textAlign="left">
-            +1927987987498
+            {address.phone}
           </Typography>
 
           <Typography className="pre" textAlign="center" color="text.muted">
-            <a href="/address/xkssThds6h37sd">
+            <a href={`address/${address.id}`}>
               <Typography as="a" href="/address/xkssThds6h37sd" color="inherit">
                 <IconButton size="small">
                   <Icon variant="small" defaultcolor="currentColor">
@@ -182,17 +213,22 @@ const AddressList = () => {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <FormControl>
+
+            <FormControl isRequired isInvalid={contactName === ""}>
               <FormLabel>Contact Name</FormLabel>
-              <Input value={contactName} onChange={handleContactNameChange} />
-            </FormControl>
-            <FormControl>
+              <Input value={contactName} onChange={handleContactNameChange} required />
+              <FormErrorMessage>contact name is required</FormErrorMessage>
+            </FormControl >
+
+            <FormControl isRequired isInvalid={phoneError !== ""}>
               <FormLabel>Phone</FormLabel>
-              <Input value={phone} onChange={handlePhoneChange} />
+              <Input pattern="[0-9]{10}" value={phone} onChange={handlePhoneChange} required />
+              <FormErrorMessage>{phoneError}</FormErrorMessage>
             </FormControl>
-            <FormControl>
+
+            <FormControl isRequired isInvalid={province === null}>
               <FormLabel>City/Province Name</FormLabel>
-              <Select value={JSON.stringify(province)} onChange={handleProvinceChange}>
+              <Select value={JSON.stringify(province)} onChange={handleProvinceChange} required>
                 <option value="">Select a province</option>
                 {Object.values(provinces).map((p) => (
                   <option key={p.code} value={JSON.stringify(p)}>
@@ -201,9 +237,10 @@ const AddressList = () => {
                 ))}
               </Select>
             </FormControl>
-            <FormControl>
+
+            <FormControl isRequired isInvalid={district === null}>
               <FormLabel>District Name</FormLabel>
-              <Select value={JSON.stringify(district)} onChange={handleDistrictChange} disabled={!province}>
+              <Select value={JSON.stringify(district)} onChange={handleDistrictChange} disabled={!province} required>
                 <option value="">Select a district</option>
                 {filteredDistricts.map((d) => (
                   <option key={d.code} value={JSON.stringify(d)}>
@@ -212,9 +249,10 @@ const AddressList = () => {
                 ))}
               </Select>
             </FormControl>
-            <FormControl>
+
+            <FormControl isRequired isInvalid={ward === null}>
               <FormLabel>Ward Name</FormLabel>
-              <Select value={JSON.stringify(ward)} onChange={handleWardChange} disabled={!district}>
+              <Select value={JSON.stringify(ward)} onChange={handleWardChange} disabled={!district} required>
                 <option value="">Select a ward</option>
                 {filteredWards.map((w) => (
                   <option key={w.code} value={JSON.stringify(w)}>
@@ -223,9 +261,13 @@ const AddressList = () => {
                 ))}
               </Select>
             </FormControl>
-            <FormControl>
+
+            <FormControl isRequired isInvalid={detailAddress === ''}>
               <FormLabel>Detail Address</FormLabel>
-              <Input value={detailAddress} onChange={handleDetailAddressChange} />
+              <Input value={detailAddress} onChange={handleDetailAddressChange} required />
+              <FormErrorMessage>
+                detail address is required
+              </FormErrorMessage>
             </FormControl>
           </ModalBody>
 
@@ -233,7 +275,10 @@ const AddressList = () => {
             <Button colorScheme='blue' color="red" mr={3} onClick={() => setIsDialogOpen(false)}>
               Close
             </Button>
-            <Button variant='ghost' color='green' onClick={saveAddress}>Save</Button>
+            <Button variant='ghost' color='green'
+              onClick={saveAddress}
+              disabled={isSaveDisabled}
+            >Save</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -250,38 +295,6 @@ const AddressList = () => {
   );
 };
 
-const orderList = [
-  {
-    orderNo: "1050017AS",
-    status: "Pending",
-    purchaseDate: new Date(),
-    price: 350,
-  },
-  {
-    orderNo: "1050017AS",
-    status: "Processing",
-    purchaseDate: new Date(),
-    price: 500,
-  },
-  {
-    orderNo: "1050017AS",
-    status: "Delivered",
-    purchaseDate: "2020/12/23",
-    price: 700,
-  },
-  {
-    orderNo: "1050017AS",
-    status: "Delivered",
-    purchaseDate: "2020/12/23",
-    price: 700,
-  },
-  {
-    orderNo: "1050017AS",
-    status: "Cancelled",
-    purchaseDate: "2020/12/15",
-    price: 300,
-  },
-];
 
 AddressList.layout = DashboardLayout;
 

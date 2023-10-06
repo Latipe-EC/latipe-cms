@@ -13,44 +13,55 @@ import { StyledSessionCard } from "./SessionStyle";
 import { useDispatch } from "react-redux";
 import { createAuthenticationToken } from "../../store/slices/auth-slice";
 import { AppThunkDispatch } from "store/store";
-import { toast } from "react-toastify";
+import { Spinner, useToast } from "@chakra-ui/react";
 
 const Login: React.FC = () => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
-
+  const toast = useToast()
   const togglePasswordVisibility = useCallback(() => {
     setPasswordVisibility((visible) => !visible);
   }, []);
   const dispatch = useDispatch<AppThunkDispatch>();
 
   const handleFormSubmit = async (values) => {
-    const loadingToastId = toast.info('Logging...', {
-      position: toast.POSITION.TOP_RIGHT,
-      autoClose: false,
-      hideProgressBar: true
-    });
+
+
+    const loadingToastId = toast({
+      title: 'Logging',
+      status: 'info',
+      description: <Spinner size="sm" />,
+      duration: null,
+      isClosable: true,
+    })
+
     dispatch(createAuthenticationToken({
       username: values.email,
       password: values.password
     }))
-      .then((res) => {
-        toast.dismiss(loadingToastId)
-        if (!res.error) {
-          toast.success('Success Login !', {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 1500
-          });
-          setTimeout(() => {
-            window.location.href = '/';
-          }, 2000);
-        } else {
-          // handle error here
-          const error = res.error.message.includes('404') ? 'Wrong Email or Phone Number!' : 'Wrong password!';
-          toast.error(error, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 1500
-          });
-        }
+      .unwrap()
+      .then(() => {
+        toast.close(loadingToastId)
+        toast({
+          title: 'Success Login !',
+          status: 'success',
+          duration: null,
+          isClosable: true,
+          position: 'top-right',
+        })
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 2000);
+      }).catch((err) => {
+        toast.close(loadingToastId)
+        const error = err.message.includes('404') ? 'Wrong Email or Phone Number!' : 'Wrong password!';
+        toast({
+          title: 'Error !',
+          status: 'error',
+          description: error,
+          duration: 1500,
+          isClosable: true,
+          position: 'top-right',
+        })
       })
 
 

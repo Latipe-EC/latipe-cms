@@ -143,7 +143,7 @@ export class HttpClient<SecurityDataType = unknown> {
     protected createFormData(input: Record<string, unknown>): FormData {
         return Object.keys(input || {}).reduce((formData, key) => {
             const property = input[key];
-            const propertyContent: any[] = property instanceof Array ? property : [property];
+            const propertyContent: unknown[] = property instanceof Array ? property : [property];
 
             for (const formItem of propertyContent) {
                 const isFileType = formItem instanceof Blob || formItem instanceof File;
@@ -153,7 +153,7 @@ export class HttpClient<SecurityDataType = unknown> {
             return formData;
         }, new FormData());
     }
-    public request = async <T = unknown, _E = unknown>({
+    public request = async <T = unknown>({
         secure,
         path,
         type,
@@ -178,24 +178,31 @@ export class HttpClient<SecurityDataType = unknown> {
             body = JSON.stringify(body);
         }
 
-        return this.instance.request({
-            ...requestParams,
-            headers: {
-                ...(requestParams.headers || {}),
-                ...(type && type !== ContentType.FormData ? { 'Content-Type': type } : {}),
-            },
-            params: query,
-            responseType: responseFormat,
-            data: body,
-            url: path,
-        });
+        try {
+            const response = await this.instance.request({
+                ...requestParams,
+                headers: {
+                    ...(requestParams.headers || {}),
+                    ...(type && type !== ContentType.FormData ? { 'Content-Type': type } : {}),
+                },
+                params: query,
+                responseType: responseFormat,
+                data: body,
+                url: path,
+            });
+            return response;
+        } catch (error) {
+            if (error.response) {
+                return error.response;
+            }
+            throw error;
+        }
     };
 }
 
 
 export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
     auth = {
-
         /**
          * No description
          *
@@ -204,7 +211,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
          * @request POST:/auth/login
          */
         createAuthenticationToken: (data: LoginRequest) =>
-            this.request<LoginResponse, unknown>({
+            this.request<LoginResponse>({
                 path: `/auth/login`,
                 method: 'POST',
                 body: data,
@@ -219,7 +226,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
      * @request POST:/auth/refresh-token
      */
         refreshAuthenticationToken: (data: RefreshTokenInput, params: RequestParams = {}) =>
-            this.request<RefreshTokenResponse, unknown>({
+            this.request<RefreshTokenResponse>({
                 path: `/auth/refresh-token`,
                 method: 'POST',
                 body: data,
@@ -228,20 +235,36 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
             }),
     };
     users = {
+
         /**
   * No description
   *
-  * @tags auth-controller
+  * @tags user-controller
   * @name AddMyAddress
   * @request POST:/auth/refresh-token
   */
         addMyAddress: (data: CreateUserAddressRequest, params: RequestParams = {}) =>
-            this.request<UserAddressResponse, unknown>({
+            this.request<UserAddressResponse>({
                 path: `/users/my-address`,
                 method: 'POST',
                 body: data,
                 type: ContentType.Json,
                 ...params,
+            }),
+
+        /**
+* No description
+*
+* @tags user-controller
+* @name GetMyAddress
+* @request POST:/auth/refresh-token
+*/
+        getMyAddress: (params = {}) =>
+            this.request<UserAddressResponse[]>({
+                path: `/users/my-address`,
+                method: 'GET',
+                type: ContentType.Json,
+                ...params
             }),
     }
 }

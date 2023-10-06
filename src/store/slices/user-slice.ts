@@ -1,15 +1,24 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { Api } from '../../api/AxiosClient';
+import { Api, RequestParams } from '../../api/AxiosClient';
 import { CreateUserAddressRequest } from 'api/Interface';
 
 const api = new Api();
+
 export const addMyAddress = createAsyncThunk(
-  'users/my-address',
+  'users/add-my-address',
   async (input: CreateUserAddressRequest) => {
     const response = await api.users.addMyAddress(input);
     return response;
   }
 );
+export const getMyAddress = createAsyncThunk(
+  'users/get-my-address',
+  async (params: RequestParams) => {
+    const response = await api.users.getMyAddress(params);
+    return response;
+  }
+);
+
 
 
 export const usersSlice = createSlice({

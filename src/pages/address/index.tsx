@@ -185,6 +185,7 @@ const AddressList = () => {
             {address.phone}
           </Typography>
 
+
           <Typography className="pre" textAlign="center" color="text.muted">
             <a href={`address/${address.id}`}>
               <Typography as="a" href="/address/xkssThds6h37sd" color="inherit">

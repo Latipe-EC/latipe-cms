@@ -1,5 +1,5 @@
 import Box from "../Box";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
 import Typography from "../Typography";
@@ -7,9 +7,31 @@ import {
   DashboardNavigationWrapper,
   StyledDashboardNav,
 } from "./DashboardStyle";
+import { useDispatch } from "react-redux";
+import { countMyAddress } from "../../store/slices/user-slice";
+import { AppThunkDispatch } from "../../store/store";
 
 const CustomerDashboardNavigation = () => {
-  const pathname =window.location.pathname;
+  const [addresses, setAddresses] = useState(0);
+  const pathname = window.location.pathname;
+  const dispatch = useDispatch<AppThunkDispatch>();
+
+  useEffect(() => {
+    dispatch(countMyAddress()).unwrap().then((res) => {
+      setAddresses(res.data);
+    })
+  }, []);
+
+  const getCount = (title: string) => {
+    switch (title) {
+      case "Addresses":
+        {
+          return addresses;
+        }
+      default:
+        return 5;
+    }
+  };
   return (
     <DashboardNavigationWrapper px="0px" pb="1.5rem" color="gray.900">
       {linkList.map((item) => (
@@ -33,7 +55,7 @@ const CustomerDashboardNavigation = () => {
                 </Box>
                 <span>{item.title}</span>
               </FlexBox>
-              <span>{item.count}</span>
+              <span>{getCount(item.title)}</span>
             </StyledDashboardNav>
           ))}
         </Fragment>
@@ -50,19 +72,16 @@ const linkList = [
         href: "/orders",
         title: "Orders",
         iconName: "bag",
-        count: 5,
       },
       {
         href: "/wish-list",
         title: "Wishlist",
         iconName: "heart",
-        count: 19,
       },
       {
         href: "/support-tickets",
         title: "Support Tickets",
         iconName: "customer-service",
-        count: 1,
       },
     ],
   },
@@ -73,19 +92,16 @@ const linkList = [
         href: "/profile",
         title: "Profile Info",
         iconName: "user",
-        count: 3,
       },
       {
         href: "/address",
         title: "Addresses",
         iconName: "pin",
-        count: 16,
       },
       {
         href: "/payment-methods",
         title: "Payment Methods",
         iconName: "credit-card",
-        count: 4,
       },
     ],
   },

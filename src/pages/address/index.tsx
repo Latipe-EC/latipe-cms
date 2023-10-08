@@ -16,7 +16,7 @@ import wardsData from '../../data/ward.json';
 import { AppThunkDispatch } from "store/store";
 import { useDispatch } from "react-redux";
 import { addMyAddress, getMyAddress } from "../../store/slices/user-slice";
-import { District, Province, UserAddressResponse, Ward } from "api/Interface";
+import { District, Province, UserAddress, Ward } from "api/interface/user";
 
 
 const AddressList = () => {
@@ -25,8 +25,10 @@ const AddressList = () => {
   const [phone, setPhone] = useState('');
   const [detailAddress, setDetailAddress] = useState('');
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
-  const [addresses, setAddresses] = useState<UserAddressResponse[]>([]);
+  const [addresses, setAddresses] = useState<UserAddress[]>([]);
+  const [totalPage, setTotalPage] = useState(0);
   const dispatch = useDispatch<AppThunkDispatch>();
+
 
   // Data
   const provinces: Province[] = provincesData as unknown as Province[];
@@ -44,9 +46,10 @@ const AddressList = () => {
     // get my address 
     dispatch(getMyAddress({
       page: 1,
-      limit: 10
+      size: 5
     })).unwrap().then((res) => {
-      setAddresses(res.data);
+      setAddresses(res.data.data);
+      setTotalPage(res.data.pagination.total)
     })
   }, []);
 
@@ -188,7 +191,7 @@ const AddressList = () => {
 
           <Typography className="pre" textAlign="center" color="text.muted">
             <a href={`address/${address.id}`}>
-              <Typography as="a" href="/address/xkssThds6h37sd" color="inherit">
+              <Typography as="a" href={`address/${address.id}`} color="inherit">
                 <IconButton size="small">
                   <Icon variant="small" defaultcolor="currentColor">
                     edit
@@ -285,9 +288,15 @@ const AddressList = () => {
       </Modal>
       <FlexBox justifyContent="center" mt="2.5rem">
         <Pagination
-          pageCount={5}
+          pageCount={Math.ceil(totalPage / 5)}
           onChange={(data) => {
-            console.log(data.selected);
+            dispatch(getMyAddress({
+              page: +data + 1,
+              size: 5
+            })).unwrap().then((res) => {
+              setAddresses(res.data.data);
+              setTotalPage(res.data.pagination.total)
+            })
           }}
         />
       </FlexBox>

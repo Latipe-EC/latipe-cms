@@ -1,4 +1,6 @@
-import { CreateUserAddressRequest, LoginRequest, LoginResponse, RefreshTokenInput, RefreshTokenResponse, UserAddressResponse } from 'api/Interface';
+import { PagedResultResponse } from 'api/interface/PagedResultResponse';
+import { LoginRequest, LoginResponse, RefreshTokenInput, RefreshTokenResponse } from '../api/interface/auth';
+import { CreateUserAddressRequest, UserAddress } from '../api/interface/user';
 import axios, {
     AxiosInstance,
     AxiosRequestConfig,
@@ -225,13 +227,12 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
      * @name RefreshAuthenticationToken
      * @request POST:/auth/refresh-token
      */
-        refreshAuthenticationToken: (data: RefreshTokenInput, params: RequestParams = {}) =>
+        refreshAuthenticationToken: (data: RefreshTokenInput) =>
             this.request<RefreshTokenResponse>({
                 path: `/auth/refresh-token`,
                 method: 'POST',
                 body: data,
                 type: ContentType.Json,
-                ...params,
             }),
     };
     users = {
@@ -243,15 +244,13 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
   * @name AddMyAddress
   * @request POST:/auth/refresh-token
   */
-        addMyAddress: (data: CreateUserAddressRequest, params: RequestParams = {}) =>
-            this.request<UserAddressResponse>({
+        addMyAddress: (data: CreateUserAddressRequest) =>
+            this.request<UserAddress>({
                 path: `/users/my-address`,
                 method: 'POST',
                 body: data,
                 type: ContentType.Json,
-                ...params,
             }),
-
         /**
 * No description
 *
@@ -259,12 +258,32 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 * @name GetMyAddress
 * @request POST:/auth/refresh-token
 */
-        getMyAddress: (params = {}) =>
-            this.request<UserAddressResponse[]>({
+        getMyAddress: (params: QueryParamsType) =>
+            this.request<PagedResultResponse<UserAddress>>({
                 path: `/users/my-address`,
                 method: 'GET',
                 type: ContentType.Json,
-                ...params
+                query: {
+                    ...params
+                }
+            }),
+
+        countMyAddress: () =>
+            this.request<number>({
+                path: `/users/count-my-address`,
+                method: 'GET',
+                type: ContentType.Json,
+
+            }),
+
+        getMyAddressById: (id: string) =>
+            this.request<UserAddress>({
+                path: `/users/my-address/${id}`,
+                method: 'GET',
+                type: ContentType.Json,
+
             }),
     }
+
+
 }

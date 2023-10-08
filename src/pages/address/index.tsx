@@ -48,8 +48,9 @@ const AddressList = () => {
       page: 1,
       size: 5
     })).unwrap().then((res) => {
-      setAddresses(res.data.data);
-      setTotalPage(res.data.pagination.total)
+      console.log(res.data);
+      setAddresses(res.data?.data || []);
+      setTotalPage(res.data?.pagination?.total || 0)
     })
   }, []);
 
@@ -141,6 +142,7 @@ const AddressList = () => {
             isClosable: true,
             position: "top-right",
           })
+          setAddresses([...addresses, res.data]);
           setContactName("");
           setPhone("");
           setDetailAddress("");

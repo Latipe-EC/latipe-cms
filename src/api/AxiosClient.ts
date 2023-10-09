@@ -91,6 +91,10 @@ export class HttpClient<SecurityDataType = unknown> {
                             });
                             if (response.data.accessToken) {
                                 localStorage.setItem('accessToken', response.data.accessToken);
+                                localStorage.setItem('REACT_STARTER_AUTH', JSON.stringify({
+                                    accessToken: response.data.accessToken,
+                                    isAuthenticated: true,
+                                }));
                                 this.instance.defaults.headers.common[
                                     'Authorization'
                                 ] = `Bearer ${response.data.accessToken}`;
@@ -280,6 +284,23 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
             this.request<UserAddress>({
                 path: `/users/my-address/${id}`,
                 method: 'GET',
+                type: ContentType.Json,
+
+            }),
+
+        updateMyAddress: (id: string, address: UserAddress) =>
+            this.request<UserAddress>({
+                path: `/users/my-address/${id}`,
+                method: 'PUT',
+                type: ContentType.Json,
+                body: address
+
+            }),
+
+        deleteMyAddress: (id: string) =>
+            this.request<UserAddress>({
+                path: `/users/my-address/${id}`,
+                method: 'DELETE',
                 type: ContentType.Json,
 
             }),

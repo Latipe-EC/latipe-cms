@@ -1,20 +1,16 @@
-import Box from "../Box";
 import Button from "../buttons/Button";
 import { Card1 } from "../Card1";
 import DashboardPageHeader from "../layout/DashboardPageHeader";
-import TextField from "../text-field/TextField";
-import { Formik } from "formik";
-import * as yup from "yup";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { AppThunkDispatch } from "../../store/store";
 import { useDispatch } from "react-redux";
-import { getMyAddressById } from "../../store/slices/user-slice";
+import { getMyAddressById, updateMyAddress } from "../../store/slices/user-slice";
 import provincesData from '../../data/province.json';
 import districtsData from '../../data/district.json';
 import wardsData from '../../data/ward.json';
 import { District, Province, UserAddress, Ward } from "api/interface/user";
-import { FormControl, FormErrorMessage, FormLabel, Input, Select } from "@chakra-ui/react";
+import { Flex, FormControl, FormErrorMessage, FormLabel, Input, Select, useToast } from "@chakra-ui/react";
 
 const AddressEditor = () => {
   const { id } = useParams<{ id: string }>();
@@ -27,7 +23,7 @@ const AddressEditor = () => {
     districtName: '',
     wardName: '',
   });
-
+  const toast = useToast();
   const provinces: Province[] = provincesData as unknown as Province[];
   const districts: District[] = districtsData as unknown as District[];
   const wards: Ward[] = wardsData as unknown as Ward[];
@@ -36,10 +32,9 @@ const AddressEditor = () => {
   const [ward, setWard] = useState<Ward>(null);
   const [phoneError, setPhoneError] = useState("");
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
-
+  const navigate = useNavigate();
 
   useEffect(() => {
-
     dispatch(getMyAddressById(id)).unwrap().then((res) => {
       if (res.status.toString().startsWith('2')) {
         setAddress(res.data)
@@ -56,11 +51,45 @@ const AddressEditor = () => {
     });
   }, []);
 
-  const handleFormSubmit = async (values) => {
-    console.log(values);
+  const handleFormSubmit = async (event: { preventDefault: () => void; }) => {
+    event.preventDefault();
+
+    const loadingToastId = toast({
+      title: 'Adding address.',
+      description: "Loading...",
+      status: 'info',
+      duration: null,
+      isClosable: true,
+      position: "top-right",
+    })
+
+    dispatch(updateMyAddress(address))
+      .unwrap()
+      .then((res) => {
+        toast.close(loadingToastId)
+        if (res.status.toString().includes("20")) {
+          toast({
+            title: 'Success!',
+            description: "Update address success",
+            status: 'success',
+            duration: 2000,
+            isClosable: true,
+            position: "top-right",
+          })
+        } else {
+          toast({
+            title: 'Error!',
+            description: "Update address failed",
+            status: 'error',
+            duration: 2000,
+            isClosable: true,
+            position: "top-right",
+          })
+        }
+      })
   };
 
-  const handleProvinceChange = (event) => {
+  const handleProvinceChange = (event: { target: { value: string; }; }) => {
     const selectedProvince = JSON.parse(event.target.value);
     setAddress({
       ...address, cityOrProvinceName: selectedProvince.name,
@@ -72,17 +101,17 @@ const AddressEditor = () => {
 
   };
 
-  const handleWardChange = (event) => {
+  const handleWardChange = (event: { target: { value: string; }; }) => {
     const selectedWard = JSON.parse(event.target.value);
     setAddress({
       ...address,
-      wardId: selectedWard.code, districtId: null, wardName: selectedWard.name, districtName: ''
+      wardId: selectedWard.code, wardName: selectedWard.name
     });
     setWard(selectedWard);
 
   };
 
-  const handleDistrictChange = (event) => {
+  const handleDistrictChange = (event: { target: { value: string; }; }) => {
     const selectedDistrict = JSON.parse(event.target.value);
     setAddress({
       ...address,
@@ -93,11 +122,12 @@ const AddressEditor = () => {
     setWard(null);
 
   };
-  const handleContactNameChange = (event) => {
+
+  const handleContactNameChange = (event: { target: { value: string; }; }) => {
     setAddress({ ...address, contactName: event.target.value });
   };
 
-  const handlePhoneChange = (event) => {
+  const handlePhoneChange = (event: { target: { value: string; }; }) => {
     const phoneRegex = /^[0-9]{10}$/;
     const isValid = phoneRegex.test(event.target.value);
     setAddress({ ...address, phone: event.target.value });
@@ -119,52 +149,45 @@ const AddressEditor = () => {
     );
   }, [address.contactName, address.phone, province, district, ward, address.detailAddress]);
 
-  const checkoutSchema = yup.object().shape({
-    contactName: yup.string().required("required"),
-    phone: yup.string().required("required").test(/^[0-9]{10}$/),
-    detailAddress: yup.string().required("required"),
-    cityOrProvince: yup.string().required("required"),
-    district: yup.string().required("required"),
-    ward: yup.string().required("required"),
-  });
 
-  const handleDetailAddressChange = (event) => {
+  const handleDetailAddressChange = (event: { target: { value: string; }; }) => {
     setAddress({ ...address, detailAddress: event.target.value });
   };
 
   const filteredDistricts = Object.values(districts).filter((d) => address && d.parent_code == address.cityOrProvinceId);
   const filteredWards = Object.values(wards).filter((w) => address && w.parent_code == address.districtId);
 
+  const backToAddresses = () => {
+    navigate(-1);
+  }
+
   return (
     <div>
       <DashboardPageHeader
         iconName="pin_filled"
-        title="Add New Address"
+        title="Edit Address"
         button={
-          <a href="/address">
-            <Button color="primary" bg="primary.light" px="2rem">
-              Back to Address
-            </Button>
-          </a>
+          <Button color="primary" bg="primary.light" px="2rem" onClick={backToAddresses}>
+            Back to Address
+          </Button>
         }
       />
 
       <Card1>
-
         <form onSubmit={handleFormSubmit}>
-          <FormControl isRequired isInvalid={address.contactName === ""}>
+          <FormControl isRequired isInvalid={address.contactName === ""} mb={4}>
             <FormLabel>Contact Name</FormLabel>
             <Input value={address.contactName} onChange={handleContactNameChange} required />
             <FormErrorMessage>contact name is required</FormErrorMessage>
-          </FormControl >
+          </FormControl>
 
-          <FormControl isRequired isInvalid={phoneError !== ""}>
+          <FormControl isRequired isInvalid={phoneError !== ""} mb={4}>
             <FormLabel>Phone</FormLabel>
             <Input pattern="[0-9]{10}" value={address.phone} onChange={handlePhoneChange} required />
             <FormErrorMessage>{phoneError}</FormErrorMessage>
           </FormControl>
 
-          <FormControl isRequired isInvalid={province === null}>
+          <FormControl isRequired isInvalid={province === null} mb={4}>
             <FormLabel>City/Province Name</FormLabel>
             <Select value={JSON.stringify(province)} onChange={handleProvinceChange} required>
               <option value="">Select a province</option>
@@ -176,7 +199,7 @@ const AddressEditor = () => {
             </Select>
           </FormControl>
 
-          <FormControl isRequired isInvalid={district === null}>
+          <FormControl isRequired isInvalid={district === null} mb={4}>
             <FormLabel>District Name</FormLabel>
             <Select value={JSON.stringify(district)} onChange={handleDistrictChange} required>
               <option value="">Select a district</option>
@@ -188,7 +211,7 @@ const AddressEditor = () => {
             </Select>
           </FormControl>
 
-          <FormControl isRequired isInvalid={ward === null}>
+          <FormControl isRequired isInvalid={ward === null} mb={4}>
             <FormLabel>Ward Name</FormLabel>
             <Select value={JSON.stringify(ward)} onChange={handleWardChange} required>
               <option value="">Select a ward</option>
@@ -200,25 +223,24 @@ const AddressEditor = () => {
             </Select>
           </FormControl>
 
-          <FormControl isRequired isInvalid={address.detailAddress === ''}>
+          <FormControl isRequired isInvalid={address.detailAddress === ''} mb={4}>
             <FormLabel>Detail Address</FormLabel>
             <Input value={address.detailAddress} onChange={handleDetailAddressChange} required />
             <FormErrorMessage>
               detail address is required
             </FormErrorMessage>
           </FormControl>
-          <Button type="submit" variant="contained" color="primary">
-            Save Changes
-          </Button>
+
+          <Flex justifyContent="flex-end" mt="auto">
+            <Button type="submit" variant="contained" color="primary" disabled={isSaveDisabled}>
+              Save Changes
+            </Button>
+          </Flex>
         </form>
-
-
       </Card1>
     </div>
   );
 };
-
-
 
 
 export default AddressEditor;

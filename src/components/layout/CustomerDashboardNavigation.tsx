@@ -1,5 +1,5 @@
 import Box from "../Box";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect } from "react";
 import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
 import Typography from "../Typography";
@@ -9,24 +9,22 @@ import {
 } from "./DashboardStyle";
 import { useDispatch } from "react-redux";
 import { countMyAddress } from "../../store/slices/user-slice";
-import { AppThunkDispatch } from "../../store/store";
+import { AppThunkDispatch, RootState, useAppSelector } from "../../store/store";
 
 const CustomerDashboardNavigation = () => {
-  const [addresses, setAddresses] = useState(0);
   const pathname = window.location.pathname;
   const dispatch = useDispatch<AppThunkDispatch>();
+  const count = useAppSelector((state: RootState) => state.user.countAddress);
 
   useEffect(() => {
-    dispatch(countMyAddress()).unwrap().then((res) => {
-      setAddresses(res.data);
-    })
+    dispatch(countMyAddress());
   }, []);
 
   const getCount = (title: string) => {
     switch (title) {
       case "Addresses":
         {
-          return addresses;
+          return count;
         }
       default:
         return 5;

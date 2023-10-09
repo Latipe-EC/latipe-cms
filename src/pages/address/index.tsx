@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "../../../src/components/buttons/Button";
 import IconButton from "../../../src/components/buttons/IconButton";
 import FlexBox from "../../../src/components/FlexBox";
@@ -8,27 +8,30 @@ import DashboardPageHeader from "../../../src/components/layout/DashboardPageHea
 import Pagination from "../../../src/components/pagination/Pagination";
 import TableRow from "../../../src/components/TableRow";
 import Typography from "../../../src/components/Typography";
-import { ModalHeader } from "react-bootstrap";
+import { ModalHeader, Spinner } from "react-bootstrap";
 import { FormControl, FormErrorMessage, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalOverlay, Select, useToast } from "@chakra-ui/react";
 import provincesData from '../../data/province.json';
 import districtsData from '../../data/district.json';
 import wardsData from '../../data/ward.json';
-import { AppThunkDispatch } from "store/store";
+import { AppThunkDispatch, RootState, useAppSelector } from "../../store/store";
 import { useDispatch } from "react-redux";
-import { addMyAddress, getMyAddress } from "../../store/slices/user-slice";
-import { District, Province, UserAddress, Ward } from "api/interface/user";
+import { addMyAddress, deleteMyAddress, getMyAddress } from "../../store/slices/user-slice";
+import { District, Province, Ward } from "api/interface/user";
+import { useNavigate } from "react-router-dom";
 
 
 const AddressList = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [contactName, setContactName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [detailAddress, setDetailAddress] = useState('');
-  const [isSaveDisabled, setIsSaveDisabled] = useState(true);
-  const [addresses, setAddresses] = useState<UserAddress[]>([]);
-  const [totalPage, setTotalPage] = useState(0);
-  const dispatch = useDispatch<AppThunkDispatch>();
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [contactName, setContactName] = useState(null);
+  const [phone, setPhone] = useState(null);
+  const [detailAddress, setDetailAddress] = useState(null);
+  const [isSaveDisabled, setIsSaveDisabled] = useState(true);
+  const dispatch = useDispatch<AppThunkDispatch>();
+  const addresses = useAppSelector((state: RootState) => state.user.dataAddress);
+  const totalPage = useAppSelector((state: RootState) => state.user.paginationAddress.total);
+  const formRef = useRef(null);
+  const navigate = useNavigate();
 
   // Data
   const provinces: Province[] = provincesData as unknown as Province[];
@@ -47,11 +50,7 @@ const AddressList = () => {
     dispatch(getMyAddress({
       page: 1,
       size: 5
-    })).unwrap().then((res) => {
-      console.log(res.data);
-      setAddresses(res.data?.data || []);
-      setTotalPage(res.data?.pagination?.total || 0)
-    })
+    }));
   }, []);
 
   const handleProvinceChange = (event) => {
@@ -101,6 +100,47 @@ const AddressList = () => {
     );
   }, [contactName, phone, province, district, ward, detailAddress]);
 
+  const handleRemoveAddress = (value: string) => {
+
+    const loadingToastId = toast({
+      title: 'Deleting address.',
+      description: <Spinner></Spinner>,
+      status: 'info',
+      duration: null,
+      isClosable: true,
+      position: "top-right",
+    })
+
+    dispatch(deleteMyAddress(value))
+      .unwrap()
+      .then((res) => {
+        toast.close(loadingToastId)
+        if (res.status.toString().includes("20")) {
+          toast({
+            title: 'Success!',
+            description: "Delete address success",
+            status: 'success',
+            duration: 2000,
+            isClosable: true,
+            position: "top-right",
+          })
+        } else {
+          const errMsg = res.data.detail.includes("10 addresses") ? "You can only add up to 10 addresses" : "Some thing went wrong"
+          toast({
+            title: 'Error!',
+            description: errMsg,
+            status: 'error',
+            duration: 2000,
+            isClosable: true,
+            position: "top-right",
+          })
+        }
+      })
+
+  }
+  const handleRedirectAddress = (value: string) => {
+    navigate(`/address/${value}`)
+  }
 
   const handleDetailAddressChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setDetailAddress(event.target.value);
@@ -142,13 +182,15 @@ const AddressList = () => {
             isClosable: true,
             position: "top-right",
           })
-          setAddresses([...addresses, res.data]);
-          setContactName("");
-          setPhone("");
-          setDetailAddress("");
+          setContactName(null);
+          setPhone(null);
+          setDetailAddress(null);
           setProvince(null);
           setDistrict(null);
           setWard(null);
+          setPhoneError(null);
+          setIsSaveDisabled(true);
+          formRef.current.reset();
         } else {
           const errMsg = res.data.detail.includes("10 addresses") ? "You can only add up to 10 addresses" : "Some thing went wrong"
           toast({
@@ -190,18 +232,13 @@ const AddressList = () => {
             {address.phone}
           </Typography>
 
-
           <Typography className="pre" textAlign="center" color="text.muted">
-            <a href={`address/${address.id}`}>
-              <Typography as="a" href={`address/${address.id}`} color="inherit">
-                <IconButton size="small">
-                  <Icon variant="small" defaultcolor="currentColor">
-                    edit
-                  </Icon>
-                </IconButton>
-              </Typography>
-            </a>
-            <IconButton size="small" onClick={(e) => e.stopPropagation()}>
+            <IconButton size="small" onClick={() => handleRedirectAddress(address.id)}>
+              <Icon variant="small" defaultcolor="currentColor">
+                edit
+              </Icon>
+            </IconButton>
+            <IconButton size="small" onClick={() => handleRemoveAddress(address.id)}>
               <Icon variant="small" defaultcolor="currentColor">
                 delete
               </Icon>
@@ -209,7 +246,7 @@ const AddressList = () => {
           </Typography>
         </TableRow>
       ))}
-      <Modal isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
+      <Modal isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader style={{
@@ -218,7 +255,7 @@ const AddressList = () => {
             Add New Address
           </ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody ref={formRef}>
 
             <FormControl isRequired isInvalid={contactName === ""}>
               <FormLabel>Contact Name</FormLabel>
@@ -276,7 +313,6 @@ const AddressList = () => {
               </FormErrorMessage>
             </FormControl>
           </ModalBody>
-
           <ModalFooter>
             <Button colorScheme='blue' color="red" mr={3} onClick={() => setIsDialogOpen(false)}>
               Close
@@ -295,10 +331,7 @@ const AddressList = () => {
             dispatch(getMyAddress({
               page: +data + 1,
               size: 5
-            })).unwrap().then((res) => {
-              setAddresses(res.data.data);
-              setTotalPage(res.data.pagination.total)
-            })
+            }));
           }}
         />
       </FlexBox>

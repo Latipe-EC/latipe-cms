@@ -9,7 +9,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import VendorDashboardLayout from './components/layout/VendorDashboardLayout';
 import CustomerDashboardLayout from './components/layout/CustomerDashboardLayout';
 import NavbarLayout from './components/layout/NavbarLayout';
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ChakraProvider } from '@chakra-ui/react';
 
@@ -63,7 +62,6 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <ChakraProvider>
-        <ToastContainer />
         <head>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
@@ -195,7 +193,6 @@ function App() {
               </Routes>
             </Suspense>
           </Router>
-
         </AppProvider>
       </ChakraProvider>
     </ThemeProvider>

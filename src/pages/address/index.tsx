@@ -314,7 +314,7 @@ const AddressList = () => {
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme='blue' color="red" mr={3} onClick={() => setIsDialogOpen(false)}>
+            <Button variant='ghost' color="red" mr={3} onClick={() => setIsDialogOpen(false)}>
               Close
             </Button>
             <Button variant='ghost' color='green'

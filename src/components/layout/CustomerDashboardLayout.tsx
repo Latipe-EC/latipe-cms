@@ -31,7 +31,9 @@ const CustomerDashboardLayout: React.FC<Props> = ({
     <Sticky fixedOn={0}>
       <Header />
     </Sticky>
-    <div className="section-after-sticky"><Navbar /></div>
+    <div className="section-after-sticky">
+      <Navbar />
+    </div>
     (
     <Container my="2rem">
       <Grid container spacing={6}>
@@ -48,9 +50,6 @@ const CustomerDashboardLayout: React.FC<Props> = ({
     <MobileNavigationBar />
     <Footer />
   </StyledAppLayout>
-
-
-
 );
 
 export default CustomerDashboardLayout;

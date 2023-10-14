@@ -9,7 +9,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import VendorDashboardLayout from './components/layout/VendorDashboardLayout';
 import CustomerDashboardLayout from './components/layout/CustomerDashboardLayout';
 import NavbarLayout from './components/layout/NavbarLayout';
-import 'react-toastify/dist/ReactToastify.css';
 import { ChakraProvider } from '@chakra-ui/react';
 
 // home pages

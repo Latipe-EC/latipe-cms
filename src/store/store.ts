@@ -1,4 +1,4 @@
-import { configureStore, combineReducers, ThunkDispatch, AnyAction, Store, createSerializableStateInvariantMiddleware } from '@reduxjs/toolkit';
+import { configureStore, combineReducers, ThunkDispatch, AnyAction, Store } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
 import authReducer from './slices/auth-slice';
 import userReducer from './slices/user-slice';

@@ -181,12 +181,12 @@ function App() {
                   }
                   />
                   <Route path="account-settings" element={<AccountSettings />} />
-                  <Route path="add-product" element={<AddProduct />} />
                   <Route path="orders/:id" element={<OrderDetailsVendor />} />
                   <Route path="orders" element={<OrdersVendor />} />
                   <Route path="products/:id" element={<ProductDetailsVendor />} />
                   <Route path="products" element={<ProductsVendor />} />
                 </Route>
+                <Route path="/vendor/add-product" element={<AddProduct />} />
 
 
               </Routes>

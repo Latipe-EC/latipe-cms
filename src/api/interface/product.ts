@@ -673,7 +673,14 @@ export interface ProductVariant {
      * @type {Array<string>}
      * @memberof ProductVariant
      */
-    'options'?: Array<string>;
+    'options'?: Array<Options>;
+
+
+}
+
+interface Options {
+    option: string;
+    file: File;
 }
 /**
  * 

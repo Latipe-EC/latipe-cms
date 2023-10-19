@@ -1,17 +1,39 @@
-import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Box, Button, Flex, FormControl, FormLabel, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Table, Tbody, Td, Text, Textarea, Th, Thead, Tr } from "@chakra-ui/react";
+import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Box, Button, Flex, FormControl, FormLabel, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Switch, Table, Tbody, Td, Text, Textarea, Th, Thead, Tr } from "@chakra-ui/react";
 import DropZone from "../../../components/DropZone";
 import DashboardPageHeader from "../../../components/layout/DashboardPageHeader";
 import VendorDashboardLayout from "../../../components/layout/VendorDashboardLayout";
 import './index.css'
 import { useEffect, useState } from "react";
 import { AddIcon, CloseIcon } from '@chakra-ui/icons';
-import { ProductClassification, ProductVariant } from "api/interface/product";
-import { set } from "lodash";
+import { Attribute, ProductClassification, ProductVariant } from "api/interface/product";
+import AttributeForm from "../../../components/attribute/AttributeForm";
 
 
-
+const attributess = [
+  {
+    name: "Name",
+    defaultValue: "",
+    type: "string",
+    isRequired: true,
+  },
+  {
+    name: "Age",
+    defaultValue: "18",
+    type: "number",
+    isRequired: true,
+    prefixUnit: "years",
+  },
+  {
+    name: "Gender",
+    defaultValue: "Male",
+    type: "selectbox",
+    isRequired: true,
+    options: ["Male", "Female", "Other"],
+  },
+];
 const AddProduct = () => {
 
+  const [isPublic, setIsPublic] = useState(true);
   const [data, setData] = useState([]);
   const [images, setImages] = useState([]);
   const [name, setName] = useState('');
@@ -24,6 +46,7 @@ const AddProduct = () => {
   const [categories, setCategories] = useState([]);
   const [productVariants, setProductVariants] = useState<ProductVariant[]>([]);
   const [productClassification, setProductClassification] = useState<ProductClassification[]>([]);
+  const [attributeValues, setAttributeValues] = useState(attributess);
   const handleDrop = (acceptedFiles) => {
     console.log(acceptedFiles);
     setImages((prevFiles) => [...prevFiles, ...acceptedFiles]);
@@ -85,6 +108,16 @@ const AddProduct = () => {
   function fetchCategories(searchText: string) {
     setData(tempdata);
   }
+
+
+  const handleAttributeChange = ({ index, value }) => {
+    setAttributeValues((prevAttributes) =>
+      prevAttributes.map((attribute, i) =>
+        i === index ? { ...attribute, ["value"]: value } : attribute
+      )
+    );
+    console.log(attributeValues);
+  };
 
   const handleCategorySelect = (category, order) => {
     setSelectedCategory([category]);
@@ -321,6 +354,10 @@ const AddProduct = () => {
                   </div>
                 )}
               </FormControl>
+              <FormControl isInvalid={isInvalid}>
+                <FormLabel fontWeight="bold" fontSize="sm" mt={4}>Public</FormLabel>
+                <Switch onChange={() => { setIsPublic(!isPublic) }} id='email-alerts' />
+              </FormControl>
             </AccordionPanel>
           </AccordionItem>
           <AccordionItem>
@@ -330,6 +367,7 @@ const AddProduct = () => {
               </Box>
             </AccordionButton>
             <AccordionPanel ml={2} >
+              <AttributeForm attributes={attributeValues} onChange={handleAttributeChange}></AttributeForm>
             </AccordionPanel>
           </AccordionItem>
           <AccordionItem>
@@ -447,7 +485,7 @@ const AddProduct = () => {
 
                 {/* // table */}
                 {productVariants.length > 0 && (
-                  <Table mt={8} variant="simple" style={{
+                  <Table mt={8} variant="striped" colorScheme='WhiteAlpha' style={{
                     borderCollapse: "separate",
                     border: "4px solid #ddd",
 
@@ -455,9 +493,9 @@ const AddProduct = () => {
                     <Thead h="100px" >
                       <Tr>
                         <Th
-                          bg="gray.200"
+                          bg="green.200"
                           borderBottom="2px"
-                          borderColor="gray.600"
+                          borderColor="gray.300"
                           fontWeight="bold"
                           textTransform="uppercase"
                           letterSpacing="wide"
@@ -474,9 +512,9 @@ const AddProduct = () => {
                         </Th>
                         {productVariants.length === 2 && (
                           <Th
-                            bg="gray.200"
+                            bg="green.200"
                             borderBottom="2px"
-                            borderColor="gray.600"
+                            borderColor="gray.300"
                             fontWeight="bold"
                             textTransform="uppercase"
                             letterSpacing="wide"
@@ -492,9 +530,9 @@ const AddProduct = () => {
                           </Th>
                         )}
                         <Th
-                          bg="gray.200"
+                          bg="green.200"
                           borderBottom="2px"
-                          borderColor="gray.600"
+                          borderColor="gray.300"
                           fontWeight="bold"
                           textTransform="uppercase"
                           letterSpacing="wide"
@@ -505,9 +543,9 @@ const AddProduct = () => {
                           Price
                         </Th>
                         <Th
-                          bg="gray.200"
+                          bg="green.200"
                           borderBottom="2px"
-                          borderColor="gray.600"
+                          borderColor="gray.300"
                           fontWeight="bold"
                           textTransform="uppercase"
                           letterSpacing="wide"
@@ -518,9 +556,9 @@ const AddProduct = () => {
                           Promotional Price
                         </Th>
                         <Th
-                          bg="gray.200"
+                          bg="green.200"
                           borderBottom="2px"
-                          borderColor="gray.600"
+                          borderColor="gray.300"
                           fontWeight="bold"
                           textTransform="uppercase"
                           letterSpacing="wide"
@@ -531,9 +569,9 @@ const AddProduct = () => {
                           Warehouse
                         </Th>
                         <Th
-                          bg="gray.200"
+                          bg="green.200"
                           borderBottom="2px"
-                          borderColor="gray.600"
+                          borderColor="gray.300"
                           fontWeight="bold"
                           textTransform="uppercase"
                           letterSpacing="wide"
@@ -552,19 +590,22 @@ const AddProduct = () => {
                             borderRight: "2px solid #ddd",
                             borderBottom: index === productVariants[0].options.length - 1 ? "none" : "2px solid #ddd",
                           }}
-                          >{item.option}
-                            <IconButton
-                              aria-label="Upload file"
-                              icon={<AddIcon />}
-                              onClick={() => {
-                                const fileInput = document.getElementById('fileInput');
-                                if (fileInput) {
-                                  fileInput.click();
-                                }
-                              }}
-                            >
-                            </IconButton>
-                            <Flex alignItems="center">
+                          > <Flex alignItems="center" justifyContent="space-between" >
+                              {item.option}
+                              <IconButton
+                                aria-label="Upload file"
+                                icon={<AddIcon />}
+                                onClick={() => {
+                                  const fileInput = document.getElementById('fileInput');
+                                  if (fileInput) {
+                                    fileInput.click();
+                                  }
+                                }}
+                              >
+                              </IconButton>
+                            </Flex>
+
+                            <Flex alignItems="center" justifyContent="space-between" >
                               <Text mr={2}>
                                 {productVariants[0].options[index].file !== null ?
                                   productVariants[0].options[index].file.name : "Upload"}
@@ -606,143 +647,146 @@ const AddProduct = () => {
                                 }
                               }} />
                           </Td>
-                          {productVariants.length === 2 && (
-                            <>
-                              <Td style={{
-                                borderRight: "2px solid #ddd",
-                              }}>
-                                {productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
-                                  item !== null && item.option !== '' && (
-                                    <>
-                                      <Tr style={{
-                                        borderRight: "5px solid #ddd",
-                                      }} key={`classd2${valueIndex}`}>
+                          {
+                            productVariants.length === 2 && (
+                              <>
+                                <Td style={{
+                                  borderRight: "2px solid #ddd",
+                                }}>
+                                  {productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+                                    item !== null && item.option !== '' && (
+                                      <>
+                                        <Tr style={{
+                                          borderRight: "5px solid #ddd",
+                                        }} key={`classd2${valueIndex}`}>
+                                          <Input
+                                            value={item.option}
+                                            maxLength={maxLength}
+                                            mb={2}
+                                            border="none"
+                                            readOnly
+                                          />
+                                        </Tr>
+                                      </>
+                                    ))}
+                                </Td>
+
+                                <Td style={{
+                                  borderRight: "2px solid #ddd",
+                                }}>
+                                  {productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+                                    item !== null && item.option !== '' && (
+                                      <Tr key={`price-unique${index}`}>
+                                        <InputGroup>
+                                          <Input
+                                            placeholder="price"
+                                            type="number"
+                                            value={productClassification[index * productVariants[productVariants.length - 1].options.length + valueIndex].price}
+                                            onChange={(event) =>
+                                              handleProductClassificationChange(
+                                                index * productVariants[productVariants.length - 1].options.length + valueIndex,
+                                                'price',
+                                                event.target.value
+                                              )
+                                            }
+                                            maxLength={maxLength}
+                                            overflow="hidden"
+                                            mb={2}
+                                          />
+                                          <InputLeftElement width="50px" textAlign="center" mr={2}>
+                                            <Text fontSize="sm" color={isInvalid ? 'red.500' : 'gray.500'}>
+                                              $
+                                            </Text>
+                                          </InputLeftElement>
+                                        </InputGroup>
+                                      </Tr>
+                                    ))}
+                                </Td>
+
+                                <Td style={{
+                                  borderRight: "2px solid #ddd",
+                                }}>
+                                  {productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+                                    item !== null && item.option !== '' && (
+                                      <Tr key={`pricePromotional-unique${index}`}>
+                                        <InputGroup>
+                                          <Input
+                                            placeholder="Promotional Price"
+                                            type="number"
+                                            value={productClassification[index * productVariants[productVariants.length - 1].options.length + valueIndex].promotionalPrice}
+                                            onChange={(event) =>
+                                              handleProductClassificationChange(
+                                                index * productVariants[productVariants.length - 1].options.length + valueIndex,
+                                                'promotionalPrice',
+                                                event.target.value
+                                              )
+                                            }
+                                            maxLength={maxLength}
+                                            overflow="hidden"
+                                            mb={2}
+                                          />
+                                          <InputLeftElement width="50px" textAlign="center" mr={2}>
+                                            <Text fontSize="sm" color={isInvalid ? 'red.500' : 'gray.500'}>
+                                              $
+                                            </Text>
+                                          </InputLeftElement>
+                                        </InputGroup>
+                                      </Tr>
+                                    ))}
+                                </Td>
+
+                                <Td style={{
+                                  borderRight: "2px solid #ddd",
+                                }}>
+                                  {productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+                                    item !== null && item.option !== '' && (
+                                      <Tr key={`quantity${index}`}>
+                                        <NumberInput step={1} defaultValue={0} min={0} mb={2}
+                                          value={productClassification[index * productVariants[productVariants.length - 1].options.length + valueIndex].quantity}
+                                          onChange={(value) =>
+                                            handleProductClassificationChange(
+                                              index * productVariants[productVariants.length - 1].options.length + valueIndex,
+                                              'quantity',
+                                              value
+                                            )
+                                          }>
+                                          <NumberInputField />
+                                          <NumberInputStepper>
+                                            <NumberIncrementStepper />
+                                            <NumberDecrementStepper />
+                                          </NumberInputStepper>
+                                        </NumberInput>
+
+                                      </Tr>
+                                    ))}
+                                </Td>
+                                <Td >
+                                  {productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+                                    item !== null && item.option !== '' && (
+                                      <Tr key={`sku${index}`}>
                                         <Input
-                                          value={item.option}
-                                          maxLength={maxLength}
+                                          placeholder="sku"
+                                          value={productClassification[index * productVariants[productVariants.length - 1].options.length + valueIndex].sku}
+                                          onChange={(event) =>
+                                            handleProductClassificationChange(
+                                              index * productVariants[productVariants.length - 1].options.length + valueIndex,
+                                              'sku',
+                                              event.target.value
+                                            )
+                                          }
                                           mb={2}
-                                          border="none"
-                                          readOnly
+                                          maxLength={maxLength}
+                                          overflow="hidden"
                                         />
                                       </Tr>
-                                    </>
-                                  ))}
-                              </Td>
+                                    ))}
+                                </Td>
+                              </>
+                            )
+                          }
 
-                              <Td style={{
-                                borderRight: "2px solid #ddd",
-                              }}>
-                                {productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
-                                  item !== null && item.option !== '' && (
-                                    <Tr key={`price-unique${index}`}>
-                                      <InputGroup>
-                                        <Input
-                                          placeholder="price"
-                                          type="number"
-                                          value={productClassification[index * productVariants[productVariants.length - 1].options.length + valueIndex].price}
-                                          onChange={(event) =>
-                                            handleProductClassificationChange(
-                                              index * productVariants[productVariants.length - 1].options.length + valueIndex,
-                                              'price',
-                                              event.target.value
-                                            )
-                                          }
-                                          maxLength={maxLength}
-                                          overflow="hidden"
-                                          mb={2}
-                                        />
-                                        <InputLeftElement width="50px" textAlign="center" mr={2}>
-                                          <Text fontSize="sm" color={isInvalid ? 'red.500' : 'gray.500'}>
-                                            $
-                                          </Text>
-                                        </InputLeftElement>
-                                      </InputGroup>
-                                    </Tr>
-                                  ))}
-                              </Td>
-
-                              <Td style={{
-                                borderRight: "2px solid #ddd",
-                              }}>
-                                {productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
-                                  item !== null && item.option !== '' && (
-                                    <Tr key={`pricePromotional-unique${index}`}>
-                                      <InputGroup>
-                                        <Input
-                                          placeholder="Promotional Price"
-                                          type="number"
-                                          value={productClassification[index * productVariants[productVariants.length - 1].options.length + valueIndex].promotionalPrice}
-                                          onChange={(event) =>
-                                            handleProductClassificationChange(
-                                              index * productVariants[productVariants.length - 1].options.length + valueIndex,
-                                              'promotionalPrice',
-                                              event.target.value
-                                            )
-                                          }
-                                          maxLength={maxLength}
-                                          overflow="hidden"
-                                          mb={2}
-                                        />
-                                        <InputLeftElement width="50px" textAlign="center" mr={2}>
-                                          <Text fontSize="sm" color={isInvalid ? 'red.500' : 'gray.500'}>
-                                            $
-                                          </Text>
-                                        </InputLeftElement>
-                                      </InputGroup>
-                                    </Tr>
-                                  ))}
-                              </Td>
-
-                              <Td style={{
-                                borderRight: "2px solid #ddd",
-                              }}>
-                                {productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
-                                  item !== null && item.option !== '' && (
-                                    <Tr key={`quantity${index}`}>
-                                      <NumberInput step={1} defaultValue={0} min={0} mb={2}
-                                        value={productClassification[index * productVariants[productVariants.length - 1].options.length + valueIndex].quantity}
-                                        onChange={(value) =>
-                                          handleProductClassificationChange(
-                                            index * productVariants[productVariants.length - 1].options.length + valueIndex,
-                                            'quantity',
-                                            value
-                                          )
-                                        }>
-                                        <NumberInputField />
-                                        <NumberInputStepper>
-                                          <NumberIncrementStepper />
-                                          <NumberDecrementStepper />
-                                        </NumberInputStepper>
-                                      </NumberInput>
-
-                                    </Tr>
-                                  ))}
-                              </Td>
-                              <Td >
-                                {productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
-                                  item !== null && item.option !== '' && (
-                                    <Tr key={`sku${index}`}>
-                                      <Input
-                                        placeholder="sku"
-                                        value={productClassification[index * productVariants[productVariants.length - 1].options.length + valueIndex].sku}
-                                        onChange={(event) =>
-                                          handleProductClassificationChange(
-                                            index * productVariants[productVariants.length - 1].options.length + valueIndex,
-                                            'sku',
-                                            event.target.value
-                                          )
-                                        }
-                                        mb={2}
-                                        maxLength={maxLength}
-                                        overflow="hidden"
-                                      />
-                                    </Tr>
-                                  ))}
-                              </Td>
-                            </>
-                          )}
-
-                          {productVariants.length === 1 &&
+                          {
+                            productVariants.length === 1 &&
                             item !== null && item.option !== '' && (
                               <>
                                 <Td>
@@ -833,7 +877,8 @@ const AddProduct = () => {
                                   </Tr>
                                 </Td>
                               </>
-                            )}
+                            )
+                          }
 
                         </Tr>
                       ))}
@@ -845,6 +890,19 @@ const AddProduct = () => {
               </div>
             </AccordionPanel>
           </AccordionItem>
+          <Flex justifyContent="flex-end" mt={2}>
+            <Button
+              isLoading={false}
+              loadingText='Loading'
+              colorScheme='teal'
+              variant='outline'
+              spinnerPlacement='end'
+
+            >
+              Save
+            </Button>
+          </Flex>
+
         </Accordion>
       </Box >
     </div >

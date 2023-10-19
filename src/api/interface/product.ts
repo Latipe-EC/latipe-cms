@@ -818,3 +818,13 @@ export interface UpdateProductRequest {
      */
     'productClassifications'?: Array<ProductClassificationVm>;
 }
+
+export interface Attribute {
+    name: string;
+    defaultValue: string;
+    type: "string" | "number" | "selectbox";
+    isRequired: boolean;
+    prefixUnit?: string;
+    options?: string[];
+    value?: string;
+}

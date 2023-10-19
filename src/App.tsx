@@ -10,6 +10,7 @@ import VendorDashboardLayout from './components/layout/VendorDashboardLayout';
 import CustomerDashboardLayout from './components/layout/CustomerDashboardLayout';
 import NavbarLayout from './components/layout/NavbarLayout';
 import { ChakraProvider } from '@chakra-ui/react';
+import AddProductLayout from './components/layout/AddProductLayout';
 
 // home pages
 const Address = lazy(() => import('./pages/address'));
@@ -170,8 +171,6 @@ function App() {
 
                 </Route>
 
-
-
                 {/* Vendor */}
                 <Route path="/vendor/" element={
                   <VendorDashboardLayout />
@@ -186,8 +185,11 @@ function App() {
                   <Route path="products/:id" element={<ProductDetailsVendor />} />
                   <Route path="products" element={<ProductsVendor />} />
                 </Route>
-                <Route path="/vendor/add-product" element={<AddProduct />} />
-
+                <Route path="/vendor/" element={
+                  <AddProductLayout />
+                }>
+                  <Route path="/vendor/add-product" element={<AddProduct />} />
+                </Route>
 
               </Routes>
             </Suspense>

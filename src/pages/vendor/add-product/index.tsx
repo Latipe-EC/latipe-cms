@@ -1,4 +1,4 @@
-import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Box, Button, Flex, FormControl, FormLabel, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Switch, Table, Tbody, Td, Text, Textarea, Th, Thead, Tr } from "@chakra-ui/react";
+import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Box, Button, Flex, FormControl, FormLabel, IconButton, Image, Input, InputGroup, InputLeftElement, InputRightElement, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Switch, Table, Tbody, Td, Text, Textarea, Th, Thead, Tr } from "@chakra-ui/react";
 import DropZone from "../../../components/DropZone";
 import DashboardPageHeader from "../../../components/layout/DashboardPageHeader";
 import VendorDashboardLayout from "../../../components/layout/VendorDashboardLayout";
@@ -344,7 +344,8 @@ const AddProduct = () => {
                     <div className="image-preview-container">
                       {images.map((previewImage, index) => (
                         <div key={index} className="image-preview">
-                          <img src={URL.createObjectURL(previewImage)} alt="Preview" width="200" height="200" />
+                          <Image src={URL.createObjectURL(previewImage)}
+                            boxSize='150px' />
                           <button className="remove-image-button" type="button" onClick={() => handleRemove(index)}>
                             x
                           </button>

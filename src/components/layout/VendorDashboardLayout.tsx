@@ -13,7 +13,7 @@ import Footer from "../footer/Footer";
 import { Helmet } from "react-helmet";
 import { Outlet } from "react-router-dom";
 
-const VendorDashboardLayout: React.FC = ({ children }: any) => (
+const VendorDashboardLayout: React.FC = () => (
   <StyledAppLayout>
     <Helmet>
       <title>Latipe</title>

@@ -2,6 +2,8 @@ import { configureStore, combineReducers, ThunkDispatch, AnyAction, Store } from
 import storage from 'redux-persist/lib/storage';
 import authReducer from './slices/auth-slice';
 import userReducer from './slices/user-slice';
+import categoryReducer from './slices/categories-slice';
+
 import {
     persistStore,
     persistReducer,
@@ -24,6 +26,7 @@ const persistConfig = {
 export const rootReducer = combineReducers({
     auth: authReducer,
     user: userReducer,
+    categories: categoryReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

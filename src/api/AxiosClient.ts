@@ -8,6 +8,8 @@ import axios, {
     HeadersDefaults,
     ResponseType,
 } from 'axios';
+import { CategoryResponse, CreateCategoryRequest, UpdateCategoryRequest } from 'api/interface/product';
+import { MediaVm } from 'api/interface/media';
 
 export type QueryParamsType = Record<string | number, unknown>;
 
@@ -241,13 +243,6 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
     };
     users = {
 
-        /**
-  * No description
-  *
-  * @tags user-controller
-  * @name AddMyAddress
-  * @request POST:/auth/refresh-token
-  */
         addMyAddress: (data: CreateUserAddressRequest) =>
             this.request<UserAddress>({
                 path: `/users/my-address`,
@@ -255,13 +250,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
                 body: data,
                 type: ContentType.Json,
             }),
-        /**
-* No description
-*
-* @tags user-controller
-* @name GetMyAddress
-* @request POST:/auth/refresh-token
-*/
+
         getMyAddress: (params: QueryParamsType) =>
             this.request<PagedResultResponse<UserAddress>>({
                 path: `/users/my-address`,
@@ -306,5 +295,69 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
             }),
     }
 
+    category = {
+        getCategories: (params: QueryParamsType) =>
+            this.request<PagedResultResponse<CategoryResponse>>({
+                path: `/categories/paginate`,
+                method: 'GET',
+                type: ContentType.Json,
+                query: {
+                    ...params
+                }
+            }),
 
+        getChildCategories: (parentId: string) =>
+            this.request<CategoryResponse[]>({
+                path: `/categories/children-categories/${parentId}`,
+                method: 'GET',
+                type: ContentType.Json,
+
+            }),
+
+        getCategory: (id: string) =>
+            this.request<CategoryResponse>({
+                path: `/categories/${id}`,
+                method: 'GET',
+                type: ContentType.Json,
+            }),
+
+        addCategory: (data: CreateCategoryRequest) =>
+            this.request<CategoryResponse>({
+                path: `/categories`,
+                method: 'POST',
+                body: data,
+                type: ContentType.Json,
+            }),
+
+        updateCategory: (category: UpdateCategoryRequest) =>
+            this.request<CategoryResponse>({
+                path: `/categories/${category.id}`,
+                method: 'PUT',
+                body: category,
+                type: ContentType.Json,
+            }),
+
+        deleteCategory: (id: string) =>
+            this.request<CategoryResponse>({
+                path: `/categories/${id}`,
+                method: 'DELETE',
+                type: ContentType.Json,
+            }),
+    }
+    media = {
+        /**
+         * No description
+         *
+         * @tags user-controller
+         * @name addCategory
+         * @request POST:/auth/refresh-token
+         */
+        uploadFile: (formData: FormData) =>
+            this.request<MediaVm>({
+                path: `/medias`,
+                method: 'POST',
+                body: formData,
+                type: ContentType.FormData,
+            }),
+    }
 }

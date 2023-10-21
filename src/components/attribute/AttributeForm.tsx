@@ -18,7 +18,7 @@ interface Props {
 }
 
 const AttributeForm: React.FC<Props> = ({ attributes, onChange }) => {
-    const handleInputChange = (name: string, index: number, value: string) => {
+    const handleInputChange = (index: number, value: string) => {
         onChange({ index, value });
     };
     return (

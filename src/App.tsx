@@ -36,6 +36,9 @@ const OrdersVendor = lazy(() => import('./pages/vendor/orders/index'));
 const ProductDetailsVendor = lazy(() => import('./pages/vendor/products/[id]'));
 const ProductsVendor = lazy(() => import('./pages/vendor/products/index'));
 
+// admin pages
+const DashboardAdmin = lazy(() => import('./components/layout/admin/AdminLayout'));
+const CategoriesAdmin = lazy(() => import('./components/admin/AdminCategories'));
 
 const AboutPage = lazy(() => import('./pages/about'));
 const Cart = lazy(() => import('./pages/cart'));
@@ -190,7 +193,11 @@ function App() {
                 }>
                   <Route path="/vendor/add-product" element={<AddProduct />} />
                 </Route>
+                {/* Admin */}
 
+                <Route path="/admin/" element={<DashboardAdmin />}>
+                  <Route path="categories" element={<CategoriesAdmin />} />
+                </Route>
               </Routes>
             </Suspense>
           </Router>

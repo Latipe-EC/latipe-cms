@@ -72,6 +72,12 @@ export interface CreateCategoryRequest {
      * @memberof CreateCategoryRequest
      */
     'image'?: string;
+    /**
+   * 
+   * @type {File}
+   * @memberof CreateCategoryRequest
+   */
+    'file'?: File;
 }
 /**
  * 
@@ -713,6 +719,7 @@ export interface ProductVariantVm {
  * @interface UpdateCategoryRequest
  */
 export interface UpdateCategoryRequest {
+    'id': string;
     /**
      * 
      * @type {string}
@@ -731,6 +738,7 @@ export interface UpdateCategoryRequest {
      * @memberof UpdateCategoryRequest
      */
     'image'?: string;
+    'file'?: File;
 }
 /**
  * 

@@ -14,9 +14,7 @@ export const fetchCategories = createAsyncThunk(
 
 export const addCategory = createAsyncThunk('categories/addCategory', async (category: CreateCategoryRequest) => {
     if (category.file !== null) {
-        const formData = new FormData();
-        formData.append('file', category.file, `image/${category.file.type.split('/')[1]}`);
-        const file = await api.media.uploadFile(formData);
+        const file = await api.media.uploadFile({ file: category.file });
         category.image = file.data.url;
         category.file = null;
     }
@@ -31,9 +29,7 @@ export const deleteCategory = createAsyncThunk('categories/deleteCategory', asyn
 
 export const updateCategory = createAsyncThunk('categories/updateCategory', async (category: UpdateCategoryRequest) => {
     if (category.file !== null) {
-        const formData = new FormData();
-        formData.append('file', category.file, `image/${category.file.type.split('/')[1]}`);
-        const file = await api.media.uploadFile(formData);
+        const file = await api.media.uploadFile({ file: category.file });
         category.image = file.data.url;
     }
     const response = await api.category.updateCategory(category);
@@ -79,7 +75,6 @@ export const categoriesSlice = createSlice({
                 state.pagination.limit = action.payload.data.pagination.limit;
             })
             .addCase(fetchCategories.rejected, (state, action) => {
-                console.log(23);
                 state.isLoading = false;
                 state.error = action.error.message;
             })
@@ -95,7 +90,10 @@ export const categoriesSlice = createSlice({
             })
             .addCase(deleteCategory.fulfilled, (state, action) => {
                 const deletedCateId = action.meta.arg;
-                state.data = state.data.filter((category) => category.Id !== deletedCateId);
+                const inedx = state.data.findIndex((category) => category.Id === deletedCateId);
+                if (inedx !== -1) {
+                    state.data.splice(inedx, 1);
+                }
             })
             .addCase(updateCategory.fulfilled, (state, action) => {
                 const deletedCateId = action.meta.arg;

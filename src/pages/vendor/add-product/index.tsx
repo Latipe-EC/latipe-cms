@@ -591,7 +591,8 @@ const AddProduct = () => {
                             borderRight: "2px solid #ddd",
                             borderBottom: index === productVariants[0].options.length - 1 ? "none" : "2px solid #ddd",
                           }}
-                          > <Flex alignItems="center" justifyContent="space-between" >
+                          >
+                            <Flex alignItems="center" justifyContent="space-between" >
                               {item.option}
                               <IconButton
                                 aria-label="Upload file"

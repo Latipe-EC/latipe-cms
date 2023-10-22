@@ -352,11 +352,13 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
          * @name addCategory
          * @request POST:/auth/refresh-token
          */
-        uploadFile: (formData: FormData) =>
+        uploadFile: (data: {
+            file: File
+        }) =>
             this.request<MediaVm>({
                 path: `/medias`,
                 method: 'POST',
-                body: formData,
+                body: data,
                 type: ContentType.FormData,
             }),
     }

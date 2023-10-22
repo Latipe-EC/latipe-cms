@@ -42,9 +42,7 @@ export type AppStore = Omit<Store<RootState, AnyAction>, "dispatch"> & {
 export const store: AppStore = configureStore({
     reducer: persistedReducer,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-        serializableCheck: {
-            ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-        },
+        serializableCheck: false
     }),
 });
 

@@ -4,6 +4,7 @@ import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Flex, Link, Text, useC
 import { useState, useEffect } from 'react';
 import AdminNavbarLinks from '../navbar/NavbarLinksAdmin';
 import { Outlet } from 'react-router-dom';
+import Scrollbars from 'react-custom-scrollbars-2';
 
 export default function AdminNavbar(props: {
 	secondary: boolean;
@@ -141,7 +142,10 @@ export default function AdminNavbar(props: {
 						</Box>
 					</Flex>
 					<Box mt={8}>
-						<Outlet /></Box>
+						<Scrollbars style={{ height: 'calc(100vh - 200px)' }}>
+							<Outlet />
+						</Scrollbars>
+					</Box>
 				</Box>
 			</Box>
 		</>

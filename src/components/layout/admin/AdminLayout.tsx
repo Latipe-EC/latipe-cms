@@ -1,18 +1,15 @@
 // Chakra imports
-import { Portal, Box, useDisclosure, Icon } from '@chakra-ui/react';
+import { Portal, Box, useDisclosure } from '@chakra-ui/react';
 // Layout components
 import Navbar from '../../navbar/NavbarAdmin';
 import Sidebar from '../../sidebar/Sidebar';
 import { useState } from 'react';
-import { Outlet, Route, Routes } from 'react-router-dom';
 import { RoutesType } from 'api/interface/interface';
 import routes from './routes.tsx';
-
 
 export default function Dashboard() {
     // states and functions
     const [fixed] = useState(false);
-    const [toggleSidebar, setToggleSidebar] = useState(false);
 
     const getActiveRoute = (routes: RoutesType[]): string => {
         const activeRoute = 'Default Brand Text';
@@ -46,9 +43,8 @@ export default function Dashboard() {
     const { onOpen } = useDisclosure();
     return (
         <Box>
-            <Sidebar routes={routes} display='none' />
 
-
+            <Sidebar routes={routes} />
             <Box
                 float='right'
                 minHeight='100vh'

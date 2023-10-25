@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import { useDispatch } from 'react-redux';
 import { debounce } from 'lodash';
-import { Box, Button, ButtonGroup, Flex, FormControl, FormErrorMessage, FormLabel, Image, Input, InputGroup, InputLeftElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Spinner, Table, Tbody, Td, Th, Thead, Tr, VStack, useToast } from '@chakra-ui/react';
-import { CreateCategoryRequest, UpdateCategoryRequest } from 'api/interface/product';
+import { Box, Button, ButtonGroup, Flex, FormControl, FormErrorMessage, FormLabel, Icon, IconButton, Image, Input, InputGroup, InputLeftElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Spinner, Table, Tbody, Td, Th, Thead, Tr, VStack, useToast } from '@chakra-ui/react';
+import { Attribute, CreateCategoryRequest, UpdateCategoryRequest } from 'api/interface/product';
 import { MdSearch } from 'react-icons/md';
 import Pagination from "../pagination/Pagination";
 
@@ -14,11 +14,12 @@ import {
   addCategory,
   deleteCategory
 } from '../../store/slices/categories-slice';
-import { AddIcon, ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
+import { AddIcon, ChevronDownIcon, ChevronUpIcon, CloseIcon } from '@chakra-ui/icons';
 import FlexBox from '../FlexBox';
 import defaultImage from '../../assets/default.jpg';
 import Dropdown from '../dropdown/Dropdown';
 import ImageUploader from '../upload-image/UploadImage';
+import AttributeForm from '../attribute/AttributeForm';
 
 const CategoriesAdmin = () => {
 
@@ -33,7 +34,7 @@ const CategoriesAdmin = () => {
   const [size] = useState(10);
   const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
   const [parentCategory, setParentCategory] = useState(null);
-
+  const [attributes, setAttributes] = useState<Attribute>([]);
 
   const dispatch = useDispatch<AppThunkDispatch>();
   const categories = useAppSelector((state: RootState) => state.categories);
@@ -330,6 +331,15 @@ const CategoriesAdmin = () => {
     setShowDeleteModal(false);
   };
 
+  const handleAddAttributes = () => {
+    setAttributes([...attributes, { name: "", defaultValue: "", type: "text", isRequired: false, prefixUnit: "", options: [] }]);
+  }
+
+  const removeAttribute = (index) => {
+    const newAttributes = [...attributes];
+    newAttributes.splice(index, 1);
+    setAttributes(newAttributes);
+  }
   return (
     <div >
       <Box
@@ -414,22 +424,100 @@ const CategoriesAdmin = () => {
           <ModalCloseButton />
           <ModalBody >
             <FormControl isRequired isInvalid={selectedCategory.name === ""}>
-              <FormLabel>Name</FormLabel>
+              <FormLabel style={{ fontWeight: 'bold' }}>Name</FormLabel>
               <Input value={selectedCategory.name} onChange={(e) => {
                 setSelectedCategory({ ...selectedCategory, name: e.target.value })
               }} required />
               <FormErrorMessage>name is required</FormErrorMessage>
             </FormControl >
             <FormControl  >
-              <FormLabel>Image</FormLabel>
+              <FormLabel style={{ fontWeight: 'bold' }}>Image</FormLabel>
               <ImageUploader value={imagePreviewUrl} setValue={setImagePreviewUrl} ></ImageUploader>
             </FormControl >
             <FormControl  >
-              <FormLabel>Parent Category</FormLabel>
+              <FormLabel style={{ fontWeight: 'bold' }}>Parent Category</FormLabel>
               <Dropdown
                 value={selectedCategory.parentCategory}
                 onChange={handleParentCategoryChange}
               />
+            </FormControl >
+            <FormControl  >
+              <FormLabel style={{ fontWeight: 'bold' }}>Add attributes</FormLabel>
+              {attributes.map((attribute, index) => {
+                return (
+                  <>
+                    <Flex alignItems="center" mb={2} mt={2}>
+                      <FormLabel alignItems="center" fontWeight="bold" mr={2}
+                        mt={2}
+                        mb={2}>
+                        Attribute {index + 1}
+                      </FormLabel>
+                      <IconButton icon={<CloseIcon />} size="sm" colorScheme="red" onClick={() => removeAttribute(index)} />
+                    </Flex>
+                    <Box>
+                      <Flex alignItems="center" mb="2">
+                        <FormLabel htmlFor="name" mr="2">
+                          Name
+                        </FormLabel>
+                        <Input
+                          id="name"
+                          value={attribute.name}
+                          onChange={(e) => { }}
+                          isRequired
+                          w="70%"
+                          mr="2"
+                        />
+                        <FormLabel htmlFor="type" mr="2">
+                          Type
+                        </FormLabel>
+                        <Select id="type" value={attribute.type} w="30%" mr="2">
+                          <option value="text">Text</option>
+                          <option value="number">Number</option>
+                          <option value="selectbox">Selectbox</option>
+                        </Select>
+                      </Flex>
+                      <Flex alignItems="center" mb="2">
+                        <FormLabel htmlFor="options" mr="2">
+                          Options
+                        </FormLabel>
+                        <Input
+                          id="options"
+                          value={attribute.options}
+                          onChange={(e) => { }}
+                          isRequired
+                          w="100%"
+                          mr="2"
+                        />
+                      </Flex>
+                      <Flex alignItems="center" mb="2">
+                        <FormLabel htmlFor="defaultValue" mr="2">
+                          Default Value
+                        </FormLabel>
+                        <Input
+                          id="defaultValue"
+                          value={attribute.defaultValue}
+                          onChange={(e) => { }}
+                          isRequired
+                          w="50%"
+                          mr="2"
+                        />
+                        <FormLabel htmlFor="prefixUnit" mr="2">
+                          Prefix Unit
+                        </FormLabel>
+                        <Input
+                          id="prefixUnit"
+                          value={attribute.prefixUnit}
+                          onChange={(e) => { }}
+                          isRequired
+                          w="50%"
+                        />
+                      </Flex>
+                    </Box>
+                  </>
+                );
+              })}
+              <IconButton icon={<AddIcon />} onClick={handleAddAttributes}></IconButton>
+
             </FormControl >
           </ModalBody>
           <ModalFooter>

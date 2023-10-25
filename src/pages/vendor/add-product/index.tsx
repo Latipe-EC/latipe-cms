@@ -5,7 +5,7 @@ import VendorDashboardLayout from "../../../components/layout/VendorDashboardLay
 import './index.css'
 import { useEffect, useState } from "react";
 import { AddIcon, CloseIcon } from '@chakra-ui/icons';
-import { Attribute, ProductClassification, ProductVariant } from "api/interface/product";
+import { ProductClassification, ProductVariant } from "api/interface/product";
 import AttributeForm from "../../../components/attribute/AttributeForm";
 
 

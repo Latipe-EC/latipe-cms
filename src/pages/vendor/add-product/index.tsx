@@ -6,7 +6,7 @@ import './index.css'
 import { useEffect, useState } from "react";
 import { AddIcon, CloseIcon } from '@chakra-ui/icons';
 import { ProductClassification, ProductVariant } from "api/interface/product";
-import AttributeForm from "../../../components/attribute/AttributeForm";
+import AttributeForm from "../../../components/attribute/AttributeRenderForm";
 
 
 const attributess = [

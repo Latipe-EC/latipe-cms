@@ -1,4 +1,4 @@
-import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Box, Button, Flex, FormControl, FormLabel, IconButton, Image, Input, InputGroup, InputLeftElement, InputRightElement, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Stack, Switch, Table, Tbody, Td, Text, Textarea, Th, Thead, Tr } from "@chakra-ui/react";
+import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Box, Button, Divider, Flex, FormControl, FormLabel, HStack, Icon, IconButton, Image, Input, InputGroup, InputLeftElement, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Stack, Switch, Table, Tbody, Td, Text, Textarea, Th, Thead, Tr, VStack } from "@chakra-ui/react";
 import DropZone from "../../../components/DropZone";
 import DashboardPageHeader from "../../../components/layout/DashboardPageHeader";
 import VendorDashboardLayout from "../../../components/layout/VendorDashboardLayout";
@@ -102,7 +102,6 @@ const AddProduct = () => {
 		setData((prevData) => {
 			const newData = prevData.map((item) => {
 				if (item.order > order) {
-					console.log(item);
 					return { ...item, categories: [] };
 				}
 				return item;
@@ -240,6 +239,69 @@ const AddProduct = () => {
 
 	return (
 		<div>
+			<Modal size={"6xl"} isOpen={true} onClose={() => { }} isCentered  >
+				<ModalOverlay />
+				<ModalContent height="4xl">
+					<ModalHeader style={{
+						fontWeight: 'bold', fontSize: '20px', color: 'gray.800', textAlign: "center", marginTop: '20px'
+					}}>
+						Select Category
+					</ModalHeader>
+					<ModalCloseButton />
+					<ModalBody  >
+						<Box bgColor={"#f6f6f6"} p={2}>
+							<FormControl mt={2} mb={4} w={"50%"} >
+								<InputGroup size="md">
+									<InputLeftElement pointerEvents="none">
+										{/* <Icon as={SearchIcon} color="gray.300" /> */}
+									</InputLeftElement>
+									<Input placeholder="Search" />
+								</InputGroup>
+							</FormControl >
+							<FormControl p={2} bgColor={"white"}>
+								<Flex h="l" overflowX="auto" alignItems="stretch">
+									{tempdata.map((data) => (
+										<Flex key={data.order}>
+											<Flex
+												fontSize="md"
+												pl={2} pt={2}
+												flex="1"
+												minW="250px"
+												maxW="250px"
+												ml={2}
+											>
+												<VStack height="xl" spacing={2} alignItems="stretch">
+													{data.categories.map((category) => (
+														<Box
+															key={category.id}
+															cursor="pointer"
+															onClick={() => handleCategorySelect(category)}
+															bg={selectedCategory?.id === category.id ? "orange.200" : "transparent"}
+														>
+															{category.name}
+														</Box>
+													))}
+												</VStack>
+											</Flex>
+											{data.order < tempdata.length && (
+												<Divider orientation="vertical" width="1px" h="xl" bgColor="red.300" />
+											)}
+										</Flex>
+									))}
+								</Flex>
+							</FormControl >
+
+						</Box>
+					</ModalBody>
+					<ModalFooter>
+						<Button variant='ghost' color="red" mr={3} onClick={() => { }}>
+							Close
+						</Button>
+						<Button variant='ghost' color='green'
+						>Save</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
 			<DashboardPageHeader
 				title="Add Product"
 				iconName="delivery-box"

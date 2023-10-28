@@ -17,7 +17,7 @@ interface Props {
 	onChange: (attributeValue: { index: number; value: string }) => void;
 }
 
-const AttributeForm: React.FC<Props> = ({ attributes, onChange }) => {
+const AttributeRenderForm: React.FC<Props> = ({ attributes, onChange }) => {
 	const handleInputChange = (index: number, value: string) => {
 		onChange({ index, value });
 	};
@@ -77,4 +77,4 @@ const AttributeForm: React.FC<Props> = ({ attributes, onChange }) => {
 		</Flex>
 	);
 };
-export default AttributeForm;
+export default AttributeRenderForm;

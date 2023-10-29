@@ -7,6 +7,11 @@ import { useEffect, useState } from "react";
 import { AddIcon, CloseIcon } from '@chakra-ui/icons';
 import { ProductClassification, ProductVariant } from "api/interface/product";
 import AttributeRenderForm from "../../../components/attribute/AttributeRenderForm";
+import { debounce, set } from "lodash";
+import { useDispatch } from "react-redux";
+import { getChildsCategory, searchCategory } from "../../../store/slices/categories-slice";
+import { AppThunkDispatch } from "../../../store/store";
+import { is } from "date-fns/locale";
 
 const AddProduct = () => {
 
@@ -24,6 +29,9 @@ const AddProduct = () => {
 	const [productVariants, setProductVariants] = useState<ProductVariant[]>([]);
 	const [productClassification, setProductClassification] = useState<ProductClassification[]>([]);
 	const [attributeValues, setAttributeValues] = useState([]);
+	const [selectedListCategory, setSelectedListCategory] = useState([]);
+
+	const dispatch = useDispatch<AppThunkDispatch>();
 
 	const handleDrop = (acceptedFiles) => {
 		console.log(acceptedFiles);
@@ -79,13 +87,45 @@ const AddProduct = () => {
 	];
 
 	useEffect(() => {
+		console.log(categories);
 		if (isModalCateOpen) {
-			fetchCategories(searchText);
+			if (categories.length === 0) {
+				dispatch(getChildsCategory(null)).unwrap().then((payload) => {
+					if (payload.data.length === 0) {
+						setCategories([])
+					} else
+						setCategories([{ categories: [...payload.data], order: 1 }]);
+				});
+			} else {
+				const newData = categories.splice(0, 1)
+				setCategories(newData);
+			}
 		}
-	}, [isModalCateOpen, searchText]);
-	function fetchCategories(searchText: string) {
-		setData(tempdata);
-	}
+	}, [isModalCateOpen]);
+
+
+	const handleSearch = debounce(() => {
+		if (isModalCateOpen) {
+			if (searchText && searchText.length > 0) {
+				dispatch(searchCategory({ name: searchText })).unwrap().then((payload) => {
+					setCategories([{ categories: [...payload.data], order: 1 }]);
+				});
+			} else {
+				dispatch(getChildsCategory(null)).unwrap().then((payload) => {
+					console.log(payload.data);
+					if (payload.data.length === 0) {
+						setCategories([])
+					} else {
+						setCategories([{ categories: [...payload.data], order: 1 }]);
+					}
+				});
+			}
+		}
+	}, 500);
+
+	useEffect(() => {
+		handleSearch();
+	}, [searchText]);
 
 
 	const handleAttributeChange = ({ index, value }) => {
@@ -94,19 +134,18 @@ const AddProduct = () => {
 				i === index ? { ...attribute, ["value"]: value } : attribute
 			)
 		);
-		console.log(attributeValues);
 	};
 
 	const handleCategorySelect = (category, order) => {
-		setSelectedCategory([category]);
-		setData((prevData) => {
-			const newData = prevData.map((item) => {
-				if (item.order > order) {
-					return { ...item, categories: [] };
-				}
-				return item;
-			});
-			return newData;
+		const newSelectedListCategory = [...selectedListCategory];
+		newSelectedListCategory.splice(order, newSelectedListCategory.length - order);
+		setSelectedListCategory([...newSelectedListCategory, { id: category.id, name: category.name }]);
+		const newCategory = [...categories];
+		newCategory.splice(order + 1, newCategory.length - order - 1);
+		dispatch(getChildsCategory(category.id)).unwrap().then((payload) => {
+			if (payload.data.length !== 0) {
+				setCategories([...newCategory, { categories: [...payload.data], order }]);
+			}
 		});
 	}
 
@@ -212,6 +251,7 @@ const AddProduct = () => {
 		setProductVariants(newProductVariants);
 	};
 
+
 	const handleProductClassificationChange = (
 		index: number,
 		key: keyof ProductClassification,
@@ -239,7 +279,10 @@ const AddProduct = () => {
 
 	return (
 		<div>
-			<Modal size={"6xl"} isOpen={true} onClose={() => { }} isCentered  >
+			<Modal size={"6xl"} isOpen={isModalCateOpen} onClose={() => {
+				setModalCateOpen(false);
+				setSelectedListCategory([])
+			}} isCentered  >
 				<ModalOverlay />
 				<ModalContent height="4xl">
 					<ModalHeader style={{
@@ -255,13 +298,13 @@ const AddProduct = () => {
 									<InputLeftElement pointerEvents="none">
 										{/* <Icon as={SearchIcon} color="gray.300" /> */}
 									</InputLeftElement>
-									<Input placeholder="Search" />
+									<Input placeholder="Search" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
 								</InputGroup>
 							</FormControl >
 							<FormControl p={2} bgColor={"white"}>
 								<Flex h="l" overflowX="auto" alignItems="stretch">
-									{tempdata.map((data) => (
-										<Flex key={data.order}>
+									{isModalCateOpen && categories.length > 0 && categories.map((data, index) => (
+										<Flex key={index}>
 											<Flex
 												fontSize="md"
 												pl={2} pt={2}
@@ -271,12 +314,12 @@ const AddProduct = () => {
 												ml={2}
 											>
 												<VStack height="xl" spacing={2} alignItems="stretch">
-													{data.categories.map((category) => (
+													{data.categories && data.categories.map((category) => (
 														<Box
 															key={category.id}
 															cursor="pointer"
-															onClick={() => handleCategorySelect(category)}
-															bg={selectedCategory?.id === category.id ? "orange.200" : "transparent"}
+															onClick={() => handleCategorySelect(category, index)}
+															bg={selectedListCategory.findIndex(x => x.id.includes(category.id)) !== -1 ? "orange.200" : "transparent"}
 														>
 															{category.name}
 														</Box>
@@ -294,7 +337,10 @@ const AddProduct = () => {
 						</Box>
 					</ModalBody>
 					<ModalFooter>
-						<Button variant='ghost' color="red" mr={3} onClick={() => { }}>
+						<Button variant='ghost' color="red" mr={3}
+
+							onClick={() => { setModalCateOpen(false); setSelectedListCategory([]) }}
+						>
 							Close
 						</Button>
 						<Button variant='ghost' color='green'
@@ -362,9 +408,9 @@ const AddProduct = () => {
 								<InputGroup>
 									<Input
 										placeholder="category"
-										value={selectedCategory.map((cate) => cate.name).join('->')}
+										value={selectedListCategory.map((cate) => cate.name).join('->')}
 										onChange={handleChangeName}
-										onClick={() => setModalCateOpen(true)}
+										onClick={() => { setModalCateOpen(true); setSelectedListCategory([]) }}
 										maxLength={maxLength}
 										pr="4rem"
 										cursor={'pointer'}

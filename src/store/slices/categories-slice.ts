@@ -12,6 +12,14 @@ export const fetchCategories = createAsyncThunk(
 	}
 );
 
+export const searchCategory = createAsyncThunk(
+	'categories/search',
+	async (params: QueryParamsType) => {
+		const response = await api.category.getCategories(params);
+		return response;
+	}
+);
+
 export const addCategory = createAsyncThunk('categories/addCategory', async (category: CreateCategoryRequest) => {
 	if (category.file !== null) {
 		const file = await api.media.uploadFile({ file: category.file });

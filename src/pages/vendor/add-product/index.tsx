@@ -11,26 +11,23 @@ import { debounce, set } from "lodash";
 import { useDispatch } from "react-redux";
 import { getChildsCategory, searchCategory } from "../../../store/slices/categories-slice";
 import { AppThunkDispatch } from "../../../store/store";
-import { is } from "date-fns/locale";
 
 const AddProduct = () => {
 
 	const [isPublic, setIsPublic] = useState(true);
-	const [data, setData] = useState([]);
 	const [images, setImages] = useState([]);
 	const [name, setName] = useState('');
 	const [description, setDescription] = useState('');
 	const [price, setPrice] = useState(0);
 	const [inventory, setInventory] = useState(0);
-	const [selectedCategory, setSelectedCategory] = useState([]);
 	const [isModalCateOpen, setModalCateOpen] = useState(false);
 	const [searchText, setSearchText] = useState('');
 	const [categories, setCategories] = useState([]);
 	const [productVariants, setProductVariants] = useState<ProductVariant[]>([]);
 	const [productClassification, setProductClassification] = useState<ProductClassification[]>([]);
 	const [attributeValues, setAttributeValues] = useState([]);
-	const [selectedListCategory, setSelectedListCategory] = useState([]);
-
+	const [selectedCategory, setSelectedCategory] = useState([]);
+	const [attributes, setAttributes] = useState([]);
 	const dispatch = useDispatch<AppThunkDispatch>();
 
 	const handleDrop = (acceptedFiles) => {
@@ -127,6 +124,11 @@ const AddProduct = () => {
 		handleSearch();
 	}, [searchText]);
 
+	useEffect(() => {
+		if (selectedCategory.length > 0 && isModalCateOpen) {
+			s
+
+		}, [categories, isModalCateOpen]);
 
 	const handleAttributeChange = ({ index, value }) => {
 		setAttributeValues((prevAttributes) =>
@@ -137,14 +139,16 @@ const AddProduct = () => {
 	};
 
 	const handleCategorySelect = (category, order) => {
-		const newSelectedListCategory = [...selectedListCategory];
+		const newSelectedListCategory = [...selectedCategory];
 		newSelectedListCategory.splice(order, newSelectedListCategory.length - order);
-		setSelectedListCategory([...newSelectedListCategory, { id: category.id, name: category.name }]);
+		setSelectedCategory([...newSelectedListCategory, { id: category.id, name: category.name, attributes: category.attributes }]);
 		const newCategory = [...categories];
-		newCategory.splice(order + 1, newCategory.length - order - 1);
+		newCategory.splice(order + 1, newCategory.length - order);
 		dispatch(getChildsCategory(category.id)).unwrap().then((payload) => {
 			if (payload.data.length !== 0) {
 				setCategories([...newCategory, { categories: [...payload.data], order }]);
+			} else {
+				setCategories([...newCategory]);
 			}
 		});
 	}
@@ -277,11 +281,15 @@ const AddProduct = () => {
 		setProductClassification(newProductClassification);
 	};
 
+	const handleSaveCategoriesSelect = () => {
+		setModalCateOpen(false);
+	}
+
 	return (
 		<div>
 			<Modal size={"6xl"} isOpen={isModalCateOpen} onClose={() => {
 				setModalCateOpen(false);
-				setSelectedListCategory([])
+				setSelectedCategory([])
 			}} isCentered  >
 				<ModalOverlay />
 				<ModalContent height="4xl">
@@ -319,7 +327,8 @@ const AddProduct = () => {
 															key={category.id}
 															cursor="pointer"
 															onClick={() => handleCategorySelect(category, index)}
-															bg={selectedListCategory.findIndex(x => x.id.includes(category.id)) !== -1 ? "orange.200" : "transparent"}
+															fontWeight={selectedCategory.findIndex(x => x.id.includes(category.id)) !== -1 ? "bold" : ""}
+															color={selectedCategory.findIndex(x => x.id.includes(category.id)) !== -1 ? "#ee4d2d" : "black"}
 														>
 															{category.name}
 														</Box>
@@ -338,12 +347,12 @@ const AddProduct = () => {
 					</ModalBody>
 					<ModalFooter>
 						<Button variant='ghost' color="red" mr={3}
-
-							onClick={() => { setModalCateOpen(false); setSelectedListCategory([]) }}
+							onClick={() => { setModalCateOpen(false); setSelectedCategory([]) }}
 						>
 							Close
 						</Button>
 						<Button variant='ghost' color='green'
+							onClick={handleSaveCategoriesSelect}
 						>Save</Button>
 					</ModalFooter>
 				</ModalContent>
@@ -376,6 +385,7 @@ const AddProduct = () => {
 										placeholder="Name"
 										value={name}
 										maxLength={maxLength}
+										onChange={handleChangeName}
 										pr="4rem"
 										overflow="hidden"
 									/>
@@ -408,9 +418,9 @@ const AddProduct = () => {
 								<InputGroup>
 									<Input
 										placeholder="category"
-										value={selectedListCategory.map((cate) => cate.name).join('->')}
+										value={selectedCategory.map((cate) => cate.name).join(' -> ')}
 										onChange={handleChangeName}
-										onClick={() => { setModalCateOpen(true); setSelectedListCategory([]) }}
+										onClick={() => { setModalCateOpen(true); setSelectedCategory([]) }}
 										maxLength={maxLength}
 										pr="4rem"
 										cursor={'pointer'}

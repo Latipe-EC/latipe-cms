@@ -2,11 +2,12 @@ import React from "react";
 import {
 	Box,
 	Flex,
+	FormLabel,
 	Input,
 	InputGroup,
-	InputLeftAddon,
 	InputRightElement,
 	Select,
+	Text,
 } from "@chakra-ui/react";
 import { Attribute } from "api/interface/product";
 
@@ -36,9 +37,9 @@ const AttributeRenderForm: React.FC<Props> = ({ attributes, onChange }) => {
 
 				if (type === "selectbox" && options) {
 					return (
-						<Box key={name} width="40%" margin="0 10px 10px 0">
+						<Box key={name} width="45%" margin="0 10px 10px 0">
+							<FormLabel fontWeight={'bold'}>{name} {isRequired && <Text as="span" color="red.500">*</Text>}</FormLabel>
 							<InputGroup>
-								<InputLeftAddon>{name}</InputLeftAddon>
 								<Select
 									defaultValue={value || defaultValue}
 									isRequired={isRequired}
@@ -58,9 +59,9 @@ const AttributeRenderForm: React.FC<Props> = ({ attributes, onChange }) => {
 				}
 
 				return (
-					<Box key={name} width="40%" margin="0 10px 10px 0">
+					<Box key={name} width="45%" margin="0 10px 10px 0">
+						<FormLabel fontWeight={'bold'}>{name} {isRequired && <Text as="span" color="red.500">*</Text>}</FormLabel>
 						<InputGroup>
-							<InputLeftAddon>{name}</InputLeftAddon>
 							<Input
 								defaultValue={value || defaultValue}
 								isRequired={isRequired}

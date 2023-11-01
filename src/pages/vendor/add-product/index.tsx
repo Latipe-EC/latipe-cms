@@ -1,20 +1,22 @@
-import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Box, Button, Divider, Flex, FormControl, FormLabel, HStack, Icon, IconButton, Image, Input, InputGroup, InputLeftElement, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Stack, Switch, Table, Tbody, Td, Text, Textarea, Th, Thead, Tr, VStack } from "@chakra-ui/react";
+import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Box, Button, Divider, Flex, FormControl, FormLabel, HStack, Icon, IconButton, Image, Input, InputGroup, InputLeftElement, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Spinner, Stack, Switch, Table, Tbody, Td, Text, Textarea, Th, Thead, Tr, VStack, useToast } from "@chakra-ui/react";
 import DropZone from "../../../components/DropZone";
 import DashboardPageHeader from "../../../components/layout/DashboardPageHeader";
 import VendorDashboardLayout from "../../../components/layout/VendorDashboardLayout";
 import './index.css'
 import { useEffect, useState } from "react";
 import { AddIcon, CloseIcon } from '@chakra-ui/icons';
-import { ProductClassification, ProductVariant } from "api/interface/product";
+import { CreateProductRequest, ProductClassification, ProductVariant } from "api/interface/product";
 import AttributeRenderForm from "../../../components/attribute/AttributeRenderForm";
 import { debounce, set } from "lodash";
 import { useDispatch } from "react-redux";
 import { getChildsCategory, searchCategory } from "../../../store/slices/categories-slice";
 import { AppThunkDispatch } from "../../../store/store";
+import { createProduct } from "../../../store/slices/products-slice";
+import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
 
-	const [isPublic, setIsPublic] = useState(true);
+	const [isPublished, setIsPublished] = useState(true);
 	const [images, setImages] = useState([]);
 	const [name, setName] = useState('');
 	const [description, setDescription] = useState('');
@@ -24,14 +26,18 @@ const AddProduct = () => {
 	const [searchText, setSearchText] = useState('');
 	const [categories, setCategories] = useState([]);
 	const [productVariants, setProductVariants] = useState<ProductVariant[]>([]);
-	const [productClassification, setProductClassification] = useState<ProductClassification[]>([]);
+	const [productClassifications, setProductClassifications] = useState<ProductClassification[]>([]);
 	const [attributeValues, setAttributeValues] = useState([]);
 	const [selectedCategory, setSelectedCategory] = useState([]);
-	const [attributes, setAttributes] = useState([]);
+	const [disableButtonSaveCategory, setDisableButtonSaveCategory] = useState(false);
+	const [step, setStep] = useState([0]);
+	const [promotionalPrice, setPromotionalPrice] = useState(0);
+	const [disableSaveProduct, setDisableSaveProduct] = useState(true);
 	const dispatch = useDispatch<AppThunkDispatch>();
+	const toast = useToast();
+	const navigate = useNavigate();
 
 	const handleDrop = (acceptedFiles) => {
-		console.log(acceptedFiles);
 		setImages((prevFiles) => [...prevFiles, ...acceptedFiles]);
 	};
 
@@ -84,7 +90,29 @@ const AddProduct = () => {
 	];
 
 	useEffect(() => {
-		console.log(categories);
+		if (name === '' || description === '' || images.length === 0 || selectedCategory.length === 0) {
+			setDisableSaveProduct(true);
+			return;
+		}
+		if (productVariants.length === 0) {
+			if (price === 0 || inventory === 0) {
+				setDisableSaveProduct(true);
+				return;
+			}
+			setDisableSaveProduct(false);
+		} else {
+			if (productClassifications.length >= 0) {
+				for (let i = 0; i < productClassifications.length; i++) {
+					if (productClassifications[i].price === 0 || productClassifications[i].quantity === 0) {
+						setDisableSaveProduct(true);
+						return;
+					}
+				}
+				setDisableSaveProduct(false);
+			}
+		}
+	}, [name, description, images, selectedCategory, productVariants.length, price, inventory, productClassifications]);
+	useEffect(() => {
 		if (isModalCateOpen) {
 			if (categories.length === 0) {
 				dispatch(getChildsCategory(null)).unwrap().then((payload) => {
@@ -126,9 +154,9 @@ const AddProduct = () => {
 
 	useEffect(() => {
 		if (selectedCategory.length > 0 && isModalCateOpen) {
-			s
 
-		}, [categories, isModalCateOpen]);
+		}
+	}, [categories, isModalCateOpen]);
 
 	const handleAttributeChange = ({ index, value }) => {
 		setAttributeValues((prevAttributes) =>
@@ -147,8 +175,10 @@ const AddProduct = () => {
 		dispatch(getChildsCategory(category.id)).unwrap().then((payload) => {
 			if (payload.data.length !== 0) {
 				setCategories([...newCategory, { categories: [...payload.data], order }]);
+				setDisableButtonSaveCategory(true)
 			} else {
 				setCategories([...newCategory]);
+				setDisableButtonSaveCategory(false);
 			}
 		});
 	}
@@ -158,19 +188,20 @@ const AddProduct = () => {
 			return;
 		}
 		if (productVariants.length === 0) {
-			setProductClassification([{ name: '0', quantity: 0, price: 0, sku: '' }]);
+			setProductClassifications([{ name: '0', quantity: 0, price: 0, promotionalPrice: 0, sku: '' }]);
 		}
 		else {
-			const newProductClassification = [...productClassification];
+			console.log(123);
+			const newProductClassification = [...productClassifications];
 			newProductClassification.flatMap((item, index) => [item, {
 				name:
 					(index + 2).toString(),
 				quantity: 0, price: 0, sku: ''
 			}])
-			setProductClassification(newProductClassification);
+			setProductClassifications(newProductClassification);
 
 		}
-		setProductVariants([...productVariants, { name: '', options: [{ option: '', file: new File([new Blob()], 'Upload', { type: 'image/png' }) }] }]);
+		setProductVariants([...productVariants, { name: '', optionSamples: [{ option: '', file: new File([new Blob()], 'Upload', { type: 'image/png' }) }] }]);
 	}
 
 	const handleProductVariantNameChange = (index: number, name: string) => {
@@ -181,22 +212,22 @@ const AddProduct = () => {
 
 	const handleAddProductVariantValue = (index: number) => {
 		const newProductVariants = [...productVariants];
-		const newProductClassification = [...productClassification];
+		const newProductClassification = [...productClassifications];
 
-		newProductVariants[index].options.push({ option: '', file: new File([new Blob()], 'Upload', { type: 'image/png' }) });
+		newProductVariants[index].optionSamples.push({ option: '', file: new File([new Blob()], 'Upload', { type: 'image/png' }) });
 		if (index === 0) {
 			if (newProductVariants.length === 1) {
 				newProductClassification.push({
 					name:
-						(index * newProductVariants[index].options.length + 1).toString(),
+						(index * newProductVariants[index].optionSamples.length + 1).toString(),
 					quantity: 0, price: 0, sku: ''
 				});
 			} else {
 				const newClassification = newProductVariants[1]
-					.options.map(() => {
+					.optionSamples.map(() => {
 						return {
 							name: '',
-							quantity: 0, price: 0, sku: ''
+							quantity: 0, price: 0, sku: '', promotionalPrice: 0
 						}
 					});
 				newProductClassification.push(...newClassification);
@@ -206,23 +237,22 @@ const AddProduct = () => {
 			newProductClassification.splice(newProductClassification.length, 0, {
 				name:
 					'',
-				quantity: 0, price: 0, sku: ''
+				quantity: 0, price: 0, sku: '', promotionalPrice: 0
 			});
-			newProductClassification.splice(2 * newProductVariants[index].options.length - 1, 0, {
+			newProductClassification.splice((newProductVariants[index].optionSamples.length - 1), 0, {
 				name:
 					'',
-				quantity: 0, price: 0, sku: ''
+				quantity: 0, price: 0, sku: '', promotionalPrice: 0
 			});
 		}
-		console.log(newProductClassification);
-		setProductClassification(newProductClassification);
+		setProductClassifications(newProductClassification);
 		setProductVariants(newProductVariants);
 
 	}
 
 	const handleProductVariantValueChange = (index: number, valueIndex: number, value: string) => {
 		const newProductVariants = [...productVariants];
-		newProductVariants[index].options[valueIndex].option = value;
+		newProductVariants[index].optionSamples[valueIndex].option = value;
 		setProductVariants(newProductVariants);
 	};
 
@@ -230,28 +260,28 @@ const AddProduct = () => {
 		const newProductVariants = [...productVariants];
 		newProductVariants.splice(index, 1);
 
-		const newProductClassification = [...productClassification];
-		newProductClassification.splice(index * productVariants[index].options.length, productVariants[index].options.length);
+		const newProductClassification = [...productClassifications];
+		newProductClassification.splice(index * productVariants[index].optionSamples.length, productVariants[index].optionSamples.length);
 
-		setProductClassification(newProductClassification);
+		setProductClassifications(newProductClassification);
 		setProductVariants(newProductVariants);
 	};
 
 	const handleRemoveProductVariantValue = (index: number, valueIndex: number) => {
 		const newProductVariants = [...productVariants];
 		const productVariant = newProductVariants[index];
-		if (productVariant.options.length === 1) {
+		if (productVariant.optionSamples.length === 1) {
 			return;
 		}
 
-		const newProductClassification = [...productClassification];
+		const newProductClassification = [...productClassifications];
 		newProductClassification.splice(valueIndex, 1);
-		if (productVariant.options.length === 2) {
-			newProductClassification.splice(valueIndex + productVariants[index].options.length - 1, 1);
+		if (productVariant.optionSamples.length === 2) {
+			newProductClassification.splice(valueIndex + productVariants[index].optionSamples.length - 1, 1);
 		}
-		setProductClassification(newProductClassification);
+		setProductClassifications(newProductClassification);
 
-		productVariant.options.splice(valueIndex, 1);
+		productVariant.optionSamples.splice(valueIndex, 1);
 		setProductVariants(newProductVariants);
 	};
 
@@ -262,7 +292,7 @@ const AddProduct = () => {
 		value: number | string
 	) => {
 		console.log(value);
-		const newProductClassification = [...productClassification];
+		const newProductClassification = [...productClassifications];
 		switch (key) {
 			case 'price':
 				newProductClassification[index][key as 'price'] = value as number;
@@ -278,11 +308,71 @@ const AddProduct = () => {
 				break;
 
 		}
-		setProductClassification(newProductClassification);
+		setProductClassifications(newProductClassification);
 	};
 
 	const handleSaveCategoriesSelect = () => {
+		if (disableButtonSaveCategory)
+			return;
 		setModalCateOpen(false);
+		setAttributeValues(selectedCategory[selectedCategory.length - 1].attributes);
+		setStep([...new Set([...step, 1, 2])]);
+	}
+
+	const handleSaveProduct = () => {
+		const request: CreateProductRequest = {
+			name,
+			description,
+			promotionalPrice,
+			price,
+			categories: selectedCategory.map((category) => category.id),
+			isPublished,
+			quantity: inventory,
+			detailsProduct: attributeValues.map((attribute) => ({
+				name: attribute.name,
+				value: attribute.value ? attribute.value : attribute.defaultValue ? attribute.defaultValue : 'Khong co',
+			})),
+			productVariants,
+			productClassifications,
+			imagesFile: images,
+		}
+
+		const loadingToastId = toast({
+			title: 'Adding new product...',
+			description: <Spinner />,
+			status: 'info',
+			duration: null,
+			isClosable: true,
+			position: "top-right",
+		})
+
+		dispatch(createProduct(request))
+			.unwrap()
+			.then((res) => {
+				toast.close(loadingToastId)
+				if (res.status.toString().includes("20")) {
+					toast({
+						title: 'Success!',
+						description: "Add product success",
+						status: 'success',
+						duration: 2000,
+						isClosable: true,
+						position: "top-right",
+					})
+					// setTimeout(() => {
+					// 	navigate(-1);
+					// }, 2500)
+				} else {
+					toast({
+						title: 'Error!',
+						description: "Add product failed",
+						status: 'error',
+						duration: 2000,
+						isClosable: true,
+						position: "top-right",
+					})
+				}
+			})
 	}
 
 	return (
@@ -346,12 +436,14 @@ const AddProduct = () => {
 						</Box>
 					</ModalBody>
 					<ModalFooter>
-						<Button variant='ghost' color="red" mr={3}
+						<Button variant={'ghost'} color="red" mr={3}
 							onClick={() => { setModalCateOpen(false); setSelectedCategory([]) }}
 						>
 							Close
 						</Button>
-						<Button variant='ghost' color='green'
+						<Button variant={!disableButtonSaveCategory ? 'ghost' : 'unstyled'}
+							color={!disableButtonSaveCategory ? 'green' : 'gray.200'}
+							isDisabled={disableButtonSaveCategory}
 							onClick={handleSaveCategoriesSelect}
 						>Save</Button>
 					</ModalFooter>
@@ -369,7 +461,7 @@ const AddProduct = () => {
 				}
 			/>
 			<Box mt={8} mb={8}>
-				<Accordion allowMultiple>
+				<Accordion allowMultiple index={step}>
 					<AccordionItem>
 						<AccordionButton>
 							<Box flex="1" textAlign="left" fontWeight="bold" fontSize="xl">
@@ -420,7 +512,11 @@ const AddProduct = () => {
 										placeholder="category"
 										value={selectedCategory.map((cate) => cate.name).join(' -> ')}
 										onChange={handleChangeName}
-										onClick={() => { setModalCateOpen(true); setSelectedCategory([]) }}
+										onClick={() => {
+											setModalCateOpen(true);
+											setSelectedCategory([]);
+											setDisableButtonSaveCategory(true);
+										}}
 										maxLength={maxLength}
 										pr="4rem"
 										cursor={'pointer'}
@@ -454,12 +550,12 @@ const AddProduct = () => {
 
 							<FormControl isInvalid={isInvalid}>
 								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Public</FormLabel>
-								<Switch onChange={() => { setIsPublic(!isPublic) }} id='email-alerts' />
+								<Switch onChange={() => { setIsPublished(!isPublished) }} id='email-alerts' />
 							</FormControl>
 						</AccordionPanel>
 					</AccordionItem>
-					<AccordionItem>
-						<AccordionButton>
+					<AccordionItem >
+						<AccordionButton >
 							<Box flex="1" textAlign="left" fontWeight="bold" fontSize="xl">
 								Details information
 							</Box>
@@ -492,6 +588,17 @@ const AddProduct = () => {
 
 								{productVariants.length === 0 && (
 									<>
+										<FormControl mt={4} w="40%">
+											<FormLabel fontSize="sm" mb={2}>
+												Promotional Price
+											</FormLabel>
+											<Input
+												placeholder="Promotional Price"
+												type="number"
+												value={promotionalPrice}
+												onChange={(event) => setPromotionalPrice(parseInt(event.target.value))}
+											/>
+										</FormControl>
 										<FormControl mt={4} w="40%">
 											<FormLabel fontSize="sm" mb={2}>
 												Price
@@ -546,7 +653,7 @@ const AddProduct = () => {
 												</FormLabel>
 												<Box mt={2} >
 													<Flex w="100%" alignItems="center" mb={2} flexWrap="wrap">
-														{productVariant.options.map((value, valueIndex) => (
+														{productVariant.optionSamples.map((value, valueIndex) => (
 															<InputGroup w="50%">
 																<Input
 																	borderColor='gray.600'
@@ -684,11 +791,11 @@ const AddProduct = () => {
 											</Tr>
 										</Thead>
 										<Tbody borderColor="red.900">
-											{productVariants[0].options.map((item, index) => (
+											{productVariants[0].optionSamples.map((item, index) => (
 												<Tr key={index}>
 													<Td style={{
 														borderRight: "2px solid #ddd",
-														borderBottom: index === productVariants[0].options.length - 1 ? "none" : "2px solid #ddd",
+														borderBottom: index === productVariants[0].optionSamples.length - 1 ? "none" : "2px solid #ddd",
 													}}
 													>
 														<Flex alignItems="center" justifyContent="space-between" >
@@ -697,7 +804,8 @@ const AddProduct = () => {
 																aria-label="Upload file"
 																icon={<AddIcon />}
 																onClick={() => {
-																	const fileInput = document.getElementById('fileInput');
+																	const fileInput = document.getElementById(`fileInput-${index}`);
+																	console.log(fileInput);
 																	if (fileInput) {
 																		fileInput.click();
 																	}
@@ -708,21 +816,21 @@ const AddProduct = () => {
 
 														<Flex alignItems="center" justifyContent="space-between" >
 															<Text mr={2}>
-																{productVariants[0].options[index].file !== null ?
-																	productVariants[0].options[index].file.name : "Upload"}
+																{productVariants[0].optionSamples[index].file !== null ?
+																	productVariants[0].optionSamples[index].file.name : "Upload"}
 															</Text>
-															{productVariants[0].options[index].file !== null &&
+															{productVariants[0].optionSamples[index].file !== null &&
 																<IconButton
 																	aria-label="Remove file"
 																	icon={<CloseIcon boxSize={3} color="red.500" />}
 																	bg="transparent"
 																	onClick={() => {
-																		const updatedOptions = [...productVariants[0].options];
-																		updatedOptions[index].file = null;
+																		const updatedOptions = [...productVariants[index].optionSamples];
+																		updatedOptions[index].file = new File([new Blob()], 'Upload');
 																		setProductVariants([
 																			{
-																				...productVariants[0],
-																				options: updatedOptions,
+																				...productVariants[index],
+																				optionSamples: updatedOptions,
 																			},
 																			...productVariants.slice(1),
 																		]);
@@ -730,21 +838,16 @@ const AddProduct = () => {
 																/>
 															}
 														</Flex>
-														<Input id="fileInput" type="file" display="none"
+														<Input id={`fileInput-${index}`} type="file" display="none"
 															accept="image/*,video/*,.gif"
 															onChange={(event) => {
 																const file = event.target.files?.[0];
 																if (file) {
-																	const updatedOptions = [...productVariants[0].options];
-																	console.log(updatedOptions, index);
+																	const updatedOptions = [...productVariants[0].optionSamples];
 																	updatedOptions[index].file = event.target.files[0];
-																	setProductVariants([
-																		{
-																			...productVariants[0],
-																			options: updatedOptions,
-																		},
-																		...productVariants.slice(1),
-																	]);
+																	const newProductVariants = [...productVariants];
+																	newProductVariants[0].optionSamples = updatedOptions;
+																	setProductVariants(newProductVariants);
 																}
 															}} />
 													</Td>
@@ -754,7 +857,7 @@ const AddProduct = () => {
 																<Td style={{
 																	borderRight: "2px solid #ddd",
 																}}>
-																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+																	{productVariants.length === 2 && productVariants[1].optionSamples.map((item, valueIndex) =>
 																		item !== null && item.option !== '' && (
 																			<>
 																				<Tr style={{
@@ -775,17 +878,17 @@ const AddProduct = () => {
 																<Td style={{
 																	borderRight: "2px solid #ddd",
 																}}>
-																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+																	{productVariants.length === 2 && productVariants[1].optionSamples.map((item, valueIndex) =>
 																		item !== null && item.option !== '' && (
-																			<Tr key={`price-unique${index}`}>
+																			<Tr key={`price-unique${valueIndex}${index}`}>
 																				<InputGroup>
 																					<Input
 																						placeholder="price"
 																						type="number"
-																						value={productClassification[index * productVariants[productVariants.length - 1].options.length + valueIndex].price}
+																						value={productClassifications[index * productVariants[productVariants.length - 1].optionSamples.length + valueIndex].price}
 																						onChange={(event) =>
 																							handleProductClassificationChange(
-																								index * productVariants[productVariants.length - 1].options.length + valueIndex,
+																								index * productVariants[productVariants.length - 1].optionSamples.length + valueIndex,
 																								'price',
 																								event.target.value
 																							)
@@ -807,17 +910,17 @@ const AddProduct = () => {
 																<Td style={{
 																	borderRight: "2px solid #ddd",
 																}}>
-																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+																	{productVariants.length === 2 && productVariants[1].optionSamples.map((item, valueIndex) =>
 																		item !== null && item.option !== '' && (
-																			<Tr key={`pricePromotional-unique${index}`}>
+																			<Tr key={`pricePromotional-unique${valueIndex}${index}`}>
 																				<InputGroup>
 																					<Input
 																						placeholder="Promotional Price"
 																						type="number"
-																						value={productClassification[index * productVariants[productVariants.length - 1].options.length + valueIndex].promotionalPrice}
+																						value={productClassifications[index * productVariants[productVariants.length - 1].optionSamples.length + valueIndex].promotionalPrice}
 																						onChange={(event) =>
 																							handleProductClassificationChange(
-																								index * productVariants[productVariants.length - 1].options.length + valueIndex,
+																								index * productVariants[productVariants.length - 1].optionSamples.length + valueIndex,
 																								'promotionalPrice',
 																								event.target.value
 																							)
@@ -839,14 +942,14 @@ const AddProduct = () => {
 																<Td style={{
 																	borderRight: "2px solid #ddd",
 																}}>
-																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+																	{productVariants.length === 2 && productVariants[1].optionSamples.map((item, valueIndex) =>
 																		item !== null && item.option !== '' && (
-																			<Tr key={`quantity${index}`}>
+																			<Tr key={`quantity${valueIndex}${index}`}>
 																				<NumberInput step={1} defaultValue={0} min={0} mb={2}
-																					value={productClassification[index * productVariants[productVariants.length - 1].options.length + valueIndex].quantity}
+																					value={productClassifications[index * productVariants[productVariants.length - 1].optionSamples.length + valueIndex].quantity}
 																					onChange={(value) =>
 																						handleProductClassificationChange(
-																							index * productVariants[productVariants.length - 1].options.length + valueIndex,
+																							index * productVariants[productVariants.length - 1].optionSamples.length + valueIndex,
 																							'quantity',
 																							value
 																						)
@@ -862,15 +965,15 @@ const AddProduct = () => {
 																		))}
 																</Td>
 																<Td >
-																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+																	{productVariants.length === 2 && productVariants[1].optionSamples.map((item, valueIndex) =>
 																		item !== null && item.option !== '' && (
-																			<Tr key={`sku${index}`}>
+																			<Tr key={`sku${valueIndex}${index}`}>
 																				<Input
 																					placeholder="sku"
-																					value={productClassification[index * productVariants[productVariants.length - 1].options.length + valueIndex].sku}
+																					value={productClassifications[index * productVariants[productVariants.length - 1].optionSamples.length + valueIndex].sku}
 																					onChange={(event) =>
 																						handleProductClassificationChange(
-																							index * productVariants[productVariants.length - 1].options.length + valueIndex,
+																							index * productVariants[productVariants.length - 1].optionSamples.length + valueIndex,
 																							'sku',
 																							event.target.value
 																						)
@@ -896,7 +999,7 @@ const AddProduct = () => {
 																			<Input
 																				placeholder="price"
 																				type="number"
-																				value={productClassification[index].price}
+																				value={productClassifications[index].price}
 																				onChange={(event) =>
 																					handleProductClassificationChange(
 																						index,
@@ -923,7 +1026,7 @@ const AddProduct = () => {
 																			<Input
 																				placeholder="price"
 																				type="number"
-																				value={productClassification[index].promotionalPrice}
+																				value={productClassifications[index].promotionalPrice}
 																				onChange={(event) =>
 																					handleProductClassificationChange(
 																						index,
@@ -948,7 +1051,7 @@ const AddProduct = () => {
 																		<Input
 																			placeholder="inventory"
 																			type="number"
-																			value={productClassification[index].quantity}
+																			value={productClassifications[index].quantity}
 																			onChange={(event) =>
 																				handleProductClassificationChange(
 																					index,
@@ -964,7 +1067,7 @@ const AddProduct = () => {
 																	<Tr key={`sku${index}`}>
 																		<Input
 																			placeholder="sku"
-																			value={productClassification[index].sku} onChange={(event) =>
+																			value={productClassifications[index].sku} onChange={(event) =>
 																				handleProductClassificationChange(
 																					index,
 																					'sku',
@@ -998,6 +1101,8 @@ const AddProduct = () => {
 							colorScheme='teal'
 							variant='outline'
 							spinnerPlacement='end'
+							onClick={handleSaveProduct}
+							isDisabled={disableSaveProduct}
 						>
 							Save
 						</Button>

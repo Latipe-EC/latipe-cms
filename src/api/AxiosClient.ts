@@ -8,7 +8,7 @@ import axios, {
 	HeadersDefaults,
 	ResponseType,
 } from 'axios';
-import { CategoryResponse, CreateCategoryRequest, UpdateCategoryRequest } from 'api/interface/product';
+import { CategoryResponse, CreateCategoryRequest, CreateProductRequest, ProductResponse, UpdateCategoryRequest } from 'api/interface/product';
 import { MediaVm } from 'api/interface/media';
 
 export type QueryParamsType = Record<string | number, unknown>;
@@ -297,7 +297,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 	category = {
 		getCategories: (params: QueryParamsType) =>
-			this.request<PagedResuListResponse<CategoryResponse>>({
+			this.request<PagedResultResponse<CategoryResponse>>({
 				path: `/categories/paginate`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -355,13 +355,6 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			}),
 	}
 	media = {
-		/**
-		 * No description
-		 *
-		 * @tags user-controller
-		 * @name addCategory
-		 * @request POST:/auth/refresh-token
-		 */
 		uploadFile: (data: {
 			file: File
 		}) =>
@@ -370,6 +363,15 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				method: 'POST',
 				body: data,
 				type: ContentType.FormData,
+			}),
+	}
+	product = {
+		addProduct: (data: CreateProductRequest) =>
+			this.request<ProductResponse>({
+				path: `/products`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
 			}),
 	}
 }

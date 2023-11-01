@@ -188,7 +188,7 @@ const CategoriesAdmin = () => {
 					setShowModal(false);
 					setAttributes([]);
 					setSelectedCategory({
-						id: "", name: "", image: "", parentCategory: null, file: null
+						id: "", name: "", image: "", parentCategory: null, file: null, parentCategoryId: null
 					})
 				} else {
 					toast({

@@ -118,6 +118,12 @@ export interface CreateProductRequest {
 	'categories': Array<string>;
 	/**
 	 * 
+	 * @type {Array<File>}
+	 * @memberof CreateProductRequest
+	 */
+	'imagesFile'?: Array<File>;
+	/**
+	 * 
 	 * @type {Array<string>}
 	 * @memberof CreateProductRequest
 	 */
@@ -130,10 +136,10 @@ export interface CreateProductRequest {
 	'quantity'?: number;
 	/**
 	 * 
-	 * @type {Array<ProductVariantVm>}
+	 * @type {Array<ProductVariant>}
 	 * @memberof CreateProductRequest
 	 */
-	'productVariants'?: Array<ProductVariantVm>;
+	'productVariants'?: Array<ProductVariant>;
 	/**
 	 * 
 	 * @type {boolean}
@@ -142,10 +148,22 @@ export interface CreateProductRequest {
 	'isPublished'?: boolean;
 	/**
 	 * 
-	 * @type {Array<ProductClassificationVm>}
+	 * @type {Array<ProductClassification>}
 	 * @memberof CreateProductRequest
 	 */
-	'productClassifications'?: Array<ProductClassificationVm>;
+	'productClassifications'?: Array<ProductClassification>;
+
+	/**
+	 * 
+	 * @type {Array<AttributeValue>}
+	 * @memberof CreateProductRequest
+	 */
+	'detailsProduct'?: Array<AttributeValue>;
+}
+
+export interface AttributeValue {
+	name: string;
+	value: string;
 }
 /**
  * 
@@ -680,13 +698,14 @@ export interface ProductVariant {
 	 * @type {Array<string>}
 	 * @memberof ProductVariant
 	 */
-	'options'?: Array<Options>;
-
+	'optionSamples'?: Array<Options>;
+	'options'?: Array<string>;
 
 }
 
 interface Options {
 	option: string;
+	image?: string;
 	file: File;
 }
 /**

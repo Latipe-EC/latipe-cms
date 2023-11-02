@@ -1,0 +1,21 @@
+.remove-image-button {
+    background-color: #f44336;
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: rgb(255, 255, 255);
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 20px;
+    font-size: 20px;
+  }
+  .image-preview {
+    display: inline-block;
+    position: relative;
+  }
+  
+  .image-preview img {
+    height: auto;
+    object-fit: cover;
+  }

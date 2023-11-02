@@ -8,7 +8,7 @@ import axios, {
 	HeadersDefaults,
 	ResponseType,
 } from 'axios';
-import { CategoryResponse, CreateCategoryRequest, CreateProductRequest, ProductResponse, UpdateCategoryRequest } from 'api/interface/product';
+import { CategoryResponse, CreateCategoryRequest, CreateProductRequest, ProductResponse, UpdateCategoryRequest, UpdateProductRequest } from 'api/interface/product';
 import { MediaVm } from 'api/interface/media';
 
 export type QueryParamsType = Record<string | number, unknown>;
@@ -371,6 +371,19 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				path: `/products`,
 				method: 'POST',
 				body: data,
+				type: ContentType.Json,
+			}),
+		updateProduct: (data: UpdateProductRequest) =>
+			this.request<ProductResponse>({
+				path: `/products/${data.id}`,
+				method: 'PUT',
+				body: data,
+				type: ContentType.Json,
+			}),
+		getProductById: (id: string) =>
+			this.request<ProductResponse>({
+				path: `/products/${id}`,
+				method: 'GET',
 				type: ContentType.Json,
 			}),
 	}

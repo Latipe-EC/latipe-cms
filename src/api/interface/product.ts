@@ -591,10 +591,22 @@ export interface ProductResponse {
 	'price'?: number;
 	/**
 	 * 
+	 * @type {number}
+	 * @memberof ProductResponse
+	 */
+	'promotionalPrice'?: number;
+	/**
+	 * 
 	 * @type {Array<string>}
 	 * @memberof ProductResponse
 	 */
 	'images'?: Array<string>;
+	/**
+ * 
+ * @type {Array<string>}
+ * @memberof ProductResponse
+ */
+	'categories'?: Array<CategoryResponse>;
 	/**
 	 * 
 	 * @type {number}
@@ -631,6 +643,13 @@ export interface ProductResponse {
 	 * @memberof ProductResponse
 	 */
 	'countSale'?: number;
+
+	/**
+ * 
+ * @type {Array<AttributeValue>}
+ * @memberof CreateProductRequest
+ */
+	'detailsProduct'?: Array<AttributeValue>;
 }
 /**
  * 
@@ -698,13 +717,12 @@ export interface ProductVariant {
 	 * @type {Array<string>}
 	 * @memberof ProductVariant
 	 */
-	'optionSamples'?: Array<Options>;
-	'options'?: Array<string>;
+	'options'?: Array<Options>;
 
 }
 
-interface Options {
-	option: string;
+export interface Options {
+	value: string;
 	image?: string;
 	file: File;
 }
@@ -791,6 +809,7 @@ export interface UpdateProductQuantityRequest {
  * @interface UpdateProductRequest
  */
 export interface UpdateProductRequest {
+	'id': string;
 	/**
 	 * 
 	 * @type {string}
@@ -835,16 +854,26 @@ export interface UpdateProductRequest {
 	'quantity'?: number;
 	/**
 	 * 
-	 * @type {Array<ProductVariantVm>}
+	 * @type {Array<ProductVariant>}
 	 * @memberof UpdateProductRequest
 	 */
-	'productVariants'?: Array<ProductVariantVm>;
+	'productVariants'?: Array<ProductVariant>;
 	/**
 	 * 
-	 * @type {Array<ProductClassificationVm>}
+	 * @type {Array<ProductClassification>}
 	 * @memberof UpdateProductRequest
 	 */
-	'productClassifications'?: Array<ProductClassificationVm>;
+	'productClassifications'?: Array<ProductClassification>;
+	'isPublished'?: boolean;
+	'detailsProduct'?: Array<AttributeValue>;
+	'imagesFile'?: Array<File>;
+	'defaultValue'?: ProductResponse;
+	'originalFiles'?: Array<originalFiles>;
+}
+
+export interface originalFiles {
+	file: File;
+	url: string;
 }
 
 export interface Attribute {

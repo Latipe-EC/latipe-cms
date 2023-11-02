@@ -1,13 +1,12 @@
-import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Box, Button, Divider, Flex, FormControl, FormLabel, HStack, Icon, IconButton, Image, Input, InputGroup, InputLeftElement, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Spinner, Stack, Switch, Table, Tbody, Td, Text, Textarea, Th, Thead, Tr, VStack, useToast } from "@chakra-ui/react";
+import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Box, Button, Divider, Flex, FormControl, FormLabel, IconButton, Image, Input, InputGroup, InputLeftElement, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Spinner, Switch, Table, Tbody, Td, Text, Textarea, Th, Thead, Tr, VStack, useToast } from "@chakra-ui/react";
 import DropZone from "../../../components/DropZone";
 import DashboardPageHeader from "../../../components/layout/DashboardPageHeader";
-import VendorDashboardLayout from "../../../components/layout/VendorDashboardLayout";
 import './index.css'
 import { useEffect, useState } from "react";
 import { AddIcon, CloseIcon } from '@chakra-ui/icons';
 import { CreateProductRequest, ProductClassification, ProductVariant } from "api/interface/product";
 import AttributeRenderForm from "../../../components/attribute/AttributeRenderForm";
-import { debounce, set } from "lodash";
+import { debounce } from "lodash";
 import { useDispatch } from "react-redux";
 import { getChildsCategory, searchCategory } from "../../../store/slices/categories-slice";
 import { AppThunkDispatch } from "../../../store/store";
@@ -133,7 +132,7 @@ const AddProduct = () => {
 		if (isModalCateOpen) {
 			if (searchText && searchText.length > 0) {
 				dispatch(searchCategory({ name: searchText })).unwrap().then((payload) => {
-					setCategories([{ categories: [...payload.data], order: 1 }]);
+					setCategories([{ categories: [...payload.data.data], order: 1 }]);
 				});
 			} else {
 				dispatch(getChildsCategory(null)).unwrap().then((payload) => {
@@ -152,11 +151,6 @@ const AddProduct = () => {
 		handleSearch();
 	}, [searchText]);
 
-	useEffect(() => {
-		if (selectedCategory.length > 0 && isModalCateOpen) {
-
-		}
-	}, [categories, isModalCateOpen]);
 
 	const handleAttributeChange = ({ index, value }) => {
 		setAttributeValues((prevAttributes) =>
@@ -201,7 +195,7 @@ const AddProduct = () => {
 			setProductClassifications(newProductClassification);
 
 		}
-		setProductVariants([...productVariants, { name: '', optionSamples: [{ option: '', file: new File([new Blob()], 'Upload', { type: 'image/png' }) }] }]);
+		setProductVariants([...productVariants, { name: '', options: [{ value: '', file: new File([new Blob()], 'Upload', { type: 'image/png' }) }] }]);
 	}
 
 	const handleProductVariantNameChange = (index: number, name: string) => {
@@ -214,17 +208,17 @@ const AddProduct = () => {
 		const newProductVariants = [...productVariants];
 		const newProductClassification = [...productClassifications];
 
-		newProductVariants[index].optionSamples.push({ option: '', file: new File([new Blob()], 'Upload', { type: 'image/png' }) });
+		newProductVariants[index].options.push({ value: '', file: new File([new Blob()], 'Upload', { type: 'image/png' }) });
 		if (index === 0) {
 			if (newProductVariants.length === 1) {
 				newProductClassification.push({
 					name:
-						(index * newProductVariants[index].optionSamples.length + 1).toString(),
+						(index * newProductVariants[index].options.length + 1).toString(),
 					quantity: 0, price: 0, sku: ''
 				});
 			} else {
 				const newClassification = newProductVariants[1]
-					.optionSamples.map(() => {
+					.options.map(() => {
 						return {
 							name: '',
 							quantity: 0, price: 0, sku: '', promotionalPrice: 0
@@ -239,7 +233,7 @@ const AddProduct = () => {
 					'',
 				quantity: 0, price: 0, sku: '', promotionalPrice: 0
 			});
-			newProductClassification.splice((newProductVariants[index].optionSamples.length - 1), 0, {
+			newProductClassification.splice((newProductVariants[index].options.length - 1), 0, {
 				name:
 					'',
 				quantity: 0, price: 0, sku: '', promotionalPrice: 0
@@ -252,7 +246,7 @@ const AddProduct = () => {
 
 	const handleProductVariantValueChange = (index: number, valueIndex: number, value: string) => {
 		const newProductVariants = [...productVariants];
-		newProductVariants[index].optionSamples[valueIndex].option = value;
+		newProductVariants[index].options[valueIndex].value = value;
 		setProductVariants(newProductVariants);
 	};
 
@@ -261,7 +255,7 @@ const AddProduct = () => {
 		newProductVariants.splice(index, 1);
 
 		const newProductClassification = [...productClassifications];
-		newProductClassification.splice(index * productVariants[index].optionSamples.length, productVariants[index].optionSamples.length);
+		newProductClassification.splice(index * productVariants[index].options.length, productVariants[index].options.length);
 
 		setProductClassifications(newProductClassification);
 		setProductVariants(newProductVariants);
@@ -270,18 +264,18 @@ const AddProduct = () => {
 	const handleRemoveProductVariantValue = (index: number, valueIndex: number) => {
 		const newProductVariants = [...productVariants];
 		const productVariant = newProductVariants[index];
-		if (productVariant.optionSamples.length === 1) {
+		if (productVariant.options.length === 1) {
 			return;
 		}
 
 		const newProductClassification = [...productClassifications];
 		newProductClassification.splice(valueIndex, 1);
-		if (productVariant.optionSamples.length === 2) {
-			newProductClassification.splice(valueIndex + productVariants[index].optionSamples.length - 1, 1);
+		if (productVariant.options.length === 2) {
+			newProductClassification.splice(valueIndex + productVariants[index].options.length - 1, 1);
 		}
 		setProductClassifications(newProductClassification);
 
-		productVariant.optionSamples.splice(valueIndex, 1);
+		productVariant.options.splice(valueIndex, 1);
 		setProductVariants(newProductVariants);
 	};
 
@@ -359,9 +353,9 @@ const AddProduct = () => {
 						isClosable: true,
 						position: "top-right",
 					})
-					// setTimeout(() => {
-					// 	navigate(-1);
-					// }, 2500)
+					setTimeout(() => {
+						navigate("/vendor/products");
+					}, 2500)
 				} else {
 					toast({
 						title: 'Error!',
@@ -653,12 +647,12 @@ const AddProduct = () => {
 												</FormLabel>
 												<Box mt={2} >
 													<Flex w="100%" alignItems="center" mb={2} flexWrap="wrap">
-														{productVariant.optionSamples.map((value, valueIndex) => (
+														{productVariant.options.map((value, valueIndex) => (
 															<InputGroup w="50%">
 																<Input
 																	borderColor='gray.600'
 																	placeholder="Product Classification Value"
-																	value={value.option}
+																	value={value.value}
 																	mr={2}
 																	mb={2}
 																	onChange={(event) => handleProductVariantValueChange(index, valueIndex, event.target.value)}
@@ -791,15 +785,15 @@ const AddProduct = () => {
 											</Tr>
 										</Thead>
 										<Tbody borderColor="red.900">
-											{productVariants[0].optionSamples.map((item, index) => (
+											{productVariants[0].options.map((item, index) => (
 												<Tr key={index}>
 													<Td style={{
 														borderRight: "2px solid #ddd",
-														borderBottom: index === productVariants[0].optionSamples.length - 1 ? "none" : "2px solid #ddd",
+														borderBottom: index === productVariants[0].options.length - 1 ? "none" : "2px solid #ddd",
 													}}
 													>
 														<Flex alignItems="center" justifyContent="space-between" >
-															{item.option}
+															{item.value}
 															<IconButton
 																aria-label="Upload file"
 																icon={<AddIcon />}
@@ -816,21 +810,21 @@ const AddProduct = () => {
 
 														<Flex alignItems="center" justifyContent="space-between" >
 															<Text mr={2}>
-																{productVariants[0].optionSamples[index].file !== null ?
-																	productVariants[0].optionSamples[index].file.name : "Upload"}
+																{productVariants[0].options[index].file !== null ?
+																	productVariants[0].options[index].file.name : "Upload"}
 															</Text>
-															{productVariants[0].optionSamples[index].file !== null &&
+															{productVariants[0].options[index].file !== null &&
 																<IconButton
 																	aria-label="Remove file"
 																	icon={<CloseIcon boxSize={3} color="red.500" />}
 																	bg="transparent"
 																	onClick={() => {
-																		const updatedOptions = [...productVariants[index].optionSamples];
+																		const updatedOptions = [...productVariants[index].options];
 																		updatedOptions[index].file = new File([new Blob()], 'Upload');
 																		setProductVariants([
 																			{
 																				...productVariants[index],
-																				optionSamples: updatedOptions,
+																				options: updatedOptions,
 																			},
 																			...productVariants.slice(1),
 																		]);
@@ -843,10 +837,10 @@ const AddProduct = () => {
 															onChange={(event) => {
 																const file = event.target.files?.[0];
 																if (file) {
-																	const updatedOptions = [...productVariants[0].optionSamples];
+																	const updatedOptions = [...productVariants[0].options];
 																	updatedOptions[index].file = event.target.files[0];
 																	const newProductVariants = [...productVariants];
-																	newProductVariants[0].optionSamples = updatedOptions;
+																	newProductVariants[0].options = updatedOptions;
 																	setProductVariants(newProductVariants);
 																}
 															}} />
@@ -857,14 +851,14 @@ const AddProduct = () => {
 																<Td style={{
 																	borderRight: "2px solid #ddd",
 																}}>
-																	{productVariants.length === 2 && productVariants[1].optionSamples.map((item, valueIndex) =>
-																		item !== null && item.option !== '' && (
+																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+																		item !== null && item.value !== '' && (
 																			<>
 																				<Tr style={{
 																					borderRight: "5px solid #ddd",
 																				}} key={`classd2${valueIndex}`}>
 																					<Input
-																						value={item.option}
+																						value={item.value}
 																						maxLength={maxLength}
 																						mb={2}
 																						border="none"
@@ -878,17 +872,17 @@ const AddProduct = () => {
 																<Td style={{
 																	borderRight: "2px solid #ddd",
 																}}>
-																	{productVariants.length === 2 && productVariants[1].optionSamples.map((item, valueIndex) =>
-																		item !== null && item.option !== '' && (
+																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+																		item !== null && item.value !== '' && (
 																			<Tr key={`price-unique${valueIndex}${index}`}>
 																				<InputGroup>
 																					<Input
 																						placeholder="price"
 																						type="number"
-																						value={productClassifications[index * productVariants[productVariants.length - 1].optionSamples.length + valueIndex].price}
+																						value={productClassifications[index * productVariants[productVariants.length - 1].options.length + valueIndex].price}
 																						onChange={(event) =>
 																							handleProductClassificationChange(
-																								index * productVariants[productVariants.length - 1].optionSamples.length + valueIndex,
+																								index * productVariants[productVariants.length - 1].options.length + valueIndex,
 																								'price',
 																								event.target.value
 																							)
@@ -910,17 +904,17 @@ const AddProduct = () => {
 																<Td style={{
 																	borderRight: "2px solid #ddd",
 																}}>
-																	{productVariants.length === 2 && productVariants[1].optionSamples.map((item, valueIndex) =>
-																		item !== null && item.option !== '' && (
+																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+																		item !== null && item.value !== '' && (
 																			<Tr key={`pricePromotional-unique${valueIndex}${index}`}>
 																				<InputGroup>
 																					<Input
 																						placeholder="Promotional Price"
 																						type="number"
-																						value={productClassifications[index * productVariants[productVariants.length - 1].optionSamples.length + valueIndex].promotionalPrice}
+																						value={productClassifications[index * productVariants[productVariants.length - 1].options.length + valueIndex].promotionalPrice}
 																						onChange={(event) =>
 																							handleProductClassificationChange(
-																								index * productVariants[productVariants.length - 1].optionSamples.length + valueIndex,
+																								index * productVariants[productVariants.length - 1].options.length + valueIndex,
 																								'promotionalPrice',
 																								event.target.value
 																							)
@@ -942,14 +936,14 @@ const AddProduct = () => {
 																<Td style={{
 																	borderRight: "2px solid #ddd",
 																}}>
-																	{productVariants.length === 2 && productVariants[1].optionSamples.map((item, valueIndex) =>
-																		item !== null && item.option !== '' && (
+																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+																		item !== null && item.value !== '' && (
 																			<Tr key={`quantity${valueIndex}${index}`}>
 																				<NumberInput step={1} defaultValue={0} min={0} mb={2}
-																					value={productClassifications[index * productVariants[productVariants.length - 1].optionSamples.length + valueIndex].quantity}
+																					value={productClassifications[index * productVariants[productVariants.length - 1].options.length + valueIndex].quantity}
 																					onChange={(value) =>
 																						handleProductClassificationChange(
-																							index * productVariants[productVariants.length - 1].optionSamples.length + valueIndex,
+																							index * productVariants[productVariants.length - 1].options.length + valueIndex,
 																							'quantity',
 																							value
 																						)
@@ -965,15 +959,15 @@ const AddProduct = () => {
 																		))}
 																</Td>
 																<Td >
-																	{productVariants.length === 2 && productVariants[1].optionSamples.map((item, valueIndex) =>
-																		item !== null && item.option !== '' && (
+																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+																		item !== null && item.value !== '' && (
 																			<Tr key={`sku${valueIndex}${index}`}>
 																				<Input
 																					placeholder="sku"
-																					value={productClassifications[index * productVariants[productVariants.length - 1].optionSamples.length + valueIndex].sku}
+																					value={productClassifications[index * productVariants[productVariants.length - 1].options.length + valueIndex].sku}
 																					onChange={(event) =>
 																						handleProductClassificationChange(
-																							index * productVariants[productVariants.length - 1].optionSamples.length + valueIndex,
+																							index * productVariants[productVariants.length - 1].options.length + valueIndex,
 																							'sku',
 																							event.target.value
 																						)
@@ -991,7 +985,7 @@ const AddProduct = () => {
 
 													{
 														productVariants.length === 1 &&
-														item !== null && item.option !== '' && (
+														item !== null && item.value !== '' && (
 															<>
 																<Td>
 																	<Tr key={`price${index}`}>
@@ -1112,11 +1106,5 @@ const AddProduct = () => {
 		</div >
 	);
 };
-
-
-
-
-
-AddProduct.layout = VendorDashboardLayout;
 
 export default AddProduct;

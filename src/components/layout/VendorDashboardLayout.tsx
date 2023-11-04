@@ -12,39 +12,47 @@ import MobileNavigationBar from "../mobile-navigation/MobileNavigationBar";
 import Footer from "../footer/Footer";
 import { Helmet } from "react-helmet";
 import { Outlet } from "react-router-dom";
+import styled from "styled-components";
 
-const VendorDashboardLayout: React.FC = () => (
-  <StyledAppLayout>
-    <Helmet>
-      <title>Latipe</title>
-      <meta charSet="utf-8" />
-      <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-    </Helmet>
-    <Topbar />
-    <Sticky fixedOn={0}>
-      <Header />
-    </Sticky>
-    <div className="section-after-sticky">
-      <Navbar />
-    </div>
-    (
-    <Container my="2rem">
-      <Grid container spacing={6}>
-        <Hidden as={Grid} item lg={3} xs={12} down={1024}>
-          <VendorDashboardNavigation />
-        </Hidden>
-        <Grid item lg={9} xs={12}>
-          <Outlet />
-        </Grid>
-      </Grid>
-    </Container>
-    )
+const MainContent = styled.div`
+  margin-top: 5rem; /* Add some initial margin */
+  height: 60vh; /* Set the height to 100vh */
+  margin-bottom: 5rem;
+`;
 
-    <MobileNavigationBar />
-    <Footer />
-  </StyledAppLayout>
+const VendorDashboardLayout: React.FC = () => {
 
+	return (
+		<StyledAppLayout>
+			<Helmet>
+				<title>Latipe</title>
+				<meta charSet="utf-8" />
+				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+			</Helmet>
+			<Topbar />
+			<Sticky fixedOn={0}>
+				<Header />
+			</Sticky>
+			<div className="section-after-sticky">
+				<Navbar />
+			</div>
+			<MainContent >
+				<Container my="2rem">
+					<Grid container spacing={6}>
+						<Hidden as={Grid} item lg={3} xs={12} down={1024}>
+							<VendorDashboardNavigation />
+						</Hidden>
+						<Grid item lg={9} xs={12}>
+							<Outlet />
+						</Grid>
+					</Grid>
+				</Container>
+			</MainContent>
 
-);
+			<MobileNavigationBar />
+			<Footer />
+		</StyledAppLayout>
+	)
+};
 
 export default VendorDashboardLayout;

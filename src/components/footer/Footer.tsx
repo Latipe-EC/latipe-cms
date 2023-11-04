@@ -12,25 +12,25 @@ import Typography, { Paragraph } from "../Typography";
 import './Footer.css';
 
 const StyledLink = styled.a`
-  position: relative;
-  display: block;
-  padding: 0.3rem 0rem;
-  color: ${getTheme("colors.gray.500")};
-  cursor: pointer;
-  border-radius: 4px;
-  :hover {
-    color: ${getTheme("colors.gray.100")};
-  }
+position: relative;
+display: block;
+padding: 0.3rem 0rem;
+color: ${getTheme("colors.gray.500")};
+cursor: pointer;
+border-radius: 4px;
+:hover {
+	color: ${getTheme("colors.gray.100")};
+}
 `;
 
 const FooterContainer = styled.footer`
 
 `;
-
 const Footer: React.FC = () => {
 
+
 	return (
-		<FooterContainer>
+		<FooterContainer >
 			<Box bg="#0F3460">
 				<Container p="1rem" color="white">
 					<Box py="5rem" overflow="hidden">

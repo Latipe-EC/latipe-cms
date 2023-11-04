@@ -10,6 +10,7 @@ import axios, {
 } from 'axios';
 import { CategoryResponse, CreateCategoryRequest, CreateProductRequest, ProductResponse, UpdateCategoryRequest, UpdateProductRequest } from 'api/interface/product';
 import { MediaVm } from 'api/interface/media';
+import { StoreResponse, CreateStoreRequest, UpdateStoreRequest } from 'api/interface/store';
 
 export type QueryParamsType = Record<string | number, unknown>;
 
@@ -384,6 +385,43 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			this.request<ProductResponse>({
 				path: `/products/${id}`,
 				method: 'GET',
+				type: ContentType.Json,
+			}),
+	}
+	store = {
+		registerStore: (data: CreateStoreRequest) =>
+			this.request<StoreResponse>({
+				path: `/stores/register-store`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+			}),
+
+		getMyProductStore: (params: QueryParamsType) =>
+			this.request<PagedResultResponse<CategoryResponse>>({
+				path: `/stores/my-products`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+
+		getMyProductBanStore: (params: QueryParamsType) =>
+			this.request<PagedResultResponse<CategoryResponse>>({
+				path: `/stores/my-products/ban`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+
+		update: (data: UpdateStoreRequest) =>
+			this.request<StoreResponse>({
+				path: `/stores/my-products/ban`,
+				method: 'PUT',
+				body: data,
 				type: ContentType.Json,
 			}),
 	}

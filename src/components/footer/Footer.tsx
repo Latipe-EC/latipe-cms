@@ -1,6 +1,6 @@
 import AppStore from "../AppStore";
 import Image from "../Image";
-import React, { useEffect, useState } from "react";
+import React, { } from "react";
 import styled from "styled-components";
 import { getTheme } from "../../utils/utils";
 import Box from "../Box";

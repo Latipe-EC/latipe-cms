@@ -1,15 +1,13 @@
-import { Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Flex, Icon, Menu, MenuButton, MenuItem, MenuList, Text } from "@chakra-ui/react";
+import { Icon, Text } from "@chakra-ui/react";
 import Box from "../Box";
 import FlexBox from "../FlexBox";
 import {
 	DashboardNavigationWrapper,
 	StyledDashboardNav,
 } from "./DashboardStyle";
-import { FaCartArrowDown, FaChevronDown, FaChevronLeft, FaChevronUp, FaCircle, FaDatabase, FaDollarSign, FaFirstOrder, FaJediOrder, FaPaperPlane, FaShopify } from "react-icons/fa";
-import { Dropdown } from "react-bootstrap";
-import { MdDashboard, MdDashboardCustomize, MdOutlineDashboardCustomize, MdStore } from "react-icons/md";
+import { FaCartArrowDown, FaChevronDown, FaChevronLeft, FaDatabase, FaDollarSign, FaPaperPlane, FaShopify } from "react-icons/fa";
 import { useState } from "react";
-import { is } from "date-fns/locale";
+import { useNavigate } from "react-router-dom";
 
 const VendorDashboardNavigation = () => {
 
@@ -18,6 +16,7 @@ const VendorDashboardNavigation = () => {
 	const [isFinanceOpen, setIsFinanceOpen] = useState(false);
 	const [isDataOpen, setIsDataOpen] = useState(false);
 	const [isShopOpen, setIsShopOpen] = useState(true);
+	const navigate = useNavigate();
 
 	const toggleOrders = () => {
 		setIsOrdersOpen(!isOrdersOpen);
@@ -60,8 +59,8 @@ const VendorDashboardNavigation = () => {
 					</StyledDashboardNav>
 					{isOrdersOpen && (
 						<>
-							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12}>Tất cả</Text>
-							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12}>
+							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12} onClick={() => { navigate("/vendor/orders") }}>Tất cả</Text>
+							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12} onClick={() => { navigate("/vendor/orders/cancel") }}>
 								Đơn hủy</Text>
 						</>
 					)}
@@ -85,10 +84,10 @@ const VendorDashboardNavigation = () => {
 					</StyledDashboardNav>
 					{isProductsOpen && (
 						<>
-							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12}>Tất cả sản phẩm</Text>
-							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12}>
+							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12} onClick={() => { navigate("/vendor/products") }}>Tất cả sản phẩm</Text>
+							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12} onClick={() => { navigate("/vendor/products/add") }}>
 								Thêm sản phẩm</Text>
-							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12}>
+							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12} onClick={() => { navigate("/vendor/products/ban") }} >
 								Sản phẩm vi phạm</Text>
 						</>
 					)}
@@ -112,8 +111,8 @@ const VendorDashboardNavigation = () => {
 					</StyledDashboardNav>
 					{isFinanceOpen && (
 						<>
-							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12}>Doanh thu</Text>
-							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12}>Tài khoản ngân hàng</Text>
+							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12} onClick={() => { navigate("/vendor/revenues") }}>Doanh thu</Text>
+							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12} onClick={() => { navigate("/vendor/bank") }}>Tài khoản ngân hàng</Text>
 						</>
 					)}
 				</Box>
@@ -135,7 +134,9 @@ const VendorDashboardNavigation = () => {
 					</StyledDashboardNav>
 					{isDataOpen && (
 						<>
-							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12}>Phân tích bán hàng</Text>
+							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12}
+								onClick={() => { navigate("/vendor/analysis") }}
+							>Phân tích bán hàng</Text>
 						</>
 					)}
 				</Box>
@@ -149,7 +150,9 @@ const VendorDashboardNavigation = () => {
 							<Box className="dashboard-nav-icon-holder" >
 								<Icon as={FaShopify} mr="10px" />
 							</Box>
-							<Text _hover={{ cursor: "pointer" }} >Quản lý shop</Text>
+							<Text _hover={{ cursor: "pointer" }}
+								onClick={() => { navigate("/vendor/manage") }}
+							>Quản lý shop</Text>
 						</FlexBox>
 						<Box ml="auto" onClick={toggleShop} _hover={{ cursor: "pointer" }}>
 							<Icon as={isOrdersOpen ? FaChevronDown : FaChevronLeft} />
@@ -157,8 +160,12 @@ const VendorDashboardNavigation = () => {
 					</StyledDashboardNav>
 					{isShopOpen && (
 						<>
-							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12}>Đánh giá shop</Text>
-							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12}>Hồ sơ shop</Text>
+							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12}
+								onClick={() => { navigate("/vendor/ratting") }}
+							>Đánh giá shop</Text>
+							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12}
+								onClick={() => { navigate("/vendor/profile") }}
+							>Hồ sơ shop</Text>
 						</>
 					)}
 				</Box>

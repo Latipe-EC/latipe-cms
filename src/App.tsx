@@ -193,7 +193,7 @@ function App() {
 									<AddProductLayout />
 								}>
 									<Route path="/vendor/products/:id" element={<ProductDetailsVendor />} />
-									<Route path="/vendor/products/add-product" element={<AddProduct />} />
+									<Route path="/vendor/products/add" element={<AddProduct />} />
 								</Route>
 								{/* Admin */}
 

@@ -25,6 +25,7 @@ export const getMyProductBanStore = createAsyncThunk(
 	'stores/my-products/ban',
 	async (params: QueryParamsType) => {
 		const response = await api.store.getMyProductBanStore(params);
+		console.log(response);
 		return response;
 	}
 );

@@ -3,36 +3,43 @@ import Avatar from "../../../components/avatar/Avatar";
 import IconButton from "../../../components/buttons/IconButton";
 import FlexBox from "../../../components/FlexBox";
 import Hidden from "../../../components/hidden/Hidden";
-import Icon from "../../../components/icon/Icon";
 import DashboardPageHeader from "../../../components/layout/DashboardPageHeader";
 import Pagination from "../../../components/pagination/Pagination";
 import TableRow from "../../../components/TableRow";
 import Typography, { H5 } from "../../../components/Typography";
 import { AppThunkDispatch, RootState, useAppSelector } from '../../../store/store';
 import { useDispatch } from 'react-redux';
-import { getMyProductStore } from "../../../store/slices/stores-slice";
-import { Box, Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
-import { ChevronDownIcon, ChevronUpIcon, Search2Icon } from "@chakra-ui/icons";
+import { getMyProductBanStore } from "../../../store/slices/stores-slice";
+import { Alert, AlertIcon, Box, Button, Input, InputGroup, InputLeftElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Tooltip } from "@chakra-ui/react";
+import { ChevronDownIcon, ChevronUpIcon, Search2Icon, ViewIcon } from "@chakra-ui/icons";
 import { debounce } from "lodash";
+import { ProductStoreResponse } from "api/interface/store";
 
 const Products = () => {
 	const [currentPage, setCurrentPage] = useState(0);
 	const [searchText, setSearchText] = useState("");
 	const [orderBy, setOrderBy] = useState("createdDate");
+	const [showReason, setShowReason] = useState(false);
+	const [reason, setReason] = useState<string>();
 	const dispatch = useDispatch<AppThunkDispatch>();
 	const stores = useAppSelector((state: RootState) => state.stores);
 
 	useEffect(() => {
-		dispatch(getMyProductStore({ skip: currentPage * 10, limit: 10, name: searchText, orderBy }));
+		dispatch(getMyProductBanStore({ skip: currentPage * 10, limit: 10, name: searchText, orderBy }));
 	}, []);
 
 	useEffect(() => {
-		dispatch(getMyProductStore({ skip: currentPage * 10, limit: 10, name: searchText, orderBy }));
+		dispatch(getMyProductBanStore({ skip: currentPage * 10, limit: 10, name: searchText, orderBy }));
 	}, [currentPage, searchText, orderBy]);
 
 	const handleSearch = debounce((searchText: string) => {
 		setSearchText(searchText);
 	}, 500);
+
+	const handleSeeReasonBan = (reason: string) => {
+		setShowReason(true);
+		setReason(reason);
+	}
 
 	return (
 		<Box>
@@ -82,47 +89,65 @@ const Products = () => {
 				</TableRow>
 			</Hidden>
 
-			{stores.products.length > 0 && stores.products.map((item, ind) => (
-				<a href={`/vendor/products/${item.id}`} key={ind}>
-					<TableRow as="a" href={item.href} my="1rem" padding="6px 18px">
-						<FlexBox alignItems="center" m="6px" flex="2 2 220px !important">
-							<Avatar src={item.image} size={36} />
-							<Typography textAlign="center" ml="20px">
-								{item.name}
-							</Typography>
-						</FlexBox>
-						<H5
-							m="6px"
-							textAlign="center"
-							fontWeight="600"
-							color={item.stock < 6 ? "error.main" : "inherit"}
-						>
-							{item.countProductVariants}
-						</H5>
-						<H5 m="6px" textAlign="center" fontWeight="400">
-							{item.countSale}
-						</H5>
-						<Hidden flex="0 0 0 !important" down={769}>
+			{stores.banProducts.length > 0 && stores.banProducts.map((item, index) => (
+				<TableRow as="a" href={item.href} my="1rem" padding="6px 18px" key={index}>
+					<FlexBox alignItems="center" m="6px" flex="2 2 220px !important">
+						<Avatar src={item.image} size={36} />
+						<Typography textAlign="center" ml="20px">
+							{item.name}
+						</Typography>
+					</FlexBox>
+					<H5
+						m="6px"
+						textAlign="center"
+						fontWeight="600"
+						color={item.stock < 6 ? "error.main" : "inherit"}
+					>
+						{item.countProductVariants}
+					</H5>
+					<H5 m="6px" textAlign="center" fontWeight="400">
+						{item.countSale}
+					</H5>
+					<Hidden flex="0 0 0 !important" down={769} onClick={() => handleSeeReasonBan(item.reasonBan)}>
+						<Tooltip label="Xem lý do">
 							<Typography textAlign="center" color="text.muted">
-								<IconButton size="small">
-									<Icon variant="small" defaultcolor="currentColor">
-										arrow-right
-									</Icon>
+								<IconButton variant="contained">
+									<ViewIcon />
 								</IconButton>
 							</Typography>
-						</Hidden>
-					</TableRow>
-				</a>
+						</Tooltip>
+					</Hidden>
+				</TableRow>
 			))}
 
 			<FlexBox justifyContent="center" mt="2.5rem">
 				<Pagination
-					pageCount={Math.ceil(stores.pagination.total / 10)}
+					pageCount={Math.ceil(stores.paginationBan.total / 10)}
 					onChange={(data) => {
 						setCurrentPage(+data);
 					}}
 				/>
 			</FlexBox>
+
+			<Modal isOpen={showReason} onClose={() => { setShowReason(false) }} isCentered>
+				<ModalOverlay />
+				<ModalContent>
+					<ModalHeader>Lý do</ModalHeader>
+					<ModalCloseButton />
+					<ModalBody>
+						<Alert status='error'>
+							<AlertIcon />
+							{reason}
+						</Alert>
+
+					</ModalBody>
+					<ModalFooter>
+						<Button colorScheme='red' mr={3} onClick={() => { setShowReason(false) }}>
+							Close
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
 		</Box>
 	);
 };

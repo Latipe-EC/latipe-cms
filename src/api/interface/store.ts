@@ -200,3 +200,49 @@ export interface StoreAddress {
 	 */
 	'countryName'?: string;
 }
+
+
+
+/**
+ * 
+ * @export
+ * @interface ProductStoreResponse
+ */
+export interface ProductStoreResponse {
+	/**
+	 * 
+	 * @type {string}
+	 * @memberof ProductStoreResponse
+	 */
+	'id': string;
+	/**
+	 * 
+	 * @type {string}
+	 * @memberof ProductStoreResponse
+	 */
+	'name'?: string;
+	/**
+	 * 
+	 * @type {string}
+	 * @memberof ProductStoreResponse
+	 */
+	'image'?: string;
+	/**
+	 * 
+	 * @type {string}
+	 * @memberof ProductStoreResponse
+	 */
+	'countProductVariants'?: number;
+	/**
+	 * 
+	 * @type {string}
+	 * @memberof ProductStoreResponse
+	 */
+	'countSale'?: number;
+	/**
+	 * 
+	 * @type {string}
+	 * @memberof ProductStoreResponse
+	 */
+	'reasonBan'?: string;
+}

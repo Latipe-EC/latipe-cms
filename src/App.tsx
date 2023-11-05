@@ -35,6 +35,7 @@ const OrderDetailsVendor = lazy(() => import('./pages/vendor/orders/[id]'));
 const OrdersVendor = lazy(() => import('./pages/vendor/orders/index'));
 const ProductDetailsVendor = lazy(() => import('./pages/vendor/products/[id]'));
 const ProductsVendor = lazy(() => import('./pages/vendor/products/index'));
+const BanProductsVendor = lazy(() => import('./pages/vendor/products/BanProduct'));
 
 // admin pages
 const DashboardAdmin = lazy(() => import('./components/layout/admin/AdminLayout'));
@@ -187,6 +188,7 @@ function App() {
 									<Route path="orders" element={<OrdersVendor />} />
 
 									<Route path="products" element={<ProductsVendor />} />
+									<Route path="products/ban" element={<BanProductsVendor />} />
 								</Route>
 
 								<Route path="/vendor/" element={

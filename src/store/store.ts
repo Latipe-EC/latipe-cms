@@ -4,6 +4,7 @@ import authReducer from './slices/auth-slice';
 import userReducer from './slices/user-slice';
 import categoryReducer from './slices/categories-slice';
 import productReducer from './slices/products-slice';
+import storeReducer from './slices/stores-slice';
 
 import {
 	persistStore,
@@ -23,6 +24,7 @@ export const rootReducer = combineReducers({
 	user: userReducer,
 	categories: categoryReducer,
 	products: productReducer,
+	stores: storeReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

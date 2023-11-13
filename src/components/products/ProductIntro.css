@@ -1,0 +1,12 @@
+
+
+.chakra-button.selected::after {
+  content: "\2713";
+  display: block;
+  font-size: 1.2rem;
+  color: var(--brand-primary-color, #ee4d2d);
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateX(70%);
+}

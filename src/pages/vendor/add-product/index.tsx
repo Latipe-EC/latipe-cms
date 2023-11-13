@@ -354,7 +354,7 @@ const AddProduct = () => {
 						position: "top-right",
 					})
 					setTimeout(() => {
-						navigate("/vendor/products");
+						// navigate("/vendor/products");
 					}, 2500)
 				} else {
 					toast({

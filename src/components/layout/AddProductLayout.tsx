@@ -3,12 +3,12 @@ import React from "react";
 import styled from "styled-components";
 import { Outlet } from "react-router-dom";
 const AddProductLayout: React.FC = () => (
-  <div>
-    <StyledAppLayout>
-      <Topbar />
-      <div className="section-after-sticky" style={{ paddingLeft: "10%", paddingRight: "10%", marginBottom: "20px" }}> <Outlet /></div>
-    </StyledAppLayout>
-  </div>
+	<div>
+		<StyledAppLayout>
+			<Topbar />
+			<div className="section-after-sticky" style={{ paddingLeft: "10%", paddingRight: "10%", marginBottom: "20px" }}> <Outlet /></div>
+		</StyledAppLayout>
+	</div>
 
 );
 

@@ -1,3 +1,5 @@
+import { StoreResponse } from "api/interface/store";
+
 /**
  * 
  * @export
@@ -651,6 +653,114 @@ export interface ProductResponse {
  */
 	'detailsProduct'?: Array<AttributeValue>;
 }
+
+/**
+ * 
+ * @export
+ * @interface ProductDetailResponse
+ */
+export interface ProductDetailResponse {
+	/**
+	 * 
+	 * @type {string}
+	 * @memberof ProductResponse
+	 */
+	'id': string;
+	/**
+	 * 
+	 * @type {boolean}
+	 * @memberof ProductResponse
+	 */
+	'isDeleted'?: boolean;
+	/**
+	 * 
+	 * @type {string}
+	 * @memberof ProductResponse
+	 */
+	'name': string;
+	/**
+	 * 
+	 * @type {string}
+	 * @memberof ProductResponse
+	 */
+	'description': string;
+	/**
+	 * 
+	 * @type {number}
+	 * @memberof ProductResponse
+	 */
+	'price'?: number;
+	/**
+	 * 
+	 * @type {number}
+	 * @memberof ProductResponse
+	 */
+	'promotionalPrice'?: number;
+	/**
+	 * 
+	 * @type {Array<string>}
+	 * @memberof ProductResponse
+	 */
+	'images'?: Array<string>;
+	/**
+ * 
+ * @type {Array<string>}
+ * @memberof ProductResponse
+ */
+	'categories'?: Array<CategoryResponse>;
+	/**
+	 * 
+	 * @type {number}
+	 * @memberof ProductResponse
+	 */
+	'quantity'?: number;
+	/**
+	 * 
+	 * @type {Array<number>}
+	 * @memberof ProductResponse
+	 */
+	'ratings'?: Array<number>;
+	/**
+	 * 
+	 * @type {Array<ProductVariant>}
+	 * @memberof ProductResponse
+	 */
+	'productVariants'?: Array<ProductVariant>;
+	/**
+	 * 
+	 * @type {Array<ProductClassification>}
+	 * @memberof ProductResponse
+	 */
+	'productClassifications'?: Array<ProductClassification>;
+	/**
+	 * 
+	 * @type {boolean}
+	 * @memberof ProductResponse
+	 */
+	'isBanned'?: boolean;
+	/**
+	 * 
+	 * @type {boolean}
+	 * @memberof ProductResponse
+	 */
+	'isPublished'?: boolean;
+	/**
+	 * 
+	 * @type {number}
+	 * @memberof ProductResponse
+	 */
+	'countSale'?: number;
+
+	/**
+ * 
+ * @type {Array<AttributeValue>}
+ * @memberof CreateProductRequest
+ */
+	'detailsProduct'?: Array<AttributeValue>;
+
+	'store'?: StoreResponse;
+}
+
 /**
  * 
  * @export

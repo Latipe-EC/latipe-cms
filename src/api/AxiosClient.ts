@@ -381,6 +381,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				body: data,
 				type: ContentType.Json,
 			}),
+
 		getProductById: (id: string) =>
 			this.request<ProductResponse>({
 				path: `/products/${id}`,

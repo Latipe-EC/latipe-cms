@@ -5,6 +5,7 @@ import userReducer from './slices/user-slice';
 import categoryReducer from './slices/categories-slice';
 import productReducer from './slices/products-slice';
 import storeReducer from './slices/stores-slice';
+import ratingReducer from './slices/ratings-slice';
 
 import {
 	persistStore,
@@ -25,6 +26,7 @@ export const rootReducer = combineReducers({
 	categories: categoryReducer,
 	products: productReducer,
 	stores: storeReducer,
+	ratings: ratingReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

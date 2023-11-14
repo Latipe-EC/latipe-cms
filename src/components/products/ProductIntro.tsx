@@ -1,8 +1,5 @@
 import LazyImage from "../LazyImage";
-import { useAppContext } from "../../contexts/app/AppContext";
-import { CartItem } from "../../reducers/cartReducer";
-import { useParams } from 'react-router-dom';
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import Avatar from "../avatar/Avatar";
 import Box from "../Box";
 import Button from "../buttons/Button";
@@ -12,12 +9,11 @@ import FlexBox from "../FlexBox";
 import Grid from "../grid/Grid";
 import Icon from "../icon/Icon";
 import Rating from "../rating/Rating";
-import { H1, H2, H3, H4, H5, H6, SemiSpan } from "../Typography";
+import { H1, H3, H5, H6, SemiSpan } from "../Typography";
 import { ProductDetailResponse } from "api/interface/product";
 import { Badge, Divider, IconButton, Tooltip } from "@chakra-ui/react";
 import { FaFlag, FaShoppingCart } from "react-icons/fa";
 import './ProductIntro.css'
-import { set } from "lodash";
 export interface ProductIntroProps {
 	product: ProductDetailResponse
 }
@@ -28,12 +24,10 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 	const [selectPromotionPrice, setSelectPromotionPrice] = useState(product.promotionalPrice);
 	const [selectOption, setSelectOption] = useState([]);
 
-	const { state, dispatch } = useAppContext();
 	const [selectQuantity, setSelectQuantity] = useState(product.productClassifications[0].quantity);
 	const [quantity, setQuantity] = useState(1);
 	console.log(product);
 	// const routerId = router.query.id as string;
-	const { id: routerId } = useParams();
 	const sum = product.ratings ? product.ratings.reduce((acc, cur) => acc + cur, 0) : 0;
 	const avg = product.ratings ? sum / product.ratings.length : 0;
 	const handleImageClick = (ind) => () => {
@@ -53,32 +47,37 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 	};
 
 	const handleSelectOption = (index, val) => {
+		console.log(index);
 		const newSelectOption = [...selectOption];
 		newSelectOption[index] = product.productVariants[index].options[val].value;
-		if (index === 1 && selectOption[0]) {
-			setSelectedImage
-				({
-					id: 999999,
-					value: product.productVariants[0].options[
-						product.productVariants[0].options.findIndex(
-							(option) => option.value === selectOption[0]
-						)]
-						.image
-				});
-		} else if (index === 0 && selectOption[1]) {
-			const indexOption = product.productVariants[1].options.findIndex(
-				(option) => option.value === selectOption[1]
-			)
-			setSelectedImage
-				({
-					id: 999999,
-					value: product.productVariants[1].options[indexOption]
-						.image
-				});
-			setSelectQuantity(product.productVariants[1].options[indexOption].);
+
+		const otherIndex = index === 0 ? 1 : 0;
+		const otherVal = selectOption[otherIndex];
+		const indexOption = product.productVariants[otherIndex].options.findIndex(
+			(option) => option.value === otherVal
+		);
+
+		console.log("length", selectOption.length);
+		console.log(index);
+		if ((index === 1 && selectOption.length === 1) || selectOption.length === 2) {
+			setSelectedImage({
+				id: 999999,
+				value: product.productVariants[index].options[val].image,
+			});
+			setSelectQuantity(
+				product.productClassifications[indexOption + val].quantity
+			);
+			setSelectPrice(product.productClassifications[indexOption + val].price);
+			setSelectPromotionPrice(
+				product.productClassifications[indexOption + val].promotionalPrice
+			);
+			setQuantity(1);
 		}
+
 		setSelectOption(newSelectOption);
-	}
+
+	};
+
 	const handleCheckValid = () => {
 		if (product.productVariants.length > 0) {
 			if (selectOption.length !== product.productVariants.length)
@@ -207,7 +206,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 								<FlexBox alignItems="center" mb="1rem">
 									<Wrap mb="1rem">
 										{options.options.map((option, indexValue) => (
-											<WrapItem key={`detail-${options.id}`}>
+											<WrapItem key={`detail-${options.id}-${indexValue}`}>
 												<ButtonCharkra
 													onClick={() => handleSelectOption(index, indexValue)}
 													colorScheme="white"

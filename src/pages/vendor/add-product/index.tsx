@@ -1,4 +1,12 @@
-import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Box, Button, Divider, Flex, FormControl, FormLabel, IconButton, Image, Input, InputGroup, InputLeftElement, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Spinner, Switch, Table, Tbody, Td, Text, Textarea, Th, Thead, Tr, VStack, useToast } from "@chakra-ui/react";
+import {
+	Accordion, AccordionButton, AccordionItem, AccordionPanel,
+	Box, Button, Divider, Flex, FormControl, FormLabel, IconButton,
+	Image, Input, InputGroup, InputLeftElement, InputRightElement,
+	Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter,
+	ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper,
+	NumberInput, NumberInputField, NumberInputStepper, Spinner, Switch, Table,
+	Tbody, Td, Text, Th, Thead, Tr, VStack, useToast
+} from "@chakra-ui/react";
 import DropZone from "../../../components/DropZone";
 import DashboardPageHeader from "../../../components/layout/DashboardPageHeader";
 import './index.css'
@@ -12,6 +20,8 @@ import { getChildsCategory, searchCategory } from "../../../store/slices/categor
 import { AppThunkDispatch } from "../../../store/store";
 import { createProduct } from "../../../store/slices/products-slice";
 import { useNavigate } from "react-router-dom";
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const AddProduct = () => {
 
@@ -47,46 +57,9 @@ const AddProduct = () => {
 	const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setName(event.target.value);
 	};
-	const handleChangeDescription = (event) => {
-		setDescription(event.target.value);
-	};
+
 	const maxLength = 210;
 	const isInvalid = name.length > maxLength;
-
-	const tempdata = [
-		{
-			order: 1,
-			categories: [
-				{ id: 13, name: 'Category 1' },
-				{ id: 2323, name: 'Category 2' },
-				{ id: 323, name: 'Category 3' },
-			],
-		},
-		{
-			order: 2,
-			categories: [
-				{ id: 49, name: 'Category 4' },
-				{ id: 59, name: 'Category 5' },
-				{ id: 69, name: 'Category 6' },
-			],
-		},
-		{
-			order: 3,
-			categories: [
-				{ id: 76, name: 'Category 7' },
-				{ id: 86, name: 'Category 8' },
-				{ id: 96, name: 'Category 9' },
-			],
-		},
-		{
-			order: 4,
-			categories: [
-				{ id: 763, name: 'Category 7' },
-				{ id: 863, name: 'Category 8' },
-				{ id: 963, name: 'Category 9' },
-			],
-		},
-	];
 
 	useEffect(() => {
 		if (name === '' || description === '' || images.length === 0 || selectedCategory.length === 0) {
@@ -354,7 +327,7 @@ const AddProduct = () => {
 						position: "top-right",
 					})
 					setTimeout(() => {
-						// navigate("/vendor/products");
+						navigate("/vendor/products");
 					}, 2500)
 				} else {
 					toast({
@@ -419,7 +392,7 @@ const AddProduct = () => {
 													))}
 												</VStack>
 											</Flex>
-											{data.order < tempdata.length && (
+											{data.order < data.length && (
 												<Divider orientation="vertical" width="1px" h="xl" bgColor="red.300" />
 											)}
 										</Flex>
@@ -483,20 +456,25 @@ const AddProduct = () => {
 								</InputGroup>
 							</FormControl>
 
-							<FormControl isInvalid={isInvalid}>
+							<FormControl isInvalid={isInvalid} >
 								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Description</FormLabel>
-								<InputGroup>
-									<Textarea
-										name="description"
-										placeholder="Description"
-										value={description}
-										maxLength={maxLength}
-										pr="4rem"
-										minH="200px"
-										resize="none"
-										onChange={handleChangeDescription}
-									/>
-								</InputGroup>
+								<CKEditor
+									editor={ClassicEditor}
+									data="<p>Hello from CKEditor&nbsp;5!</p>"
+									onReady={editor => {
+										// You can store the "editor" and use when it is needed.
+										console.log('Editor is ready to use!', editor);
+									}}
+									onChange={(event, editor) => {
+										setDescription(editor.getData());
+									}}
+									onBlur={(event, editor) => {
+										console.log('Blur.', editor);
+									}}
+									onFocus={(event, editor) => {
+										console.log('Focus.', editor);
+									}}
+								/>
 							</FormControl>
 
 							<FormControl isInvalid={isInvalid}>

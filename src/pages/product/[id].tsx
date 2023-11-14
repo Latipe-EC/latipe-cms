@@ -34,58 +34,26 @@ const ProductDetails = () => {
 		}
 	}, []);
 
-	const [selectedOption, setSelectedOption] = useState("description");
-
-	const handleOptionClick = (opt) => () => {
-		setSelectedOption(opt);
-	};
 
 	return (
-		<div>
-			{product && <ProductIntro product={product} />}
-
-			<FlexBox
-				borderBottom="1px solid"
-				borderColor="gray.400"
-				mt="80px"
-				mb="26px"
-			>
-				<H5
-					className="cursor-pointer"
-					mr="25px"
-					p="4px 10px"
-					color={
-						selectedOption === "description" ? "primary.main" : "text.muted"
-					}
-					borderBottom={selectedOption === "description" && "2px solid"}
-					borderColor="primary.main"
-					onClick={handleOptionClick("description")}
-				>
-					Description
-				</H5>
-				<H5
-					className="cursor-pointer"
-					p="4px 10px"
-					color={selectedOption === "review" ? "primary.main" : "text.muted"}
-					onClick={handleOptionClick("review")}
-					borderBottom={selectedOption === "review" && "2px solid"}
-					borderColor="primary.main"
-				>
-					Review (3)
-				</H5>
-			</FlexBox>
-
-			<Box mb="50px">
-				{selectedOption === "description" && <ProductDescription />}
-				{selectedOption === "review" && <ProductReview />}
+		<Box bg={"gray.200"}>
+			<Box bg="white">
+				{product && <ProductIntro product={product} />}
 			</Box>
+			<Box bg="white">
+				<Box mb="50px">
+					{product && <ProductDescription
+						description={product.description}
+						attributes={product.detailsProduct}
+						categories={product.categories}
+					/>}
+				</Box>
+				{/* <FrequentlyBought /> */}
+			</Box>
+			{product && <ProductReview />}
 
-			{/* <FrequentlyBought /> */}
 
-			<AvailableShops />
-
-			<RelatedProducts />
-		</div>
+		</Box>
 	);
 };
 

@@ -1,55 +1,72 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Api, QueryParamsType } from '../../api/AxiosClient';
-import { CreateStoreRequest, UpdateStoreRequest } from 'api/interface/store';
+import { CreateRatingRequest, UpdateRatingRequest } from 'api/interface/rating';
 
 const api = new Api();
 
-export const register = createAsyncThunk(
-	'stores/register',
-	async (input: CreateStoreRequest) => {
-		const response = await api.store.registerStore(input);
+export const create = createAsyncThunk(
+	'ratings/create',
+	async (input: CreateRatingRequest) => {
+		const response = await api.rating.create(input);
 		return response;
 	}
 );
 
 export const update = createAsyncThunk(
-	'stores/update',
-	async (input: UpdateStoreRequest) => {
-		const response = await api.store.update(input);
+	'ratings/update',
+	async (input: UpdateRatingRequest) => {
+		const response = await api.rating.update(input.id, input);
+		return response;
+	}
+);
+
+export const deleteRating = createAsyncThunk(
+	'ratings/delete',
+	async (id: string) => {
+		const response = await api.rating.remove(id);
 		return response;
 	}
 );
 
 
-export const getMyProductBanStore = createAsyncThunk(
-	'stores/my-products/ban',
+export const getRatingDetail = createAsyncThunk(
+	'ratings/detail-rating',
+	async (id: string) => {
+		const response = await api.rating.getDetailRating(id);
+		return response;
+	}
+);
+
+export const getRatingStore = createAsyncThunk(
+	'ratings/rating-store',
 	async (params: QueryParamsType) => {
-		const response = await api.store.getMyProductBanStore(params);
+		const response = await api.rating.getRatingStore(params);
 		console.log(response);
 		return response;
 	}
 );
 
-export const getMyProductStore = createAsyncThunk(
-	'stores/my-products',
+export const getgetRatingProduct = createAsyncThunk(
+	'ratings/rating-products',
 	async (params: QueryParamsType) => {
-		const response = await api.store.getMyProductStore(params);
+		const response = await api.rating.getRatingProduct(params);
 		return response;
 	}
 );
 
-export const storesSlice = createSlice({
-	name: 'stores',
+export const ratingsSlice = createSlice({
+	name: 'ratings',
 	initialState: {
-		store: null,
-		products: [],
+		rating: null,
+		ratingProducts: [],
+		ratingStores: [],
 		banProducts: [],
-		pagination: {
+		paginationStore: {
 			total: 0,
 			skip: 0,
 			limit: 10,
 		},
-		paginationBan: {
+		paginationProduct: {
 			total: 0,
 			skip: 0,
 			limit: 10,
@@ -59,32 +76,31 @@ export const storesSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder
-			.addCase(getMyProductStore.fulfilled, (state, action) => {
+			.addCase(getRatingStore.fulfilled, (state, action) => {
 				state.isLoading = false;
-				state.products = action.payload.data.data;
-				state.pagination.total = action.payload.data.pagination.total;
-				state.pagination.skip = action.payload.data.pagination.skip;
-				state.pagination.limit = action.payload.data.pagination.limit;
+				state.ratingStores = action.payload.data.data;
+				state.paginationStore.total = action.payload.data.pagination.total;
+				state.paginationStore.skip = action.payload.data.pagination.skip;
+				state.paginationStore.limit = action.payload.data.pagination.limit;
 			})
-			.addCase(getMyProductBanStore.fulfilled, (state, action) => {
+			.addCase(getgetRatingProduct.fulfilled, (state, action) => {
 				state.isLoading = false;
-				state.banProducts = action.payload.data.data;
-				state.paginationBan.total = action.payload.data.pagination.total;
-				state.paginationBan.skip = action.payload.data.pagination.skip;
-				state.paginationBan.limit = action.payload.data.pagination.limit;
+				state.ratingProducts = action.payload.data.data;
+				state.paginationProduct.total = action.payload.data.pagination.total;
+				state.paginationProduct.skip = action.payload.data.pagination.skip;
+				state.paginationProduct.limit = action.payload.data.pagination.limit;
 			})
-			.addCase(register.fulfilled, (state, action) => {
-				state.store = action.payload.data;
+			.addCase(getRatingDetail.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.rating = action.payload.data;
 			})
-			.addCase(update.fulfilled, (state, action) => {
-				state.store = action.payload.data;
-			})
+
 	},
 	reducers: {
 
 	}
 });
 
-export const selectStores = (state) => state.stores;
+export const selectStores = (state) => state.ratings;
 
-export default storesSlice.reducer;
+export default ratingsSlice.reducer;

@@ -1,4 +1,4 @@
-import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Box, Button, Divider, Flex, FormControl, FormLabel, IconButton, Image, Input, InputGroup, InputLeftElement, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Spinner, Switch, Table, Tbody, Td, Text, Textarea, Th, Thead, Tr, VStack, useToast } from "@chakra-ui/react";
+import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Box, Button, Divider, Flex, FormControl, FormLabel, IconButton, Image, Input, InputGroup, InputLeftElement, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Spinner, Switch, Table, Tbody, Td, Text, Th, Thead, Tr, VStack, useToast } from "@chakra-ui/react";
 import DropZone from "../../../components/DropZone";
 import DashboardPageHeader from "../../../components/layout/DashboardPageHeader";
 import './index.css'
@@ -12,6 +12,9 @@ import { getChildsCategory, searchCategory } from "../../../store/slices/categor
 import { AppThunkDispatch } from "../../../store/store";
 import { getProductById, updateProduct } from "../../../store/slices/products-slice";
 import { useNavigate, useParams } from "react-router-dom";
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 
 const ProductDetailVendor = () => {
 
@@ -190,9 +193,6 @@ const ProductDetailVendor = () => {
 
 	const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setName(event.target.value);
-	};
-	const handleChangeDescription = (event) => {
-		setDescription(event.target.value);
 	};
 
 	const handleAttributeChange = ({ index, value }) => {
@@ -528,20 +528,25 @@ const ProductDetailVendor = () => {
 								</InputGroup>
 							</FormControl>
 
-							<FormControl isInvalid={isInvalid}>
+							<FormControl isInvalid={isInvalid} >
 								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Description</FormLabel>
-								<InputGroup>
-									<Textarea
-										name="description"
-										placeholder="Description"
-										value={description}
-										maxLength={maxLength}
-										pr="4rem"
-										minH="200px"
-										resize="none"
-										onChange={handleChangeDescription}
-									/>
-								</InputGroup>
+								<CKEditor
+									editor={ClassicEditor}
+									data="<p>Hello from CKEditor&nbsp;5!</p>"
+									onReady={editor => {
+										// You can store the "editor" and use when it is needed.
+										console.log('Editor is ready to use!', editor);
+									}}
+									onChange={(event, editor) => {
+										setDescription(editor.getData());
+									}}
+									onBlur={(event, editor) => {
+										console.log('Blur.', editor);
+									}}
+									onFocus={(event, editor) => {
+										console.log('Focus.', editor);
+									}}
+								/>
 							</FormControl>
 
 							<FormControl isInvalid={isInvalid}>

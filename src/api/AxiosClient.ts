@@ -11,6 +11,7 @@ import axios, {
 import { CategoryResponse, CreateCategoryRequest, CreateProductRequest, ProductResponse, UpdateCategoryRequest, UpdateProductRequest } from 'api/interface/product';
 import { MediaVm } from 'api/interface/media';
 import { StoreResponse, CreateStoreRequest, UpdateStoreRequest, ProductStoreResponse } from 'api/interface/store';
+import { CreateRatingRequest, RatingResponse, UpdateRatingRequest } from 'api/interface/rating';
 
 export type QueryParamsType = Record<string | number, unknown>;
 
@@ -426,4 +427,106 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				type: ContentType.Json,
 			}),
 	}
+	rating = {
+		getDetailRating: (id: string) =>
+			this.request<RatingResponse>({
+				path: `/ratings/${id}`,
+				method: 'GET',
+				type: ContentType.Json,
+			}),
+		/**
+	 * 
+	 * @param {string} productId 
+	 * @param {number} skip 
+	 * @param {number} size 
+	 * @param {string} orderBy 
+	 * @param {GetRatingFilterStarEnum} filterStar 
+	 * @param {*} [options] Override http request option.
+	 * @throws {RequiredError}
+	 */
+		getRatingProduct: (params: QueryParamsType) =>
+			this.request<PagedResultResponse<RatingResponse>>({
+				path: `/ratings/rating-product`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+
+		/**
+ * 
+ * @param {string} productId 
+ * @param {number} skip 
+ * @param {number} size 
+ * @param {string} orderBy 
+ * @param {GetRatingFilterStarEnum} filterStar 
+ * @param {*} [options] Override http request option.
+ * @throws {RequiredError}
+ */
+		getRatingStore: (params: QueryParamsType) =>
+			this.request<PagedResultResponse<RatingResponse>>({
+				path: `/ratings/rating-store`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+
+		/**
+						*
+						* @param {string} id
+						* @param {UpdateRatingRequest} updateRatingRequest
+						* @param {*} [options] Override http request option.
+						* @throws {RequiredError}
+						*/
+		update: (id: string, updateRatingRequest: UpdateRatingRequest) =>
+			this.request<RatingResponse>({
+				path: `/ratings/${id}`,
+				method: 'PUT',
+				type: ContentType.Json,
+				body: updateRatingRequest
+			}),
+
+		/**
+			*
+			* @param {string} id
+			* @param {*} [options] Override http request option.
+			* @throws {RequiredError}
+			*/
+		remove: (id: string) =>
+			this.request<RatingResponse>({
+				path: `/ratings/${id}`,
+				method: 'DELETE',
+				type: ContentType.Json,
+			}),
+
+		/**
+			*
+			* @param {CreateRatingRequest} createRatingRequest
+			* @param {*} [options] Override http request option.
+			* @throws {RequiredError}
+			*/
+		create: (createRatingRequest: CreateRatingRequest) =>
+			this.request<RatingResponse>({
+				path: `/ratings`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: createRatingRequest
+			}),
+	}
 }
+
+/**
+ * @export
+ */
+export const GetRatingProductFilterStarEnum = {
+	All: 'ALL',
+	One: 'ONE',
+	Two: 'TWO',
+	Three: 'THREE',
+	Four: 'FOUR',
+	Five: 'FIVE'
+} as const;
+export type GetRatingFilterStarEnum = typeof GetRatingProductFilterStarEnum[keyof typeof GetRatingProductFilterStarEnum];

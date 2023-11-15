@@ -1,65 +1,78 @@
 import React from "react";
 import Box from "../Box";
 import Button from "../buttons/Button";
-import FlexBox from "../FlexBox";
-import Rating from "../rating/Rating";
-import TextArea from "../textarea/TextArea";
-import { H2, H5 } from "../Typography";
+import { H2 } from "../Typography";
 import ProductComment from "./ProductComment";
-import { useFormik } from "formik";
-import * as yup from "yup";
+import { Flex, Icon, Text } from "@chakra-ui/react";
+import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 
-export interface ProductReviewProps { }
+export interface ProductReviewProps {
+	rating: Array<number>;
+	setSelectedStar: (star: number) => void;
+	selectedStar: number;
+}
 
-const ProductReview: React.FC<ProductReviewProps> = () => {
+const ProductReview: React.FC<ProductReviewProps> = ({ rating, selectedStar, setSelectedStar }) => {
+
+	// {ratting.reduce((a, b) => a + b, 0)} / 5
 
 
+	const averageStar = rating ? rating.reduce((a, b) => a + b, 0) / rating.length : 0;
+	const fullStars = Math.floor(averageStar);
+	const hasHalfStar = averageStar - fullStars >= 0.5;
 
+	const formatNumber = (number: number): string => {
+		if (number > 1000) {
+			return (number / 1000).toFixed(1) + "k";
+		} else {
+			return number.toString();
+		}
+	};
 	return (
-		<Box>
-			{commentList.map((item, ind) => (
-				<ProductComment {...item} key={ind} />
-			))}
+		<Box p={2}>
+			<H2 fontWeight={"bold"} mb="1rem">Đánh giá sản phẩm</H2>
+			<Flex alignItems="center" mb="1rem">
+				{Array.from({ length: 5 }).map((_, index) => {
+					if (index < fullStars) {
+						return <Icon key={index} as={FaStar} color="yellow.500" mr="0.5rem" />;
+					} else if (hasHalfStar && index === fullStars) {
+						return <Icon key={index} as={FaStarHalfAlt} color="yellow.500" mr="0.5rem" />;
+					} else {
+						return <Icon key={index} as={FaStar} color="gray.300" mr="0.5rem" />;
+					}
+				})}
+				<Text fontSize="2xl" fontWeight="bold" mr="1rem">
+					{averageStar.toFixed(1)} trên 5
+				</Text>
+			</Flex>
+			<Box display="flex" alignItems="center">
+				<Button
+					variant="outline"
+					mr="1rem"
+					border="2px solid"
+					borderColor={selectedStar === null ? "orange.500" : "gray.300"}
+					color={selectedStar === null ? "red" : "black"}
+					onClick={() => setSelectedStar(null)}
+				>
+					Tất cả
+				</Button>
+				{[5, 4, 3, 2, 1].map((star) => (
+					<Button
+						key={star}
+						variant="outline"
+						mr="1rem"
+						border="2px solid"
+						borderColor={selectedStar === star ? "orange.500" : "gray.300"}
+						color={selectedStar === star ? "red" : "black"}
+						onClick={() => setSelectedStar(star)}
+					>
+						{star} sao ({formatNumber(rating[star - 1])})
+					</Button>
+				))}
+			</Box>
+			<ProductComment star={selectedStar} />
 		</Box>
 	);
 };
-
-const commentList = [
-	{
-		name: "Jannie Schumm",
-		imgUrl: "/assets/images/faces/7.png",
-		rating: 4.7,
-		date: "2021-02-14",
-		comment:
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius massa id ut mattis. Facilisis vitae gravida egestas ac account.",
-	},
-	{
-		name: "Joe Kenan",
-		imgUrl: "/assets/images/faces/6.png",
-		rating: 4.7,
-		date: "2019-08-10",
-		comment:
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius massa id ut mattis. Facilisis vitae gravida egestas ac account.",
-	},
-	{
-		name: "Jenifer Tulio",
-		imgUrl: "/assets/images/faces/8.png",
-		rating: 4.7,
-		date: "2021-02-05",
-		comment:
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius massa id ut mattis. Facilisis vitae gravida egestas ac account.",
-	},
-];
-
-const initialValues = {
-	rating: "",
-	comment: "",
-	date: new Date().toISOString(),
-};
-
-const reviewSchema = yup.object().shape({
-	rating: yup.number().required("required"),
-	comment: yup.string().required("required"),
-});
 
 export default ProductReview;

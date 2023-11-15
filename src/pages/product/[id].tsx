@@ -17,6 +17,7 @@ const ProductDetails = () => {
 	const dispatch = useDispatch<AppThunkDispatch>();
 	const navigate = useNavigate();
 	const { id } = useParams<{ id: string }>();
+	const [selectedStar, setSelectedStar] = useState(0);
 
 	const [product, setProduct] = useState(null);
 
@@ -41,7 +42,7 @@ const ProductDetails = () => {
 				{product && <ProductIntro product={product} />}
 			</Box>
 			<Box bg="white">
-				<Box mb="50px">
+				<Box mb="0.5rem">
 					{product && <ProductDescription
 						description={product.description}
 						attributes={product.detailsProduct}
@@ -50,7 +51,11 @@ const ProductDetails = () => {
 				</Box>
 				{/* <FrequentlyBought /> */}
 			</Box>
-			{product && <ProductReview />}
+			{product && <ProductReview
+				selectedStar={selectedStar}
+				setSelectedStar={setSelectedStar}
+				rating={product.ratings}
+			/>}
 
 
 		</Box>

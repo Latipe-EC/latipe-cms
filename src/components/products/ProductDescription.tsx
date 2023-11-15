@@ -17,7 +17,7 @@ const ProductDescription: React.FC<ProductDescriptionProps> = ({ description,
 	attributes, categories }) => {
 	const navigate = useNavigate();
 	const handleClickCate = (category: CategoryResponse) => {
-		navigate(`/search?category=${category.name}`)
+		navigate(`/search?keyword=${category.name}`)
 	}
 
 
@@ -58,11 +58,9 @@ const ProductDescription: React.FC<ProductDescriptionProps> = ({ description,
 					</FlexBox>
 				))
 			}
-			<Text p={"2"} fontSize={"2xl"} mb="1rem" textTransform="uppercase">Mô tả sản phẩm:</Text>
-			<Box ml={3}>
+			<Text p={"2"} fontSize={"2xl"} mb="0.5rem" textTransform="uppercase">Mô tả sản phẩm:</Text>
+			<Box ml={3} mb={2} >
 				<ReactMarkdown children={description} />
-
-
 			</Box>
 		</Box >
 	);

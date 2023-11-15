@@ -1,43 +1,96 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { getDateDifference } from "../../utils/utils";
 import Avatar from "../avatar/Avatar";
 import Box from "../Box";
 import FlexBox from "../FlexBox";
 import Rating from "../rating/Rating";
 import { H5, H6, Paragraph, SemiSpan } from "../Typography";
-
+import { AppThunkDispatch, RootState, useAppSelector } from "../../store/store";
+import Pagination from "../pagination/Pagination";
+import { useDispatch } from "react-redux";
+import { getgetRatingProduct } from "../../store/slices/ratings-slice";
+import { useParams } from "react-router-dom";
+import { GetRatingFilterStarEnum } from "../../api/AxiosClient";
+import { Text } from "@chakra-ui/react";
 export interface ProductCommentProps {
-  name;
-  imgUrl: string;
-  rating: number;
-  date: string;
-  comment: string;
+	star: number;
 }
 
-const ProductComment: React.FC<ProductCommentProps> = ({
-  name,
-  imgUrl,
-  rating,
-  date,
-  comment,
-}) => {
-  return (
-    <Box mb="32px" maxWidth="600px">
-      <FlexBox alignItems="center" mb="1rem">
-        <Avatar src={imgUrl} />
-        <Box ml="1rem">
-          <H5 mb="4px">{name}</H5>
-          <FlexBox alignItems="center">
-            <Rating value={rating} color="warn" readonly />
-            <H6 mx="10px">{rating}</H6>
-            <SemiSpan>{getDateDifference(date)}</SemiSpan>
-          </FlexBox>
-        </Box>
-      </FlexBox>
+const ProductComment: React.FC<ProductCommentProps> = ({ star }) => {
+	const rating = useAppSelector((state: RootState) => state.ratings);
+	const { id } = useParams<{ id: string }>();
+	const [currentPage, setCurrentPage] = useState(0);
+	const dispatch = useDispatch<AppThunkDispatch>();
 
-      <Paragraph color="gray.700">{comment}</Paragraph>
-    </Box>
-  );
+	useEffect(() => {
+		dispatch(
+			getgetRatingProduct({
+				size: 5, skip: currentPage * 5, productId: id,
+				filterStar: getStarFilter()
+			})
+		);
+	}, [star]);
+
+	const getStarFilter = () => {
+		switch (star) {
+			case 1:
+				return GetRatingFilterStarEnum.One;
+			case 2:
+				return GetRatingFilterStarEnum.Two;
+			case 3:
+				return GetRatingFilterStarEnum.Three;
+			case 4:
+				return GetRatingFilterStarEnum.Four;
+			case 5:
+				return GetRatingFilterStarEnum.Five;
+			default:
+				return GetRatingFilterStarEnum.All;
+		}
+	}
+	return (
+		<Box>
+			{rating.ratingProducts.length > 0 && rating.ratingProducts.map((item) =>
+			(<Box mb="32px" maxWidth="600px">
+				<FlexBox alignItems="center" mb="1rem">
+					<Avatar src={"/assets/images/faces/7.png"} />
+					<Box ml="1rem">
+						<H5 mb="4px">{item.userName}</H5>
+						<FlexBox alignItems="center">
+							<Rating value={item.rating} color="warn" readonly />
+							<H6 mx="10px">{item.rating}</H6>
+							<SemiSpan>{getDateDifference(item.createdDate)}</SemiSpan>
+						</FlexBox>
+					</Box>
+				</FlexBox>
+				<Paragraph color="gray.700">{item.content}</Paragraph>
+
+
+			</Box>))
+
+			}
+
+			{rating.ratingProducts.length > 0 &&
+				< FlexBox justifyContent="center" mt="2.5rem" >
+					<Pagination
+						pageCount={Math.ceil(rating.paginationProduct.total / 10)}
+						onChange={(data) => {
+							dispatch(
+								getgetRatingProduct({ size: 5, skip: (+data) * 5, productId: id, filterStar: getStarFilter() })
+							);
+							setCurrentPage(+data);
+						}}
+					/>
+				</FlexBox>}
+
+			{rating.ratingProducts.length === 0 &&
+				<Box height="100px" display="flex" alignItems="center" justifyContent="center">
+					<Text fontSize="2xl" fontWeight="bold" textAlign="center">
+						Sản phẩm chưa có đánh giá nào.
+					</Text>
+				</Box>
+			}
+		</Box >
+	);
 };
 
 export default ProductComment;

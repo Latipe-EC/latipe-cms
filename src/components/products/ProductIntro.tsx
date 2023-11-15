@@ -14,6 +14,7 @@ import { ProductDetailResponse } from "api/interface/product";
 import { Badge, Divider, IconButton, Tooltip } from "@chakra-ui/react";
 import { FaFlag, FaShoppingCart } from "react-icons/fa";
 import './ProductIntro.css'
+import { useNavigate } from "react-router-dom";
 export interface ProductIntroProps {
 	product: ProductDetailResponse
 }
@@ -23,19 +24,22 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 	const [selectPrice, setSelectPrice] = useState(product.price);
 	const [selectPromotionPrice, setSelectPromotionPrice] = useState(product.promotionalPrice);
 	const [selectOption, setSelectOption] = useState([]);
-
 	const [selectQuantity, setSelectQuantity] = useState(product.productClassifications[0].quantity);
 	const [quantity, setQuantity] = useState(1);
-	console.log(product);
 	// const routerId = router.query.id as string;
 	const sum = product.ratings ? product.ratings.reduce((acc, cur) => acc + cur, 0) : 0;
 	const avg = product.ratings ? sum / product.ratings.length : 0;
+	const navigate = useNavigate();
+
 	const handleImageClick = (ind) => () => {
 		setSelectedImage({ id: ind, value: product.images[ind] });
 	};
 
 	const handleBuyNow = () => {
-
+		if (product.productVariants.length > 0 && product.productVariants.length !== selectOption.length) {
+			return;
+		}
+		navigate(`/checkout/${product.id}?quantity=${quantity}?option=${selectOption.join(',')}?buyNow=true`);
 	};
 
 	const handleAddToCart = () => {
@@ -47,7 +51,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 	};
 
 	const handleSelectOption = (index, val) => {
-		console.log(index);
 		const newSelectOption = [...selectOption];
 		newSelectOption[index] = product.productVariants[index].options[val].value;
 
@@ -57,8 +60,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 			(option) => option.value === otherVal
 		);
 
-		console.log("length", selectOption.length);
-		console.log(index);
 		if ((index === 1 && selectOption.length === 1) || selectOption.length === 2) {
 			setSelectedImage({
 				id: 999999,

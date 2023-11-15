@@ -12,6 +12,7 @@ import { CategoryResponse, CreateCategoryRequest, CreateProductRequest, ProductR
 import { MediaVm } from 'api/interface/media';
 import { StoreResponse, CreateStoreRequest, UpdateStoreRequest, ProductStoreResponse } from 'api/interface/store';
 import { CreateRatingRequest, RatingResponse, UpdateRatingRequest } from 'api/interface/rating';
+import { CartGetDetailResponse, CartItemRequest, DeleteCartItemRequest, UpadateQuantiyRequest } from 'api/interface/cart';
 
 export type QueryParamsType = Record<string | number, unknown>;
 
@@ -516,12 +517,48 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				body: createRatingRequest
 			}),
 	}
+	cart = {
+		getMyCart: (params: QueryParamsType) =>
+			this.request<PagedResultResponse<CartGetDetailResponse>>({
+				path: `/carts/my-cart`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+
+		addToCart: (data: Array<CartItemRequest>) =>
+			this.request<PagedResultResponse<CartGetDetailResponse>>({
+				path: `/carts/my-cart`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: data
+			}),
+
+		updateQuantity: (request: UpadateQuantiyRequest) =>
+			this.request<VoidFunction>({
+				path: `/carts/${request.id}`,
+				method: 'PUT',
+				type: ContentType.Json,
+				body: request
+			}),
+
+		deleteCartItem: (request: DeleteCartItemRequest) =>
+			this.request<VoidFunction>({
+				path: `/carts`,
+				method: 'DELETE',
+				type: ContentType.Json,
+				body: request
+			}),
+	}
+
 }
 
 /**
  * @export
  */
-export const GetRatingProductFilterStarEnum = {
+export const GetRatingFilterStarEnum = {
 	All: 'ALL',
 	One: 'ONE',
 	Two: 'TWO',
@@ -529,4 +566,4 @@ export const GetRatingProductFilterStarEnum = {
 	Four: 'FOUR',
 	Five: 'FIVE'
 } as const;
-export type GetRatingFilterStarEnum = typeof GetRatingProductFilterStarEnum[keyof typeof GetRatingProductFilterStarEnum];
+export type GetRatingFilterStarEnum = typeof GetRatingFilterStarEnum[keyof typeof GetRatingFilterStarEnum];

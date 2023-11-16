@@ -370,7 +370,7 @@ export interface SortObject {
 	'unsorted'?: boolean;
 }
 
-export interface UpadateQuantiyRequest {
+export interface UpdateQuantityRequest {
 	id: string;
 	quantity: number;
 }

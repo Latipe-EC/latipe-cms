@@ -11,6 +11,9 @@ import CustomerDashboardLayout from './components/layout/CustomerDashboardLayout
 import NavbarLayout from './components/layout/NavbarLayout';
 import { ChakraProvider } from '@chakra-ui/react';
 import AddProductLayout from './components/layout/AddProductLayout';
+import { AppThunkDispatch } from './store/store';
+import { useDispatch } from 'react-redux';
+import { getMyCart } from './store/slices/carts-slice';
 
 // home pages
 const Address = lazy(() => import('./pages/address'));
@@ -63,6 +66,16 @@ const WishList = lazy(() => import('./pages/wish-list'));
 const Error404 = lazy(() => import('./pages/404'));
 
 function App() {
+
+	const dispatch = useDispatch<AppThunkDispatch>();
+
+	const auth = JSON.parse(localStorage.getItem('REACT_STARTER_AUTH'));
+	if (auth && auth.isAuthenticated) {
+		dispatch(getMyCart({ skip: 0, limit: 10 }))
+
+	}
+
+
 	return (
 		<ThemeProvider theme={theme}>
 			<ChakraProvider>

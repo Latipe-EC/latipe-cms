@@ -12,7 +12,7 @@ import { CategoryResponse, CreateCategoryRequest, CreateProductRequest, ProductR
 import { MediaVm } from 'api/interface/media';
 import { StoreResponse, CreateStoreRequest, UpdateStoreRequest, ProductStoreResponse } from 'api/interface/store';
 import { CreateRatingRequest, RatingResponse, UpdateRatingRequest } from 'api/interface/rating';
-import { CartGetDetailResponse, CartItemRequest, DeleteCartItemRequest, UpadateQuantiyRequest } from 'api/interface/cart';
+import { CartGetDetailResponse, CartItemRequest, DeleteCartItemRequest, UpdateQuantityRequest } from 'api/interface/cart';
 
 export type QueryParamsType = Record<string | number, unknown>;
 
@@ -536,7 +536,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				body: data
 			}),
 
-		updateQuantity: (request: UpadateQuantiyRequest) =>
+		updateQuantity: (request: UpdateQuantityRequest) =>
 			this.request<VoidFunction>({
 				path: `/carts/${request.id}`,
 				method: 'PUT',

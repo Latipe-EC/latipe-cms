@@ -59,6 +59,7 @@ export const cartSlice = createSlice({
 				state.pagination.skip = action.payload.data.pagination.skip;
 				state.pagination.limit = action.payload.data.pagination.limit;
 				state.data = action.payload.data.data;
+				state.count = action.payload.data.pagination.total;
 			})
 			.addCase(deleteCartItem.fulfilled, (state, action) => {
 				const deleteCartItemId = action.meta.arg;

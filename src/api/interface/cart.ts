@@ -380,3 +380,15 @@ export interface DeleteCartItemRequest {
 	ids: string[];
 }
 
+export interface CartResponse {
+	"id": string;
+	"userId": string;
+	"productId": string;
+	"productOptionId": string;
+	"quantity": number;
+	productName: string;
+	storeId: string;
+	storeName: string;
+	image: string;
+	nameOption: string
+}

@@ -532,11 +532,7 @@ const ProductDetailVendor = () => {
 								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Description</FormLabel>
 								<CKEditor
 									editor={ClassicEditor}
-									data="<p>Hello from CKEditor&nbsp;5!</p>"
-									onReady={editor => {
-										// You can store the "editor" and use when it is needed.
-										console.log('Editor is ready to use!', editor);
-									}}
+									data={description}
 									onChange={(event, editor) => {
 										setDescription(editor.getData());
 									}}

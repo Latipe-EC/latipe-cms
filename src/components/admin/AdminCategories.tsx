@@ -124,7 +124,7 @@ const CategoriesAdmin = () => {
 	useEffect(() => {
 		if (selectedCategory?.parentCategory) {
 			setParentCategory({
-				value: selectedCategory.parentCategory.Id,
+				value: selectedCategory.parentCategory.id,
 				label: selectedCategory.parentCategory.name,
 			});
 		} else {

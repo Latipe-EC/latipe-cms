@@ -1,9 +1,9 @@
 import LazyImage from "../LazyImage";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Avatar from "../avatar/Avatar";
 import Box from "../Box";
 import Button from "../buttons/Button";
-import { Button as ButtonCharkra, Wrap, WrapItem } from "@chakra-ui/react";
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogOverlay, Button as ButtonCharkra, Center, Text, Wrap, WrapItem, useToast } from "@chakra-ui/react";
 
 import FlexBox from "../FlexBox";
 import Grid from "../grid/Grid";
@@ -15,17 +15,28 @@ import { Badge, Divider, IconButton, Tooltip } from "@chakra-ui/react";
 import { FaFlag, FaShoppingCart } from "react-icons/fa";
 import './ProductIntro.css'
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../store/slices/carts-slice";
+import { AppThunkDispatch } from "store/store";
 export interface ProductIntroProps {
 	product: ProductDetailResponse
 }
 
 const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
+
+	const dispatch = useDispatch<AppThunkDispatch>();
+	const [isOpen, setIsOpen] = useState(false);
+	const onClose = () => setIsOpen(false);
+	const cancelRef = useRef();
+	const toast = useToast();
+
 	const [selectedImage, setSelectedImage] = useState({ id: 0, value: product.images[0] });
 	const [selectPrice, setSelectPrice] = useState(product.price);
 	const [selectPromotionPrice, setSelectPromotionPrice] = useState(product.promotionalPrice);
 	const [selectOption, setSelectOption] = useState([]);
 	const [selectQuantity, setSelectQuantity] = useState(product.productClassifications[0].quantity);
 	const [quantity, setQuantity] = useState(1);
+	const [selectClassification, setSelectClassification] = useState(null);
 	// const routerId = router.query.id as string;
 	const sum = product.ratings ? product.ratings.reduce((acc, cur) => acc + cur, 0) : 0;
 	const avg = product.ratings ? sum / product.ratings.length : 0;
@@ -39,15 +50,23 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 		if (product.productVariants.length > 0 && product.productVariants.length !== selectOption.length) {
 			return;
 		}
-		navigate(`/checkout/${product.id}?quantity=${quantity}?option=${selectOption.join(',')}?buyNow=true`);
+		navigate(`/checkout/${product.id}?quantity=${quantity}?option=${selectOption.map(x => x.value).join(',')}?buyNow=true`);
 	};
 
 	const handleAddToCart = () => {
-		if (product.productVariants.length > 0) {
-
+		if (product.productVariants.length > 0 && (product.productVariants.length
+			!== selectOption.length || selectClassification === null)) {
 			return;
 		}
-
+		dispatch(addToCart(
+			{
+				productId: product.id,
+				quantity: quantity,
+				productOptionId: selectClassification
+			}
+		))
+		setIsOpen(true);
+		setTimeout(() => setIsOpen(false), 1000);
 	};
 
 	const handleSelectOption = (index, val) => {
@@ -63,7 +82,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 		if ((index === 1 && selectOption.length === 1) || selectOption.length === 2) {
 			setSelectedImage({
 				id: 999999,
-				value: product.productVariants[index].options[val].image,
+				value: product.productVariants[0].options[index].image,
 			});
 			setSelectQuantity(
 				product.productClassifications[indexOption + val].quantity
@@ -72,6 +91,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 			setSelectPromotionPrice(
 				product.productClassifications[indexOption + val].promotionalPrice
 			);
+			setSelectClassification(product.productClassifications[indexOption + val].id);
 			setQuantity(1);
 		}
 
@@ -104,6 +124,23 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 
 	return (
 		<Box overflow="hidden">
+			<AlertDialog
+				isOpen={isOpen}
+				leastDestructiveRef={cancelRef}
+				onClose={onClose}
+			>
+				<AlertDialogOverlay>
+					<Center>
+						<AlertDialogContent bg="green.500">
+							<AlertDialogBody>
+								<Text textAlign="center" color="white">
+									Thêm vào giỏ hàng thành công !
+								</Text>
+							</AlertDialogBody>
+						</AlertDialogContent>
+					</Center>
+				</AlertDialogOverlay>
+			</AlertDialog>
 			<Grid container justifyContent="center" spacing={16}>
 				<Grid item md={6} xs={12} alignItems="center">
 					<Box>

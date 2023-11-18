@@ -1,7 +1,6 @@
 import IconButton from "../buttons/IconButton";
 import GrocerySearchBox from "../search-box/GrocerySearchBox";
 import { Tiny } from "../Typography";
-import { useAppContext } from "../../contexts/app/AppContext";
 import React, { useState } from "react";
 import Box from "../Box";
 import Container from "../Container";

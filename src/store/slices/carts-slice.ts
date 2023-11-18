@@ -15,7 +15,7 @@ export const getMyCart = createAsyncThunk(
 
 export const addToCart = createAsyncThunk(
 	'carts/addToCart',
-	async (data: Array<CartItemRequest>) => {
+	async (data: CartItemRequest) => {
 		const response = await api.cart.addToCart(data);
 		return response;
 	}
@@ -63,19 +63,19 @@ export const cartSlice = createSlice({
 			})
 			.addCase(deleteCartItem.fulfilled, (state, action) => {
 				const deleteCartItemId = action.meta.arg;
-				const inedx = state.data.findIndex((cartItem) => cartItem.id === deleteCartItemId);
-				if (inedx !== -1) {
-					state.data.splice(inedx, 1);
+				const index = state.data.findIndex((cartItem) => cartItem.id === deleteCartItemId);
+				if (index !== -1) {
+					state.data.splice(index, 1);
 				}
 			})
 			.addCase(updateQuantity.fulfilled, (state, action) => {
 				const deleteCartItemId = action.meta.arg;
-				const index = state.data.findIndex((category) => category.id === deleteCartItemId);
+				const index = state.data.findIndex((cartItem) => cartItem.id === deleteCartItemId);
 				state.data[index].quantity++;
 			})
 			.addCase(addToCart.fulfilled, (state, action) => {
-				state.count = state.count + 1;
 				state.data.push(action.payload.data);
+				state.pagination.total++;
 			})
 	},
 	reducers: {

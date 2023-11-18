@@ -304,6 +304,7 @@ const AddProduct = () => {
 			imagesFile: images,
 		}
 
+		console.log(productVariants);
 		const loadingToastId = toast({
 			title: 'Adding new product...',
 			description: <Spinner />,
@@ -462,7 +463,6 @@ const AddProduct = () => {
 									editor={ClassicEditor}
 									data="<p>Hello from CKEditor&nbsp;5!</p>"
 									onReady={editor => {
-										// You can store the "editor" and use when it is needed.
 										console.log('Editor is ready to use!', editor);
 									}}
 									onChange={(event, editor) => {

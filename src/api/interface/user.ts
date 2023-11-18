@@ -471,6 +471,8 @@ export interface UserResponse {
 	 * @memberof UserResponse
 	 */
 	'point'?: number;
+
+	'addresses'?: UserAddress[];
 }
 
 export interface District {

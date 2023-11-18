@@ -72,7 +72,6 @@ function App() {
 	const auth = JSON.parse(localStorage.getItem('REACT_STARTER_AUTH'));
 	if (auth && auth.isAuthenticated) {
 		dispatch(getMyCart({ skip: 0, limit: 10 }))
-
 	}
 
 

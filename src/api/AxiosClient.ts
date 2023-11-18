@@ -1,6 +1,6 @@
 import { PagedResultResponse } from 'api/interface/PagedResultResponse';
 import { LoginRequest, LoginResponse, RefreshTokenInput, RefreshTokenResponse } from '../api/interface/auth';
-import { CreateUserAddressRequest, UserAddress } from '../api/interface/user';
+import { CreateUserAddressRequest, UserAddress, UserResponse } from '../api/interface/user';
 import axios, {
 	AxiosInstance,
 	AxiosRequestConfig,
@@ -269,7 +269,6 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				path: `/users/count-my-address`,
 				method: 'GET',
 				type: ContentType.Json,
-
 			}),
 
 		getMyAddressById: (id: string) =>
@@ -293,6 +292,14 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			this.request<UserAddress>({
 				path: `/users/my-address/${id}`,
 				method: 'DELETE',
+				type: ContentType.Json,
+
+			}),
+
+		getMyProfile: () =>
+			this.request<UserResponse>({
+				path: `/users/my-profile`,
+				method: 'GET',
 				type: ContentType.Json,
 
 			}),

@@ -32,6 +32,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
 		[]
 	);
 
+	console.log(123);
 	const getTotalPrice = () => {
 		return (
 			cartList.reduce(

@@ -47,12 +47,17 @@ export interface CartGetDetailResponse {
 	 * @memberof CartGetDetailResponse
 	 */
 	'userId'?: string;
-	/**
-	 * 
-	 * @type {Array<CartDetailResponse>}
-	 * @memberof CartGetDetailResponse
-	 */
-	'cartDetails'?: Array<CartDetailResponse>;
+
+	'productId'?: string;
+
+	'productOptionId'?: string;
+	'quantity'?: number;
+	'productName'?: string;
+	'storeId'?: string;
+	'image'?: string;
+	'storeName'?: string;
+	'nameOption'?: string;
+	'price'?: number;
 }
 /**
  * 

@@ -24,7 +24,7 @@ export const addToCart = createAsyncThunk(
 
 export const
 	updateQuantity = createAsyncThunk(
-		'carts/update-quantity',
+		'carts/quantity',
 		async (data: UpdateQuantityRequest) => {
 			const response = await api.cart.updateQuantity(data);
 			return response;
@@ -59,20 +59,28 @@ export const cartSlice = createSlice({
 				state.pagination.total = action.payload.data.pagination.total;
 				state.pagination.skip = action.payload.data.pagination.skip;
 				state.pagination.limit = action.payload.data.pagination.limit;
-				state.data = action.payload.data.data;
+				if (action.payload.data.pagination.skip === 0) {
+					state.data = action.payload.data.data;
+				} else {
+					state.data.push(...action.payload.data.data);
+				}
 				state.count = action.payload.data.pagination.total;
 			})
 			.addCase(deleteCartItem.fulfilled, (state, action) => {
-				const deleteCartItemId = action.meta.arg;
-				const index = state.data.findIndex((cartItem) => cartItem.id === deleteCartItemId);
-				if (index !== -1) {
-					state.data.splice(index, 1);
-				}
+				const deleteCartItemIds = action.meta.arg;
+				deleteCartItemIds.ids.forEach(deleteCartItemId => {
+					const index = state.data.findIndex((cartItem) => cartItem.id === deleteCartItemId);
+					if (index !== -1) {
+						state.data.splice(index, 1);
+						state.pagination.total--;
+						state.count--;
+					}
+				});
 			})
 			.addCase(updateQuantity.fulfilled, (state, action) => {
-				const deleteCartItemId = action.meta.arg;
-				const index = state.data.findIndex((cartItem) => cartItem.id === deleteCartItemId);
-				state.data[index].quantity++;
+				const cartItem = action.meta.arg;
+				const index = state.data.findIndex((cartItem) => cartItem.id === cartItem.id);
+				state.data[index].quantity = cartItem.quantity;
 			})
 			.addCase(addToCart.fulfilled, (state, action) => {
 				state.data.push(action.payload.data);

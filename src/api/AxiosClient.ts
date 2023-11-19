@@ -545,7 +545,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		updateQuantity: (request: UpdateQuantityRequest) =>
 			this.request<VoidFunction>({
-				path: `/carts/${request.id}`,
+				path: `/carts/${request.id}/quantity`,
 				method: 'PUT',
 				type: ContentType.Json,
 				body: request
@@ -553,7 +553,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		deleteCartItem: (request: DeleteCartItemRequest) =>
 			this.request<VoidFunction>({
-				path: `/carts`,
+				path: `/carts/multi-delete`,
 				method: 'DELETE',
 				type: ContentType.Json,
 				body: request

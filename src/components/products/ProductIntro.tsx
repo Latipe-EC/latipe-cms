@@ -3,7 +3,10 @@ import React, { useRef, useState } from "react";
 import Avatar from "../avatar/Avatar";
 import Box from "../Box";
 import Button from "../buttons/Button";
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogOverlay, Button as ButtonCharkra, Center, Text, Wrap, WrapItem, useToast } from "@chakra-ui/react";
+import {
+	AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogOverlay, Button as ButtonCharkra, Center, Text,
+	Wrap, WrapItem
+} from "@chakra-ui/react";
 
 import FlexBox from "../FlexBox";
 import Grid from "../grid/Grid";
@@ -16,8 +19,8 @@ import { FaFlag, FaShoppingCart } from "react-icons/fa";
 import './ProductIntro.css'
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../../store/slices/carts-slice";
-import { AppThunkDispatch } from "store/store";
+import { addToCart, incrementCount } from "../../store/slices/carts-slice";
+import { AppThunkDispatch } from "../../store/store";
 export interface ProductIntroProps {
 	product: ProductDetailResponse
 }
@@ -28,8 +31,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const onClose = () => setIsOpen(false);
 	const cancelRef = useRef();
-	const toast = useToast();
-
 	const [selectedImage, setSelectedImage] = useState({ id: 0, value: product.images[0] });
 	const [selectPrice, setSelectPrice] = useState(product.price);
 	const [selectPromotionPrice, setSelectPromotionPrice] = useState(product.promotionalPrice);
@@ -64,7 +65,11 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 				quantity: quantity,
 				productOptionId: selectClassification
 			}
-		))
+		)).unwrap().then((res) => {
+			if (res.status.toString().startsWith("20") && res.data.quantity === quantity) {
+				dispatch(incrementCount());
+			}
+		}).catch(() => { });
 		setIsOpen(true);
 		setTimeout(() => setIsOpen(false), 1000);
 	};
@@ -207,7 +212,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 							<Tooltip label="Báo cáo sản phẩm">
 								<IconButton
 									aria-label="Report"
-									icon={<Icon as={FaFlag} />}
+									icon={<Icon as={FaFlag} children={""} />}
 									variant="outline"
 									colorScheme="red"
 								/>
@@ -303,7 +308,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 					<FlexBox alignItems="center" mb="1rem">
 						<ButtonCharkra
 							onClick={handleAddToCart}
-							leftIcon={<Icon as={FaShoppingCart} />}
+							leftIcon={<Icon as={FaShoppingCart} children={""} />}
 							disabled={!handleCheckValid()}
 							bg="#FDF3F4"
 							color={"red"}

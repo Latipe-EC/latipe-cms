@@ -4,29 +4,30 @@ import { colorOptions } from "../../interfaces";
 import StyledIcon from "./IconStyle";
 
 export interface IconProps {
-  size?: string;
-  children: string;
-  transform?: string;
-  variant?: "small" | "medium" | "large";
-  color?: colorOptions;
-  defaultcolor?: "currentColor" | "auto";
+	size?: string;
+	children: string;
+	transform?: string;
+	variant?: "small" | "medium" | "large";
+	color?: colorOptions;
+	defaultcolor?: "currentColor" | "auto";
+	as?: unknown;
 }
 
 const Icon: React.FC<
-  IconProps & SpaceProps & ButtonHTMLAttributes<IconProps>
+	IconProps & SpaceProps & ButtonHTMLAttributes<IconProps>
 > = ({ children, ...props }: IconProps) => {
-  return (
-    <StyledIcon
-      src={`/assets/images/icons/${children}.svg`}
-      fallback={() => <span>{children?.trim()}</span>}
-      {...props}
-    />
-  );
+	return (
+		<StyledIcon
+			src={`/assets/images/icons/${children}.svg`}
+			fallback={() => <span>{children?.trim()}</span>}
+			{...props}
+		/>
+	);
 };
 
 Icon.defaultProps = {
-  variant: "medium",
-  defaultcolor: "currentColor",
+	variant: "medium",
+	defaultcolor: "currentColor",
 };
 
 export default Icon;

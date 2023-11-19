@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Api, QueryParamsType } from '../../api/AxiosClient';
 import { CartItemRequest, DeleteCartItemRequest, UpdateQuantityRequest } from 'api/interface/cart';
 
+
 const api = new Api();
 
 
@@ -79,10 +80,14 @@ export const cartSlice = createSlice({
 			})
 	},
 	reducers: {
-
+		incrementCount: (state) => {
+			console.log(12312);
+			state.count++;
+		}
 	}
 });
 
 export const selectCart = (state) => state.cart;
-
+export const { incrementCount } = cartSlice.actions;
 export default cartSlice.reducer;
+

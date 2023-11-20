@@ -1,7 +1,7 @@
 import Avatar from "../avatar/Avatar";
 import FlexBox from "../FlexBox";
 import LazyImage from "../LazyImage";
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import Button from "../buttons/Button";
 import Divider from "../Divider";
 import Icon from "../icon/Icon";
@@ -12,7 +12,7 @@ import { CartGetDetailResponse } from "api/interface/cart";
 import { useDispatch } from "react-redux";
 import { deleteCartItem, getMyCart, updateQuantity } from "../../store/slices/carts-slice";
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Box, Checkbox, Spinner } from "@chakra-ui/react";
+import { Checkbox, Spinner } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 type MiniCartProps = {
@@ -21,10 +21,10 @@ type MiniCartProps = {
 
 const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
 	const dispatch = useDispatch<AppThunkDispatch>();
-	const [currentPage, setCurrentPage] = React.useState(0);
 	const navigate = useNavigate();
 	const carts = useAppSelector((state: RootState) => state.carts);
-	const [cartSelected, setCartSelected] = React.useState([]);
+	const [currentPage, setCurrentPage] = useState(0);
+	const [cartSelected, setCartSelected] = useState([]);
 
 	const handleCartAmountChange =
 		(amount, cartItem) => {
@@ -44,9 +44,16 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
 	const fetchMoreData = () => {
 		if (carts.count <= carts.data.length)
 			return;
+		dispatch(getMyCart({ skip: (currentPage + 1) * 10, limit: 10 }))
 		setCurrentPage(currentPage + 1);
-		dispatch(getMyCart({ skip: currentPage, limit: 15 }))
 	};
+
+	const handleBuyNow = () => {
+		if (cartSelected.length === 0) {
+			return;
+		}
+		navigate(`/checkout?cartIds=${cartSelected.join(',')}`)
+	}
 
 	const getTotalPrice = () => {
 		return 0;
@@ -54,7 +61,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
 	React.useEffect(() => {
 
 		return () => {
-			dispatch(getMyCart({ skip: 0, limit: 15 }))
+			dispatch(getMyCart({ skip: 0, limit: 10 }))
 		};
 	}, []);
 	return (
@@ -70,7 +77,10 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
 							color="primary"
 							variant="outlined"
 							m="0px 1rem 0.75rem"
-							onClick={() => { navigate('/cart') }}
+							onClick={() => {
+								toggleSidenav();
+								navigate('/cart')
+							}}
 						>
 							<Typography fontWeight={600}>Xem giỏ hàng</Typography>
 						</Button>
@@ -151,7 +161,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
 								</a>
 
 								<div className="product-details">
-									<a href={`/products/${item.id}`}>
+									<a href={`/products/${item.productId}`}>
 										<H5 className="title" fontSize="14px">
 											{item.productName}
 										</H5>
@@ -213,7 +223,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
 						m="1rem 1rem 0.75rem"
 						onClick={toggleSidenav}
 					>
-						<Typography fontWeight={600}>
+						<Typography fontWeight={600} onClick={() => handleBuyNow()}>
 							Mua ngay (₫{getTotalPrice().toLocaleString('vi-VN')})
 						</Typography>
 					</Button>

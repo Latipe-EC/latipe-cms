@@ -14,23 +14,23 @@ import Section9 from "../components/home-1/Section9";
 import AppLayout from "../components/layout/AppLayout";
 
 const IndexPage = () => {
-  return (
-    <main>
-      <Section1 />
-      <Section2 />
-      <Section3 />
-      <Section4 />
-      <Section5 />
-      <Section13 />
-      <Section6 />
-      <Section7 />
-      <Section8 />
-      <Section9 />
-      <Section10 />
-      <Section11 />
-      <Section12 />
-    </main>
-  );
+	return (
+		<main>
+			<Section1 />
+			<Section2 />
+			<Section3 />
+			<Section4 />
+			<Section5 />
+			<Section13 />
+			<Section6 />
+			<Section7 />
+			<Section8 />
+			<Section9 />
+			<Section10 />
+			<Section11 />
+			<Section12 />
+		</main>
+	);
 };
 
 IndexPage.layout = AppLayout;

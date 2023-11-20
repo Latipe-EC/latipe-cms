@@ -1,142 +1,116 @@
-import { useAppContext } from "../contexts/app/AppContext";
-import { CartItem } from "../reducers/cartReducer";
-import  { Fragment } from "react";
-import Box from "../components/Box";
+import { Fragment, useState } from "react";
 import Button from "../components/buttons/Button";
-import { Card1 } from "../components/Card1";
-import Divider from "../components/Divider";
 import FlexBox from "../components/FlexBox";
 import Grid from "../components/grid/Grid";
 import CheckoutNavLayout from "../components/layout/CheckoutNavLayout";
 import ProductCard7 from "../components/product-cards/ProductCard7";
-import Select from "../components/Select";
-import TextField from "../components/text-field/TextField";
-import TextArea from "../components/textarea/TextArea";
 import Typography from "../components/Typography";
-import countryList from "../data/countryList";
+import CartLayout from "../components/layout/CartLayout";
+import { AppThunkDispatch, RootState, useAppSelector } from "../store/store";
+import { useDispatch } from "react-redux";
+import { deleteCartItem, getMyCart } from "../store/slices/carts-slice";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { Spinner } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
-  const { state } = useAppContext();
-  const cartList: CartItem[] = state.cart.cartList;
+	const carts = useAppSelector((state: RootState) => state.carts);
+	const navigate = useNavigate();
+	const [cartSelected, setCartSelected] = useState([]);
+	const dispatch = useDispatch<AppThunkDispatch>();
+	const [currentPage, setCurrentPage] = useState(0);
 
-  const getTotalPrice = () => {
-    return (
-      cartList.reduce(
-        (accumulator, item) => accumulator + item.price * item.qty,
-        0
-      ) || 0
-    );
-  };
+	const handleBuySelected = () => {
+		if (cartSelected.length === 0) {
+			return;
+		}
+		navigate(`/checkout?cartIds=${cartSelected.join(',')}`)
+	}
 
-  return (
-    <Fragment>
-      <Grid container spacing={6}>
-        <Grid item lg={8} md={8} xs={12}>
-          {cartList.map((item) => (
-            <ProductCard7 key={item.id} mb="1.5rem" {...item} />
-          ))}
-        </Grid>
-        <Grid item lg={4} md={4} xs={12}>
-          <Card1>
-            <FlexBox
-              justifyContent="space-between"
-              alignItems="center"
-              mb="1rem"
-            >
-              <Typography color="gray.600">Total:</Typography>
-              <FlexBox alignItems="flex-end">
-                <Typography fontSize="18px" fontWeight="600" lineHeight="1">
-                  ${getTotalPrice().toFixed(2)}
-                </Typography>
-                <Typography fontWeight="600" fontSize="14px" lineHeight="1">
-                  00
-                </Typography>
-              </FlexBox>
-            </FlexBox>
+	const fetchMoreData = () => {
+		if (carts.count <= carts.data.length)
+			return;
+		dispatch(getMyCart({ skip: (currentPage + 1) * 10, limit: 10 }))
+		setCurrentPage(currentPage + 1);
 
-            <Divider mb="1rem" />
+	};
 
-            <FlexBox alignItems="center" mb="1rem">
-              <Typography fontWeight="600" mr="10px">
-                Additional Comments
-              </Typography>
-              <Box p="3px 10px" bg="primary.light" borderRadius="3px">
-                <Typography fontSize="12px" color="primary.main">
-                  Note
-                </Typography>
-              </Box>
-            </FlexBox>
+	const handleRemoveSelected = () => {
+		dispatch(deleteCartItem({ ids: cartSelected }));
+	}
+	const handleUnselectAll = () => {
+		setCartSelected([]);
+	}
+	const calculateTotalPrice = () => {
+		let total = 0;
+		carts.data.forEach((item) => {
+			if (cartSelected.includes(item.id)) {
+				total += item.price * item.quantity;
+			}
+		})
+		return total;
+	}
+	return (
+		<CartLayout>
+			<Fragment>
+				<Grid containe>
+					<Grid item xl={12} lg={8} md={8} xs={12} mb={8}>
+						{carts.data.length > 0 && <InfiniteScroll
+							dataLength={carts.data.length}
+							next={fetchMoreData}
+							hasMore={carts.count !== 0 && carts.count > carts.data.length}
+							loader={<Spinner />}
+						>
+							{carts.data.map((item) => (
+								<ProductCard7 key={item.id} mb="1.5rem" product={item}
+									cartSelected={cartSelected} setCartSelected={setCartSelected} />
+							))}
+						</InfiniteScroll>}
+					</Grid>
+				</Grid>
+				<FlexBox
+					position="fixed"
+					bottom="0"
+					left="0"
+					right="0"
+					width="100%"
+					justifyContent="space-between"
+					alignItems="center"
+					p="1rem"
+					backgroundColor="#F6F9FC"
+				>
+					<Button variant="contained" color="primary" onClick={handleUnselectAll}>
+						Bỏ chọn sản phẩm ({cartSelected.length})
+					</Button>
+					<Typography fontWeight={"bold"}>
+						Tổng giá tiền: ₫{calculateTotalPrice().toLocaleString('vi-VN')}
+					</Typography>
+					<FlexBox justifyContent="space-between"
+						alignItems="center">
+						<Button
+							disabled={cartSelected.length === 0}
+							color="primary"
+							border="1px solid"
 
-            <TextArea rows={6} fullwidth mb="1rem" />
-
-            <Divider mb="1rem" />
-
-            <TextField placeholder="Voucher" fullwidth />
-
-            <Button
-              variant="outlined"
-              color="primary"
-              mt="1rem"
-              mb="30px"
-              fullwidth
-            >
-              Apply Voucher
-            </Button>
-
-            <Divider mb="1.5rem" />
-
-            <Typography fontWeight="600" mb="1rem">
-              Shipping Estimates
-            </Typography>
-
-            <Select
-              mb="1rem"
-              label="Country"
-              placeholder="Select Country"
-              options={countryList}
-              onChange={(e) => {
-                console.log(e);
-              }}
-            />
-
-            <Select
-              label="State"
-              placeholder="Select State"
-              options={stateList}
-              onChange={(e) => {
-                console.log(e);
-              }}
-            />
-
-            <Box mt="1rem">
-              <TextField label="Zip Code" placeholder="3100" fullwidth />
-            </Box>
-
-            <Button variant="outlined" color="primary" my="1rem" fullwidth>
-              Calculate Shipping
-            </Button>
-            <a href="/checkout">
-              <Button variant="contained" color="primary" fullwidth>
-                Checkout Now
-              </Button>
-            </a>
-          </Card1>
-        </Grid>
-      </Grid>
-    </Fragment>
-  );
+							onClick={handleRemoveSelected}
+							style={{ marginLeft: '10px' }}
+							mr={2}>
+							Xóa sản phẩm đã chọn
+						</Button>
+						<Button
+							borderRadius="5px"
+							borderColor="green"
+							border="1px solid"
+							disabled={cartSelected.length === 0}
+							color="green" onClick={handleBuySelected}>
+							Mua hàng
+						</Button>
+					</FlexBox>
+				</FlexBox>
+			</Fragment>
+		</CartLayout>
+	);
 };
-
-const stateList = [
-  {
-    value: "New York",
-    label: "New York",
-  },
-  {
-    value: "Chicago",
-    label: "Chicago",
-  },
-];
 
 Cart.layout = CheckoutNavLayout;
 

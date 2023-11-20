@@ -1,6 +1,5 @@
 import IconButton from "../buttons/IconButton";
 import Image from "../Image";
-import { useAppContext } from "../../contexts/app/AppContext";
 import React, { useState } from "react";
 import Box from "../Box";
 import Categories from "../categories/Categories";

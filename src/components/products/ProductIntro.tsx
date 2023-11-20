@@ -51,7 +51,11 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 		if (product.productVariants.length > 0 && product.productVariants.length !== selectOption.length) {
 			return;
 		}
-		navigate(`/checkout/${product.id}?quantity=${quantity}?option=${selectOption.map(x => x.value).join(',')}?buyNow=true`);
+		const optionsTwo = product.productVariants.length === 2 ?
+			product.productVariants[1].options.length : 1;
+		const indexFinal = selectOption[0] *
+			optionsTwo + (selectOption.length === 2 ? selectOption[1] : 0);
+		navigate(`/checkout?productId=${product.id}?quantity=${quantity}?option=${product.productClassifications[indexFinal].id}`);
 	};
 
 	const handleAddToCart = () => {
@@ -76,27 +80,24 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 
 	const handleSelectOption = (index, val) => {
 		const newSelectOption = [...selectOption];
-		newSelectOption[index] = product.productVariants[index].options[val].value;
-
-		const otherIndex = index === 0 ? 1 : 0;
-		const otherVal = selectOption[otherIndex];
-		const indexOption = product.productVariants[otherIndex].options.findIndex(
-			(option) => option.value === otherVal
-		);
-
+		newSelectOption[index] = val;
 		if ((index === 1 && selectOption.length === 1) || selectOption.length === 2) {
+			const optionsTwo = product.productVariants.length === 2 ?
+				product.productVariants[1].options.length : 1;
+			const indexFinal = newSelectOption[0] *
+				optionsTwo + (newSelectOption.length === 2 ? newSelectOption[1] : 0);
 			setSelectedImage({
 				id: 999999,
 				value: product.productVariants[0].options[index].image,
 			});
 			setSelectQuantity(
-				product.productClassifications[indexOption + val].quantity
+				product.productClassifications[indexFinal].quantity
 			);
-			setSelectPrice(product.productClassifications[indexOption + val].price);
+			setSelectPrice(product.productClassifications[indexFinal].price);
 			setSelectPromotionPrice(
-				product.productClassifications[indexOption + val].promotionalPrice
+				product.productClassifications[indexFinal].promotionalPrice
 			);
-			setSelectClassification(product.productClassifications[indexOption + val].id);
+			setSelectClassification(product.productClassifications[indexFinal].id);
 			setQuantity(1);
 		}
 
@@ -111,21 +112,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 		}
 		return true;
 	}
-	// const handleCartAmountChange = useCallback(
-	// 	(amount) => () => {
-	// 		dispatch({
-	// 			type: "CHANGE_CART_AMOUNT",
-	// 			payload: {
-	// 				qty: amount,
-	// 				name: title,
-	// 				price,
-	// 				imgUrl: imgUrl[0],
-	// 				id: id || routerId,
-	// 			},
-	// 		});
-	// 	},
-	// 	[]
-	// );
 
 	return (
 		<Box overflow="hidden">
@@ -258,8 +244,8 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 													border={"1px"}
 													fontWeight={"normal"}
 													borderRadius={"0"}
-													borderColor={selectOption[index] === option.value ? "#D0011B" : "gray"}
-													className={selectOption[index] === option.value ? "selected" : ""}
+													borderColor={options.options[selectOption[index]] && options.options[selectOption[index]].value === option.value ? "#D0011B" : "gray"}
+													className={options.options[selectOption[index]] && options.options[selectOption[index]].value === option.value ? "selected" : ""}
 												>
 													{option.value}
 												</ButtonCharkra>

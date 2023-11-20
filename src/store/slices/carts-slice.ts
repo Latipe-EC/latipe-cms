@@ -79,7 +79,7 @@ export const cartSlice = createSlice({
 			})
 			.addCase(updateQuantity.fulfilled, (state, action) => {
 				const cartItem = action.meta.arg;
-				const index = state.data.findIndex((cartItem) => cartItem.id === cartItem.id);
+				const index = state.data.findIndex((item) => item.id === cartItem.id);
 				state.data[index].quantity = cartItem.quantity;
 			})
 			.addCase(addToCart.fulfilled, (state, action) => {

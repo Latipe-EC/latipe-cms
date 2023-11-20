@@ -14,6 +14,7 @@ import AddProductLayout from './components/layout/AddProductLayout';
 import { AppThunkDispatch } from './store/store';
 import { useDispatch } from 'react-redux';
 import { getMyCart } from './store/slices/carts-slice';
+import { getChildsCategory } from './store/slices/categories-slice';
 
 // home pages
 const Address = lazy(() => import('./pages/address'));
@@ -68,10 +69,10 @@ const Error404 = lazy(() => import('./pages/404'));
 function App() {
 
 	const dispatch = useDispatch<AppThunkDispatch>();
-
+	dispatch(getChildsCategory(null));
 	const auth = JSON.parse(localStorage.getItem('REACT_STARTER_AUTH'));
 	if (auth && auth.isAuthenticated) {
-		dispatch(getMyCart({ skip: 0, limit: 15 }))
+		dispatch(getMyCart({ skip: 0, limit: 10 }))
 	}
 
 
@@ -131,7 +132,6 @@ function App() {
 								<Route path="/" element={<AppLayout />}>
 									<Route index element={<IndexPage />} />
 									<Route path="about" element={<AboutPage />} />
-									<Route path="cart" element={<Cart />} />
 									<Route path="checkout-alternative" element={<CheckoutAlternative />} />
 									<Route path="checkout" element={<Checkout />} />
 									<Route path="home-2" element={<Home2 />} />
@@ -157,6 +157,7 @@ function App() {
 									<Route path="products/seach" element={<ProductSearchResult />} />
 									<Route path="shop/:id" element={<Shop />} />
 								</Route>
+								<Route path="/cart" element={<Cart />} />
 
 								{/* Support Ticket */}
 								<Route path="/support-tickets/" element={

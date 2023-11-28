@@ -7,20 +7,13 @@ import React from "react";
 import StyledAppLayout from "./AppLayoutStyle";
 import { Helmet } from "react-helmet";
 import { Outlet } from "react-router-dom";
-import styled from "styled-components";
-import Container from "../../components/Container";
-import Navbar from "../navbar/Navbar";
+
 
 type Props = {
 	title?: string;
 	navbar?: React.ReactNode;
 	children?: React.ReactNode;
 };
-const MainContent = styled.div`
-  margin-top: 5rem; /* Add some initial margin */
-  min-height: calc(100vh - 10rem); /* Set a minimum height for the content */
-  margin-bottom: 5rem;
-`;
 const AppLayout: React.FC<Props> = ({
 	navbar,
 	title = "Latipe",
@@ -39,14 +32,13 @@ const AppLayout: React.FC<Props> = ({
 			<Sticky fixedOn={0}>
 				<Header />
 			</Sticky>
-			<MainContent>
-				{navbar && <div className="section-after-sticky">{navbar}</div>}
-				{!navbar ? (
-					<div className="section-after-sticky"><Outlet /></div>
-				) : (
-					<Outlet />
-				)}
-			</MainContent>
+
+			{navbar && <div className="section-after-sticky">{navbar}</div>}
+			{!navbar ? (
+				<div className="section-after-sticky"><Outlet /></div>
+			) : (
+				<Outlet />
+			)}
 			<MobileNavigationBar />
 			<Footer></Footer>
 		</StyledAppLayout>

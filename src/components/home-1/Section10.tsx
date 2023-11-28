@@ -1,66 +1,96 @@
 import LazyImage from "../LazyImage";
-import productDatabase from "../../data/product-database";
-import React from "react";
-import Card from "../Card";
+import React, { useEffect, useState } from "react";
 import CategorySectionHeader from "../CategorySectionHeader";
 import Container from "../Container";
 import Grid from "../grid/Grid";
-import Typography from "../Typography";
+import { useDispatch } from "react-redux";
+import { AppThunkDispatch } from "../../store/store";
+import { getChildsCategory } from "../../store/slices/categories-slice";
+import { CategoryResponse } from "../../api/interface/product";
+import { ButtonBack, ButtonNext, CarouselProvider, Slide, Slider } from "pure-react-carousel";
+import { Text, Button as ButtonChakra, Flex, Spacer } from "@chakra-ui/react";
+import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
 
 const Section10: React.FC = () => {
-  return (
-    <Container mb="70px">
-      <CategorySectionHeader
-        title="Categories"
-        iconName="categories"
-        seeMoreLink="#"
-      />
+	const dispatch = useDispatch<AppThunkDispatch>();
+	const [categories, setCategories] = useState<CategoryResponse[]>([]);
 
-      <Grid container spacing={6}>
-        {categoryList.map((item, ind) => (
-          <Grid item lg={2} md={3} sm={4} xs={12} key={ind}>
-              <a href="/">
-                <Card
-                  display="flex"
-                  alignItems="center"
-                  p="0.75rem"
-                  boxShadow="small"
-                  borderRadius={8}
-                  hoverEffect
-                >
-                  <LazyImage
-                    src={productDatabase[ind * 13 + 100].imgUrl}
-                    alt="fashion"
-                    height="52px"
-                    width="52px"
-                    objectFit="contain"
-                    borderRadius={8}
-                  />
-                  <Typography fontWeight="600" fontSize="14px" ml="10px">
-                    {item}
-                  </Typography>
-                </Card>
-              </a>
-          </Grid>
-        ))}
-      </Grid>
-    </Container>
-  );
+	useEffect(() => {
+		dispatch(getChildsCategory(null)).unwrap().then((res) => {
+			console.log(res);
+			return setCategories(res.data);
+		});
+
+	}, []);
+
+	const navigate = useNavigate();
+
+	return (
+		<Container mb="70px">
+			<CategorySectionHeader
+				title="Danh mục sản phẩm"
+				iconName="categories"
+			/>
+			{categories.length > 0 && (
+
+				<CarouselProvider
+					naturalSlideWidth={100}
+					naturalSlideHeight={20}
+					totalSlides={Math.ceil(categories.length / 20)}
+				>
+					<Slider>
+						{Array.from({ length: Math.ceil(categories.length / 20) }, (_, i) => (
+							<Slide index={i} key={i}>
+								<Grid container spacing={2}>
+									{categories.slice(i * 20, i * 20 + 10).map((category) => (
+										<Grid item xs={6} sm={1} key={category.id} style={{ width: '120px', height: '120px' }}
+											onClick={() => navigate(`/search/category=${category.name}`)}
+										>
+											<LazyImage
+												src={category.image ? category.image : '/assets/images/products/apple-watch-0.png'}
+												alt="fashion"
+												height="52px"
+												width="52px"
+												objectFit="contain"
+												borderRadius={8}
+											/>
+											<Text isTruncated>{category.name}</Text>
+										</Grid>
+									))}
+								</Grid>
+								<Grid container spacing={2}>
+									{categories.slice(i * 20 + 10, i * 20 + 20).map((category) => (
+										<Grid item xs={6} sm={1} key={category.id} style={{ width: '120px', height: '120px' }}
+											onClick={() => navigate(`/search/category=${category.name}`)}
+										>
+											<LazyImage
+												src={category.image ? category.image : '/assets/images/products/apple-watch-0.png'}
+												alt="fashion"
+												height="52px"
+												width="52px"
+												objectFit="contain"
+												borderRadius={8}
+											/>
+											<Text isTruncated>{category.name}</Text>
+
+										</Grid>
+									))}
+								</Grid>
+							</Slide>
+						))}
+					</Slider>
+					<Flex justifyContent="center" alignItems="center">
+						<ButtonChakra as={ButtonBack} leftIcon={<ChevronLeftIcon />} colorScheme="teal" variant="outline">
+						</ButtonChakra>
+						<Spacer />
+						<ButtonChakra as={ButtonNext} leftIcon={<ChevronRightIcon />} colorScheme="teal" variant="outline"></ButtonChakra>
+					</Flex>
+
+				</CarouselProvider>
+			)}
+		</Container>
+	);
 };
-
-const categoryList = [
-  "Automobile",
-  "Car",
-  "Fashion",
-  "Electronics",
-  "Mobile",
-  "Laptop",
-  "Desktop",
-  "Tablet",
-  "Fashion",
-  "Electronics",
-  "Furniture",
-  "Camera",
-];
 
 export default Section10;

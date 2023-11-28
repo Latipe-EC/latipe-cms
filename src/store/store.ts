@@ -7,6 +7,7 @@ import productReducer from './slices/products-slice';
 import storeReducer from './slices/stores-slice';
 import ratingReducer from './slices/ratings-slice';
 import cartReducer from './slices/carts-slice';
+import searchReducer from './slices/search-slice';
 
 import {
 	persistStore,
@@ -28,7 +29,8 @@ export const rootReducer = combineReducers({
 	products: productReducer,
 	stores: storeReducer,
 	ratings: ratingReducer,
-	carts: cartReducer
+	carts: cartReducer,
+	searchs: searchReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

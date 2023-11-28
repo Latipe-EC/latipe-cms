@@ -443,6 +443,8 @@ export interface ProductESDetailVm {
 	 * @memberof ProductESDetailVm
 	 */
 	'createdOn'?: string;
+	'countSale'?: number;
+	'ratings'?: number;
 }
 /**
  * 

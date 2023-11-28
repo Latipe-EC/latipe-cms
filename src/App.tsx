@@ -154,7 +154,7 @@ function App() {
 									<NavbarLayout />
 								}>
 									<Route path="products/:id" element={<ProductDetails />} />
-									<Route path="products/seach" element={<ProductSearchResult />} />
+									<Route path="search" element={<ProductSearchResult />} />
 									<Route path="shop/:id" element={<Shop />} />
 								</Route>
 								<Route path="/cart" element={<Cart />} />

@@ -13,6 +13,7 @@ import { MediaVm } from 'api/interface/media';
 import { StoreResponse, CreateStoreRequest, UpdateStoreRequest, ProductStoreResponse } from 'api/interface/store';
 import { CreateRatingRequest, RatingResponse, UpdateRatingRequest } from 'api/interface/rating';
 import { CartGetDetailResponse, CartItemRequest, CartResponse, DeleteCartItemRequest, UpdateQuantityRequest } from 'api/interface/cart';
+import { ProductListGetVm, ProductNameListVm } from 'api/interface/search';
 
 export type QueryParamsType = Record<string | number, unknown>;
 
@@ -304,7 +305,6 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 			}),
 	}
-
 	category = {
 		getCategories: (params: QueryParamsType) =>
 			this.request<PagedResultResponse<CategoryResponse>>({
@@ -557,6 +557,27 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				method: 'DELETE',
 				type: ContentType.Json,
 				body: request
+			}),
+	}
+	search = {
+		searchProduct: (params: QueryParamsType) =>
+			this.request<ProductListGetVm>({
+				path: `/search/catalog-search`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+
+		autoComplete: (params: QueryParamsType) =>
+			this.request<ProductNameListVm>({
+				path: `/search/search_suggest`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
 			}),
 	}
 

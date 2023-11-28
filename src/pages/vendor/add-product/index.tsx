@@ -72,6 +72,7 @@ const AddProduct = () => {
 				return;
 			}
 			setDisableSaveProduct(false);
+			return;
 		} else {
 			if (productClassifications.length >= 0) {
 				for (let i = 0; i < productClassifications.length; i++) {

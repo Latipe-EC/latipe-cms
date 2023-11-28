@@ -17,7 +17,7 @@ const ProductDescription: React.FC<ProductDescriptionProps> = ({ description,
 	attributes, categories }) => {
 	const navigate = useNavigate();
 	const handleClickCate = (category: CategoryResponse) => {
-		navigate(`/search?keyword=${category.name}`)
+		navigate(`/search?category=${category.name}`)
 	}
 
 

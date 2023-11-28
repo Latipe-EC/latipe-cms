@@ -1,155 +1,113 @@
 import Accordion from "../accordion/Accordion";
 import AccordionHeader from "../accordion/AccordionHeader";
-import Avatar from "../avatar/Avatar";
 import Card from "../Card";
-import CheckBox from "../CheckBox";
 import Divider from "../Divider";
 import FlexBox from "../FlexBox";
-import Rating from "../rating/Rating";
 import TextField from "../text-field/TextField";
 import { H5, H6, Paragraph, SemiSpan } from "../Typography";
+import { AppThunkDispatch, RootState, useAppSelector } from '../../store/store';
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { getChildsCategory } from "../../store/slices/categories-slice";
+import { useNavigate, useParams } from "react-router-dom";
+import { Box, Button, Tooltip } from "@chakra-ui/react";
 
 const ProductFilterCard = () => {
-  return (
-    <Card p="18px 27px" elevation={5}>
-      <H6 mb="10px">Categories</H6>
 
-      {categroyList.map((item) =>
-        item.subCategories ? (
-          <Accordion key={item.title} expanded>
-            <AccordionHeader
-              px="0px"
-              py="6px"
-              color="text.muted"
-              // justifyContent="flex-start"
-            >
-              <SemiSpan className="cursor-pointer" mr="9px">
-                {item.title}
-              </SemiSpan>
-            </AccordionHeader>
-            {item.subCategories.map((name) => (
-              <Paragraph
-                className="cursor-pointer"
-                fontSize="14px"
-                color="text.muted"
-                pl="22px"
-                py="6px"
-                key={name}
-              >
-                {name}
-              </Paragraph>
-            ))}
-          </Accordion>
-        ) : (
-          <Paragraph
-            className="cursor-pointer"
-            fontSize="14px"
-            color="text.muted"
-            py="6px"
-            key={item.title}
-          >
-            {item.title}
-          </Paragraph>
-        )
-      )}
+	const categories = useAppSelector((state: RootState) => state.categories);
+	const dispatch = useDispatch<AppThunkDispatch>();
+	const navigate = useNavigate();
+	const { keyword, category, sortType } = useParams();
+	const [minPrice, setMinPrice] = useState<number>();
+	const [maxPrice, setMaxPrice] = useState<number>();
+	const [isValidRangePrice, setIsValidRangePrice] = useState<boolean>(false);
+	useEffect(() => {
+		if (categories.children.length === 0) {
+			dispatch(getChildsCategory(null))
+		}
+	}, []);
 
-      <Divider mt="18px" mb="24px" />
+	useEffect(() => {
+		if (minPrice && maxPrice && minPrice >= 1000 && maxPrice >= 1000 && minPrice < maxPrice) {
+			setIsValidRangePrice(true);
+			return;
+		}
+		setIsValidRangePrice(false);
+	}, [minPrice, maxPrice]);
 
-      <H6 mb="16px">Price Range</H6>
-      <FlexBox justifyContent="space-between" alignItems="center">
-        <TextField placeholder="0" type="number" fullwidth />
-        <H5 color="text.muted" px="0.5rem">
-          -
-        </H5>
-        <TextField placeholder="250" type="number" fullwidth />
-      </FlexBox>
+	const handleSubmitRangePrice = () => {
+		if (!isValidRangePrice) {
+			return;
+		}
+		const query = `minPrice=${minPrice}&maxPrice=${maxPrice}${keyword ? `&keyword=${keyword}` : ''}${category ? `&category=${category}` : ''}${sortType ? `&sortType=${sortType}` : ''}`
+		navigate(`/search?${query}`);
+	}
 
-      <Divider my="24px" />
+	return (
+		<Card p="18px 27px" elevation={5}>
 
-      <H6 mb="16px">Brands</H6>
-      {brandList.map((item) => (
-        <CheckBox
-          key={item}
-          name={item}
-          value={item}
-          color="secondary"
-          label={<SemiSpan color="inherit">{item}</SemiSpan>}
-          my="10px"
-          onChange={(e) => {
-            console.log(e.target.value, e.target.checked);
-          }}
-        />
-      ))}
+			<H6 mb="16px">Khoảng giá</H6>
+			<Box>
+				<FlexBox justifyContent="space-between" alignItems="center">
+					<TextField placeholder="0" type="number" fullwidth value={minPrice}
+						onChange={(e) => {
+							setMinPrice(parseInt(e.target.value));
+						}} />
+					<H5 color="text.muted" px="0.5rem">
+						-
+					</H5>
+					<TextField placeholder="100000" type="number" fullwidth value={maxPrice}
+						onChange={(e) => {
+							setMaxPrice(parseInt(e.target.value));
+						}} />
+				</FlexBox>
+				<Tooltip label="Giá phải trên 1000 và min price phải nhỏ hơn max price">
+					<Button
+						size="sm"
+						mt={2}
+						colorScheme="red"
+						isDisabled={!isValidRangePrice}
+						onClick={handleSubmitRangePrice}>Áp dụng</Button>
+				</Tooltip>
+			</Box>
+			<Divider my="24px" />
 
-      <Divider my="24px" />
+			<H6 mb="10px">Danh mục</H6>
+			{categories.children.map((item) =>
+				item.subCategories ? (
+					<Accordion key={item.name} expanded
+					>
+						<AccordionHeader
+							px="0px"
+							py="6px"
+							color="text.muted"
+							onClick={() => navigate(`/search?category=${item.name}`)}
+						// justifyContent="flex-start"
+						>
+							<SemiSpan className="cursor-pointer" mr="9px">
+								{item.name}
+							</SemiSpan>
+						</AccordionHeader>
+					</Accordion>
+				) : (
+					<Paragraph
+						onClick={() => navigate(`/search?category=${item.name}`)}
+						className="cursor-pointer"
+						fontSize="14px"
+						color="text.muted"
+						py="6px"
+						key={item.name}
+					>
+						{item.name}
+					</Paragraph>
+				)
+			)}
 
-      {otherOptions.map((item) => (
-        <CheckBox
-          key={item}
-          name={item}
-          value={item}
-          color="secondary"
-          label={<SemiSpan color="inherit">{item}</SemiSpan>}
-          my="10px"
-          onChange={(e) => {
-            console.log(e.target.value, e.target.checked);
-          }}
-        />
-      ))}
-
-      <Divider my="24px" />
-
-      <H6 mb="16px">Ratings</H6>
-      {[5, 4, 3, 2, 1].map((item) => (
-        <CheckBox
-          key={item}
-          value={item}
-          color="secondary"
-          label={<Rating value={item} outof={5} color="warn" />}
-          my="10px"
-          onChange={(e) => {
-            console.log(e.target.value, e.target.checked);
-          }}
-        />
-      ))}
-
-      <Divider my="24px" />
-
-      <H6 mb="16px">Colors</H6>
-      <FlexBox mb="1rem">
-        {colorList.map((item) => (
-          <Avatar bg={item} size={25} mr="10px" style={{ cursor: "pointer" }} />
-        ))}
-      </FlexBox>
-    </Card>
-  );
+			<Divider my="24px" />
+		</Card>
+	);
 };
 
-const categroyList = [
-  {
-    title: "Bath Preparations",
-    subCategories: ["Bubble Bath", "Bath Capsules", "Others"],
-  },
-  {
-    title: "Eye Makeup Preparations",
-  },
-  {
-    title: "Fragrance",
-  },
-  {
-    title: "Hair Preparations",
-  },
-];
 
-const brandList = ["Maccs", "Karts", "Baars", "Bukks", "Luasis"];
-const otherOptions = ["On Sale", "In Stock", "Featured"];
-const colorList = [
-  "#1C1C1C",
-  "#FF7A7A",
-  "#FFC672",
-  "#84FFB5",
-  "#70F6FF",
-  "#6B7AFF",
-];
 
 export default ProductFilterCard;

@@ -132,8 +132,8 @@ function App() {
 								<Route path="/" element={<AppLayout />}>
 									<Route index element={<IndexPage />} />
 									<Route path="about" element={<AboutPage />} />
-									<Route path="checkout-alternative" element={<CheckoutAlternative />} />
-									<Route path="checkout" element={<Checkout />} />
+									<Route path="checkout" element={<CheckoutAlternative />} />
+									{/* <Route path="checkout" element={<Checkout />} /> */}
 									<Route path="home-2" element={<Home2 />} />
 									<Route path="home-3" element={<Home3 />} />
 									<Route path="home-4" element={<Home4 />} />

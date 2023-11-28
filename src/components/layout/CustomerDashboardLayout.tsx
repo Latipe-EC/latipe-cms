@@ -3,7 +3,7 @@ import Container from "../Container";
 import Grid from "../grid/Grid";
 import Hidden from "../hidden/Hidden";
 import CustomerDashboardNavigation from "./CustomerDashboardNavigation";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import MobileNavigationBar from "../mobile-navigation/MobileNavigationBar";
 import Footer from "../footer/Footer";
 import StyledAppLayout from "../layout/AppLayoutStyle";
@@ -27,6 +27,7 @@ const MainContent = styled.div`
 const CustomerDashboardLayout: React.FC<Props> = ({
 	title = "Latipe",
 }) => {
+
 	return (
 		<StyledAppLayout>
 			<Helmet>
@@ -34,16 +35,18 @@ const CustomerDashboardLayout: React.FC<Props> = ({
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
 			</Helmet>
+
 			<Topbar />
+
 			<Sticky fixedOn={0}>
 				<Header />
 			</Sticky>
+
 			<div className="section-after-sticky">
 				<Navbar />
 			</div>
-			(
-			<MainContent>
-				<Container my="2rem">
+			<MainContent >
+				<Container my="2rem" minH={"1000px"}>
 					<Grid container spacing={6}>
 						<Hidden as={Grid} item lg={3} xs={12} down={1024}>
 							<CustomerDashboardNavigation />
@@ -53,11 +56,9 @@ const CustomerDashboardLayout: React.FC<Props> = ({
 						</Grid>
 					</Grid>
 				</Container>
+				<Footer />
+				<MobileNavigationBar />
 			</MainContent>
-			)
-
-			<MobileNavigationBar />
-			<Footer />
 		</StyledAppLayout>
 	)
 };

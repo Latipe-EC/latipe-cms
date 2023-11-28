@@ -55,7 +55,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 			product.productVariants[1].options.length : 1;
 		const indexFinal = selectOption[0] *
 			optionsTwo + (selectOption.length === 2 ? selectOption[1] : 0);
-		navigate(`/checkout?productId=${product.id}?quantity=${quantity}?option=${product.productClassifications[indexFinal].id}`);
+		navigate(`/checkout?productId=${product.id}&quantity=${quantity}&option=${product.productClassifications[indexFinal].id}`);
 	};
 
 	const handleAddToCart = () => {

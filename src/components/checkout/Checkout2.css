@@ -1,0 +1,32 @@
+.cart-item {
+	display: flex;
+	align-items: center;
+	padding: 1rem;
+
+}
+
+.cart-item .add-cart {
+	text-align: center;
+}
+
+.cart-item .product-image {
+	border-radius: 5px;
+	margin-left: 1rem;
+	margin-right: 1rem;
+	width: 64px;
+	height: 64px;
+}
+
+
+.cart-item .product-details {
+	flex: 1 1 0;
+	min-width: 0px;
+}
+
+.cart-item .product-details .title {
+	margin: 0px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	line-height: 1;
+}

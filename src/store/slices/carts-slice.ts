@@ -32,6 +32,15 @@ export const
 	);
 
 export const
+	getMultiCart = createAsyncThunk(
+		'carts/multi-cart',
+		async (params: QueryParamsType) => {
+			const response = await api.cart.getMultiCart(params);
+			return response;
+		}
+	);
+
+export const
 	deleteCartItem = createAsyncThunk(
 		'carts/delete-cart-item',
 		async (data: DeleteCartItemRequest) => {

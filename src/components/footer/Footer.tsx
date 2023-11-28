@@ -2,7 +2,6 @@ import AppStore from "../AppStore";
 import Image from "../Image";
 import React, { } from "react";
 import styled from "styled-components";
-import { getTheme } from "../../utils/utils";
 import Box from "../Box";
 import Container from "../Container";
 import FlexBox from "../FlexBox";
@@ -10,25 +9,13 @@ import Grid from "../grid/Grid";
 import Icon from "../icon/Icon";
 import Typography, { Paragraph } from "../Typography";
 import './Footer.css';
-
-const StyledLink = styled.a`
-position: relative;
-display: block;
-padding: 0.3rem 0rem;
-color: ${getTheme("colors.gray.500")};
-cursor: pointer;
-border-radius: 4px;
-:hover {
-	color: ${getTheme("colors.gray.100")};
-}
-`;
+import { useNavigate } from "react-router-dom";
 
 const FooterContainer = styled.footer`
 
 `;
 const Footer: React.FC = () => {
-
-
+	const navigate = useNavigate();
 	return (
 		<FooterContainer >
 			<Box bg="#0F3460">
@@ -63,11 +50,11 @@ const Footer: React.FC = () => {
 									About Us
 								</Typography>
 
-								<div>
+								<div style={{ display: 'flex', flexDirection: 'column', minHeight: '100px' }}>
 									{aboutLinks.map((item, ind) => (
-										<a href="/" key={ind}>
-											<StyledLink>{item}</StyledLink>
-										</a>
+										<Typography key={ind} onClick={() => navigate("/")} py="0.3rem" color="gray.500">
+											{item}
+										</Typography>
 									))}
 								</div>
 							</Grid>
@@ -84,9 +71,9 @@ const Footer: React.FC = () => {
 
 								<div>
 									{customerCareLinks.map((item, ind) => (
-										<a href="/" key={ind}>
-											<StyledLink>{item}</StyledLink>
-										</a>
+										<Typography key={ind} onClick={() => navigate("/")} py="0.3rem" color="gray.500">
+											{item}
+										</Typography>
 									))}
 								</div>
 							</Grid>

@@ -8,7 +8,7 @@ import axios, {
 	HeadersDefaults,
 	ResponseType,
 } from 'axios';
-import { CategoryResponse, CreateCategoryRequest, CreateProductRequest, ProductResponse, UpdateCategoryRequest, UpdateProductRequest } from 'api/interface/product';
+import { CategoryResponse, CreateCategoryRequest, CreateProductRequest, ProductFeatureRequest, ProductResponse, ProductThumbnailVm, UpdateCategoryRequest, UpdateProductRequest } from 'api/interface/product';
 import { MediaVm } from 'api/interface/media';
 import { StoreResponse, CreateStoreRequest, UpdateStoreRequest, ProductStoreResponse } from 'api/interface/store';
 import { CreateRatingRequest, RatingResponse, UpdateRatingRequest } from 'api/interface/rating';
@@ -397,6 +397,14 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				method: 'GET',
 				type: ContentType.Json,
 			}),
+
+		getFeatureProduct: (request: ProductFeatureRequest[]) =>
+			this.request<ProductThumbnailVm[]>({
+				path: `/products/list-featured`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: request
+			}),
 	}
 	store = {
 		registerStore: (data: CreateStoreRequest) =>
@@ -557,6 +565,15 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				method: 'DELETE',
 				type: ContentType.Json,
 				body: request
+			}),
+		getMultiCart: (params: QueryParamsType) =>
+			this.request<CartGetDetailResponse[]>({
+				path: `/carts/multi-cart`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
 			}),
 	}
 	search = {

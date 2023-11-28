@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Api } from '../../api/AxiosClient';
-import { CreateProductRequest, UpdateProductRequest } from 'api/interface/product';
+import { CreateProductRequest, ProductFeatureRequest, UpdateProductRequest } from 'api/interface/product';
 
 const api = new Api();
 
@@ -84,6 +84,13 @@ export const getProductById = createAsyncThunk(
 	}
 );
 
+export const getFeatureProduct = createAsyncThunk(
+	'products/list-feature',
+	async (request: ProductFeatureRequest[]) => {
+		const response = await api.product.getFeatureProduct(request);
+		return response;
+	}
+);
 
 export const productsSlice = createSlice({
 	name: 'products',

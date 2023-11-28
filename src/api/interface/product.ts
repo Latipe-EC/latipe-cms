@@ -799,6 +799,10 @@ export interface ProductThumbnailVm {
 	 * @memberof ProductThumbnailVm
 	 */
 	'thumbnailUrl'?: string;
+
+	'storeId'?: string;
+
+	'storeName'?: string;
 }
 /**
  * 

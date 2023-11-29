@@ -14,6 +14,9 @@ import { StoreResponse, CreateStoreRequest, UpdateStoreRequest, ProductStoreResp
 import { CreateRatingRequest, RatingResponse, UpdateRatingRequest } from 'api/interface/rating';
 import { CartGetDetailResponse, CartItemRequest, CartResponse, DeleteCartItemRequest, UpdateQuantityRequest } from 'api/interface/cart';
 import { ProductListGetVm, ProductNameListVm } from 'api/interface/search';
+import { calculateShippingOrderRequest, createDeliveryRequest, listDeliveryRequest } from 'api/interface/delivery';
+import { CancelOrderRequest, CreateOrderRequest } from 'api/interface/order';
+import { ApplyVoucherRequest, createVoucherRequest } from 'api/interface/promotion';
 
 export type QueryParamsType = Record<string | number, unknown>;
 
@@ -597,7 +600,96 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				}
 			}),
 	}
+	delivery = {
+		getListDelivery: (request: listDeliveryRequest) =>
+			this.request<[]>({
+				path: `/delivery/shipping/anonymous`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: request
+			}),
 
+		createDelivery: (request: createDeliveryRequest) =>
+			this.request<unknown>({
+				path: `/delivery/admin`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: request
+			}),
+
+		calculateShippingOrder: (request: calculateShippingOrderRequest) =>
+			this.request<unknown>({
+				path: `/delivery/shipping/order`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: request
+			}),
+	}
+	order = {
+		createOrder: (request: CreateOrderRequest) =>
+			this.request<unknown>({
+				path: `/orders/user`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: request
+			}),
+
+		getMyOrder: () =>
+			this.request<unknown>({
+				path: `/orders/user`,
+				method: 'GET',
+				type: ContentType.Json,
+			}),
+
+		cancelOrder: (request: CancelOrderRequest) =>
+			this.request<unknown>({
+				path: `/orders/user/cancel`,
+				method: 'PATCH',
+				type: ContentType.Json,
+				body: request
+			}),
+	}
+	promotion = {
+		applyVoucher: (request: ApplyVoucherRequest) =>
+			this.request<unknown>({
+				path: `/vouchers/apply`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: request
+			}),
+
+		createVoucher: (request: createVoucherRequest) =>
+			this.request<unknown>({
+				path: `/vouchers`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: request
+			}),
+
+		getById: (id: string) =>
+			this.request<unknown>({
+				path: `/vouchers/${id}`,
+				method: 'GET',
+				type: ContentType.Json,
+			}),
+
+		getByCode: (code: string) =>
+			this.request<unknown>({
+				path: `/vouchers/code/${code}`,
+				method: 'GET',
+				type: ContentType.Json,
+			}),
+
+		getAll: (param: QueryParamsType) =>
+			this.request<[]>({
+				path: `/vouchers`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...param
+				}
+			}),
+	}
 }
 
 /**

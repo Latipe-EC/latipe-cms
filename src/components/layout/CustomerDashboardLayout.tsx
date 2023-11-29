@@ -3,7 +3,7 @@ import Container from "../Container";
 import Grid from "../grid/Grid";
 import Hidden from "../hidden/Hidden";
 import CustomerDashboardNavigation from "./CustomerDashboardNavigation";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import MobileNavigationBar from "../mobile-navigation/MobileNavigationBar";
 import Footer from "../footer/Footer";
 import StyledAppLayout from "../layout/AppLayoutStyle";

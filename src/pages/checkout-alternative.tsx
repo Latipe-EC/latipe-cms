@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 
 const CheckoutAlternative = () => {
 	const [products, setProducts] = useState([]);
+	const [vouchers, setVouchers] = useState([]);
+	const [selectDelivery, setSelectDelivery] = useState(null);
 	const navigate = useNavigate();
 
 	const dispatch = useDispatch<AppThunkDispatch>();
@@ -38,7 +40,7 @@ const CheckoutAlternative = () => {
 				if (res.data.length === 0) {
 					navigate('/404');
 				}
-				setProducts([{ ...res.data[0], quantity: quantity, productOptionId: option, image: res.data[0].thumbnailUrl }])
+				setProducts([{ ...res.data[0], quantity: quantity, productOptionId: option, image: res.data[0].thumbnailUrl, productId: res.data[0].id }])
 			});
 		} else {
 			navigate('/404');
@@ -49,10 +51,17 @@ const CheckoutAlternative = () => {
 		<Container my="1.5rem">
 			<Grid container spacing={6}>
 				<Grid item lg={8} md={8} xs={12}>
-					<CheckoutForm2 products={products} />
+					<CheckoutForm2 products={products}
+						vouchers={vouchers}
+						setVouchers={setVouchers} setSelectDelivery={setSelectDelivery}
+					/>
 				</Grid>
 				<Grid item lg={4} md={4} xs={12}>
-					<CheckoutSummary2 products={products} />
+					<CheckoutSummary2
+						products={products}
+						vouchers={vouchers}
+						selectDelivery={selectDelivery}
+					/>
 				</Grid>
 			</Grid>
 		</Container>

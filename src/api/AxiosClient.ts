@@ -15,8 +15,8 @@ import { CreateRatingRequest, RatingResponse, UpdateRatingRequest } from 'api/in
 import { CartGetDetailResponse, CartItemRequest, CartResponse, DeleteCartItemRequest, UpdateQuantityRequest } from 'api/interface/cart';
 import { ProductListGetVm, ProductNameListVm } from 'api/interface/search';
 import { calculateShippingOrderRequest, createDeliveryRequest, listDeliveryRequest } from 'api/interface/delivery';
-import { CancelOrderRequest, CreateOrderRequest } from 'api/interface/order';
-import { ApplyVoucherRequest, createVoucherRequest } from 'api/interface/promotion';
+import { CancelOrderRequest, CreateOrderRequest, CreateOrderResponse, GetOrderByIdResponse } from 'api/interface/order';
+import { ApplyVoucherReponse, ApplyVoucherRequest, createVoucherRequest } from 'api/interface/promotion';
 
 export type QueryParamsType = Record<string | number, unknown>;
 
@@ -627,7 +627,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 	}
 	order = {
 		createOrder: (request: CreateOrderRequest) =>
-			this.request<unknown>({
+			this.request<CreateOrderResponse>({
 				path: `/orders/user`,
 				method: 'POST',
 				type: ContentType.Json,
@@ -648,10 +648,18 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				type: ContentType.Json,
 				body: request
 			}),
+
+
+		getOrderById: (id: string) =>
+			this.request<GetOrderByIdResponse>({
+				path: `/orders/user/${id}`,
+				method: 'GET',
+				type: ContentType.Json,
+			}),
 	}
 	promotion = {
 		applyVoucher: (request: ApplyVoucherRequest) =>
-			this.request<unknown>({
+			this.request<ApplyVoucherReponse>({
 				path: `/vouchers/apply`,
 				method: 'POST',
 				type: ContentType.Json,

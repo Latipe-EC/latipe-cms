@@ -1,4 +1,3 @@
-
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Api, QueryParamsType } from '../../api/AxiosClient';
 import { ApplyVoucherRequest, createVoucherRequest } from 'api/interface/promotion';

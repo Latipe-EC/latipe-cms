@@ -18,3 +18,12 @@ export interface createDeliveryRequest {
 	email: string
 	phone_number: string
 }
+
+export interface CostDelivery {
+	src_code: string[]
+	dest_code: string
+	receive_date: string
+	delivery_id: string
+	delivery_name: string
+	cost: number
+}

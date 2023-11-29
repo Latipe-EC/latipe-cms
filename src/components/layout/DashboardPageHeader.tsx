@@ -8,41 +8,41 @@ import { H2 } from "../Typography";
 import DashboardNavigation from "./CustomerDashboardNavigation";
 
 export interface DashboardPageHeaderProps {
-  iconName?: string;
-  title?: string;
-  button?: any;
+	iconName?: string;
+	title?: string;
+	button?: unknown;
 }
 
 const DashboardPageHeader: React.FC<DashboardPageHeaderProps> = ({
-  iconName,
-  title,
-  button,
+	iconName,
+	title,
+	button,
 }) => {
-    const { width } = useWindowSize();
-  const isTablet = width < 1025;
+	const { width } = useWindowSize();
+	const isTablet = width < 1025;
 
-  return (
-    <Box mb="1.5rem" mt="-1rem">
-      <FlexBox justifyContent="space-between" alignItems="center" mt="1rem">
-        <FlexBox alignItems="center">
-          <Icon color="primary">{iconName}</Icon>
-          <H2 ml="12px" my="0px" lineHeight="1" whitespace="pre">
-            {title}
-          </H2>
-        </FlexBox>
+	return (
+		<Box mb="1.5rem" mt="-1rem">
+			<FlexBox justifyContent="space-between" alignItems="center" mt="1rem">
+				<FlexBox alignItems="center">
+					<Icon color="primary">{iconName}</Icon>
+					<H2 ml="12px" my="0px" lineHeight="1" whitespace="pre">
+						{title}
+					</H2>
+				</FlexBox>
 
-        {isTablet && (
-          <Sidenav position="left" handle={<Icon mx="1rem">menu</Icon>}>
-            <DashboardNavigation />
-          </Sidenav>
-        )}
+				{isTablet && (
+					<Sidenav position="left" handle={<Icon mx="1rem">menu</Icon>}>
+						<DashboardNavigation />
+					</Sidenav>
+				)}
 
-        {!isTablet && button}
-      </FlexBox>
+				{!isTablet && button}
+			</FlexBox>
 
-      {isTablet && !!button && <Box mt="1rem">{button}</Box>}
-    </Box>
-  );
+			{isTablet && !!button && <Box mt="1rem">{button}</Box>}
+		</Box>
+	);
 };
 
 export default DashboardPageHeader;

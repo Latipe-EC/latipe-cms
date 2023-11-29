@@ -55,13 +55,3 @@ export const deliverySlice = createSlice({
 });
 
 export const selectDeliveries = (state) => state.delivery;
-
-
-
-
-
-
-
-
-
-

@@ -1,4 +1,3 @@
-
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Api } from '../../api/AxiosClient';
 import { CancelOrderRequest, CreateOrderRequest } from 'api/interface/order';
@@ -28,6 +27,15 @@ export const
 		'orders/cancelOrder',
 		async (request: CancelOrderRequest) => {
 			const response = await api.order.cancelOrder(request);
+			return response;
+		}
+	);
+
+export const
+	getOrderById = createAsyncThunk(
+		'orders/getOrderById',
+		async (id: string) => {
+			const response = await api.order.getOrderById(id);
 			return response;
 		}
 	);

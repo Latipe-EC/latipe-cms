@@ -49,6 +49,7 @@ const AboutPage = lazy(() => import('./pages/about'));
 const Cart = lazy(() => import('./pages/cart'));
 const CheckoutAlternative = lazy(() => import('./pages/checkout-alternative'));
 const Checkout = lazy(() => import('./pages/checkout'));
+const OrderSuccess = lazy(() => import('./pages/order-success'));
 const Home2 = lazy(() => import('./pages/home-2'));
 const Home3 = lazy(() => import('./pages/home-3'));
 const Home4 = lazy(() => import('./pages/home-4'));
@@ -145,6 +146,7 @@ function App() {
 									<Route path="sale-page-2" element={<SalePage2 />} />
 									<Route path="shops" element={<ShopList />} />
 									<Route path="signup" element={<SignUpPage />} />
+									<Route path="orders/success" element={<OrderSuccess />} />
 									<Route path="*" element={<Error404 />} />
 								</Route>
 

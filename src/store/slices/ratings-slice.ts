@@ -4,7 +4,7 @@ import { CreateRatingRequest, UpdateRatingRequest } from 'api/interface/rating';
 
 const api = new Api();
 
-export const create = createAsyncThunk(
+export const createRating = createAsyncThunk(
 	'ratings/create',
 	async (input: CreateRatingRequest) => {
 		const response = await api.rating.create(input);

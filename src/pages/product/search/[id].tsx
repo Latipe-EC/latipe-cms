@@ -106,87 +106,90 @@ const ProductSearchResult = () => {
 	}
 
 	return (
-		<Box pt="20px">
-			<FlexBox
-				p="1.25rem"
-				flexWrap="wrap"
-				justifyContent="space-between"
-				alignItems="center"
-				mb="55px"
-				elevation={5}
-				as={Card}
-			>
-				{keyword && (<div>
-					<H5>Searching for “ {keyword} ”</H5>
-					<Paragraph color="text.muted">{result.totalElements} kết quả tìm thấy</Paragraph>
-				</div>)}
-				<FlexBox alignItems="center" flexWrap="wrap">
-					<Paragraph color="text.muted" mr="1rem">
-						Short by:
-					</Paragraph>
-					<Box flex="1 1 0" mr="1.75rem" minWidth="150px">
-						<Select
-							onChange={(e) => { handleFilterChange(e); }}
-							placeholder="Short by"
-							defaultValue={sortOptions[0]}
-							options={sortOptions}
-						/>
-					</Box>
-
-					<Paragraph color="text.muted" mr="0.5rem">
-						View:
-					</Paragraph>
-					<IconButton size="small" onClick={toggleView("grid")}>
-						<Icon
-							variant="small"
-							defaultcolor="auto"
-							color={view === "grid" ? "primary" : "inherit"}
-						>
-							grid
-						</Icon>
-					</IconButton>
-					<IconButton size="small" onClick={toggleView("list")}>
-						<Icon
-							variant="small"
-							defaultcolor="auto"
-							color={view === "list" ? "primary" : "inherit"}
-						>
-							menu
-						</Icon>
-					</IconButton>
-
-					{isTablet && (
-						<Sidenav
-							position="left"
-							scroll={true}
-							handle={
-								<IconButton size="small">
-									<Icon>options</Icon>
-								</IconButton>
-							}
-						>
-							<ProductFilterCard
+		<>
+			{result && <Box pt="20px">
+				<FlexBox
+					p="1.25rem"
+					flexWrap="wrap"
+					justifyContent="space-between"
+					alignItems="center"
+					mb="55px"
+					elevation={5}
+					as={Card}
+				>
+					{keyword && (<div>
+						<H5>Searching for “ {keyword} ”</H5>
+						<Paragraph color="text.muted">{result.totalElements} kết quả tìm thấy</Paragraph>
+					</div>)}
+					<FlexBox alignItems="center" flexWrap="wrap">
+						<Paragraph color="text.muted" mr="1rem">
+							Short by:
+						</Paragraph>
+						<Box flex="1 1 0" mr="1.75rem" minWidth="150px">
+							<Select
+								onChange={(e) => { handleFilterChange(e); }}
+								placeholder="Short by"
+								defaultValue={sortOptions[0]}
+								options={sortOptions}
 							/>
-						</Sidenav>
-					)}
+						</Box>
+
+						<Paragraph color="text.muted" mr="0.5rem">
+							View:
+						</Paragraph>
+						<IconButton size="small" onClick={toggleView("grid")}>
+							<Icon
+								variant="small"
+								defaultcolor="auto"
+								color={view === "grid" ? "primary" : "inherit"}
+							>
+								grid
+							</Icon>
+						</IconButton>
+						<IconButton size="small" onClick={toggleView("list")}>
+							<Icon
+								variant="small"
+								defaultcolor="auto"
+								color={view === "list" ? "primary" : "inherit"}
+							>
+								menu
+							</Icon>
+						</IconButton>
+
+						{isTablet && (
+							<Sidenav
+								position="left"
+								scroll={true}
+								handle={
+									<IconButton size="small">
+										<Icon>options</Icon>
+									</IconButton>
+								}
+							>
+								<ProductFilterCard
+								/>
+							</Sidenav>
+						)}
+					</FlexBox>
 				</FlexBox>
-			</FlexBox>
 
-			<Grid container spacing={6}>
-				<Hidden as={Grid} item lg={3} xs={12} down={1024}>
-					<ProductFilterCard />
-				</Hidden>
+				<Grid container spacing={6}>
+					<Hidden as={Grid} item lg={3} xs={12} down={1024}>
+						<ProductFilterCard />
+					</Hidden>
 
-				{result && !isLoading ? (<Grid item lg={9} xs={12}>
-					{view === "grid" ? <ProductCard1List
-						data={result} onChange={handlePageChange} /> :
-						<ProductCard9List data={result}
-							onChange={handlePageChange} />}
-				</Grid>) : (<Center position="fixed" top="0" right="0" bottom="0" left="0" zIndex="9999">
-					<Spinner size="xl" />
-				</Center>)}
-			</Grid>
-		</Box>)
+					{result && !isLoading ? (<Grid item lg={9} xs={12}>
+						{view === "grid" ? <ProductCard1List
+							data={result} onChange={handlePageChange} /> :
+							<ProductCard9List data={result}
+								onChange={handlePageChange} />}
+					</Grid>) : (<Center position="fixed" top="0" right="0" bottom="0" left="0" zIndex="9999">
+						<Spinner size="xl" />
+					</Center>)}
+				</Grid>
+			</Box>}
+		</>
+	)
 
 };
 

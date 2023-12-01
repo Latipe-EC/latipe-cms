@@ -17,6 +17,7 @@ import { ProductListGetVm, ProductNameListVm } from 'api/interface/search';
 import { calculateShippingOrderRequest, createDeliveryRequest, listDeliveryRequest } from 'api/interface/delivery';
 import { CancelOrderRequest, CreateOrderRequest, CreateOrderResponse, GetOrderByIdResponse } from 'api/interface/order';
 import { ApplyVoucherReponse, ApplyVoucherRequest, createVoucherRequest } from 'api/interface/promotion';
+import { CheckPaymentOrderResponse, PayOrderRequest } from 'api/interface/payment';
 
 export type QueryParamsType = Record<string | number, unknown>;
 
@@ -696,6 +697,22 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				query: {
 					...param
 				}
+			}),
+	}
+	payment = {
+		checkPaymentOrder: (id: string) =>
+			this.request<CheckPaymentOrderResponse>({
+				path: `/payment/payment-order/${id}`,
+				method: 'GET',
+				type: ContentType.Json,
+			}),
+
+		validPayment: (request: PayOrderRequest) =>
+			this.request<void>({
+				path: `/payment/pay`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: request
 			}),
 	}
 }

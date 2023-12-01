@@ -64,13 +64,16 @@ export interface DataGetOrderById {
 export interface Order {
 	order_uuid: string
 	amount: number
-	discount: number
+	item_discount: number
+	shipping_discount: number
 	sub_total: number
 	status: number
 	payment_method: number
 	created_at: string
-	"updated-at": string
+	updated_at: string
 	delivery: DeliveryGetOrderById
+	order_items: OrderItem[]
+	order_status: StatusOrder[],
 }
 
 export interface DeliveryGetOrderById {
@@ -82,4 +85,24 @@ export interface DeliveryGetOrderById {
 	shipping_name: string
 	shipping_phone: string
 	shipping_address: string
+}
+
+export interface OrderItem {
+	product_id: string
+	sub_total: number
+	option_id: string
+	quantity: number
+	product_name: string
+	image: string
+	store_id: string
+	price: number
+	rating_id: string
+	name_option: string
+	order_item_id: string
+}
+
+export interface StatusOrder {
+	message: string
+	status_change: number
+	created_at: string
 }

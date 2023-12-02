@@ -12,7 +12,7 @@ export const createRating = createAsyncThunk(
 	}
 );
 
-export const update = createAsyncThunk(
+export const updateRating = createAsyncThunk(
 	'ratings/update',
 	async (input: UpdateRatingRequest) => {
 		const response = await api.rating.update(input.id, input);

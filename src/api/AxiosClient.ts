@@ -17,7 +17,7 @@ import { ProductListGetVm, ProductNameListVm } from 'api/interface/search';
 import { calculateShippingOrderRequest, createDeliveryRequest, listDeliveryRequest } from 'api/interface/delivery';
 import { CancelOrderRequest, CreateOrderRequest, CreateOrderResponse, GetOrderByIdResponse } from 'api/interface/order';
 import { ApplyVoucherReponse, ApplyVoucherRequest, createVoucherRequest } from 'api/interface/promotion';
-import { CheckPaymentOrderResponse, PayOrderRequest } from 'api/interface/payment';
+import { CheckPaymentOrderResponse, PayByPaypalRequest, PayOrderRequest } from 'api/interface/payment';
 
 export type QueryParamsType = Record<string | number, unknown>;
 
@@ -703,7 +703,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 		checkPaymentOrder: (id: string) =>
 			this.request<CheckPaymentOrderResponse>({
 				path: `/payment/payment-order/${id}`,
-				method: 'GET',
+				method: 'POST',
 				type: ContentType.Json,
 			}),
 
@@ -713,6 +713,21 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				method: 'POST',
 				type: ContentType.Json,
 				body: request
+			}),
+
+		payByPaypal: (request: PayByPaypalRequest) =>
+			this.request<void>({
+				path: `/payment/capture-payments/paypal`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: request
+			}),
+
+		checkOrderPaypal: (id: string) =>
+			this.request<void>({
+				path: `/payment/check-order-paypal/${id}`,
+				method: 'GET',
+				type: ContentType.Json,
 			}),
 	}
 }

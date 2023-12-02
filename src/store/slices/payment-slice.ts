@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Api } from '../../api/AxiosClient';
-import { PayOrderRequest } from 'api/interface/payment';
+import { PayByPaypalRequest, PayOrderRequest } from 'api/interface/payment';
 
 const api = new Api();
 
@@ -18,6 +18,15 @@ export const
 		'payments/validPayment',
 		async (request: PayOrderRequest) => {
 			const response = await api.payment.validPayment(request);
+			return response;
+		}
+	);
+
+export const
+	payByPaypal = createAsyncThunk(
+		'payments/payByPaypal',
+		async (request: PayByPaypalRequest) => {
+			const response = await api.payment.payByPaypal(request);
 			return response;
 		}
 	);

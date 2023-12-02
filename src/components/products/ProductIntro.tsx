@@ -51,6 +51,10 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 		if (product.productVariants.length > 0 && product.productVariants.length !== selectOption.length) {
 			return;
 		}
+		if (product.productVariants.length === 0) {
+			navigate(`/checkout?productId=${product.id}&quantity=${quantity}&option=${product.productClassifications[0].id}`);
+			return;
+		}
 		const optionsTwo = product.productVariants.length === 2 ?
 			product.productVariants[1].options.length : 1;
 		const indexFinal = selectOption[0] *
@@ -305,7 +309,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 						</ButtonCharkra>
 						<ButtonCharkra
 							onClick={handleBuyNow}
-							disabled={!handleCheckValid()}
+							isDisabled={!handleCheckValid()}
 							variant="solid"
 							colorScheme="red"
 							_hover={{ bg: "red.500" }}

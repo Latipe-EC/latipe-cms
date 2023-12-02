@@ -18,13 +18,13 @@ import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "../../store/store";
 import { cancelOrder, getOrderById } from "../../store/slices/orders-slice";
 import { DataGetOrderById, OrderItem } from "api/interface/order";
-import { Heading, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Textarea, useToast } from "@chakra-ui/react";
+import { Center, Heading, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Textarea, useToast } from "@chakra-ui/react";
 import { Button as ButtonChakra, Flex as FlexCharkra } from "@chakra-ui/react";
 import { CheckPaymentOrderResponse, EPaymentMethod, EPaymentStatus } from "../../api/interface/payment";
 import { checkPaymentOrder, validPayment } from "../../store/slices/payment-slice";
 import { getMyProfile } from "../../store/slices/user-slice";
-import { StarIcon } from "@chakra-ui/icons";
-import { createRating } from "../../store/slices/ratings-slice";
+import { StarIcon, WarningIcon } from "@chakra-ui/icons";
+import { createRating, deleteRating, getRatingDetail, updateRating } from "../../store/slices/ratings-slice";
 import { RatingResponse } from "api/interface/rating";
 
 
@@ -46,6 +46,7 @@ const OrderDetails = () => {
 	const [ratingComment, setRatingComment] = useState<string>();
 	const [ratingStar, setRatingStar] = useState<number>();
 	const [detailRating, setDetailRating] = useState<RatingResponse>(null);
+	const [viewRating, setViewRating] = useState<OrderItem>(null);
 
 	useEffect(() => {
 		dispatch(getOrderById(id)).unwrap().then((res) => {
@@ -116,7 +117,7 @@ const OrderDetails = () => {
 			productId: displayRating.product_id,
 			orderItemId: displayRating.order_item_id,
 		})).unwrap().then((res) => {
-			if (res.status === 200) {
+			if (res.status === 201) {
 				const newOrder = { ...orderDetail };
 				newOrder.order.order_items.map((item) => {
 					if (item.order_item_id === displayRating.order_item_id) {
@@ -125,6 +126,8 @@ const OrderDetails = () => {
 				});
 				setOrderDetail(newOrder);
 				setDisplayRating(null);
+				setRatingComment(null);
+				setRatingStar(null);
 			}
 			else {
 				toast({
@@ -138,8 +141,152 @@ const OrderDetails = () => {
 		});
 	}
 
-	return (
+	const handleViewRating = (orderItem: OrderItem) => {
+		dispatch(getRatingDetail(orderItem.rating_id)).unwrap().then((res) => {
+			setDetailRating(res.data);
+			setViewRating(orderItem);
+		});
+	}
 
+	const handleUpdateRating = () => {
+		dispatch(updateRating({
+			id: detailRating.id,
+			content: detailRating.content,
+			rating: detailRating.rating,
+		})).unwrap().then((res) => {
+			if (res.status === 200) {
+				const newOrder = { ...orderDetail };
+				newOrder.order.order_items.map((item) => {
+					if (item.order_item_id === viewRating.order_item_id) {
+						item.rating_id = res.data.id;
+					}
+				});
+				setOrderDetail(newOrder);
+				setViewRating(null);
+			}
+			else {
+				toast({
+					title: "Cập nhật đánh giá thất bại",
+					description: "Xin vui lòng thử lại sau.",
+					status: "error",
+					duration: 5000,
+					isClosable: true,
+				});
+			}
+		});
+	}
+
+	const handleDeleteRating = () => {
+		dispatch(deleteRating(detailRating.id)).unwrap().then((res) => {
+			if (res.status === 200) {
+				const newOrder = { ...orderDetail };
+				newOrder.order.order_items.map((item) => {
+					if (item.order_item_id === viewRating.order_item_id) {
+						item.rating_id = null;
+					}
+				});
+				setOrderDetail(newOrder);
+				setViewRating(null);
+			}
+			else {
+				toast({
+					title: "Xóa đánh giá thất bại",
+					description: "Xin vui lòng thử lại sau.",
+					status: "error",
+					duration: 5000,
+					isClosable: true,
+				});
+			}
+		});
+	}
+
+	const isOlderThanSevenDays = () => {
+		const date = orderDetail.order.order_status.find(x => x.message.includes("Đơn hàng được giao thành công"))
+
+		if (!date)
+			return true;
+		const sevenDaysAgo = new Date();
+		sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+		return new Date(date.created_at) < sevenDaysAgo;
+	}
+
+	const handleStatusIcon = (index: number) => {
+		if (index === 0) {
+			return true
+		}
+		else if (index === 1) {
+			if (orderDetail.order.status >= 1 && (orderDetail.order.payment_method === 1 || statusPaymentOrder.paymentStatus === EPaymentStatus.COMPLETED))
+				return true;
+			else
+				return false;
+		} else if (index === 2) {
+			if (orderDetail.order.status >= 3)
+				return true;
+			else
+				return false;
+		} else if (index === 3) {
+			if (orderDetail.order.status >= 4)
+				return true;
+			else
+				return false;
+		} else if (index === 4) {
+			if (orderDetail.order.status >= 5)
+				return true;
+			else
+				return false;
+		}
+	}
+
+	const handleStatusLine = (index: number) => {
+		if (index === 0) {
+			return true
+		}
+		else if (index === 1) {
+			if (orderDetail.order.status >= 1 && (orderDetail.order.payment_method === 1 || statusPaymentOrder.paymentStatus === EPaymentStatus.COMPLETED))
+				return true;
+			else
+				return false;
+		} else if (index === 2) {
+			if (orderDetail.order.status >= 3)
+				return true;
+			else
+				return false;
+		} else if (index === 3) {
+			if (orderDetail.order.status >= 4)
+				return true;
+			else
+				return false;
+		}
+	}
+
+	const handleStatusDone = (index: number) => {
+		if (index === 0) {
+			return true
+		}
+		else if (index === 1) {
+			if (orderDetail.order.status >= 1 && (orderDetail.order.payment_method === 1 || statusPaymentOrder.paymentStatus === EPaymentStatus.COMPLETED))
+				return true;
+			else
+				return false;
+		} else if (index === 2) {
+			if (orderDetail.order.status >= 3)
+				return true;
+			else
+				return false;
+		} else if (index === 3) {
+			if (orderDetail.order.status >= 4)
+				return true;
+			else
+				return false;
+		} else if (index === 4) {
+			if (orderDetail.order.status >= 5 && (isOlderThanSevenDays() || orderDetail.order.order_items.every(item => item.rating_id)))
+				return true;
+			else
+				return false;
+		}
+	}
+
+	return (
 		<div>
 			{orderDetail && (<>
 				<DashboardPageHeader
@@ -151,7 +298,49 @@ const OrderDetails = () => {
 						</Button>
 					}
 				/>
-				{displayRating && <Modal isOpen={displayRating !== null} onClose={() => setDisplayRating(null)}>
+
+				{viewRating !== null && <Modal isOpen={viewRating !== null} onClose={() => setViewRating(null)} isCentered
+					size={"xl"}>
+					<ModalOverlay />
+					<ModalContent>
+						<ModalHeader>Đánh giá sản phẩm</ModalHeader>
+						<ModalCloseButton />
+						<ModalBody>
+							<Box mb={4}>
+								<Image boxSize="100px" src={viewRating.image} alt={viewRating.product_name} />
+								<Text>{viewRating.product_name}</Text>
+							</Box>
+							<Box d="flex" mb={4}
+							>
+								{[...Array(5)].map((e, i) => (
+									<StarIcon
+										key={i}
+										color={i < detailRating.rating ? "teal.500" : "gray.300"}
+										onClick={() =>
+											setDetailRating({ ...detailRating, rating: i + 1 })}
+										cursor={"pointer"}
+									/>
+								))}
+							</Box>
+							<Textarea placeholder="Viết đánh giá" value={detailRating.content}
+								onChange={(e) => setDetailRating({ ...detailRating, content: e.target.value })}
+								maxLength={200}
+								resize="none"
+							/>
+						</ModalBody>
+						<ModalFooter>
+							<ButtonChakra colorScheme="red" variant="ghost" onClick={handleDeleteRating} mr={2}>Xóa đánh giá</ButtonChakra>
+							<ButtonChakra
+								isDisabled={detailRating.content === "" || detailRating.rating === 0 || detailRating.isChange}
+								colorScheme="green" mr={3} onClick={handleUpdateRating}>
+								Cập nhật
+							</ButtonChakra>
+						</ModalFooter>
+					</ModalContent>
+				</Modal>}
+
+				{displayRating && <Modal isOpen={displayRating !== null} onClose={() => setDisplayRating(null)} isCentered
+					size={"xl"}>
 					<ModalOverlay />
 					<ModalContent>
 						<ModalHeader>Đánh giá sản phẩm</ModalHeader>
@@ -161,29 +350,61 @@ const OrderDetails = () => {
 								<Image boxSize="100px" src={displayRating.image} alt={displayRating.product_name} />
 								<Text>{displayRating.product_name}</Text>
 							</Box>
-							<Box d="flex" mb={4}>
+							<Box d="flex" mb={4}
+							>
 								{[...Array(5)].map((e, i) => (
 									<StarIcon
 										key={i}
 										color={i < ratingStar ? "teal.500" : "gray.300"}
 										onClick={() => setRatingStar(i + 1)}
+										cursor={"pointer"}
 									/>
 								))}
 							</Box>
 							<Textarea placeholder="Viết đánh giá" value={ratingComment}
+								maxLength={200}
+								resize="none"
 								onChange={(e) => setRatingComment(e.target.value)} />
 						</ModalBody>
 						<ModalFooter>
-							<Button
+							<ButtonChakra colorScheme="red" variant="ghost" onClick={() => setDisplayRating(null)} mr={2}>Hủy</ButtonChakra>
+							<ButtonChakra
 								isDisabled={ratingComment === "" || ratingStar === 0}
-								colorScheme="blue" mr={3} onClick={handleUploadRating}>
-								Đánh giá ngay!
-							</Button>
-							<Button variant="ghost" onClick={() => setDisplayRating(null)}>Hủy</Button>
+								colorScheme="green" mr={3} onClick={handleUploadRating}>
+								Đánh giá ngay
+							</ButtonChakra>
 						</ModalFooter>
 					</ModalContent>
 				</Modal>}
-				<Card p="2rem 1.5rem" mb="30px">
+
+				{displayModalCancelOrder &&
+					<Modal isOpen={displayModalCancelOrder} onClose={() => setDisplayModalCancelOrder(null)} isCentered>
+						<ModalOverlay />
+						<ModalContent>
+							<ModalHeader>
+								<Center>
+									Huỷ đặt hàng
+								</Center>
+							</ModalHeader>
+							<ModalCloseButton />
+							<ModalBody>
+								<FlexCharkra>
+									<WarningIcon boxSize="20px" mr="15px" color="red.500" />
+									<Text>Bạn có chắc chắn hủy đặt đơn hàng này</Text>
+								</FlexCharkra>
+							</ModalBody>
+							<ModalFooter>
+								<Button colorScheme="red" onClick={handleCancleOrder}>
+									xác nhận
+								</Button>
+								<Button colorScheme="blue" variant="ghost" onClick={() => setDisplayModalCancelOrder(false)}>
+									hủy
+								</Button>
+							</ModalFooter>
+						</ModalContent>
+					</Modal>
+				}
+				{orderDetail && orderDetail.order.status !== -1 && <Card p="2rem 1.5rem" mb="30px">
 					<FlexBox
 						flexDirection={size.width < breakpoint ? "column" : "row"}
 						justifyContent="space-between"
@@ -196,14 +417,14 @@ const OrderDetails = () => {
 								<Box position="relative">
 									<Avatar
 										size={64}
-										bg={ind <= orderDetail.order.status - 1 ? "primary.main" : "gray.300"}
-										color={ind <= orderDetail.order.status - 1 ? "gray.white" : "primary.main"}
+										bg={handleStatusIcon(ind) ? "primary.main" : "gray.3-10"}
+										color={handleStatusIcon(ind) ? "gray.white" : "primary.main"}
 									>
 										<Icon size="32px" defaultcolor="currentColor">
 											{item}
 										</Icon>
 									</Avatar>
-									{ind < orderDetail.order.status - 1 && (
+									{handleStatusDone(ind) && (
 										<Box position="absolute" right="0" top="0">
 											<Avatar size={22} bg="gray.200" color="success.main">
 												<Icon size="12px" defaultcolor="currentColor">
@@ -218,11 +439,12 @@ const OrderDetails = () => {
 										flex={size.width < breakpoint ? "unset" : "1 1 0"}
 										height={size.width < breakpoint ? 50 : 4}
 										minWidth={size.width && size.width < breakpoint ? 4 : 50}
-										bg={ind < orderDetail.order.status - 1 ? "primary.main" : "gray.300"}
+										bg={handleStatusLine(ind) ? "primary.main" : "gray.300"}
 									/>
 								)}
 							</Fragment>
-						))}
+						))
+						}
 					</FlexBox>
 
 					<FlexBox justifyContent={size.width < breakpoint ? "center" : "flex-end"}>
@@ -245,7 +467,10 @@ const OrderDetails = () => {
 					{statusPaymentOrder &&
 						statusPaymentOrder.paymentStatus === EPaymentStatus.PENDING && (
 							<FlexCharkra justifyContent={size.width < breakpoint ? "center" : "flex-end"} mt={2}
-								onClick={handleOrderNow}
+								onClick={() => {
+									setSelectedOrder(orderDetail.order.order_uuid);
+									setDisplayModalCancelOrder(true)
+								}}
 							>
 								<ButtonChakra width="30%" bg="white" color="black" borderRadius="0" border="1px solid gray">Hủy đơn hàng</ButtonChakra>
 							</FlexCharkra>
@@ -262,7 +487,9 @@ const OrderDetails = () => {
 							>
 								<ButtonChakra
 									isDisabled={statusPaymentOrder.paymentMethod === EPaymentMethod.BANKING && profile.eWallet < orderDetail.order.amount}
-									width="30%" bg="white" color="black" borderRadius="0" border="1px solid gray">Thanh toán ngay</ButtonChakra>
+									width="30%" bg="white" color="black" borderRadius="0" border="1px solid gray"
+									onClick={handleOrderNow}
+								>Thanh toán ngay</ButtonChakra>
 							</FlexCharkra>
 						)}
 					<FlexCharkra justifyContent={size.width < breakpoint ? "center" : "flex-end"} mt={2}
@@ -270,7 +497,19 @@ const OrderDetails = () => {
 					>
 						<ButtonChakra width="30%" bg="white" color="black" borderRadius="0" border="1px solid gray">Liên hệ người bán</ButtonChakra>
 					</FlexCharkra>
-				</Card>
+				</Card>}
+
+				{orderDetail && orderDetail.order.status === 7 && (
+					<Center mt={4} mb={4}>
+						<Text fontSize="xl">Đơn hàng của bạn đã bị hủy</Text>
+					</Center>
+				)}
+
+				{orderDetail && orderDetail.order.status === -1 && (
+					<Center mt={4} mb={4}>
+						<Text fontSize="xl">Đơn hàng của bạn đã bị lỗi</Text>
+					</Center>
+				)}
 
 				<Card p="0px" mb="30px" overflow="hidden">
 					<TableRow bg="gray.200" p="12px" boxShadow="none" borderRadius={0}>
@@ -325,16 +564,21 @@ const OrderDetails = () => {
 									</FlexBox>
 								)}
 
-								<FlexBox flex="160px" m="6px" alignItems="center">
+
+								{isOlderThanSevenDays() && (<FlexBox flex="160px" m="6px" alignItems="center">
 									{
 										item.rating_id ? (
 											<Button
+												onClick={() => {
+													handleViewRating(item);
+												}}
+												marginLeft="auto"
 												variant="text" color="primary">
 												<Typography fontSize="14px">Xem đánh giá</Typography>
 											</Button>
 										) : (
 											<Button
-												disabled={orderDetail.order.status !== 4}
+												disabled={orderDetail.order.status === 4}
 												variant="text" color="primary"
 												onClick={() => setDisplayRating(item)}
 												_hover={{ variant: "text" }}
@@ -345,6 +589,7 @@ const OrderDetails = () => {
 										)
 									}
 								</FlexBox>
+								)}
 							</FlexBox>
 						))}
 					</Box>
@@ -444,7 +689,7 @@ const OrderDetails = () => {
 				</Box>
 			</>)
 			}
-		</div>
+		</div >
 	);
 };
 

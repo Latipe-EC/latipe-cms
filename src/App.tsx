@@ -30,6 +30,7 @@ const Profile = lazy(() => import('./pages/profile/index'));
 const Shop = lazy(() => import('./pages/shop/[id]'));
 const SupportTicketDetails = lazy(() => import('./pages/support-tickets/[id]'));
 const TicketList = lazy(() => import('./pages/support-tickets/index'));
+const Paypal = lazy(() => import('./pages/paypal/Paypal'));
 
 // vendor pages
 const DashboardVendor = lazy(() => import('./pages/vendor/dashboard/index'));
@@ -63,7 +64,7 @@ const SalePage2 = lazy(() => import('./pages/sale-page-2'));
 const ShopList = lazy(() => import('./pages/shops'));
 const SignUpPage = lazy(() => import('./pages/signup'));
 const WishList = lazy(() => import('./pages/wish-list'));
-
+const PaymentSuccess = lazy(() => import('./pages/payment-success'));
 
 const Error404 = lazy(() => import('./pages/404'));
 
@@ -147,6 +148,7 @@ function App() {
 									<Route path="shops" element={<ShopList />} />
 									<Route path="signup" element={<SignUpPage />} />
 									<Route path="orders/success" element={<OrderSuccess />} />
+									<Route path="payment-success" element={<PaymentSuccess />} />
 									<Route path="*" element={<Error404 />} />
 								</Route>
 
@@ -184,6 +186,7 @@ function App() {
 
 									<Route path="orders" element={<Orders />} />
 									<Route path="orders/:id" element={<OrderDetails />} />
+									<Route path="payment-paypal/:id" element={<Paypal />} />
 									<Route path="payment-methods" element={<AddressList />} />
 									<Route path="payment-methods/add" element={<PaymentMethodEditor />} />
 									<Route path="wish-list" element={<WishList />} />

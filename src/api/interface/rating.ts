@@ -139,6 +139,8 @@ export interface RatingResponse {
 	 * @memberof RatingResponse
 	 */
 	'detail'?: string;
+
+	'isChange': boolean;
 }
 /**
 * 

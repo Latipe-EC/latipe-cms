@@ -1,6 +1,6 @@
 import { PagedResultResponse } from 'api/interface/PagedResultResponse';
 import { LoginRequest, LoginResponse, RefreshTokenInput, RefreshTokenResponse } from '../api/interface/auth';
-import { CreateUserAddressRequest, UserAddress, UserResponse } from '../api/interface/user';
+import { CreateUserAddressRequest, UpdateUserRequest, UpdateUsernameRequest, UserAddress, UserResponse } from '../api/interface/user';
 import axios, {
 	AxiosInstance,
 	AxiosRequestConfig,
@@ -307,6 +307,22 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				method: 'GET',
 				type: ContentType.Json,
 
+			}),
+
+		updateProfile: (request: UpdateUserRequest) =>
+			this.request<UserResponse>({
+				path: `/users/my-profile`,
+				method: 'PUT',
+				type: ContentType.Json,
+				body: request
+			}),
+
+		updateUsername: (request: UpdateUsernameRequest) =>
+			this.request<UserResponse>({
+				path: `/users/profile/username`,
+				method: 'PUT',
+				type: ContentType.Json,
+				body: request
 			}),
 	}
 	category = {

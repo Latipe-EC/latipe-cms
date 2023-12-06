@@ -276,43 +276,7 @@ export interface UpdateUserAddressRequest {
 	 */
 	'countryName'?: string;
 }
-/**
- * 
- * @export
- * @interface UpdateUserRequest
- */
-export interface UpdateUserRequest {
-	/**
-	 * 
-	 * @type {string}
-	 * @memberof UpdateUserRequest
-	 */
-	'phoneNumber'?: string;
-	/**
-	 * 
-	 * @type {string}
-	 * @memberof UpdateUserRequest
-	 */
-	'firstName': string;
-	/**
-	 * 
-	 * @type {string}
-	 * @memberof UpdateUserRequest
-	 */
-	'lastName': string;
-	/**
-	 * 
-	 * @type {string}
-	 * @memberof UpdateUserRequest
-	 */
-	'displayName'?: string;
-	/**
-	 * 
-	 * @type {string}
-	 * @memberof UpdateUserRequest
-	 */
-	'avatar'?: string;
-}
+
 /**
  * 
  * @export
@@ -464,7 +428,7 @@ export interface UserResponse {
 	 * @type {number}
 	 * @memberof UserResponse
 	 */
-	'eWallet'?: number;
+	'eWallet': number;
 	/**
 	 * 
 	 * @type {number}
@@ -473,6 +437,10 @@ export interface UserResponse {
 	'point'?: number;
 
 	'addresses'?: UserAddress[];
+	'username'?: string;
+	'isChangeUsername'?: boolean;
+	'gender'?: string;
+	'birthday'?: Date;
 }
 
 export interface District {
@@ -505,3 +473,23 @@ export interface Province {
 	code: number,
 }
 
+
+export interface UpdateUsernameRequest {
+	username: string;
+}
+
+/**
+ * 
+ * @export
+ * @interface UpdateUserRequest
+ */
+export interface UpdateUserRequest {
+	phoneNumber: string
+	firstName: string
+	lastName: string
+	displayName: string
+	avatar: string
+	gender: string
+	birthday: Date,
+	avatarFile: File
+}

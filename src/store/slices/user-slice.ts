@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Api, QueryParamsType } from '../../api/AxiosClient';
-import { CreateUserAddressRequest, UserAddress } from '../../api/interface/user';
+import { CreateUserAddressRequest, UpdateUserRequest, UpdateUsernameRequest, UserAddress } from '../../api/interface/user';
+import { fi } from 'date-fns/locale';
 
 const api = new Api();
 
@@ -40,6 +41,27 @@ export const updateMyAddress = createAsyncThunk(
 	'users/update-my-address',
 	async (address: UserAddress) => {
 		const response = await api.users.updateMyAddress(address.id, address);
+		return response;
+	}
+);
+
+export const updateProfile = createAsyncThunk(
+	'users/updateProfile',
+	async (request: UpdateUserRequest) => {
+		if (request.avatarFile) {
+			const file = await api.media.uploadFile({ file: request.avatarFile });
+			request.avatar = file.data.url;
+		}
+		request.gender = request.gender.toUpperCase();
+		const response = await api.users.updateProfile(request);
+		return response;
+	}
+);
+
+export const updateUsername = createAsyncThunk(
+	'users/updateUsername',
+	async (request: UpdateUsernameRequest) => {
+		const response = await api.users.updateUsername(request);
 		return response;
 	}
 );

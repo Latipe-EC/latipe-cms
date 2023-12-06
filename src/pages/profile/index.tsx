@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import Avatar from "../../../src/components/avatar/Avatar";
 import Box from "../../../src/components/Box";
 import Button from "../../../src/components/buttons/Button";
@@ -8,8 +9,24 @@ import DashboardPageHeader from "../../../src/components/layout/DashboardPageHea
 import TableRow from "../../../src/components/TableRow";
 import Typography, { H3, H5, Small } from "../../../src/components/Typography";
 import { format } from "date-fns";
+import { UserResponse } from "api/interface/user";
+import { useDispatch } from "react-redux";
+import { AppThunkDispatch } from "store/store";
+import { getMyProfile } from "../../store/slices/user-slice";
 
 const Profile = () => {
+
+	const dispatch = useDispatch<AppThunkDispatch>();
+
+
+	const [profile, setProfile] = useState<UserResponse>();
+
+	useEffect(() => {
+		dispatch(getMyProfile()).unwrap().then((res) => {
+			setProfile(res.data);
+		});
+	}, []);
+
 	return (
 		<div>
 			<DashboardPageHeader
@@ -18,7 +35,7 @@ const Profile = () => {
 				button={
 					<a href="/profile/edit">
 						<Button color="primary" bg="primary.light" px="2rem">
-							Edit Profile
+							Chỉnh sửa
 						</Button>
 					</a>
 				}
@@ -36,7 +53,7 @@ const Profile = () => {
 									alignItems="center"
 								>
 									<div>
-										<H5 my="0px">Ralph Edwards</H5>
+										<H5 my="0px">{profile.displayName}</H5>
 										<FlexBox alignItems="center">
 											<Typography fontSize="14px" color="text.hint">
 												Balance:
@@ -47,13 +64,6 @@ const Profile = () => {
 										</FlexBox>
 									</div>
 
-									<Typography
-										ontSize="14px"
-										color="text.hint"
-										letterSpacing="0.2em"
-									>
-										SILVER USER
-									</Typography>
 								</FlexBox>
 							</Box>
 						</FlexBox>

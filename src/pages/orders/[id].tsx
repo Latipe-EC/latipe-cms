@@ -637,7 +637,8 @@ const OrderDetails = () => {
 							<Typography fontSize="14px" color="text.hint">
 								Tiền hàng:
 							</Typography>
-							<H6 my="0px">{orderDetail.order.sub_total.toLocaleString('vi-VN')}₫</H6>
+							<H6 my="0px">{(orderDetail.order.sub_total -
+								orderDetail.order.delivery.cost).toLocaleString('vi-VN')}₫</H6>
 						</FlexBox>
 						<FlexBox
 							justifyContent="space-between"
@@ -647,7 +648,7 @@ const OrderDetails = () => {
 							<Typography fontSize="14px" color="text.hint">
 								Phí ship:
 							</Typography>
-							<H6 my="0px">{orderDetail.order.delivery.payment_type.toLocaleString('vi-VN')}₫</H6>
+							<H6 my="0px">{orderDetail.order.delivery.cost.toLocaleString('vi-VN')}₫</H6>
 						</FlexBox>
 						<FlexBox
 							justifyContent="space-between"
@@ -680,11 +681,13 @@ const OrderDetails = () => {
 							<H6 my="0px">Tổng cộng</H6>
 							<H6 my="0px">{orderDetail.order.amount.toLocaleString('vi-VN')}₫</H6>
 						</FlexBox>
-						<Typography fontSize="14px">Phương thức Thanh toán: {
-							orderDetail.order.payment_method === 1 ? "Thanh toán khi nhận hàng" : orderDetail.order.payment_method === 2 ?
-								"Thanh toán qua thẻ" : "Thanh toán bằng ví Latipe"
-						}
-						</Typography>
+						<FlexBox justifyContent="space-between" alignItems="center">
+							<Typography fontSize="14px" fontWeight="bold">Phương thức Thanh toán:</Typography>
+							<Typography fontSize="14px">
+								{orderDetail.order.payment_method === 1 ? " Thanh toán khi nhận hàng" : orderDetail.order.payment_method === 2 ?
+									" Thanh toán qua thẻ" : " Thanh toán bằng ví Latipe"}
+							</Typography>
+						</FlexBox>
 					</Card>
 				</Box>
 			</>)

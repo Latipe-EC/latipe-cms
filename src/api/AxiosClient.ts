@@ -15,7 +15,7 @@ import { CreateRatingRequest, RatingResponse, UpdateRatingRequest } from 'api/in
 import { CartGetDetailResponse, CartItemRequest, CartResponse, DeleteCartItemRequest, UpdateQuantityRequest } from 'api/interface/cart';
 import { ProductListGetVm, ProductNameListVm } from 'api/interface/search';
 import { calculateShippingOrderRequest, createDeliveryRequest, listDeliveryRequest } from 'api/interface/delivery';
-import { CancelOrderRequest, CreateOrderRequest, CreateOrderResponse, GetOrderByIdResponse } from 'api/interface/order';
+import { CancelOrderRequest, CountMyOrderResponse, CreateOrderRequest, CreateOrderResponse, GetMyOrderResponse, GetOrderByIdResponse } from 'api/interface/order';
 import { ApplyVoucherReponse, ApplyVoucherRequest, createVoucherRequest } from 'api/interface/promotion';
 import { CheckPaymentOrderResponse, PayByPaypalRequest, PayOrderRequest } from 'api/interface/payment';
 
@@ -635,12 +635,16 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				body: request
 			}),
 
-		getMyOrder: () =>
-			this.request<unknown>({
-				path: `/orders/user`,
+		getMyOrder: (query: Record<string, string>) => {
+			const queryParams = new URLSearchParams(query).toString();
+			console.log(queryParams);
+			return this.request<GetMyOrderResponse>({
+				path: `/orders/user?${queryParams}`,
 				method: 'GET',
 				type: ContentType.Json,
-			}),
+
+			})
+		},
 
 		cancelOrder: (request: CancelOrderRequest) =>
 			this.request<unknown>({
@@ -654,6 +658,14 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 		getOrderById: (id: string) =>
 			this.request<GetOrderByIdResponse>({
 				path: `/orders/user/${id}`,
+				method: 'GET',
+				type: ContentType.Json,
+			}),
+
+
+		countMyOrder: () =>
+			this.request<CountMyOrderResponse>({
+				path: `/orders/user/count`,
 				method: 'GET',
 				type: ContentType.Json,
 			}),

@@ -424,7 +424,7 @@ const AddProduct = () => {
 				button={
 					<a href="/vendor/products">
 						<Button color="primary" bg="primary.light" px="2rem">
-							Back to Product List
+							Quay lại
 						</Button>
 					</a>
 				}

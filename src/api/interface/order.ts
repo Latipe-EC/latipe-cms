@@ -49,6 +49,16 @@ export interface UserOrder {
 	username: string
 }
 
+export interface CountMyOrderResponse {
+	code: number
+	error_code: string
+	message: string
+	data: CountMyOrder
+}
+
+export interface CountMyOrder {
+	count: number
+}
 
 export interface GetOrderByIdResponse {
 	code: number
@@ -79,7 +89,7 @@ export interface Order {
 export interface DeliveryGetOrderById {
 	delivery_id: string
 	delivery_name: string
-	payment_type: number
+	cost: number
 	receiving_date: string
 	address_id: string
 	shipping_name: string
@@ -105,4 +115,43 @@ export interface StatusOrder {
 	message: string
 	status_change: number
 	created_at: string
+}
+
+export interface GetMyOrderResponse {
+	code: number
+	error_code: string
+	message: string
+	data: DataGMO
+}
+
+export interface DataGMO {
+	items: DaumGMO[]
+	total: number
+	page: number
+	size: number
+	has_more: boolean
+}
+
+export interface DaumGMO {
+	order_uuid: string
+	amount: number
+	shipping_discount: number
+	item_discount: number
+	sub_total: number
+	status: number
+	payment_method: number
+	created_at: string
+	updated_at: string
+	delivery: Delivery
+}
+
+export interface DeliveryGMO {
+	delivery_id: string
+	delivery_name: string
+	cost: number
+	receiving_date: string
+	address_id: string
+	shipping_name: string
+	shipping_phone: string
+	shipping_address: string
 }

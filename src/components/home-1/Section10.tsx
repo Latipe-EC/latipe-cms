@@ -45,7 +45,7 @@ const Section10: React.FC = () => {
 								<Grid container spacing={2}>
 									{categories.slice(i * 20, i * 20 + 10).map((category) => (
 										<Grid item xs={6} sm={1} key={category.id} style={{ width: '120px', height: '120px' }}
-											onClick={() => navigate(`/search/category=${category.name}`)}
+											onClick={() => navigate(`/search?category=${category.name}`)}
 										>
 											<LazyImage
 												src={category.image ? category.image : '/assets/images/products/apple-watch-0.png'}
@@ -62,7 +62,7 @@ const Section10: React.FC = () => {
 								<Grid container spacing={2}>
 									{categories.slice(i * 20 + 10, i * 20 + 20).map((category) => (
 										<Grid item xs={6} sm={1} key={category.id} style={{ width: '120px', height: '120px' }}
-											onClick={() => navigate(`/search/category=${category.name}`)}
+											onClick={() => navigate(`/search?category=${category.name}`)}
 										>
 											<LazyImage
 												src={category.image ? category.image : '/assets/images/products/apple-watch-0.png'}

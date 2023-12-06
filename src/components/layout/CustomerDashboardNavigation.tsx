@@ -9,6 +9,7 @@ import {
 } from "./DashboardStyle";
 import { useDispatch } from "react-redux";
 import { countMyAddress } from "../../store/slices/user-slice";
+import { countMyOrder } from "../../store/slices/orders-slice";
 import { AppThunkDispatch, RootState, useAppSelector } from "../../store/store";
 
 const CustomerDashboardNavigation = () => {
@@ -16,19 +17,27 @@ const CustomerDashboardNavigation = () => {
 	const dispatch = useDispatch<AppThunkDispatch>();
 
 	dispatch(countMyAddress());
+	dispatch(countMyOrder());
 
 	const user = useAppSelector((state: RootState) => state.user);
 
+	const order = useAppSelector((state: RootState) => state.order);
+
 	const getCount = (title: string) => {
 		switch (title) {
-			case "Addresses":
+			case "Địa chỉ":
 				{
 					return user.countAddress;
 				}
+			case "Đơn mua":
+				{
+					return order.count;
+				}
 			default:
-				return 5;
+				return "";
 		}
 	};
+
 	return (
 		<DashboardNavigationWrapper px="0px" pb="1.5rem" color="gray.900">
 			{linkList.map((item) => (
@@ -67,39 +76,30 @@ const linkList = [
 		list: [
 			{
 				href: "/orders",
-				title: "Orders",
+				title: "Đơn mua",
 				iconName: "bag",
 			},
 			{
-				href: "/wish-list",
-				title: "Wishlist",
-				iconName: "heart",
-			},
-			{
 				href: "/support-tickets",
-				title: "Support Tickets",
+				title: "Hỗ trợ",
 				iconName: "customer-service",
 			},
 		],
 	},
 	{
-		title: "ACCOUNT SETTINGS",
+		title: "CÀI ĐẶT TÀI KHOẢN",
 		list: [
 			{
 				href: "/profile",
-				title: "Profile Info",
+				title: "Thông tin cá nhân",
 				iconName: "user",
 			},
 			{
 				href: "/address",
-				title: "Addresses",
+				title: "Địa chỉ",
 				iconName: "pin",
 			},
-			{
-				href: "/payment-methods",
-				title: "Payment Methods",
-				iconName: "credit-card",
-			},
+
 		],
 	},
 ];

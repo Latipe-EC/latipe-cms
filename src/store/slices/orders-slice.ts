@@ -16,8 +16,8 @@ export const
 export const
 	getMyOrder = createAsyncThunk(
 		'orders/getMyOrder',
-		async () => {
-			const response = await api.order.getMyOrder();
+		async (query: Record<string, string>) => {
+			const response = await api.order.getMyOrder(query);
 			return response;
 		}
 	);
@@ -27,6 +27,15 @@ export const
 		'orders/cancelOrder',
 		async (request: CancelOrderRequest) => {
 			const response = await api.order.cancelOrder(request);
+			return response;
+		}
+	);
+
+export const
+	countMyOrder = createAsyncThunk(
+		'orders/countMyOrder',
+		async () => {
+			const response = await api.order.countMyOrder();
 			return response;
 		}
 	);
@@ -49,11 +58,14 @@ export const orderSlice = createSlice({
 			skip: 0,
 			limit: 10,
 		},
+		count: 0,
 		loading: false,
 		error: null,
 	},
-	extraReducers: () => {
-
+	extraReducers: (builder) => {
+		builder.addCase(countMyOrder.fulfilled, (state, action) => {
+			state.count = action.payload.data.data.count;
+		})
 	},
 	reducers: {
 
@@ -61,3 +73,4 @@ export const orderSlice = createSlice({
 });
 
 export const selectOrders = (state) => state.order;
+export default orderSlice.reducer;

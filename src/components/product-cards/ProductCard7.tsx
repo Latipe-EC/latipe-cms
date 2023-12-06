@@ -100,22 +100,17 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({ product,
 					</FlexBox>
 
 				</FlexBox>
-				<FlexBox
-					justifyContent="space-between"
-					alignItems="flex-end"
-				>
-
-					<FlexBox>
-						<FlexBox flexWrap="wrap" alignItems="center">
-							<Typography color="gray.600" mr="0.5rem">
-								₫{product.price.toFixed(2)} x {product.quantity}
-							</Typography>
-							<Typography fontWeight={600} color="primary.main" mr="1rem">
-								₫{(product.quantity * product.price).toLocaleString('vi-VN')}
-							</Typography>
-						</FlexBox>
-
-						<FlexBox alignItems="center">
+				<FlexBox justifyContent="space-between">
+					<FlexBox flexWrap="wrap" alignItems="center" justifyContent="flex-start">
+						<Typography color="gray.600" mr="0.5rem">
+							₫{product.price.toFixed(2)} x {product.quantity}
+						</Typography>
+						<Typography fontWeight={600} color="primary.main" mr="1rem">
+							₫{(product.quantity * product.price).toLocaleString('vi-VN')}
+						</Typography>
+					</FlexBox>
+					<FlexBox justifyContent="flex-end" >
+						<FlexBox alignItems="center" justifyContent="flex-end">
 							<Button
 								variant="outlined"
 								color="primary"

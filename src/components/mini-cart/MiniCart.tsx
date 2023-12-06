@@ -56,10 +56,14 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
 	}
 
 	const getTotalPrice = () => {
-		return 0;
+		return carts.data.reduce((total, item) => {
+			if (cartSelected.includes(item.id))
+				return total + item.price * item.quantity;
+			return total;
+		}, 0);
 	};
-	React.useEffect(() => {
 
+	React.useEffect(() => {
 		return () => {
 			dispatch(getMyCart({ skip: 0, limit: 10 }))
 		};

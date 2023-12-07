@@ -1,13 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
 import Box from "../../../src/components/Box";
-import FlexBox from "../../../src/components/FlexBox";
 import NavbarLayout from "../../../src/components/layout/NavbarLayout";
-import AvailableShops from "../../../src/components/products/AvailableShops";
 import ProductDescription from "../../../src/components/products/ProductDescription";
 import ProductIntro from "../../../src/components/products/ProductIntro";
 import ProductReview from "../../../src/components/products/ProductReview";
-import RelatedProducts from "../../../src/components/products/RelatedProducts";
-import { H5 } from "../../../src/components/Typography";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "store/store";

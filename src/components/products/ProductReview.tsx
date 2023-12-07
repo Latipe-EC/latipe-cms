@@ -14,10 +14,10 @@ export interface ProductReviewProps {
 
 const ProductReview: React.FC<ProductReviewProps> = ({ rating, selectedStar, setSelectedStar }) => {
 
-	// {ratting.reduce((a, b) => a + b, 0)} / 5
 
+	const averageStar = rating ? rating.reduce((total, b, index) => total + b * (index + 1), 0) / rating.reduce((total, b) => total + b, 0)
+		: 0;
 
-	const averageStar = rating ? rating.reduce((a, b) => a + b, 0) / rating.length : 0;
 	const fullStars = Math.floor(averageStar);
 	const hasHalfStar = averageStar - fullStars >= 0.5;
 

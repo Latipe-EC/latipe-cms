@@ -2,12 +2,10 @@ import { useEffect, useState } from "react";
 import Avatar from "../../../src/components/avatar/Avatar";
 import Box from "../../../src/components/Box";
 import Button from "../../../src/components/buttons/Button";
-import Card from "../../../src/components/Card";
 import FlexBox from "../../../src/components/FlexBox";
 import Grid from "../../../src/components/grid/Grid";
 import DashboardPageHeader from "../../../src/components/layout/DashboardPageHeader";
-import TableRow from "../../../src/components/TableRow";
-import Typography, { H3, H5, Small } from "../../../src/components/Typography";
+import Typography, { H5 } from "../../../src/components/Typography";
 import { format } from "date-fns";
 import { UserResponse } from "api/interface/user";
 import { useDispatch } from "react-redux";
@@ -16,7 +14,6 @@ import { getMyProfile, updateProfile, updateUsername } from "../../store/slices/
 import { Flex, FormControl, FormErrorMessage, FormLabel, Input, Radio, RadioGroup, Spinner, Stack, Text, useToast } from "@chakra-ui/react";
 import Icon from "../../components/icon/Icon";
 import Hidden from "../../components/hidden/Hidden";
-import TextField from "../../components/text-field/TextField";
 
 const Profile = () => {
 

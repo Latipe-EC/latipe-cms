@@ -27,7 +27,6 @@ import { StarIcon, WarningIcon } from "@chakra-ui/icons";
 import { createRating, deleteRating, getRatingDetail, updateRating } from "../../store/slices/ratings-slice";
 import { RatingResponse } from "api/interface/rating";
 
-
 const OrderDetails = () => {
 	const stepIconList = ["package-box", "payment_success", "truck-1", "receive_package", "rating"];
 	const size = useWindowSize();
@@ -110,17 +109,18 @@ const OrderDetails = () => {
 	}
 
 	const handleUploadRating = () => {
+		console.log(displayRating);
 		dispatch(createRating({
 			content: ratingComment,
 			rating: ratingStar,
 			storeId: displayRating.store_id,
 			productId: displayRating.product_id,
-			orderItemId: displayRating.order_item_id,
+			orderItemId: displayRating.item_id,
 		})).unwrap().then((res) => {
 			if (res.status === 201) {
 				const newOrder = { ...orderDetail };
 				newOrder.order.order_items.map((item) => {
-					if (item.order_item_id === displayRating.order_item_id) {
+					if (item.item_id === displayRating.item_id) {
 						item.rating_id = res.data.id;
 					}
 				});
@@ -157,7 +157,7 @@ const OrderDetails = () => {
 			if (res.status === 200) {
 				const newOrder = { ...orderDetail };
 				newOrder.order.order_items.map((item) => {
-					if (item.order_item_id === viewRating.order_item_id) {
+					if (item.item_id === viewRating.item_id) {
 						item.rating_id = res.data.id;
 					}
 				});
@@ -177,11 +177,12 @@ const OrderDetails = () => {
 	}
 
 	const handleDeleteRating = () => {
+		console.log(detailRating);
 		dispatch(deleteRating(detailRating.id)).unwrap().then((res) => {
 			if (res.status === 200) {
 				const newOrder = { ...orderDetail };
 				newOrder.order.order_items.map((item) => {
-					if (item.order_item_id === viewRating.order_item_id) {
+					if (item.item_id === viewRating.item_id) {
 						item.rating_id = null;
 					}
 				});
@@ -279,7 +280,7 @@ const OrderDetails = () => {
 			else
 				return false;
 		} else if (index === 4) {
-			if (orderDetail.order.status >= 5 && (isOlderThanSevenDays() || orderDetail.order.order_items.every(item => item.rating_id)))
+			if (orderDetail.order.status >= 5 && orderDetail.order.order_items.some(x => x.rating_id) && (isOlderThanSevenDays() || orderDetail.order.order_items.every(item => item.rating_id)))
 				return true;
 			else
 				return false;
@@ -465,7 +466,8 @@ const OrderDetails = () => {
 						> Mua lại</ButtonChakra>
 					</FlexCharkra>
 					{statusPaymentOrder &&
-						statusPaymentOrder.paymentStatus === EPaymentStatus.PENDING && (
+						statusPaymentOrder.paymentStatus === EPaymentStatus.PENDING &&
+						orderDetail.order.status <= 3 && (
 							<FlexCharkra justifyContent={size.width < breakpoint ? "center" : "flex-end"} mt={2}
 								onClick={() => {
 									setSelectedOrder(orderDetail.order.order_uuid);
@@ -578,7 +580,7 @@ const OrderDetails = () => {
 											</Button>
 										) : (
 											<Button
-												disabled={orderDetail.order.status === 4}
+												disabled={orderDetail.order.status !== 5}
 												variant="text" color="primary"
 												onClick={() => setDisplayRating(item)}
 												_hover={{ variant: "text" }}

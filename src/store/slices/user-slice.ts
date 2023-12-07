@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Api, QueryParamsType } from '../../api/AxiosClient';
 import { CreateUserAddressRequest, UpdateUserRequest, UpdateUsernameRequest, UserAddress } from '../../api/interface/user';
-import { fi } from 'date-fns/locale';
 
 const api = new Api();
 

@@ -108,7 +108,7 @@ export interface OrderItem {
 	price: number
 	rating_id: string
 	name_option: string
-	order_item_id: string
+	item_id: string
 }
 
 export interface StatusOrder {

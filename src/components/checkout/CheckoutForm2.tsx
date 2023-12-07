@@ -67,8 +67,9 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 	}, []);
 
 	useEffect(() => {
-		if (!selectAddress)
+		if (!selectAddress || products.length === 0)
 			return
+		console.log(selectAddress);
 		dispatch(getListDelivery({
 			src_code: products.map(x => x.cityOrProvinceId),
 			dest_code: selectAddress ? selectAddress.cityOrProvinceId : 0,

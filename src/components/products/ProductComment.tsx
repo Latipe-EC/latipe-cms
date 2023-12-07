@@ -48,9 +48,9 @@ const ProductComment: React.FC<ProductCommentProps> = ({ star }) => {
 		}
 	}
 	return (
-		<Box>
+		<Box m={"2"} >
 			{rating.ratingProducts.length > 0 && rating.ratingProducts.map((item) =>
-			(<Box mb="32px" maxWidth="600px">
+			(<Box mb="32px" border="1px solid black">
 				<FlexBox alignItems="center" mb="1rem">
 					<Avatar src={"/assets/images/faces/7.png"} />
 					<Box ml="1rem">
@@ -62,9 +62,7 @@ const ProductComment: React.FC<ProductCommentProps> = ({ star }) => {
 						</FlexBox>
 					</Box>
 				</FlexBox>
-				<Paragraph color="gray.700">{item.content}</Paragraph>
-
-
+				<Paragraph ml={2} fontSize={"xxl"} color="gray.700">{item.content}</Paragraph>
 			</Box>))
 
 			}

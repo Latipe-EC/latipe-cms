@@ -3,7 +3,6 @@ import Section10 from "../components/home-1/Section10";
 import Section11 from "../components/home-1/Section11";
 import Section12 from "../components/home-1/Section12";
 import Section2 from "../components/home-1/Section2";
-import Section4 from "../components/home-1/Section4";
 import Section5 from "../components/home-1/Section5";
 
 const IndexPage = () => {
@@ -13,7 +12,7 @@ const IndexPage = () => {
 			<Section10 />
 			<Section2 />
 			{/* <Section3 /> */}
-			<Section4 />
+			{/* <Section4 /> */}
 			<Section5 />
 			{/* <Section13 /> */}
 			{/* <Section6 /> */}

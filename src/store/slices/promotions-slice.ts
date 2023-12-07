@@ -49,6 +49,15 @@ export const
 		}
 	);
 
+export const
+	checkVoucher = createAsyncThunk(
+		'promotions/checkVoucher',
+		async (request: ApplyVoucherRequest) => {
+			const response = await api.promotion.checkVoucher(request);
+			return response;
+		}
+	);
+
 
 export const promotionSlice = createSlice({
 	name: 'promotion',

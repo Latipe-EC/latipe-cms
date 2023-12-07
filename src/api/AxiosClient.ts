@@ -10,13 +10,13 @@ import axios, {
 } from 'axios';
 import { CategoryResponse, CreateCategoryRequest, CreateProductRequest, ProductFeatureRequest, ProductResponse, ProductThumbnailVm, UpdateCategoryRequest, UpdateProductRequest } from 'api/interface/product';
 import { MediaVm } from 'api/interface/media';
-import { StoreResponse, CreateStoreRequest, UpdateStoreRequest, ProductStoreResponse } from 'api/interface/store';
+import { StoreResponse, CreateStoreRequest, UpdateStoreRequest, ProductStoreResponse, ProductStoreRequest } from 'api/interface/store';
 import { CreateRatingRequest, RatingResponse, UpdateRatingRequest } from 'api/interface/rating';
 import { CartGetDetailResponse, CartItemRequest, CartResponse, DeleteCartItemRequest, UpdateQuantityRequest } from 'api/interface/cart';
 import { ProductListGetVm, ProductNameListVm } from 'api/interface/search';
 import { calculateShippingOrderRequest, createDeliveryRequest, listDeliveryRequest } from 'api/interface/delivery';
 import { CancelOrderRequest, CountMyOrderResponse, CreateOrderRequest, CreateOrderResponse, GetMyOrderResponse, GetOrderByIdResponse } from 'api/interface/order';
-import { ApplyVoucherReponse, ApplyVoucherRequest, createVoucherRequest } from 'api/interface/promotion';
+import { ApplyVoucherReponse, ApplyVoucherRequest, CheckVoucherReponse, createVoucherRequest } from 'api/interface/promotion';
 import { CheckPaymentOrderResponse, PayByPaypalRequest, PayOrderRequest } from 'api/interface/payment';
 
 export type QueryParamsType = Record<string | number, unknown>;
@@ -445,6 +445,16 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				}
 			}),
 
+		getProductStore: (request: ProductStoreRequest) =>
+			this.request<PagedResultResponse<ProductStoreResponse>>({
+				path: `/stores/${request.id}/products`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...request.params
+				}
+			}),
+
 		getMyProductBanStore: (params: QueryParamsType) =>
 			this.request<PagedResultResponse<ProductStoreResponse>>({
 				path: `/stores/my-products/ban`,
@@ -460,6 +470,13 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				path: `/stores/my-products/ban`,
 				method: 'PUT',
 				body: data,
+				type: ContentType.Json,
+			}),
+
+		getStoreById: (id: string) =>
+			this.request<StoreResponse>({
+				path: `/stores/${id}`,
+				method: 'GET',
 				type: ContentType.Json,
 			}),
 	}
@@ -726,6 +743,15 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 					...param
 				}
 			}),
+
+		checkVoucher: (request: ApplyVoucherRequest) =>
+			this.request<CheckVoucherReponse>({
+				path: `/vouchers/checking`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: request
+			}),
+
 	}
 	payment = {
 		checkPaymentOrder: (id: string) =>

@@ -1,3 +1,5 @@
+import { QueryParamsType } from "api/AxiosClient";
+
 /**
  * 
  * @export
@@ -77,6 +79,9 @@ export interface StoreResponse {
 	 * @memberof StoreResponse
 	 */
 	'cover'?: string;
+	'feePerOrder'?: number;
+	'address'?: StoreAddress;
+	'rating'?: number;
 }
 
 
@@ -245,4 +250,10 @@ export interface ProductStoreResponse {
 	 * @memberof ProductStoreResponse
 	 */
 	'reasonBan'?: string;
+	'price'?: number;
+	'rating'?: number;
+}
+export interface ProductStoreRequest {
+	id: string,
+	params: QueryParamsType
 }

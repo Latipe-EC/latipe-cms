@@ -8,7 +8,7 @@ import { Box, Text } from "@chakra-ui/react";
 
 export interface ProductCard9ListProps {
 	data?: ProductListGetVm;
-	onChange?: (data: { selected: number }) => void;
+	onChange?: (data: number) => void;
 }
 
 const ProductCard9List: React.FC<ProductCard9ListProps> = ({ data, onChange }) => {

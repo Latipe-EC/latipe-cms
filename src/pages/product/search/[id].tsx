@@ -46,7 +46,6 @@ const ProductSearchResult = () => {
 		const category = params.get('category') || "";
 		const minPrice = params.get('minPrice') || "";
 		const maxPrice = params.get('maxPrice') || "";
-		console.log(category);
 		dispatch(searchProduct(
 			{
 				keyword,
@@ -92,8 +91,8 @@ const ProductSearchResult = () => {
 		[]
 	);
 
-	const handlePageChange = (data: { selected: number }) => {
-		setCurrentPage(data.selected);
+	const handlePageChange = (data: number) => {
+		setCurrentPage(data);
 	};
 
 	const handleFilterChange = (data) => {

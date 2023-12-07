@@ -1,4 +1,3 @@
-import { ApplyVoucherRequest } from 'api/interface/promotion';
 export interface ApplyVoucherRequest {
 	vouchers: string[]
 }
@@ -17,6 +16,23 @@ export interface createVoucherRequest {
 
 export interface VoucherRequire {
 	min_require: number
+}
+
+export interface CheckVoucherReponse {
+	"code": number,
+	"message": string,
+	data: CheckVoucherData
+}
+
+export interface ApplyVoucherRequest {
+	order_total_amount: number
+	payment_method: number
+	user_id: string
+	vouchers: string[]
+}
+export interface CheckVoucherData {
+	is_success: boolean
+	items: Item[]
 }
 
 

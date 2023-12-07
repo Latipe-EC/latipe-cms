@@ -11,7 +11,7 @@ import Button from "../buttons/Button";
 import { Card1 } from "../Card1";
 import Grid from "../grid/Grid";
 import Typography, { H5, Paragraph, Tiny } from "../Typography";
-import { Button as CharkraButton, Flex, Icon, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Radio, RadioGroup, Spacer, Spinner, Text, Tooltip, useToast } from "@chakra-ui/react";
+import { Button as CharkraButton, Flex, Icon, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Radio, RadioGroup, Spinner, Text, Tooltip } from "@chakra-ui/react";
 import { FaMoneyBillWave, FaPaypal, FaSync, FaWallet } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { AppThunkDispatch, RootState, useAppSelector } from "../../store/store";
@@ -19,7 +19,7 @@ import { getMyAddress, getMyProfile } from "../../store/slices/user-slice";
 import Divider from "../../components/Divider";
 import './Checkout2.css';
 import { getListDelivery } from "../../store/slices/deliveries-slice";
-import { applyVoucher } from "../../store/slices/promotions-slice";
+import { checkVoucher } from "../../store/slices/promotions-slice";
 import { CloseIcon } from "@chakra-ui/icons";
 import { createOrder } from "../../store/slices/orders-slice";
 
@@ -101,17 +101,22 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 		setErrorVoucher("");
 	}
 
-	const handleAddVoucher = (voucher) => {
-		if (vouchers.map(x => x.voucher_code).includes(voucher)) {
+	const handleAddVoucher = (values: typeInitValue) => {
+		if (vouchers.map(x => x.voucher_code).includes(values.voucher)) {
 			setErrorVoucher("Voucher đã được áp dụng");
 			return;
 		}
-		dispatch(applyVoucher({ vouchers: [...vouchers.map(x => x.voucher_code), voucher] })).unwrap().then((res) => {
+		dispatch(checkVoucher({
+			"order_total_amount": 900000,
+			"payment_method": values.card === "PayPal" ? 2 : 1,
+			"user_id": "2323",
+			vouchers: [...vouchers.map(x => x.voucher_code), values.voucher]
+		})).unwrap().then((res) => {
 			if (res.status !== 200) {
 				setErrorVoucher("Voucher không hợp lệ");
 				return;
 			}
-			for (const v of res.data.items) {
+			for (const v of res.data.data.items) {
 				if (v.voucher_require && v.voucher_require.min_require > 0) {
 					if (getTotalPrice < v.voucher_require.min_require) {
 						setErrorVoucher("Voucher không hợp lệ");
@@ -119,7 +124,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 					}
 				}
 			}
-			setVouchers([...res.data.items]);
+			setVouchers([...res.data.data.items]);
 			setErrorVoucher("");
 		});
 	}
@@ -154,8 +159,9 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 		})).unwrap().then((res) => {
 			setIsLoading(false);
 			if (res.status === 200) {
-				if (values.card === "Paypal") {
-					navigate(`/payment/paypal/${res.data.data.order_key}`);
+				console.log(values.card);
+				if (values.card === "PayPal") {
+					navigate(`/payment-paypal/${res.data.data.order_key}`);
 					return;
 				}
 				navigate('/orders/success')
@@ -448,7 +454,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 										onClick={() => {
 											if (values.voucher === "")
 												return
-											handleAddVoucher(values.voucher);
+											handleAddVoucher(values);
 											values.voucher = "";
 										}}
 										disabled={values.voucher === ""}

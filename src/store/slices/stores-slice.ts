@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Api, QueryParamsType } from '../../api/AxiosClient';
-import { CreateStoreRequest, UpdateStoreRequest } from 'api/interface/store';
+import { CreateStoreRequest, ProductStoreRequest, UpdateStoreRequest } from 'api/interface/store';
 
 const api = new Api();
 
@@ -20,12 +20,10 @@ export const update = createAsyncThunk(
 	}
 );
 
-
 export const getMyProductBanStore = createAsyncThunk(
 	'stores/my-products/ban',
 	async (params: QueryParamsType) => {
 		const response = await api.store.getMyProductBanStore(params);
-		console.log(response);
 		return response;
 	}
 );
@@ -34,6 +32,23 @@ export const getMyProductStore = createAsyncThunk(
 	'stores/my-products',
 	async (params: QueryParamsType) => {
 		const response = await api.store.getMyProductStore(params);
+		return response;
+	}
+);
+
+
+export const getProductStore = createAsyncThunk(
+	'stores/getProductStore',
+	async (request: ProductStoreRequest) => {
+		const response = await api.store.getProductStore(request);
+		return response;
+	}
+);
+
+export const getStoreById = createAsyncThunk(
+	'stores/getStoreById',
+	async (id: string) => {
+		const response = await api.store.getStoreById(id);
 		return response;
 	}
 );

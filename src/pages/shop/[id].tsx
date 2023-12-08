@@ -1,13 +1,7 @@
 import { useDispatch } from "react-redux";
-import FlexBox from "../../../src/components/FlexBox";
 import Grid from "../../../src/components/grid/Grid";
-import Hidden from "../../../src/components/hidden/Hidden";
-import Icon from "../../../src/components/icon/Icon";
 import NavbarLayout from "../../../src/components/layout/NavbarLayout";
-import ProductFilterCard from "../../../src/components/products/ProductFilterCard";
 import ShopIntroCard from "../../../src/components/shop/ShopIntroCard";
-import Sidenav from "../../../src/components/sidenav/Sidenav";
-import useWindowSize from "../../hooks/useWindowSize";
 import { AppThunkDispatch } from "store/store";
 import { useEffect, useState } from "react";
 import { getProductStore, getStoreById } from "../../store/slices/stores-slice";
@@ -17,8 +11,6 @@ import StoreProductListCard from "../../components/products/StoreProductCardList
 import { useParams } from "react-router-dom";
 
 const Shop = () => {
-	const size = useWindowSize();
-	const isTablet = size.width < 1025;
 
 	const dispatch = useDispatch<AppThunkDispatch>();
 	const [result, setResult] = useState<PagedResultResponse<ProductStoreResponse>>();

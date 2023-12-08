@@ -49,6 +49,8 @@ export const updateProfile = createAsyncThunk(
 	async (request: UpdateUserRequest) => {
 		if (request.avatarFile) {
 			const file = await api.media.uploadFile({ file: request.avatarFile });
+			if (file.status !== 201)
+				throw new Error("Some thing went wrong");
 			request.avatar = file.data.url;
 		}
 		request.gender = request.gender.toUpperCase();

@@ -49,7 +49,6 @@ const CategoriesAdmin = lazy(() => import('./components/admin/AdminCategories'))
 const AboutPage = lazy(() => import('./pages/about'));
 const Cart = lazy(() => import('./pages/cart'));
 const CheckoutAlternative = lazy(() => import('./pages/checkout-alternative'));
-const Checkout = lazy(() => import('./pages/checkout'));
 const OrderSuccess = lazy(() => import('./pages/order-success'));
 const Home2 = lazy(() => import('./pages/home-2'));
 const Home3 = lazy(() => import('./pages/home-3'));
@@ -201,7 +200,7 @@ function App() {
 										<DashboardVendor />
 									}
 									/>
-									<Route path="account-settings" element={<AccountSettings />} />
+									<Route path="profile" element={<AccountSettings />} />
 									<Route path="orders/:id" element={<OrderDetailsVendor />} />
 									<Route path="orders" element={<OrdersVendor />} />
 

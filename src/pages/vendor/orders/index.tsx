@@ -3,12 +3,12 @@ import VendorDashboardLayout from "../../../components/layout/VendorDashboardLay
 import VendorOrderList from "../../../components/orders/VendorOrderList";
 
 const Orders = () => {
-  return (
-    <div>
-      <DashboardPageHeader title="Orders" iconName="bag_filled" />
-      <VendorOrderList />
-    </div>
-  );
+	return (
+		<div>
+			<DashboardPageHeader title="Đơn hàng của shop" iconName="bag_filled" />
+			<VendorOrderList />
+		</div>
+	);
 };
 
 Orders.layout = VendorDashboardLayout;

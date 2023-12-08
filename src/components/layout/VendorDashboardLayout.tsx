@@ -15,9 +15,9 @@ import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 
 const MainContent = styled.div`
-  margin-top: 5rem; /* Add some initial margin */
-  height: 60vh; /* Set the height to 100vh */
-  margin-bottom: 5rem;
+	margin-top: 5rem; /* Add some initial margin */
+	height: 60vh;
+	margin-bottom: 5rem;
 `;
 
 const VendorDashboardLayout: React.FC = () => {
@@ -37,7 +37,7 @@ const VendorDashboardLayout: React.FC = () => {
 				<Navbar />
 			</div>
 			<MainContent >
-				<Container my="2rem">
+				<Container my="2rem" minH={"1000px"}>
 					<Grid container spacing={6}>
 						<Hidden as={Grid} item lg={3} xs={12} down={1024}>
 							<VendorDashboardNavigation />
@@ -47,10 +47,9 @@ const VendorDashboardLayout: React.FC = () => {
 						</Grid>
 					</Grid>
 				</Container>
+				<Footer />
+				<MobileNavigationBar />
 			</MainContent>
-
-			<MobileNavigationBar />
-			<Footer />
 		</StyledAppLayout>
 	)
 };

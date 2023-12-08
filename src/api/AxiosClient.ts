@@ -10,12 +10,17 @@ import axios, {
 } from 'axios';
 import { CategoryResponse, CreateCategoryRequest, CreateProductRequest, ProductFeatureRequest, ProductResponse, ProductThumbnailVm, UpdateCategoryRequest, UpdateProductRequest } from 'api/interface/product';
 import { MediaVm } from 'api/interface/media';
-import { StoreResponse, CreateStoreRequest, UpdateStoreRequest, ProductStoreResponse, ProductStoreRequest } from 'api/interface/store';
+import { StoreResponse, CreateStoreRequest, UpdateStoreRequest, ProductStoreResponse, ProductStoreRequest, GetMyStoreResponse } from 'api/interface/store';
 import { CreateRatingRequest, RatingResponse, UpdateRatingRequest } from 'api/interface/rating';
 import { CartGetDetailResponse, CartItemRequest, CartResponse, DeleteCartItemRequest, UpdateQuantityRequest } from 'api/interface/cart';
 import { ProductListGetVm, ProductNameListVm } from 'api/interface/search';
 import { calculateShippingOrderRequest, createDeliveryRequest, listDeliveryRequest } from 'api/interface/delivery';
-import { CancelOrderRequest, CountMyOrderResponse, CreateOrderRequest, CreateOrderResponse, GetMyOrderResponse, GetOrderByIdResponse } from 'api/interface/order';
+import {
+	CancelOrderRequest, CountMyOrderResponse, CreateOrderRequest, CreateOrderResponse, GetMyOrderResponse, GetOrderByIdResponse, StoreOrderDetailResponse, GetTotalOrderInMonthResponse,
+	searchStoreOrderResponse,
+	GetTotalOrderInYear, GetTotalCommissionResponse,
+	GetProductBestSellerResponse, StatusBodyRequest, UpdateOrderItemStatusByStoreResponse
+} from 'api/interface/order';
 import { ApplyVoucherReponse, ApplyVoucherRequest, CheckVoucherReponse, createVoucherRequest } from 'api/interface/promotion';
 import { CheckPaymentOrderResponse, PayByPaypalRequest, PayOrderRequest } from 'api/interface/payment';
 
@@ -427,6 +432,14 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			}),
 	}
 	store = {
+
+		getMyStore: () =>
+			this.request<GetMyStoreResponse>({
+				path: `/stores/my`,
+				method: 'GET',
+				type: ContentType.Json,
+			}),
+
 		registerStore: (data: CreateStoreRequest) =>
 			this.request<StoreResponse>({
 				path: `/stores/register-store`,
@@ -465,9 +478,9 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				}
 			}),
 
-		update: (data: UpdateStoreRequest) =>
+		updateMyStore: (data: UpdateStoreRequest) =>
 			this.request<StoreResponse>({
-				path: `/stores/my-products/ban`,
+				path: `/stores/my`,
 				method: 'PUT',
 				body: data,
 				type: ContentType.Json,
@@ -670,7 +683,6 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getMyOrder: (query: Record<string, string>) => {
 			const queryParams = new URLSearchParams(query).toString();
-			console.log(queryParams);
 			return this.request<GetMyOrderResponse>({
 				path: `/orders/user?${queryParams}`,
 				method: 'GET',
@@ -687,7 +699,6 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				body: request
 			}),
 
-
 		getOrderById: (id: string) =>
 			this.request<GetOrderByIdResponse>({
 				path: `/orders/user/${id}`,
@@ -695,13 +706,84 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				type: ContentType.Json,
 			}),
 
-
 		countMyOrder: () =>
 			this.request<CountMyOrderResponse>({
 				path: `/orders/user/count`,
 				method: 'GET',
 				type: ContentType.Json,
 			}),
+
+		searchStoreOrder: (params: Record<string, string>) => {
+			const queryParams = new URLSearchParams(params).toString();
+			return this.request<searchStoreOrderResponse>({
+				path: `/orders/store?${queryParams}`,
+				method: 'GET',
+				type: ContentType.Json,
+
+			})
+		},
+
+		updateOrderItemStatusByStore:
+			(request: StatusBodyRequest) => this.request<UpdateOrderItemStatusByStoreResponse>({
+				path: `/orders/store/${request.id}/items`,
+				method: 'PATCH',
+				type: ContentType.Json,
+				body: request.body
+			}),
+
+		getStoreOrderDetail: (id: string) => this.request<StoreOrderDetailResponse>({
+			path: `/orders/store/${id}`,
+			method: 'GET',
+			type: ContentType.Json,
+		}),
+
+		cancelOrderItem: (request: StatusBodyRequest) => this.request<UpdateOrderItemStatusByStoreResponse>({
+			path: `/orders/store/${request.id}/items`,
+			method: 'DELETE',
+			type: ContentType.Json,
+			body: request.body
+		}),
+
+		getTotalOrderInMonth:
+			(params: QueryParamsType) => this.request<GetTotalOrderInMonthResponse>({
+				path: `/orders/statistic/store/total-order/month`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+
+		getTotalOrderInYear:
+			(params: QueryParamsType) => this.request<GetTotalOrderInYear>({
+				path: `/orders/statistic/store/total-order/year`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+
+		getTotalCommission:
+			(params: QueryParamsType) => this.request<GetTotalCommissionResponse>({
+				path: `/orders/statistic/store/total-commission`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+
+		getProductBestSeller:
+			(params: QueryParamsType) => this.request<GetProductBestSellerResponse>({
+				path: `/orders/statistic/store/list-of-product`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+
 	}
 	promotion = {
 		applyVoucher: (request: ApplyVoucherRequest) =>

@@ -7,19 +7,19 @@ import Hidden from "../hidden/Hidden";
 import Icon from "../icon/Icon";
 import TableRow from "../TableRow";
 import Typography, { H5, Small } from "../Typography";
-import { DaumGMO } from "api/interface/order";
+import { ItemSearchStoreOrder } from "api/interface/order";
 import { useNavigate } from "react-router-dom";
 
-export interface OrderRowProps {
-	order: DaumGMO;
+export interface OrderRowVendorProps {
+	order: ItemSearchStoreOrder;
 }
 
-const OrderRow: React.FC<OrderRowProps> = ({ order }) => {
+const OrderRowVendor: React.FC<OrderRowVendorProps> = ({ order }) => {
 
 	const navigate = useNavigate();
 
 	const handleNavigateOrderDetail = () => {
-		navigate(`/orders/${order.order_uuid}`);
+		navigate(`/vendor/orders/${order.order_uuid}`);
 	}
 
 	const handleRenderStaus = (): string => {
@@ -66,7 +66,6 @@ const OrderRow: React.FC<OrderRowProps> = ({ order }) => {
 		}
 	};
 
-
 	return (
 		<TableRow as="a" onClick={handleNavigateOrderDetail} my="1rem" padding="6px 18px"
 			_hover={{
@@ -84,9 +83,9 @@ const OrderRow: React.FC<OrderRowProps> = ({ order }) => {
 			<Typography className="flex-grow pre" m="6px" textAlign="left">
 				{format(new Date(order.created_at), "MMM dd, yyyy")}
 			</Typography>
-			<Typography m="6px" textAlign="left">
+			{/* <Typography m="6px" textAlign="left">
 				{order.amount.toLocaleString('vi-VN')}₫
-			</Typography>
+			</Typography> */}
 
 			<Hidden flex="0 0 0 !important" down={769}>
 				<Typography textAlign="center" color="text.muted">
@@ -101,4 +100,4 @@ const OrderRow: React.FC<OrderRowProps> = ({ order }) => {
 	);
 };
 
-export default OrderRow;
+export default OrderRowVendor;

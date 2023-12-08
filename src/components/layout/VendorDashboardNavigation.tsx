@@ -60,8 +60,8 @@ const VendorDashboardNavigation = () => {
 					{isOrdersOpen && (
 						<>
 							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12} onClick={() => { navigate("/vendor/orders") }}>Tất cả</Text>
-							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12} onClick={() => { navigate("/vendor/orders/cancel") }}>
-								Đơn hủy</Text>
+							{/* <Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12} onClick={() => { navigate("/vendor/orders/cancel") }}>
+								Đơn hủy</Text> */}
 						</>
 					)}
 				</Box>

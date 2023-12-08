@@ -123,6 +123,9 @@ export interface UpdateStoreRequest {
 	 */
 	'address'?: StoreAddress;
 
+	coverFile?: File;
+	logoFile?: File;
+
 }
 
 
@@ -161,7 +164,7 @@ export interface StoreAddress {
 	 * @type {number}
 	 * @memberof StoreAddress
 	 */
-	'cityOrProvinceId'?: string;
+	'cityOrProvinceId'?: number;
 	/**
 	 * 
 	 * @type {string}
@@ -173,7 +176,7 @@ export interface StoreAddress {
 	 * @type {number}
 	 * @memberof StoreAddress
 	 */
-	'districtId'?: string;
+	'districtId'?: number;
 	/**
 	 * 
 	 * @type {string}
@@ -185,7 +188,7 @@ export interface StoreAddress {
 	 * @type {number}
 	 * @memberof StoreAddress
 	 */
-	'wardId'?: string;
+	'wardId'?: number;
 	/**
 	 * 
 	 * @type {string}
@@ -257,3 +260,18 @@ export interface ProductStoreRequest {
 	id: string,
 	params: QueryParamsType
 }
+
+export interface GetMyStoreResponse {
+	isDeleted: boolean
+	id: string
+	name: string
+	description: string
+	logo: string
+	ownerId: string
+	cover: string
+	address: StoreAddress
+	feePerOrder: number
+	rating: number
+	eWallet: number
+}
+

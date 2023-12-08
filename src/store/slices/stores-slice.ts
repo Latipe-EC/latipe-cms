@@ -12,10 +12,23 @@ export const register = createAsyncThunk(
 	}
 );
 
-export const update = createAsyncThunk(
-	'stores/update',
-	async (input: UpdateStoreRequest) => {
-		const response = await api.store.update(input);
+export const updateMyStore = createAsyncThunk(
+	'stores/updateMyStore',
+	async (request: UpdateStoreRequest) => {
+		if (request.coverFile) {
+			const file = await api.media.uploadFile({ file: request.coverFile });
+			if (file.status !== 201)
+				throw new Error("Some thing went wrong");
+			request.cover = file.data.url;
+		}
+		if (request.logoFile) {
+			const file = await api.media.uploadFile({ file: request.logoFile });
+			if (file.status !== 201)
+				throw new Error("Some thing went wrong");
+			request.logo = file.data.url;
+		}
+		const response = await api.store.updateMyStore(request);
+
 		return response;
 	}
 );
@@ -36,11 +49,18 @@ export const getMyProductStore = createAsyncThunk(
 	}
 );
 
-
 export const getProductStore = createAsyncThunk(
 	'stores/getProductStore',
 	async (request: ProductStoreRequest) => {
 		const response = await api.store.getProductStore(request);
+		return response;
+	}
+);
+
+export const getMyStore = createAsyncThunk(
+	'stores/getMyStore',
+	async () => {
+		const response = await api.store.getMyStore();
 		return response;
 	}
 );
@@ -91,7 +111,7 @@ export const storesSlice = createSlice({
 			.addCase(register.fulfilled, (state, action) => {
 				state.store = action.payload.data;
 			})
-			.addCase(update.fulfilled, (state, action) => {
+			.addCase(updateMyStore.fulfilled, (state, action) => {
 				state.store = action.payload.data;
 			})
 	},

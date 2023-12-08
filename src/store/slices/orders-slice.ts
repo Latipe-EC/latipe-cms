@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { Api } from '../../api/AxiosClient';
-import { CancelOrderRequest, CreateOrderRequest } from 'api/interface/order';
+import { Api, QueryParamsType } from '../../api/AxiosClient';
+import { CancelOrderRequest, CreateOrderRequest, StatusBodyRequest } from 'api/interface/order';
 
 const api = new Api();
 
@@ -45,6 +45,78 @@ export const
 		'orders/getOrderById',
 		async (id: string) => {
 			const response = await api.order.getOrderById(id);
+			return response;
+		}
+	);
+
+export const
+	searchStoreOrder = createAsyncThunk(
+		'orders/searchStoreOrder',
+		async (params: Record<string, string>) => {
+			const response = await api.order.searchStoreOrder(params);
+			return response;
+		}
+	);
+
+export const
+	updateOrderItemStatusByStore = createAsyncThunk(
+		'orders/updateOrderItemStatusByStore',
+		async (params: StatusBodyRequest) => {
+			const response = await api.order.updateOrderItemStatusByStore(params);
+			return response;
+		}
+	);
+
+export const
+	getStoreOrderDetail = createAsyncThunk(
+		'orders/getStoreOrderDetail',
+		async (id: string) => {
+			const response = await api.order.getStoreOrderDetail(id);
+			return response;
+		}
+	);
+
+export const
+	cancelOrderItem = createAsyncThunk(
+		'orders/cancelOrderItem',
+		async (request: StatusBodyRequest) => {
+			const response = await api.order.cancelOrderItem(request);
+			return response;
+		}
+	);
+
+export const
+	getTotalOrderInMonth = createAsyncThunk(
+		'orders/getTotalOrderInMonth',
+		async (params: QueryParamsType) => {
+			const response = await api.order.getTotalOrderInMonth(params);
+			return response;
+		}
+	);
+
+export const
+	getTotalOrderInYear = createAsyncThunk(
+		'orders/getTotalOrderInYear',
+		async (params: QueryParamsType) => {
+			const response = await api.order.getTotalOrderInYear(params);
+			return response;
+		}
+	);
+
+export const
+	getTotalCommission = createAsyncThunk(
+		'orders/getTotalCommission',
+		async (params: QueryParamsType) => {
+			const response = await api.order.getTotalCommission(params);
+			return response;
+		}
+	);
+
+export const
+	getProductBestSeller = createAsyncThunk(
+		'orders/getProductBestSeller',
+		async (params: QueryParamsType) => {
+			const response = await api.order.getProductBestSeller(params);
 			return response;
 		}
 	);

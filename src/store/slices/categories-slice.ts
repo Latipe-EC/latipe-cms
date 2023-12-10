@@ -77,6 +77,15 @@ export const categoriesSlice = createSlice({
 			})
 			.addCase(fetchCategories.fulfilled, (state, action) => {
 				state.isLoading = false;
+				if (action.payload.status !== 200) {
+					state.data = [];
+					state.pagination = {
+						total: 0,
+						skip: 0,
+						limit: 10,
+					}
+					return;
+				}
 				state.data = action.payload.data.data;
 				state.pagination.total = action.payload.data.pagination.total;
 				state.pagination.skip = action.payload.data.pagination.skip;

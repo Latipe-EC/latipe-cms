@@ -1,3 +1,4 @@
+import { getAdminProduct } from './../store/slices/products-slice';
 import { PagedResultResponse } from 'api/interface/PagedResultResponse';
 import { LoginRequest, LoginResponse, RefreshTokenInput, RefreshTokenResponse } from '../api/interface/auth';
 import { CreateUserAddressRequest, UpdateUserRequest, UpdateUsernameRequest, UserAddress, UserResponse } from '../api/interface/user';
@@ -8,9 +9,9 @@ import axios, {
 	HeadersDefaults,
 	ResponseType,
 } from 'axios';
-import { CategoryResponse, CreateCategoryRequest, CreateProductRequest, ProductFeatureRequest, ProductResponse, ProductThumbnailVm, UpdateCategoryRequest, UpdateProductRequest } from 'api/interface/product';
+import { CategoryResponse, CreateCategoryRequest, CreateProductRequest, ProductAdminResponse, ProductFeatureRequest, ProductResponse, ProductThumbnailVm, UpdateBanProductRequest, UpdateCategoryRequest, UpdateProductRequest } from 'api/interface/product';
 import { MediaVm } from 'api/interface/media';
-import { StoreResponse, CreateStoreRequest, UpdateStoreRequest, ProductStoreResponse, ProductStoreRequest, GetMyStoreResponse } from 'api/interface/store';
+import { StoreResponse, CreateStoreRequest, UpdateStoreRequest, ProductStoreResponse, ProductStoreRequest, GetMyStoreResponse, StoreAdminResponse } from 'api/interface/store';
 import { CreateRatingRequest, RatingResponse, UpdateRatingRequest } from 'api/interface/rating';
 import { CartGetDetailResponse, CartItemRequest, CartResponse, DeleteCartItemRequest, UpdateQuantityRequest } from 'api/interface/cart';
 import { ProductListGetVm, ProductNameListVm } from 'api/interface/search';
@@ -22,7 +23,7 @@ import {
 	GetProductBestSellerResponse, StatusBodyRequest, UpdateOrderItemStatusByStoreResponse
 } from 'api/interface/order';
 import { ApplyVoucherReponse, ApplyVoucherRequest, CheckVoucherReponse, createVoucherRequest } from 'api/interface/promotion';
-import { CheckPaymentOrderResponse, PayByPaypalRequest, PayOrderRequest } from 'api/interface/payment';
+import { CheckPaymentOrderResponse, PayByPaypalRequest, PayOrderRequest, validWithdrawPayPalRequest, withdrawPayPalRequest } from 'api/interface/payment';
 
 export type QueryParamsType = Record<string | number, unknown>;
 
@@ -430,7 +431,26 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				type: ContentType.Json,
 				body: request
 			}),
+
+		getAdminProduct: (params: QueryParamsType) =>
+			this.request<PagedResultResponse<ProductAdminResponse>>({
+				path: `/products/admin`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+
+		updateBanProduct: (request: UpdateBanProductRequest) =>
+			this.request<void>({
+				path: `/products/${request.id}/ban`,
+				method: 'PATCH',
+				type: ContentType.Json,
+				body: request
+			}),
 	}
+
 	store = {
 
 		getMyStore: () =>
@@ -492,6 +512,17 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				method: 'GET',
 				type: ContentType.Json,
 			}),
+
+		getAdminStore: (params: QueryParamsType) =>
+			this.request<PagedResultResponse<StoreAdminResponse>>({
+				path: `/stores/admin`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+
 	}
 	rating = {
 		getDetailRating: (id: string) =>
@@ -611,7 +642,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		deleteCartItem: (request: DeleteCartItemRequest) =>
 			this.request<VoidFunction>({
-				path: `/carts/multi-delete`,
+				path: `/carts/multi-delete `,
 				method: 'DELETE',
 				type: ContentType.Json,
 				body: request
@@ -682,8 +713,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			}),
 
 		getMyOrder: (query: Record<string, string>) => {
-			const queryParams = new URLSearchParams(query).toString();
-			return this.request<GetMyOrderResponse>({
+			constqueryParams = newURLSearchParams(query).toString();
+			returnthis.request<GetMyOrderResponse>({
 				path: `/orders/user?${queryParams}`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -714,8 +745,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			}),
 
 		searchStoreOrder: (params: Record<string, string>) => {
-			const queryParams = new URLSearchParams(params).toString();
-			return this.request<searchStoreOrderResponse>({
+			constqueryParams = newURLSearchParams(params).toString();
+			returnthis.request<searchStoreOrderResponse>({
 				path: `/orders/store?${queryParams}`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -864,6 +895,22 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				path: `/payment/check-order-paypal/${id}`,
 				method: 'GET',
 				type: ContentType.Json,
+			}),
+
+		withdrawPayPal: (request: withdrawPayPalRequest) =>
+			this.request<void>({
+				path: `/payment/withdraw-paypal`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: request
+			}),
+
+		validWithdrawPayPal: (request: validWithdrawPayPalRequest) =>
+			this.request<void>({
+				path: `/payment/valid-withdraw-paypal`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: request
 			}),
 	}
 }

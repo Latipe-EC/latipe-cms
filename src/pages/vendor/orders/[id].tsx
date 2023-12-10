@@ -192,7 +192,7 @@ const OrderDetails = () => {
 							</FlexBox>
 
 							{
-								item.name_option && (<FlexBox flex="1 1 260px" m="6px" alignItems="center">
+								item.name_option !== "" && (<FlexBox flex="1 1 260px" m="6px" alignItems="center">
 									<Typography fontSize="14px" color="text.muted">
 										Thuộc tính: {item.name_option}
 									</Typography>

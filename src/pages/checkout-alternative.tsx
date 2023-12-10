@@ -27,7 +27,11 @@ const CheckoutAlternative = () => {
 
 		if (listCartIdsString) {
 			dispatch(getMultiCart({ cartIds: listCartIdsString })).unwrap().then((res) => {
-				setProducts(res.data)
+				if (res.status !== 200)
+					navigate('/404');
+				setProducts(res.data.map((item) => {
+					return { ...item, cart_id: item.id }
+				}));
 			});
 		} else if (productId !== null && option !== null) {
 			// const productId option
@@ -37,14 +41,15 @@ const CheckoutAlternative = () => {
 					optionId: option,
 				}
 			])).unwrap().then((res) => {
-				if (res.data.length === 0) {
+				if (res.status !== 200)
 					navigate('/404');
-				}
 				setProducts([{ ...res.data[0], quantity: quantity, productOptionId: option, image: res.data[0].thumbnailUrl, productId: res.data[0].id }])
 			});
 		} else {
 			navigate('/404');
 		}
+		return () => {
+		};
 	}, []);
 
 	return (

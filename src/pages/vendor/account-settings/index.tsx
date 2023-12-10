@@ -22,8 +22,7 @@ import provincesData from '../../../data/province.json';
 import districtsData from '../../../data/district.json';
 import wardsData from '../../../data/ward.json';
 import './index.css'
-import Typography, { H3, Small } from "../../../components/Typography";
-import FlexBox from "../../../components/FlexBox";
+import { Small } from "../../../components/Typography";
 import { Chip } from "../../../components/Chip";
 
 const AccountSettings = () => {

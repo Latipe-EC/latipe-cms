@@ -305,7 +305,6 @@ const AddProduct = () => {
 			imagesFile: images,
 		}
 
-		console.log(productVariants);
 		const loadingToastId = toast({
 			title: 'Adding new product...',
 			description: <Spinner />,
@@ -355,7 +354,7 @@ const AddProduct = () => {
 					<ModalHeader style={{
 						fontWeight: 'bold', fontSize: '20px', color: 'gray.800', textAlign: "center", marginTop: '20px'
 					}}>
-						Select Category
+						Chọn danh mục sản phẩm
 					</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody  >
@@ -434,12 +433,12 @@ const AddProduct = () => {
 					<AccordionItem>
 						<AccordionButton>
 							<Box flex="1" textAlign="left" fontWeight="bold" fontSize="xl">
-								Basic information
+								Thông tin cơ bản
 							</Box>
 						</AccordionButton>
 						<AccordionPanel ml={2}>
 							<FormControl isInvalid={isInvalid}>
-								<FormLabel fontWeight="bold" fontSize="sm" mt={2}>Name</FormLabel>
+								<FormLabel fontWeight="bold" fontSize="sm" mt={2}>Tên</FormLabel>
 								<InputGroup>
 									<Input
 										name="name"
@@ -459,27 +458,27 @@ const AddProduct = () => {
 							</FormControl>
 
 							<FormControl isInvalid={isInvalid} >
-								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Description</FormLabel>
+								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Mô tả</FormLabel>
 								<CKEditor
 									editor={ClassicEditor}
 									data="<p>Hello from CKEditor&nbsp;5!</p>"
 									onReady={editor => {
 										console.log('Editor is ready to use!', editor);
 									}}
-									onChange={(event, editor) => {
+									onChange={(_, editor) => {
 										setDescription(editor.getData());
 									}}
-									onBlur={(event, editor) => {
+									onBlur={(_, editor) => {
 										console.log('Blur.', editor);
 									}}
-									onFocus={(event, editor) => {
+									onFocus={(_, editor) => {
 										console.log('Focus.', editor);
 									}}
 								/>
 							</FormControl>
 
 							<FormControl isInvalid={isInvalid}>
-								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Category</FormLabel>
+								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Danh mục hàng hóa</FormLabel>
 								<InputGroup>
 									<Input
 										placeholder="category"
@@ -499,13 +498,13 @@ const AddProduct = () => {
 							</FormControl>
 
 							<FormControl isInvalid={isInvalid}>
-								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Images</FormLabel>
+								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Hình ảnh</FormLabel>
 
 								<DropZone onChange={handleDrop} />
 
 								{images.length > 0 && (
 									<div>
-										<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Image Preview</FormLabel>
+										<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Xem trước hình ảnh</FormLabel>
 										<div className="image-preview-container">
 											{images.map((previewImage, index) => (
 												<div key={index} className="image-preview">
@@ -522,7 +521,7 @@ const AddProduct = () => {
 							</FormControl>
 
 							<FormControl isInvalid={isInvalid}>
-								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Public</FormLabel>
+								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>công khai</FormLabel>
 								<Switch onChange={() => { setIsPublished(!isPublished) }} id='email-alerts' />
 							</FormControl>
 						</AccordionPanel>
@@ -530,7 +529,7 @@ const AddProduct = () => {
 					<AccordionItem >
 						<AccordionButton >
 							<Box flex="1" textAlign="left" fontWeight="bold" fontSize="xl">
-								Details information
+								Mô tả chi tốt
 							</Box>
 						</AccordionButton>
 						<AccordionPanel ml={2} >
@@ -542,7 +541,7 @@ const AddProduct = () => {
 					<AccordionItem>
 						<AccordionButton>
 							<Box flex="1" textAlign="left" fontWeight="bold" fontSize="xl">
-								Product Classsification
+								Phân loại hàng sản phẩm
 							</Box>
 						</AccordionButton>
 						<AccordionPanel ml={2} >
@@ -556,29 +555,31 @@ const AddProduct = () => {
 									_disabled={{ bg: 'gray.500', cursor: 'not-allowed' }}
 
 								>
-									Add Classification
+									Thêm phân loại hàng
 								</Button>
 
 								{productVariants.length === 0 && (
 									<>
 										<FormControl mt={4} w="40%">
 											<FormLabel fontSize="sm" mb={2}>
-												Promotional Price
+												Giá khuyến mãi
 											</FormLabel>
 											<Input
 												placeholder="Promotional Price"
 												type="number"
+												min="1"
 												value={promotionalPrice}
 												onChange={(event) => setPromotionalPrice(parseInt(event.target.value))}
 											/>
 										</FormControl>
 										<FormControl mt={4} w="40%">
 											<FormLabel fontSize="sm" mb={2}>
-												Price
+												Giá
 											</FormLabel>
 											<Input
 												placeholder="Price"
 												type="number"
+												min="1"
 												value={price}
 												onChange={(event) => setPrice(parseInt(event.target.value))}
 											/>
@@ -586,11 +587,12 @@ const AddProduct = () => {
 
 										<FormControl mt={4} w="40%">
 											<FormLabel fontSize="sm" mb={2}>
-												Inventory
+												Kho
 											</FormLabel>
 											<Input
 												placeholder="Storage"
 												type="number"
+												min="0"
 												value={inventory}
 												onChange={(event) => setInventory(parseInt(event.target.value))}
 											/>
@@ -601,7 +603,7 @@ const AddProduct = () => {
 									<Box key={index} mt={4} bg="gray.100" p={4}>
 										<Box display="flex" justifyContent="space-between" alignItems="center">
 											<FormLabel fontWeight="bold" fontSize="xl" mb={0}>
-												Classification group {index + 1}
+												Nhóm phân loại hàng {index + 1}
 											</FormLabel>
 											<Button size="sm" variant="ghost" colorScheme="red" onClick={() => handleRemoveProductVariant(index)}>
 												<CloseIcon />
@@ -610,7 +612,7 @@ const AddProduct = () => {
 										<Box mt={4} display="flex" justifyContent="space-between" flexWrap="wrap">
 											<FormControl w="50%" mb={4}>
 												<FormLabel fontSize="md" mb={0}>
-													Name
+													Tên
 												</FormLabel>
 												<Input
 													borderColor='gray.600'
@@ -622,7 +624,7 @@ const AddProduct = () => {
 
 											<FormControl w="100%" >
 												<FormLabel fontSize="md" mb={0}>
-													Values
+													Giá trị
 												</FormLabel>
 												<Box mt={2} >
 													<Flex w="100%" alignItems="center" mb={2} flexWrap="wrap">
@@ -668,7 +670,6 @@ const AddProduct = () => {
 									<Table mt={8} variant="striped" colorScheme='WhiteAlpha' style={{
 										borderCollapse: "separate",
 										border: "4px solid #ddd",
-
 									}} >
 										<Thead h="100px" >
 											<Tr>
@@ -720,7 +721,7 @@ const AddProduct = () => {
 													py="2"
 													textAlign="center"
 												>
-													Price
+													Giá
 												</Th>
 												<Th
 													bg="green.200"
@@ -733,7 +734,7 @@ const AddProduct = () => {
 													py="2"
 													textAlign="center"
 												>
-													Promotional Price
+													Giá khuyến mãi
 												</Th>
 												<Th
 													bg="green.200"
@@ -746,7 +747,7 @@ const AddProduct = () => {
 													py="2"
 													textAlign="center"
 												>
-													Warehouse
+													Kho
 												</Th>
 												<Th
 													bg="green.200"
@@ -866,13 +867,14 @@ const AddProduct = () => {
 																								event.target.value
 																							)
 																						}
+																						min="1"
 																						maxLength={maxLength}
 																						overflow="hidden"
 																						mb={2}
 																					/>
 																					<InputLeftElement width="50px" textAlign="center" mr={2}>
 																						<Text fontSize="sm" color={isInvalid ? 'red.500' : 'gray.500'}>
-																							$
+																							₫
 																						</Text>
 																					</InputLeftElement>
 																				</InputGroup>
@@ -898,13 +900,14 @@ const AddProduct = () => {
 																								event.target.value
 																							)
 																						}
+																						min="1"
 																						maxLength={maxLength}
 																						overflow="hidden"
 																						mb={2}
 																					/>
 																					<InputLeftElement width="50px" textAlign="center" mr={2}>
 																						<Text fontSize="sm" color={isInvalid ? 'red.500' : 'gray.500'}>
-																							$
+																							₫
 																						</Text>
 																					</InputLeftElement>
 																				</InputGroup>
@@ -950,7 +953,7 @@ const AddProduct = () => {
 																							'sku',
 																							event.target.value
 																						)
-																					}
+																					} min="1"
 																					mb={2}
 																					maxLength={maxLength}
 																					overflow="hidden"
@@ -979,14 +982,14 @@ const AddProduct = () => {
 																						'price',
 																						event.target.value
 																					)
-																				}
+																				} min="1"
 																				maxLength={maxLength}
 																				pr="4rem"
 																				overflow="hidden"
 																			/>
 																			<InputLeftElement width="50px" textAlign="center" mr={2}>
 																				<Text fontSize="sm" color={isInvalid ? 'red.500' : 'gray.500'}>
-																					$
+																					₫
 																				</Text>
 																			</InputLeftElement>
 																		</InputGroup>
@@ -999,6 +1002,7 @@ const AddProduct = () => {
 																			<Input
 																				placeholder="price"
 																				type="number"
+																				min="1"
 																				value={productClassifications[index].promotionalPrice}
 																				onChange={(event) =>
 																					handleProductClassificationChange(
@@ -1013,7 +1017,7 @@ const AddProduct = () => {
 																			/>
 																			<InputLeftElement width="50px" textAlign="center" mr={2}>
 																				<Text fontSize="sm" color={isInvalid ? 'red.500' : 'gray.500'}>
-																					$
+																					₫
 																				</Text>
 																			</InputLeftElement>
 																		</InputGroup>
@@ -1023,7 +1027,7 @@ const AddProduct = () => {
 																	<Tr key={`store${index}`}>
 																		<Input
 																			placeholder="inventory"
-																			type="number"
+																			type="number" min="0"
 																			value={productClassifications[index].quantity}
 																			onChange={(event) =>
 																				handleProductClassificationChange(

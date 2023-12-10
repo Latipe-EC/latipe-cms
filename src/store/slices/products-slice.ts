@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { Api } from '../../api/AxiosClient';
-import { CreateProductRequest, ProductFeatureRequest, UpdateProductRequest } from 'api/interface/product';
+import { Api, QueryParamsType } from '../../api/AxiosClient';
+import { CreateProductRequest, ProductFeatureRequest, UpdateBanProductRequest, UpdateProductRequest } from 'api/interface/product';
 
 const api = new Api();
 
@@ -92,22 +92,77 @@ export const getFeatureProduct = createAsyncThunk(
 	}
 );
 
+export const getAdminProduct = createAsyncThunk(
+	'products/getAdminProduct',
+	async (request: QueryParamsType) => {
+		const response = await api.product.getAdminProduct(request);
+		return response;
+	}
+);
+
+export const updateBanProduct = createAsyncThunk(
+	'products/updateBanProduct',
+	async (request: UpdateBanProductRequest) => {
+		const response = await api.product.updateBanProduct(request);
+		return response;
+	}
+);
+
 export const productsSlice = createSlice({
 	name: 'products',
 	initialState: {
 		data: [],
 		loading: false,
 		error: null,
-		product: null
+		product: null,
+		pagination: {
+			total: 0,
+			skip: 0,
+			limit: 10,
+		},
 	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(createProduct.rejected, (_, action) => {
 				console.log(action.error);
 			})
-		builder
 			.addCase(getProductById.fulfilled, (state, action) => {
 				state.product = action.payload.data;
+			})
+			.addCase(getAdminProduct.fulfilled, (state, action) => {
+				if (action.payload.status !== 200) {
+					state.data = [];
+					state.pagination = {
+						total: 0,
+						skip: 0,
+						limit: 10,
+					}
+					return;
+				}
+				state.data = action.payload.data.data;
+				state.pagination = {
+					total: action.payload.data.pagination.total,
+					skip: action.payload.data.pagination.skip,
+					limit: action.payload.data.pagination.limit,
+				}
+			})
+			.addCase(getAdminProduct.rejected, (state) => {
+				state.data = [];
+				state.pagination = {
+					total: 0,
+					skip: 0,
+					limit: 10,
+				}
+			})
+			.addCase(updateBanProduct.fulfilled, (state, action) => {
+				const index = state.data.findIndex(x => x.id === JSON.parse(action.payload.config.data).id);
+				const isBanned = JSON.parse(action.payload.config.data).isBanned;
+				state.data[index].isBanned = isBanned;
+				console.log(action.payload.config.data);
+				if (isBanned)
+					state.data[index].reasonBan = JSON.parse(action.payload.config.data).reason;
+				else
+					state.data[index].reasonBan = null;
 			})
 	},
 	reducers: {

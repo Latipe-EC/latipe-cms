@@ -1,22 +1,22 @@
-import { AppThunkDispatch, RootState, useAppSelector } from '../../store/store';
-import React, { useEffect, useState } from 'react';
+import { AppThunkDispatch, RootState, useAppSelector } from '../../../store/store';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import { useDispatch } from 'react-redux';
 import { debounce } from 'lodash';
 import { Box, Button, ButtonGroup, Flex, Image, Input, InputGroup, InputLeftElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Table, Tbody, Td, Th, Thead, Tr, useToast } from '@chakra-ui/react';
 import { Attribute, CreateCategoryRequest, UpdateCategoryRequest } from 'api/interface/product';
 import { MdSearch } from 'react-icons/md';
-import Pagination from "../pagination/Pagination";
+import Pagination from "../../../components/pagination/Pagination";
 
 import {
 	fetchCategories,
 	updateCategory,
 	addCategory,
 	deleteCategory
-} from '../../store/slices/categories-slice';
+} from '../../../store/slices/categories-slice';
 import { AddIcon, ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
-import FlexBox from '../FlexBox';
-import defaultImage from '../../assets/default.jpg';
+import FlexBox from '../../../components/FlexBox';
+import defaultImage from '../../../assets/default.jpg';
 import CategoryForm from './CategoryForm';
 
 const CategoriesAdmin = () => {
@@ -35,7 +35,7 @@ const CategoriesAdmin = () => {
 	const [showAddAttribute, setShowAddAttribute] = useState(false);
 	const dispatch = useDispatch<AppThunkDispatch>();
 	const categories = useAppSelector((state: RootState) => state.categories);
-
+	const initialized = useRef(false)
 	const toast = useToast();
 
 	const columns = React.useMemo(
@@ -101,12 +101,11 @@ const CategoriesAdmin = () => {
 	);
 
 	useEffect(() => {
-		dispatch(fetchCategories({ skip: currentPage * size, limit: size, name: searchText }));
+		if (!initialized.current) {
+			initialized.current = true
+			dispatch(fetchCategories({ skip: currentPage * size, limit: size, name: searchText }));
+		}
 	}, []);
-
-	useEffect(() => {
-		dispatch(fetchCategories({ skip: currentPage * size, limit: size, name: searchText }));
-	}, [currentPage]);
 
 	const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow } = useTable(
 		{

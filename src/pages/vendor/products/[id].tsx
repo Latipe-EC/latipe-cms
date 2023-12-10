@@ -425,7 +425,7 @@ const ProductDetailVendor = () => {
 					<ModalHeader style={{
 						fontWeight: 'bold', fontSize: '20px', color: 'gray.800', textAlign: "center", marginTop: '20px'
 					}}>
-						Select Category
+						Chọn phân loại hàng
 					</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody  >
@@ -478,13 +478,13 @@ const ProductDetailVendor = () => {
 						<Button variant={'ghost'} color="red" mr={3}
 							onClick={() => { setModalCateOpen(false); setSelectedCategory([]) }}
 						>
-							Close
+							Đóng
 						</Button>
 						<Button variant={!disableButtonSaveCategory ? 'ghost' : 'unstyled'}
 							color={!disableButtonSaveCategory ? 'green' : 'gray.200'}
 							isDisabled={disableButtonSaveCategory}
 							onClick={handleSaveCategoriesSelect}
-						>Save</Button>
+						>Lưu</Button>
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
@@ -504,12 +504,12 @@ const ProductDetailVendor = () => {
 					<AccordionItem>
 						<AccordionButton>
 							<Box flex="1" textAlign="left" fontWeight="bold" fontSize="xl">
-								Basic information
+								Thông tin cơ bản
 							</Box>
 						</AccordionButton>
 						<AccordionPanel ml={2}>
 							<FormControl isInvalid={isInvalid}>
-								<FormLabel fontWeight="bold" fontSize="sm" mt={2}>Name</FormLabel>
+								<FormLabel fontWeight="bold" fontSize="sm" mt={2}>Tên</FormLabel>
 								<InputGroup>
 									<Input
 										name="name"
@@ -529,7 +529,7 @@ const ProductDetailVendor = () => {
 							</FormControl>
 
 							<FormControl isInvalid={isInvalid} >
-								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Description</FormLabel>
+								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Mô tả</FormLabel>
 								<CKEditor
 									editor={ClassicEditor}
 									data={description}
@@ -546,7 +546,7 @@ const ProductDetailVendor = () => {
 							</FormControl>
 
 							<FormControl isInvalid={isInvalid}>
-								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Category</FormLabel>
+								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Danh mục</FormLabel>
 								<InputGroup>
 									<Input
 										placeholder="category"
@@ -566,13 +566,13 @@ const ProductDetailVendor = () => {
 							</FormControl>
 
 							<FormControl isInvalid={isInvalid}>
-								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Images</FormLabel>
+								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Hình ảnh</FormLabel>
 
 								<DropZone onChange={handleDrop} />
 
 								{images.length > 0 && (
 									<div>
-										<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Image Preview</FormLabel>
+										<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Xem trước hình ảnh</FormLabel>
 										<div className="image-preview-container">
 											{images.map((previewImage, index) => (
 												<div key={index} className="image-preview">
@@ -597,7 +597,7 @@ const ProductDetailVendor = () => {
 					<AccordionItem >
 						<AccordionButton >
 							<Box flex="1" textAlign="left" fontWeight="bold" fontSize="xl">
-								Details information
+								Thông tin chi tiết
 							</Box>
 						</AccordionButton>
 						<AccordionPanel ml={2} >
@@ -609,7 +609,7 @@ const ProductDetailVendor = () => {
 					<AccordionItem>
 						<AccordionButton>
 							<Box flex="1" textAlign="left" fontWeight="bold" fontSize="xl">
-								Product Classsification
+								Phân loại hàng
 							</Box>
 						</AccordionButton>
 						<AccordionPanel ml={2} >
@@ -623,29 +623,31 @@ const ProductDetailVendor = () => {
 									_disabled={{ bg: 'gray.500', cursor: 'not-allowed' }}
 
 								>
-									Add Classification
+									Thêm phân loại hàng
 								</Button>
 
 								{productVariants.length === 0 && (
 									<>
 										<FormControl mt={4} w="40%">
 											<FormLabel fontSize="sm" mb={2}>
-												Promotional Price
+												Giá khuyến mãi
 											</FormLabel>
 											<Input
 												placeholder="Promotional Price"
 												type="number"
+												min="0"
 												value={promotionalPrice}
 												onChange={(event) => setPromotionalPrice(parseInt(event.target.value))}
 											/>
 										</FormControl>
 										<FormControl mt={4} w="40%">
 											<FormLabel fontSize="sm" mb={2}>
-												Price
+												Giá
 											</FormLabel>
 											<Input
 												placeholder="Price"
 												type="number"
+												min="0"
 												value={price}
 												onChange={(event) => setPrice(parseInt(event.target.value))}
 											/>
@@ -653,11 +655,12 @@ const ProductDetailVendor = () => {
 
 										<FormControl mt={4} w="40%">
 											<FormLabel fontSize="sm" mb={2}>
-												Inventory
+												Kho
 											</FormLabel>
 											<Input
 												placeholder="Storage"
 												type="number"
+												min="0"
 												value={inventory}
 												onChange={(event) => setInventory(parseInt(event.target.value))}
 											/>
@@ -668,7 +671,7 @@ const ProductDetailVendor = () => {
 									<Box key={index} mt={4} bg="gray.100" p={4}>
 										<Box display="flex" justifyContent="space-between" alignItems="center">
 											<FormLabel fontWeight="bold" fontSize="xl" mb={0}>
-												Classification group {index + 1}
+												Phân lọai hàng {index + 1}
 											</FormLabel>
 											<Button size="sm" variant="ghost" colorScheme="red" onClick={() => handleRemoveProductVariant(index)}>
 												<CloseIcon />
@@ -677,7 +680,7 @@ const ProductDetailVendor = () => {
 										<Box mt={4} display="flex" justifyContent="space-between" flexWrap="wrap">
 											<FormControl w="50%" mb={4}>
 												<FormLabel fontSize="md" mb={0}>
-													Name
+													Tên
 												</FormLabel>
 												<Input
 													borderColor='gray.600'
@@ -689,7 +692,7 @@ const ProductDetailVendor = () => {
 
 											<FormControl w="100%" >
 												<FormLabel fontSize="md" mb={0}>
-													Values
+													Giá trị
 												</FormLabel>
 												<Box mt={2} >
 													<Flex w="100%" alignItems="center" mb={2} flexWrap="wrap">
@@ -926,6 +929,7 @@ const ProductDetailVendor = () => {
 																						placeholder="price"
 																						type="number"
 																						value={productClassifications[index * productVariants[productVariants.length - 1].options.length + valueIndex].price}
+																						min="0"
 																						onChange={(event) =>
 																							handleProductClassificationChange(
 																								index * productVariants[productVariants.length - 1].options.length + valueIndex,
@@ -957,6 +961,7 @@ const ProductDetailVendor = () => {
 																					<Input
 																						placeholder="Promotional Price"
 																						type="number"
+																						min="0"
 																						value={productClassifications[index * productVariants[productVariants.length - 1].options.length + valueIndex].promotionalPrice}
 																						onChange={(event) =>
 																							handleProductClassificationChange(
@@ -1039,6 +1044,7 @@ const ProductDetailVendor = () => {
 																			<Input
 																				placeholder="price"
 																				type="number"
+																				min="0"
 																				value={productClassifications[index].price}
 																				onChange={(event) =>
 																					handleProductClassificationChange(
@@ -1066,6 +1072,7 @@ const ProductDetailVendor = () => {
 																			<Input
 																				placeholder="price"
 																				type="number"
+																				min="0"
 																				value={productClassifications[index].promotionalPrice}
 																				onChange={(event) =>
 																					handleProductClassificationChange(
@@ -1091,6 +1098,7 @@ const ProductDetailVendor = () => {
 																		<Input
 																			placeholder="inventory"
 																			type="number"
+																			min="0"
 																			value={productClassifications[index].quantity}
 																			onChange={(event) =>
 																				handleProductClassificationChange(

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Api, QueryParamsType } from '../../api/AxiosClient';
-import { CreateStoreRequest, ProductStoreRequest, UpdateStoreRequest } from 'api/interface/store';
+import { CreateStoreRequest, ProductStoreRequest, UpdateBanStoreRequest, UpdateStoreRequest } from 'api/interface/store';
 
 const api = new Api();
 
@@ -73,12 +73,29 @@ export const getStoreById = createAsyncThunk(
 	}
 );
 
+export const getAdminStore = createAsyncThunk(
+	'stores/getAdminStore',
+	async (params: QueryParamsType) => {
+		const response = await api.store.getAdminStore(params);
+		return response;
+	}
+);
+
+export const updateBanStore = createAsyncThunk(
+	'products/updateBanStore',
+	async (request: UpdateBanStoreRequest) => {
+		const response = await api.product.updateBanProduct(request);
+		return response;
+	}
+);
+
 export const storesSlice = createSlice({
 	name: 'stores',
 	initialState: {
 		store: null,
 		products: [],
 		banProducts: [],
+		stores: [],
 		pagination: {
 			total: 0,
 			skip: 0,
@@ -113,6 +130,40 @@ export const storesSlice = createSlice({
 			})
 			.addCase(updateMyStore.fulfilled, (state, action) => {
 				state.store = action.payload.data;
+			}).addCase(getAdminStore.fulfilled, (state, action) => {
+				if (action.payload.status !== 200) {
+					state.stores = [];
+					state.pagination = {
+						total: 0,
+						skip: 0,
+						limit: 10,
+					}
+					return;
+				}
+				state.stores = action.payload.data.data;
+				state.pagination = {
+					total: action.payload.data.pagination.total,
+					skip: action.payload.data.pagination.skip,
+					limit: action.payload.data.pagination.limit,
+				}
+			})
+			.addCase(getAdminStore.rejected, (state) => {
+				state.stores = [];
+				state.pagination = {
+					total: 0,
+					skip: 0,
+					limit: 10,
+				}
+			})
+			.addCase(updateBanStore.fulfilled, (state, action) => {
+				const index = state.stores.findIndex(x => x.id === JSON.parse(action.payload.config.data).id);
+				const isBanned = JSON.parse(action.payload.config.data).isBanned;
+				state.stores[index].isBan = isBanned;
+				console.log(action.payload.config.data);
+				if (isBanned)
+					state.stores[index].reasonBan = JSON.parse(action.payload.config.data).reason;
+				else
+					state.stores[index].reasonBan = null;
 			})
 	},
 	reducers: {

@@ -16,9 +16,9 @@ import {
 } from "@chakra-ui/react";
 import { Attribute } from "api/interface/product";
 import { EditIcon } from "@chakra-ui/icons";
-import ImageUploader from "../upload-image/UploadImage";
-import Dropdown from "../dropdown/Dropdown";
-import AttributeForm from "../attribute/AttributeForm";
+import ImageUploader from "../../../components/upload-image/UploadImage";
+import Dropdown from "../../../components/dropdown/Dropdown";
+import AttributeForm from "../../../components/attribute/AttributeForm";
 
 interface Category {
 	id: string, name: string, image: string, parentCategoryId: string, file: File

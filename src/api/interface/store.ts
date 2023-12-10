@@ -271,7 +271,24 @@ export interface GetMyStoreResponse {
 	cover: string
 	address: StoreAddress
 	feePerOrder: number
-	rating: number
+	ratings: Array<number>
 	eWallet: number
+}
+
+export interface StoreAdminResponse {
+	id: string;
+	name: string;
+	point: number;
+	eWallet: number;
+	isDeleted: boolean;
+	isBan: boolean;
+	reasonBan: string;
+	ratings: number[];
+}
+
+export interface UpdateBanStoreRequest {
+	id: string;
+	isBanned: boolean;
+	reason: string;
 }
 

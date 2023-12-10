@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Api } from '../../api/AxiosClient';
-import { PayByPaypalRequest, PayOrderRequest } from 'api/interface/payment';
+import { PayByPaypalRequest, PayOrderRequest, validWithdrawPayPalRequest, withdrawPayPalRequest } from 'api/interface/payment';
 
 const api = new Api();
 
@@ -27,6 +27,24 @@ export const
 		'payments/payByPaypal',
 		async (request: PayByPaypalRequest) => {
 			const response = await api.payment.payByPaypal(request);
+			return response;
+		}
+	);
+
+export const
+	withdrawPayPal = createAsyncThunk(
+		'payments/withdrawPayPal',
+		async (request: withdrawPayPalRequest) => {
+			const response = await api.payment.withdrawPayPal(request);
+			return response;
+		}
+	);
+
+export const
+	validWithdrawPayPal = createAsyncThunk(
+		'payments/validWithdrawPayPal',
+		async (request: validWithdrawPayPalRequest) => {
+			const response = await api.payment.validWithdrawPayPal(request);
 			return response;
 		}
 	);

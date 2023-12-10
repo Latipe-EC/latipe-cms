@@ -150,7 +150,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 			vouchers: vouchers.map(x => x.voucher_code),
 			order_items: products.map(x => {
 				return {
-					cart_id: x.cartId,
+					cart_id: x.cart_id,
 					product_id: x.productId,
 					option_id: x.productOptionId,
 					quantity: parseInt(x.quantity),

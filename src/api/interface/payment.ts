@@ -120,3 +120,12 @@ export interface Link {
 	rel: string
 	method: string
 }
+
+export interface withdrawPayPalRequest {
+	email: string
+	amount: number
+}
+
+export interface validWithdrawPayPalRequest {
+	token: string
+}

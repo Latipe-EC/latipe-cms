@@ -1,25 +1,30 @@
-import { useParams } from "react-router-dom";
-import Avatar from "../../../components/avatar/Avatar";
-import Box from "../../../components/Box";
+import { useNavigate } from "react-router-dom";
 import Button from "../../../components/buttons/Button";
-import IconButton from "../../../components/buttons/IconButton";
-import Card from "../../../components/Card";
-import Divider from "../../../components/Divider";
-import FlexBox from "../../../components/FlexBox";
-import Grid from "../../../components/grid/Grid";
-import Icon from "../../../components/icon/Icon";
 import DashboardPageHeader from "../../../components/layout/DashboardPageHeader";
-import VendorDashboardLayout from "../../../components/layout/VendorDashboardLayout";
-import Select from "../../../components/Select";
-import TableRow from "../../../components/TableRow";
-import TextField from "../../../components/text-field/TextField";
-import TextArea from "../../../components/textarea/TextArea";
-import Typography, { H5, H6 } from "../../../components/Typography";
-import { format } from "date-fns";
-import ProductReview from "components/products/ProductReview";
+import ProductReview from "../../../components/products/ProductReview";
+import { useDispatch } from "react-redux";
+import { AppThunkDispatch } from "../../../store/store";
+import { getMyStore } from "../../../store/slices/stores-slice";
+import { useEffect, useState } from "react";
+import { GetMyStoreResponse } from "../../../api/interface/store";
 
 const RatingVendor = () => {
-	const { id } = useParams();
+	const dispatch = useDispatch<AppThunkDispatch>();
+	const navigate = useNavigate();
+	const [store, setStore] = useState<GetMyStoreResponse>();
+	const [selectedStar, setSelectedStar] = useState(0);
+
+	useEffect(() => {
+		dispatch(getMyStore()).unwrap().then(
+			(res) => {
+				if (res.status !== 200) {
+					navigate("/401");
+					return;
+				}
+				setStore(res.data);
+			}
+		);
+	}, []);
 
 	return (
 		<div>
@@ -34,10 +39,12 @@ const RatingVendor = () => {
 					</a>
 				}
 			/>
-			{product && <ProductReview
+			{store && <ProductReview
 				selectedStar={selectedStar}
 				setSelectedStar={setSelectedStar}
-				rating={product.ratings}
+				rating={store.ratings}
+				isStore={true}
+				storeId={store.id}
 			/>}
 		</div>
 	);

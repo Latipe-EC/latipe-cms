@@ -10,12 +10,14 @@ export interface ProductReviewProps {
 	rating: Array<number>;
 	setSelectedStar: (star: number) => void;
 	selectedStar: number;
+	isStore?: boolean;
+	storeId?: string;
 }
 
-const ProductReview: React.FC<ProductReviewProps> = ({ rating, selectedStar, setSelectedStar }) => {
+const ProductReview: React.FC<ProductReviewProps> = ({ rating, selectedStar, setSelectedStar, isStore, storeId }) => {
 
 
-	const averageStar = rating ? rating.reduce((total, b, index) => total + b * (index + 1), 0) / rating.reduce((total, b) => total + b, 0)
+	const averageStar = rating ? rating.reduce((total, b, index) => total + b * (index + 1), 0) / Math.max(rating.reduce((total, b) => total + b, 0), 1)
 		: 0;
 
 	const fullStars = Math.floor(averageStar);
@@ -70,7 +72,7 @@ const ProductReview: React.FC<ProductReviewProps> = ({ rating, selectedStar, set
 					</Button>
 				))}
 			</Box>
-			<ProductComment star={selectedStar} />
+			<ProductComment star={selectedStar} isStore={isStore} storeId={storeId} />
 		</Box>
 	);
 };

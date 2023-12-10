@@ -120,7 +120,8 @@ export interface RatingResponse {
 	 * @type {string}
 	 * @memberof RatingResponse
 	 */
-	'userName'?: string;
+	'username'?: string;
+	'avatar'?: string;
 	/**
 	 * 
 	 * @type {string}

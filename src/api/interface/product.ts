@@ -1001,3 +1001,21 @@ export interface Attribute {
 	options?: string;
 	value?: string;
 }
+
+export interface ProductAdminResponse {
+	id: string;
+	name: string;
+	image: string;
+	countProductVariants: number;
+	countSale: number;
+	price: number;
+	rating: number;
+	isBanned: boolean;
+	reasonBan: string;
+}
+
+export interface UpdateBanProductRequest {
+	id: string;
+	isBanned: boolean;
+	reason: string;
+}

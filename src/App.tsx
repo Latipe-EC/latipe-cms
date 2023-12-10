@@ -41,10 +41,18 @@ const OrdersVendor = lazy(() => import('./pages/vendor/orders/index'));
 const ProductDetailsVendor = lazy(() => import('./pages/vendor/products/[id]'));
 const ProductsVendor = lazy(() => import('./pages/vendor/products/index'));
 const BanProductsVendor = lazy(() => import('./pages/vendor/products/BanProduct'));
+const RatingVendor = lazy(() => import('./pages/vendor/ratings/[id]'));
+const StatisticVendor = lazy(() => import('./pages/vendor/statistic/statistic'));
+const AnalyzeVendor = lazy(() => import('./pages/vendor/analyze-vendor/index'));
+const BankVendor = lazy(() => import('./pages/vendor/bank/index'));
+const ValidWithdraw = lazy(() => import('./pages/vendor/bank/valid_withdraw'));
+const WithdrawSuccess = lazy(() => import('./pages/vendor/bank/withdraw-success'));
 
 // admin pages
 const DashboardAdmin = lazy(() => import('./components/layout/admin/AdminLayout'));
-const CategoriesAdmin = lazy(() => import('./components/admin/AdminCategories'));
+const CategoriesAdmin = lazy(() => import('./pages/admin/category/AdminCategories'));
+const ProductsAdmin = lazy(() => import('./pages/admin/product/AdminProduct'));
+const StoresAdmin = lazy(() => import('./pages/admin/store/AdminStore'));
 
 const AboutPage = lazy(() => import('./pages/about'));
 const Cart = lazy(() => import('./pages/cart'));
@@ -70,9 +78,11 @@ const Error404 = lazy(() => import('./pages/404'));
 function App() {
 
 	const dispatch = useDispatch<AppThunkDispatch>();
-	dispatch(getChildsCategory(null));
+	if (!window.location.pathname.includes('/admin'))
+		dispatch(getChildsCategory(null));
+
 	const auth = JSON.parse(localStorage.getItem('REACT_STARTER_AUTH'));
-	if (auth && auth.isAuthenticated) {
+	if (auth && auth.isAuthenticated && !window.location.pathname.includes('/admin')) {
 		dispatch(getMyCart({ skip: 0, limit: 10 }))
 	}
 
@@ -148,6 +158,8 @@ function App() {
 									<Route path="signup" element={<SignUpPage />} />
 									<Route path="orders/success" element={<OrderSuccess />} />
 									<Route path="payment-success" element={<PaymentSuccess />} />
+									<Route path="valid-withdraw" element={<ValidWithdraw />} />
+									<Route path="withdraw-success/:token" element={<WithdrawSuccess />} />
 									<Route path="*" element={<Error404 />} />
 								</Route>
 
@@ -203,8 +215,11 @@ function App() {
 									<Route path="profile" element={<AccountSettings />} />
 									<Route path="orders/:id" element={<OrderDetailsVendor />} />
 									<Route path="orders" element={<OrdersVendor />} />
-
+									<Route path="ratings" element={<RatingVendor />} />
+									<Route path="revenues" element={<StatisticVendor />} />
 									<Route path="products" element={<ProductsVendor />} />
+									<Route path="analysis" element={<AnalyzeVendor />} />
+									<Route path="bank" element={<BankVendor />} />
 									<Route path="products/ban" element={<BanProductsVendor />} />
 								</Route>
 
@@ -218,6 +233,8 @@ function App() {
 
 								<Route path="/admin/" element={<DashboardAdmin />}>
 									<Route path="categories" element={<CategoriesAdmin />} />
+									<Route path="products" element={<ProductsAdmin />} />
+									<Route path="stores" element={<StoresAdmin />} />
 								</Route>
 							</Routes>
 						</Suspense>

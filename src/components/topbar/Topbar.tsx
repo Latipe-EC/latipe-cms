@@ -8,10 +8,12 @@ import MenuItem from '../MenuItem';
 import NavLink from '../nav-link/NavLink';
 import { Small } from '../Typography';
 import StyledTopbar from './Topbar.style';
+import { useNavigate } from 'react-router-dom';
 
 const Topbar: React.FC = () => {
 	const [currency, setCurrency] = useState(currencyList[0]);
 	const [language, setLanguage] = useState(languageList[0]);
+	const navigate = useNavigate();
 
 	const handleCurrencyClick = (curr) => () => {
 		setCurrency(curr);
@@ -45,6 +47,11 @@ const Topbar: React.FC = () => {
 					<FlexBox alignItems="center" ml="20px">
 						<Icon size="14px">mail</Icon>
 						<span>support@latipe.com</span>
+					</FlexBox>
+					<FlexBox alignItems="center" ml="20px" style={{ cursor: "pointer" }}
+						onClick={() => { navigate("/vendor") }}>
+						<Icon size="14px">user</Icon>
+						<span>Kênh người bán</span>
 					</FlexBox>
 				</FlexBox>
 				<FlexBox className="topbar-right" alignItems="center">

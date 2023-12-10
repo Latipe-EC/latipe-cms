@@ -26,7 +26,6 @@ export const convertHexToRGB = (hex) => {
 
 export const getDateDifference = (date) => {
 	let diff = differenceInMinutes(new Date(), new Date(date));
-	console.log(new Date(date));
 
 	if (diff < 60) return diff + " minutes ago";
 
@@ -42,3 +41,16 @@ export const getDateDifference = (date) => {
 	diff = diff / 12;
 	return `${diff.toFixed(1)} year${ceil(diff) === 0 ? "" : "s"} ago`;
 };
+
+export const convertDateYYYYMMDD = (date) => {
+	const dateString = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`;
+	return dateString
+};
+
+export function getMonthDifference(startDate, endDate) {
+	return (
+		endDate.getMonth() -
+		startDate.getMonth() +
+		12 * (endDate.getFullYear() - startDate.getFullYear())
+	);
+}

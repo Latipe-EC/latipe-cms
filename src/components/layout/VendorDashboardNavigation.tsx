@@ -161,7 +161,7 @@ const VendorDashboardNavigation = () => {
 					{isShopOpen && (
 						<>
 							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12}
-								onClick={() => { navigate("/vendor/ratting") }}
+								onClick={() => { navigate("/vendor/ratings") }}
 							>Đánh giá shop</Text>
 							<Text _hover={{ cursor: "pointer", color: "red" }} mb={2} ml={12}
 								onClick={() => { navigate("/vendor/profile") }}

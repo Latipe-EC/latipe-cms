@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { Api } from '../../api/AxiosClient';
+import { Api, QueryParamsType } from '../../api/AxiosClient';
 import { PayByPaypalRequest, PayOrderRequest, validWithdrawPayPalRequest, withdrawPayPalRequest } from 'api/interface/payment';
 
 const api = new Api();
@@ -49,6 +49,15 @@ export const
 		}
 	);
 
+export const
+	getPaginatePayment = createAsyncThunk(
+		'payments/getPaginatePayment',
+		async (params: QueryParamsType) => {
+			const response = await api.payment.getPaginatePayment(params);
+			return response;
+		}
+	);
+
 export const paymentSlice = createSlice({
 	name: 'payment',
 	initialState: {
@@ -61,7 +70,32 @@ export const paymentSlice = createSlice({
 		loading: false,
 		error: null,
 	},
-	extraReducers: () => {
+	extraReducers: (builder) => {
+		builder.addCase(getPaginatePayment.fulfilled, (state, action) => {
+			if (action.payload.status !== 200) {
+				state.data = [];
+				state.pagination = {
+					total: 0,
+					skip: 0,
+					limit: 10,
+				}
+				return;
+			}
+			state.data = action.payload.data.data;
+			state.pagination = {
+				total: action.payload.data.pagination.total,
+				skip: action.payload.data.pagination.skip,
+				limit: action.payload.data.pagination.limit,
+			}
+		})
+			.addCase(getPaginatePayment.rejected, (state) => {
+				state.data = [];
+				state.pagination = {
+					total: 0,
+					skip: 0,
+					limit: 10,
+				}
+			})
 
 	},
 	reducers: {
@@ -70,3 +104,4 @@ export const paymentSlice = createSlice({
 });
 
 export const selectPayments = (state) => state.payment;
+export default paymentSlice.reducer;

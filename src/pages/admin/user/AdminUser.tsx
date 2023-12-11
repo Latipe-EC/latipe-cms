@@ -3,29 +3,30 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import { useDispatch } from 'react-redux';
 import { debounce } from 'lodash';
-import { Box, Button, ButtonGroup, Flex, Image, Input, InputGroup, InputLeftElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Spinner, Table, Tbody, Td, Text, Th, Thead, Tr, useToast } from '@chakra-ui/react';
-import { ProductAdminResponse } from 'api/interface/product';
+import { Avatar, Box, Button, ButtonGroup, Flex, Image, Input, InputGroup, InputLeftElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Spinner, Table, Tbody, Td, Text, Th, Thead, Tr, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
+import { UserAdminResponse } from 'api/interface/user';
 import { MdSearch } from 'react-icons/md';
 import Pagination from "../../../components/pagination/Pagination";
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import FlexBox from '../../../components/FlexBox';
 import defaultImage from '../../../assets/default.jpg';
-import { getAdminProduct, updateBanProduct } from '../../../store/slices/products-slice';
+import { getAdminUser, updateBanUser } from '../../../store/slices/user-slice';
 import { Chip } from '../../../components/Chip';
 import { Small } from '../../../components/Typography';
 
-const ProductsAdmin = () => {
+const UsersAdmin = () => {
 
-	const products = useAppSelector((state: RootState) => state.products);
+	const users = useAppSelector((state: RootState) => state.user);
 	const [searchText, setSearchText] = useState('');
 	const [currentPage, setCurrentPage] = useState(0);
 	const [size] = useState(10);
 	const dispatch = useDispatch<AppThunkDispatch>();
 	const initialized = useRef(false);
 	const [filterBanner, setFilterBanner] = useState("ALL");
-	const [showModalBan, setShowModalBan] = useState<ProductAdminResponse>(null);
-
+	const [showModalBan, setShowModalBan] = useState<UserAdminResponse>(null);
+	const textColor = useColorModeValue('secondaryGray.900', 'white');
 	const [reasonBan, setReasonBan] = useState("");
+	const [showDetailUser, setShowDetailUser] = useState(null);
 
 	const toast = useToast();
 	const columns = React.useMemo(
@@ -39,31 +40,42 @@ const ProductsAdmin = () => {
 				},
 			},
 			{
-				Header: 'Tên sản phẩm',
-				accessor: 'name',
+				Header: 'Username',
+				accessor: 'username',
 				width: 100,
-			},
-			{
-				Header: 'Ảnh',
-				accessor: 'image',
-				Cell: ({ value }) => {
+				Cell: ({ value, row }) => {
+					const item = row.original;
 					return (
-						<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-							<Image
-								src={value}
-								alt="Hình ảnh sản phẩm"
-								height="200px"
-								minWidth="200px"
-								objectFit='cover'
-								fallbackSrc={defaultImage}
+						<Flex align='center'>
+							<Avatar
+								src={item.avatar ? item.avatar : defaultImage}
+								w='30px'
+								h='30px'
+								me='8px'
 							/>
-						</div>
-					);
+							<Text
+								color={textColor}
+								fontSize='sm'
+								fontWeight='600'>
+								{value}
+							</Text>
+						</Flex>
+					)
 				},
 			},
 			{
-				Header: 'Số lượng phân loại',
-				accessor: 'countProductVariants',
+				Header: 'Tên',
+				accessor: 'displayName',
+				width: 100,
+			},
+			{
+				Header: 'Email',
+				accessor: 'email',
+				width: 100,
+			},
+			{
+				Header: 'Role',
+				accessor: 'role',
 				Cell: ({ value }) => {
 					return (
 						<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -73,14 +85,25 @@ const ProductsAdmin = () => {
 				},
 			},
 			{
-				Header: 'Đã bán',
-				accessor: 'countSale',
+				Header: 'Điểm',
+				accessor: 'point',
+				Cell: ({ value }) => {
+					return (
+						<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+							{value}
+						</div>
+					);
+				},
+			},
+			{
+				Header: 'Ví',
+				accessor: 'eWallet',
 				Cell: ({ value }) => {
 					return (
 						<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 							<Box m="6px">
 								<Chip p="0.25rem 1rem" bg="green">
-									<Small textAlign="center" color="white" fontWeight="bold">{value}</Small>
+									<Small textAlign="center" color="white" fontWeight="bold">{value.toLocaleString('vi-VN')}₫</Small>
 								</Chip>
 							</Box>
 						</div>
@@ -103,21 +126,7 @@ const ProductsAdmin = () => {
 				},
 			},
 			{
-				Header: 'Đánh giá',
-				accessor: 'rating',
-				Cell: ({ value }) => {
-					return (
-						<Box m="6px">
-							<Chip p="0.25rem 1rem" bg="green">
-								<Small textAlign="center" color="white" fontWeight="bold">{value.toFixed(1)}⭐
-								</Small>
-							</Chip>
-						</Box>
-					);
-				}
-			},
-			{
-				Header: 'Cấm bán',
+				Header: 'Cấm',
 				accessor: 'isBanned',
 				Cell: ({ value, row }) => {
 					const item = row.original;
@@ -130,7 +139,7 @@ const ProductsAdmin = () => {
 								Xem lý do
 							</Button> :
 								<Button colorScheme="green" onClick={() => setShowModalBan(item)}>
-									{value ? "Hủy cấm bán" : "Cấm bán"}
+									{value ? "Hủy cấm" : "Cấm"}
 								</Button>
 							}
 						</Flex>
@@ -144,7 +153,7 @@ const ProductsAdmin = () => {
 					return (
 						<Flex justifyContent={'center'}>
 							<ButtonGroup spacing="4">
-								<Button colorScheme="green" onClick={() => window.open(`/products/${item.id}`, '_blank')}>
+								<Button colorScheme="green" onClick={() => { setShowDetailUser(item) }}>
 									Xem chi tiết
 								</Button>
 							</ButtonGroup>
@@ -153,13 +162,13 @@ const ProductsAdmin = () => {
 				},
 			},
 		],
-		[products]
+		[users]
 	);
 
 	useEffect(() => {
 		if (!initialized.current) {
 			initialized.current = true
-			dispatch(getAdminProduct({ skip: currentPage * size, size, name: searchText, statusBan: filterBanner, orderBy: "createdAt" }));
+			dispatch(getAdminUser({ skip: currentPage * size, size, name: searchText, statusBan: filterBanner, orderBy: "createdDate" }));
 		}
 		return () => {
 		}
@@ -169,35 +178,35 @@ const ProductsAdmin = () => {
 	const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow } = useTable(
 		{
 			columns,
-			data: products.data,
+			data: users.data,
 			initialState: { pageIndex: 0 },
 			manualPagination: true,
-			pageCount: products.pagination ? Math.ceil(products.pagination.total / size) : 0,
+			pageCount: users.pagination ? Math.ceil(users.pagination.total / size) : 0,
 			manualSortBy: true,
 		},
 		useSortBy,
 		usePagination
 	);
 
-	const debouncedGetAdminProduct = debounce((searchText) => {
-		dispatch(getAdminProduct({ skip: currentPage * size, size, name: searchText, statusBan: filterBanner, orderBy: "createdAt" }));
+	const debouncedGetAdminUser = debounce((searchText) => {
+		dispatch(getAdminUser({ skip: currentPage * size, size, name: searchText, statusBan: filterBanner, orderBy: "createdDate" }));
 	}, 500);
 
 	const handleSearchChange = (event) => {
 		setSearchText(event.target.value);
-		debouncedGetAdminProduct(event.target.value);
+		debouncedGetAdminUser(event.target.value);
 	};
 
 	const handleUpdateStatusBan = () => {
 		const loadingToastId = toast({
-			title: 'Adding new category...',
+			title: 'Đang cập nhật...',
 			description: <Spinner />,
 			status: 'info',
 			duration: null,
 			isClosable: true,
 			position: "top-right",
 		})
-		dispatch(updateBanProduct({ id: showModalBan.id, isBanned: !showModalBan.isBanned, reason: reasonBan })).unwrap().then((res) => {
+		dispatch(updateBanUser({ id: showModalBan.id, isBanned: !showModalBan.isBanned, reason: reasonBan })).unwrap().then((res) => {
 			toast.close(loadingToastId);
 			if (res.status !== 200) {
 				toast({
@@ -207,9 +216,9 @@ const ProductsAdmin = () => {
 					isClosable: true,
 				});
 			} else {
-				products.data = products.data.map((item) => {
+				users.data = users.data.map((item) => {
 					if (item.id === showModalBan.id) {
-						item.isBanned = !showModalBan.isBanned;
+						item.isBan = !showModalBan.isBanned;
 					}
 					return item;
 				})
@@ -231,11 +240,12 @@ const ProductsAdmin = () => {
 		});
 		setReasonBan("");
 		setShowModalBan(null);
+		setShowDetailUser(null);
 	}
 
 	const handleFilterChange = (event) => {
 		setFilterBanner(event.target.value);
-		dispatch(getAdminProduct({ skip: currentPage * size, size, name: searchText, statusBan: event.target.value }));
+		dispatch(getAdminUser({ skip: currentPage * size, size, name: searchText, statusBan: event.target.value }));
 	}
 
 	return (
@@ -259,7 +269,7 @@ const ProductsAdmin = () => {
 					</Select>
 				</Box>
 			</Flex>
-			{products.data.length === 0 ? (
+			{users.data.length === 0 ? (
 				<Flex
 					flexDirection="column"
 					alignItems="center"
@@ -268,7 +278,7 @@ const ProductsAdmin = () => {
 				>
 					<Box>
 						<Text fontSize="xl" fontWeight="bold" textAlign="center" my={10}>
-							Không tìm thấy sản phẩm nào
+							Không tìm thấy người dùng nào
 						</Text>
 					</Box>
 				</Flex>
@@ -312,9 +322,9 @@ const ProductsAdmin = () => {
 				</Table>
 				<FlexBox justifyContent="center" mt="2.5rem" >
 					<Pagination
-						pageCount={products.pagination ? Math.ceil(products.pagination.total / 10) : 0}
+						pageCount={users.pagination ? Math.ceil(users.pagination.total / 10) : 0}
 						onChange={(data) => {
-							dispatch(getAdminProduct({ skip: +data * size, size, name: searchText, statusBan: filterBanner, orderBy: "createdAt" }));
+							dispatch(getAdminUser({ skip: +data * size, size, name: searchText, statusBan: filterBanner, orderBy: "createdDate" }));
 							setCurrentPage(+data);
 						}}
 					/>
@@ -349,15 +359,72 @@ const ProductsAdmin = () => {
 									Hủy
 								</Button>
 								<Button colorScheme="red" onClick={handleUpdateStatusBan}>
-									{showModalBan && showModalBan.isBanned ? "Hủy cấm	bán" : "Cấm bán"}
+									{showModalBan && showModalBan.isBanned ? "Hủy cấm" : "Cấm"}
 								</Button>
 							</Flex>
 						</ModalFooter>
 					</ModalContent>
 				</Modal>
+
+				{showDetailUser &&
+					<Modal isOpen={showDetailUser !== null} onClose={() => {
+						setShowDetailUser(null)
+					}} isCentered>
+						<ModalOverlay />
+						<ModalContent>
+							<ModalHeader style={{
+								fontWeight: 'bold', fontSize: '20px', color: 'gray.800', textAlign: "center", marginTop: '20px'
+							}}>
+								Thông tin chi tiết
+							</ModalHeader>
+							<ModalCloseButton />
+							<ModalBody >
+								<VStack align="start" spacing={4}>
+									<Image
+										src={showDetailUser.avatar}
+										boxSize="100px"
+										objectFit='cover'
+										fallbackSrc={defaultImage}
+									/>
+									<Text><b>ID:</b> {showDetailUser.id}</Text>
+									<Text><b>Name:</b> {showDetailUser.displayName}</Text>
+									<Text><b>Phone Number:</b> {showDetailUser.phoneNumber}</Text>
+									<Text><b>Email:</b> {showDetailUser.email}</Text>
+
+									<Text><b>Role:</b> {showDetailUser.role}</Text>
+									<Text><b>eWallet:</b> {showDetailUser.eWallet}</Text>
+									<Text><b>Point:</b> {showDetailUser.point}</Text>
+									<Text><b>Username:</b> {showDetailUser.username}</Text>
+									<Text><b>Is Banned:</b> {showDetailUser.isBanned ? "Yes" : "No"}</Text>
+									{showDetailUser.reasonBan && <Text><b>Reason for Ban:</b> {showDetailUser.reasonBan}</Text>}
+									<Text><b>Gender:</b> {showDetailUser.gender}</Text>
+									<Text><b>Birthday:</b> {showDetailUser.birthday}</Text>
+								</VStack>
+							</ModalBody>
+							<ModalFooter>
+								<Flex justifyContent="center" alignItems="center" mt={4}>
+									<Button colorScheme="teal" mr={4} onClick={() => {
+										setShowDetailUser(null)
+									}}>
+										Hủy
+									</Button>
+									{showDetailUser.isBanned ? <Button colorScheme="green" onClick={() => {
+										setReasonBan(showDetailUser.reasonBan);
+										setShowModalBan(showDetailUser)
+									}}>
+										Xem lý do
+									</Button> :
+										<Button colorScheme="green" onClick={() => setShowModalBan(showDetailUser)}>
+											{showDetailUser.isBanned ? "Hủy cấm" : "Cấm"}
+										</Button>
+									}
+								</Flex>
+							</ModalFooter>
+						</ModalContent>
+					</Modal>}
 			</>}
 		</div>
 	);
 }
 
-export default ProductsAdmin;
+export default UsersAdmin;

@@ -1,6 +1,7 @@
 import { Icon } from '@chakra-ui/react';
 import CategoriesAdmin from '../../../pages/admin/category/AdminCategories';
-import { MdCategory, MdHome, MdPayment, MdPerson, MdProductionQuantityLimits, MdReport, MdStarRate, MdStore } from 'react-icons/md';
+import { MdCategory, MdHome, MdMoney, MdPayment, MdPerson, MdProductionQuantityLimits, MdReport, MdStarRate, MdStore } from 'react-icons/md';
+import { IoMdCart } from 'react-icons/io';
 
 const routes = [
 	{
@@ -33,10 +34,24 @@ const routes = [
 		component: ''
 	},
 	{
+		name: 'Commissions',
+		layout: '/admin',
+		path: '/commissions',
+		icon: <Icon as={MdMoney} width='20px' height='20px' color='inherit' />,
+		component: ''
+	},
+	{
 		name: 'Products',
 		layout: '/admin',
 		path: '/products',
 		icon: <Icon as={MdProductionQuantityLimits} width='20px' height='20px' color='inherit' />,
+		component: ''
+	},
+	{
+		name: 'Orders',
+		layout: '/admin',
+		path: '/orders',
+		icon: <Icon as={IoMdCart} width='20px' height='20px' color='inherit' />,
 		component: ''
 	},
 	{

@@ -160,7 +160,6 @@ const ProductsAdmin = () => {
 
 	useEffect(() => {
 		if (!initialized.current && !isloaded) {
-			console.log(12323);
 			initialized.current = true
 			setLoaded(true)
 			dispatch(getAdminProduct({ skip: currentPage * size, size, name: searchText, statusBan: filterBanner, orderBy: "createdAt" }));

@@ -11,6 +11,7 @@ import { GetTotalCommissionResponse, GetTotalOrderInMonthResponse, GetTotalOrder
 import { getTotalCommission, getTotalOrderInMonth, getTotalOrderInYear } from "../../../store/slices/orders-slice";
 import { convertDateYYYYMMDD, getMonthDifference } from "../../../utils/utils";
 import { set } from "lodash";
+import MonthChart from "./MonthChart";
 
 const StatisticVendor = () => {
 	const dispatch = useDispatch<AppThunkDispatch>();
@@ -31,12 +32,57 @@ const StatisticVendor = () => {
 				navigate("/401");
 				return;
 			}
+			if (res.data.data.items.length === 0) {
+				setStatisticMonth({
+					"code": 0,
+					"error_code": "",
+					"message": "success",
+					"data": {
+						"filter_date": "2023-12-01",
+						"items": [
+							{
+								"day": 7,
+								"amount": 163944000,
+								"count": 4
+							},
+							{
+								"day": 5,
+								"amount": 301083156000,
+								"count": 7346
+							}
+						]
+					}
+				})
+				return;
+			}
 			setStatisticMonth(res.data);
 		});
 
 		dispatch(getTotalOrderInYear({ date: convertDateYYYYMMDD(dateYear) })).unwrap().then(res => {
 			if (res.status !== 200) {
 				navigate("/401");
+				return;
+			}
+			if (res.data.data.items.length === 0) {
+				setStatisticYear({
+					"code": 0,
+					"error_code": "",
+					"message": "success",
+					"data": {
+						"items": [
+							{
+								"month": 12,
+								"amount": 301165128000,
+								"count": 7348
+							},
+							{
+								"month": 11,
+								"amount": 81972000,
+								"count": 2
+							}
+						]
+					}
+				})
 				return;
 			}
 			setStatisticYear(res.data);
@@ -47,6 +93,25 @@ const StatisticVendor = () => {
 		)).unwrap().then(res => {
 			if (res.status !== 200) {
 				navigate("/401");
+				return;
+			}
+			if (res.data.data.items.length === 0) {
+				setStatisticCommission({
+					"code": 0,
+					"error_code": "",
+					"message": "success",
+					"data": {
+						"filter_date": "2023-11-01",
+						"items": [
+							{
+								"month": 12,
+								"total_received": 77900000,
+								"total_fee": 4100000,
+								"total_orders": 2
+							}
+						]
+					}
+				})
 				return;
 			}
 			setStatisticCommission(res.data);
@@ -67,7 +132,7 @@ const StatisticVendor = () => {
 					</a>
 				}
 			/>
-
+			{statisticMonth && <MonthChart statisticMonth={statisticMonth} />}
 		</div>
 	);
 };

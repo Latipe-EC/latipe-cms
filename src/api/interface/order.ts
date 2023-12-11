@@ -187,7 +187,6 @@ export interface StoreOrderDetailResponse {
 	code: number
 	error_code: string
 	message: string
-
 	data: DataStoreOrderDetail
 }
 
@@ -301,3 +300,35 @@ export interface CommissionDetail {
 	amount_received: number
 	system_fee: number
 }
+
+export interface AdminOrderDetailResponse {
+	code: number
+	error_code: string
+	message: string
+	data: DataAdminOrderDetail
+}
+export interface DataAdminOrderDetail {
+	order: AdminOrderDetail
+}
+export interface AdminOrderDetail {
+	order_uuid: string
+	amount: number
+	shipping_discount: number
+	item_discount: number
+	sub_total: number
+	net_price: number
+	status: number
+	payment_method: number
+	voucher_code: string
+	created_at: string
+	updated_at: string
+	delivery: DeliveryGetOrderById
+	order_items: OrderItem[]
+	order_status: StatusAdminOrderDetail[]
+}
+export interface StatusAdminOrderDetail {
+	message: string
+	status_change: number
+	created_at: string
+}
+

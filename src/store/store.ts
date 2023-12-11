@@ -9,6 +9,8 @@ import ratingReducer from './slices/ratings-slice';
 import cartReducer from './slices/carts-slice';
 import searchReducer from './slices/search-slice';
 import orderReducer from './slices/orders-slice';
+import commissionReducer from './slices/commissions-slice';
+import paymentReducer from './slices/payment-slice';
 
 import {
 	persistStore,
@@ -33,6 +35,8 @@ export const rootReducer = combineReducers({
 	carts: cartReducer,
 	searchs: searchReducer,
 	order: orderReducer,
+	commissions: commissionReducer,
+	payments: paymentReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

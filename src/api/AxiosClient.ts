@@ -1,7 +1,6 @@
-import { getAdminProduct } from './../store/slices/products-slice';
 import { PagedResultResponse } from 'api/interface/PagedResultResponse';
 import { LoginRequest, LoginResponse, RefreshTokenInput, RefreshTokenResponse } from '../api/interface/auth';
-import { CreateUserAddressRequest, UpdateUserRequest, UpdateUsernameRequest, UserAddress, UserResponse } from '../api/interface/user';
+import { CreateUserAddressRequest, UpdateBanUserRequest, UpdateUserRequest, UpdateUsernameRequest, UserAddress, UserAdminResponse, UserResponse } from '../api/interface/user';
 import axios, {
 	AxiosInstance,
 	AxiosRequestConfig,
@@ -20,10 +19,11 @@ import {
 	CancelOrderRequest, CountMyOrderResponse, CreateOrderRequest, CreateOrderResponse, GetMyOrderResponse, GetOrderByIdResponse, StoreOrderDetailResponse, GetTotalOrderInMonthResponse,
 	searchStoreOrderResponse,
 	GetTotalOrderInYear, GetTotalCommissionResponse,
-	GetProductBestSellerResponse, StatusBodyRequest, UpdateOrderItemStatusByStoreResponse
+	GetProductBestSellerResponse, StatusBodyRequest, UpdateOrderItemStatusByStoreResponse, AdminOrderDetailResponse
 } from 'api/interface/order';
 import { ApplyVoucherReponse, ApplyVoucherRequest, CheckVoucherReponse, createVoucherRequest } from 'api/interface/promotion';
-import { CheckPaymentOrderResponse, PayByPaypalRequest, PayOrderRequest, validWithdrawPayPalRequest, withdrawPayPalRequest } from 'api/interface/payment';
+import { CheckPaymentOrderResponse, PayByPaypalRequest, PayOrderRequest, PaymentResponse, validWithdrawPayPalRequest, withdrawPayPalRequest } from 'api/interface/payment';
+import { CommissionResponse, CreateCommissionRequest, UpdateCommissionRequest } from 'api/interface/commission';
 
 export type QueryParamsType = Record<string | number, unknown>;
 
@@ -327,6 +327,24 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			this.request<UserResponse>({
 				path: `/users/profile/username`,
 				method: 'PUT',
+				type: ContentType.Json,
+				body: request
+			}),
+
+		getAdminUser: (params: QueryParamsType) =>
+			this.request<PagedResultResponse<UserAdminResponse>>({
+				path: `/users/admin`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+
+		updateBanUser: (request: UpdateBanUserRequest) =>
+			this.request<void>({
+				path: `/users/${request.id}/ban`,
+				method: 'PATCH',
 				type: ContentType.Json,
 				body: request
 			}),
@@ -713,8 +731,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			}),
 
 		getMyOrder: (query: Record<string, string>) => {
-			constqueryParams = newURLSearchParams(query).toString();
-			returnthis.request<GetMyOrderResponse>({
+			const queryParams = new URLSearchParams(query).toString();
+			return this.request<GetMyOrderResponse>({
 				path: `/orders/user?${queryParams}`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -745,12 +763,11 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			}),
 
 		searchStoreOrder: (params: Record<string, string>) => {
-			constqueryParams = newURLSearchParams(params).toString();
-			returnthis.request<searchStoreOrderResponse>({
+			const queryParams = new URLSearchParams(params).toString();
+			return this.request<searchStoreOrderResponse>({
 				path: `/orders/store?${queryParams}`,
 				method: 'GET',
 				type: ContentType.Json,
-
 			})
 		},
 
@@ -815,6 +832,21 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				}
 			}),
 
+		searchStoreAdmin: (params: Record<string, string>) => {
+			const queryParams = new URLSearchParams(params).toString();
+			return this.request<searchStoreOrderResponse>({
+				path: `/orders/admin?${queryParams}`,
+				method: 'GET',
+				type: ContentType.Json,
+
+			})
+		},
+
+		getAdminOrderDetail: (id: string) => this.request<AdminOrderDetailResponse>({
+			path: `/orders/admin/${id}`,
+			method: 'GET',
+			type: ContentType.Json,
+		}),
 	}
 	promotion = {
 		applyVoucher: (request: ApplyVoucherRequest) =>
@@ -911,6 +943,50 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				method: 'POST',
 				type: ContentType.Json,
 				body: request
+			}),
+
+		getPaginatePayment: (params: QueryParamsType) =>
+			this.request<PagedResultResponse<PaymentResponse>>({
+				path: `/payment/paginate`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+	}
+	commission = {
+		createCommission: (request: CreateCommissionRequest) =>
+			this.request<CommissionResponse>({
+				path: `/commissions`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: request
+			}),
+
+		updateCommission: (request: UpdateCommissionRequest) =>
+			this.request<CommissionResponse>({
+				path: `/commissions/${request.id}`,
+				method: 'PUT',
+				type: ContentType.Json,
+				body: request
+			}),
+
+		deleteCommission: (id: string) =>
+			this.request<void>({
+				path: `/commissions/${id}`,
+				method: 'DELETE',
+				type: ContentType.Json,
+			}),
+
+		getPaginateCommission: (params: QueryParamsType) =>
+			this.request<PagedResultResponse<CommissionResponse>>({
+				path: `/commissions/paginate`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
 			}),
 	}
 }

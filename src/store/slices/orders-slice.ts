@@ -121,6 +121,24 @@ export const
 		}
 	);
 
+export const
+	searchStoreAdmin = createAsyncThunk(
+		'orders/searchStoreAdmin',
+		async (params: Record<string, string>) => {
+			const response = await api.order.searchStoreAdmin(params);
+			return response;
+		}
+	);
+
+export const
+	getAdminOrderDetail = createAsyncThunk(
+		'orders/getAdminOrderDetail',
+		async (id: string) => {
+			const response = await api.order.getAdminOrderDetail(id);
+			return response;
+		}
+	);
+
 export const orderSlice = createSlice({
 	name: 'order',
 	initialState: {

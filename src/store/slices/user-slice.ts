@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Api, QueryParamsType } from '../../api/AxiosClient';
-import { CreateUserAddressRequest, UpdateUserRequest, UpdateUsernameRequest, UserAddress } from '../../api/interface/user';
+import { CreateUserAddressRequest, UpdateBanUserRequest, UpdateUserRequest, UpdateUsernameRequest, UserAddress } from '../../api/interface/user';
 
 const api = new Api();
 
@@ -90,6 +90,27 @@ export const getMyProfile = createAsyncThunk(
 		}
 	}
 );
+
+export const getAdminUser = createAsyncThunk(
+	'users/getAdminUser',
+	async (params: QueryParamsType, { rejectWithValue }) => {
+		try {
+			const response = await api.users.getAdminUser(params);
+			return response;
+		} catch (err) {
+			return rejectWithValue(err.response.data);
+		}
+	}
+);
+
+export const updateBanUser = createAsyncThunk(
+	'Users/updateBanUser',
+	async (request: UpdateBanUserRequest) => {
+		const response = await api.users.updateBanUser(request);
+		return response;
+	}
+);
+
 export const usersSlice = createSlice({
 	name: 'users',
 	initialState: {
@@ -98,6 +119,12 @@ export const usersSlice = createSlice({
 			total: 0,
 			skip: 0,
 			limit: 0,
+		},
+		data: [],
+		pagination: {
+			total: 0,
+			skip: 0,
+			limit: 10,
 		},
 		countAddress: 0,
 		isLoading: false,
@@ -142,6 +169,40 @@ export const usersSlice = createSlice({
 				if (updatedAddressIndex !== -1) {
 					state.dataAddress[updatedAddressIndex] = updatedAddress;
 				}
+			}).addCase(getAdminUser.fulfilled, (state, action) => {
+				if (action.payload.status !== 200) {
+					state.data = [];
+					state.pagination = {
+						total: 0,
+						skip: 0,
+						limit: 10,
+					}
+					return;
+				}
+				state.data = action.payload.data.data;
+				state.pagination = {
+					total: action.payload.data.pagination.total,
+					skip: action.payload.data.pagination.skip,
+					limit: action.payload.data.pagination.limit,
+				}
+			})
+			.addCase(getAdminUser.rejected, (state) => {
+				state.data = [];
+				state.pagination = {
+					total: 0,
+					skip: 0,
+					limit: 10,
+				}
+			})
+			.addCase(updateBanUser.fulfilled, (state, action) => {
+				const index = state.data.findIndex(x => x.id === JSON.parse(action.payload.config.data).id);
+				const isBanned = JSON.parse(action.payload.config.data).isBanned;
+				state.data[index].isBanned = isBanned;
+				console.log(action.payload.config.data);
+				if (isBanned)
+					state.data[index].reasonBan = JSON.parse(action.payload.config.data).reason;
+				else
+					state.data[index].reasonBan = null;
 			});
 	},
 	reducers: {

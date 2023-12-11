@@ -129,3 +129,14 @@ export interface withdrawPayPalRequest {
 export interface validWithdrawPayPalRequest {
 	token: string
 }
+export interface PaymentResponse {
+	orderId: string;
+	checkoutId: string;
+	amount: number;
+	paymentFee: number;
+	gatewayTransactionId: string;
+	paymentMethod: EPaymentMethod;
+	paymentStatus: EPaymentStatus;
+	failureMessage: string;
+}
+

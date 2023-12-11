@@ -53,6 +53,14 @@ const DashboardAdmin = lazy(() => import('./components/layout/admin/AdminLayout'
 const CategoriesAdmin = lazy(() => import('./pages/admin/category/AdminCategories'));
 const ProductsAdmin = lazy(() => import('./pages/admin/product/AdminProduct'));
 const StoresAdmin = lazy(() => import('./pages/admin/store/AdminStore'));
+const UsersAdmin = lazy(() => import('./pages/admin/user/AdminUser'));
+const CommissionAdmin = lazy(() => import('./pages/admin/commission/AdminCommission'));
+const PaymentAdmin = lazy(() => import('./pages/admin/transactions/AdminTransaction'));
+const OrdersAdmin = lazy(() => import('./pages/admin/order/AdminOrder'));
+const OrderDetailAdmin = lazy(() => import('./pages/admin/order/OrderDetailAdmin'));
+
+
+
 
 const AboutPage = lazy(() => import('./pages/about'));
 const Cart = lazy(() => import('./pages/cart'));
@@ -235,6 +243,11 @@ function App() {
 									<Route path="categories" element={<CategoriesAdmin />} />
 									<Route path="products" element={<ProductsAdmin />} />
 									<Route path="stores" element={<StoresAdmin />} />
+									<Route path="users" element={<UsersAdmin />} />
+									<Route path="commissions" element={<CommissionAdmin />} />
+									<Route path="transactions" element={<PaymentAdmin />} />
+									<Route path="orders" element={<OrdersAdmin />} />
+									<Route path="orders/:id" element={<OrderDetailAdmin />} />
 								</Route>
 							</Routes>
 						</Suspense>

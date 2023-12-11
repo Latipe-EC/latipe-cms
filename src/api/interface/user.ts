@@ -493,3 +493,26 @@ export interface UpdateUserRequest {
 	birthday: Date,
 	avatarFile: File
 }
+
+
+export interface UserAdminResponse {
+	id: string;
+	displayName: string;
+	phoneNumber: string;
+	email: string;
+	avatar: string;
+	role: string;
+	eWallet: number;
+	point: number;
+	username: string;
+	isBanned: boolean;
+	reasonBan: string;
+	gender: string;
+	birthday: Date;
+}
+
+export interface UpdateBanUserRequest {
+	id: string;
+	isBanned: boolean;
+	reason: string;
+}

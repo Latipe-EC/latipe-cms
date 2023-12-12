@@ -1,11 +1,14 @@
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 
-const MonthChart = ({ statisticMonth }) => {
-	const series = statisticMonth.map((stat, index) => ({
-		name: `Statistic ${index + 1}`,
-		data: stat.data
-	}));
+const YearChart = ({ statisticYear }) => {
+
+	const sortedItems = [...statisticYear.data.items].sort((a, b) => a.month - b.month);
+
+	const series = [{
+		name: 'Amount',
+		data: sortedItems.map(item => item.amount)
+	}];
 
 	const options: ApexOptions = {
 		chart: {
@@ -22,7 +25,17 @@ const MonthChart = ({ statisticMonth }) => {
 			curve: 'smooth'
 		},
 		xaxis: {
-			categories: statisticMonth[0].labels,
+			categories: sortedItems.map(item => `${item.month}`),
+			title: {
+				text: 'Tháng'
+			}
+		},
+		yaxis: {
+			labels: {
+				formatter: function (value) {
+					return `${value.toLocaleString('vi-VN')}₫`;
+				}
+			}
 		},
 		tooltip: {
 			x: {
@@ -31,6 +44,7 @@ const MonthChart = ({ statisticMonth }) => {
 		},
 	};
 
+
 	return (
 		<div id="chart">
 			<Chart options={options} series={series} type="line" height={350} />
@@ -38,4 +52,4 @@ const MonthChart = ({ statisticMonth }) => {
 	);
 }
 
-export default MonthChart;
+export default YearChart;

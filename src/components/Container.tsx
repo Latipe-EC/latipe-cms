@@ -1,20 +1,20 @@
 import styled from "styled-components";
 import {
-  color,
-  ColorProps,
-  flexbox,
-  FlexboxProps,
-  layout,
-  LayoutProps,
-  position,
-  PositionProps,
-  space,
-  SpaceProps,
+	color,
+	ColorProps,
+	flexbox,
+	FlexboxProps,
+	layout,
+	LayoutProps,
+	position,
+	PositionProps,
+	space,
+	SpaceProps,
 } from "styled-system";
 import { layoutConstant } from "../utils/constants";
 
 const Container = styled.div<
-  LayoutProps & ColorProps & PositionProps & SpaceProps & FlexboxProps
+	LayoutProps & ColorProps & PositionProps & SpaceProps & FlexboxProps
 >`
   max-width: ${layoutConstant.containerWidth};
   margin-left: auto;

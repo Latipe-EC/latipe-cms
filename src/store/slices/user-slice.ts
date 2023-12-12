@@ -111,6 +111,7 @@ export const updateBanUser = createAsyncThunk(
 	}
 );
 
+
 export const usersSlice = createSlice({
 	name: 'users',
 	initialState: {
@@ -138,7 +139,10 @@ export const usersSlice = createSlice({
 				state.dataAddress.push(action.payload.data);
 			})
 			.addCase(getMyProfile.fulfilled, (_, action) => {
-				localStorage.setItem('user', JSON.stringify(action.payload.data));
+				localStorage.setItem('REACT_STARTER_AUTH', JSON.stringify({
+					...action.payload.data,
+					addresses: null
+				}));
 			})
 			.addCase(getMyAddress.rejected, (state, action) => {
 				state.isLoading = false;

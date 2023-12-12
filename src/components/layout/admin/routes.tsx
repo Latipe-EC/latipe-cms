@@ -64,7 +64,7 @@ const routes = [
 	{
 		name: 'Statistics',
 		layout: '/admin',
-		path: '/admin/statistics',
+		path: '/statistics',
 		icon: <Icon as={MdStarRate} width='20px' height='20px' color='inherit' />,
 		component: ''
 	}

@@ -47,6 +47,7 @@ const AnalyzeVendor = lazy(() => import('./pages/vendor/analyze-vendor/index'));
 const BankVendor = lazy(() => import('./pages/vendor/bank/index'));
 const ValidWithdraw = lazy(() => import('./pages/vendor/bank/valid_withdraw'));
 const WithdrawSuccess = lazy(() => import('./pages/vendor/bank/withdraw-success'));
+const RegisterStore = lazy(() => import('./pages/vendor/register'));
 
 // admin pages
 const DashboardAdmin = lazy(() => import('./components/layout/admin/AdminLayout'));
@@ -58,7 +59,7 @@ const CommissionAdmin = lazy(() => import('./pages/admin/commission/AdminCommiss
 const PaymentAdmin = lazy(() => import('./pages/admin/transactions/AdminTransaction'));
 const OrdersAdmin = lazy(() => import('./pages/admin/order/AdminOrder'));
 const OrderDetailAdmin = lazy(() => import('./pages/admin/order/OrderDetailAdmin'));
-
+const StatisticAdmin = lazy(() => import('./pages/admin/statistic/AdminStatistic'));
 
 
 
@@ -80,6 +81,11 @@ const ShopList = lazy(() => import('./pages/shops'));
 const SignUpPage = lazy(() => import('./pages/signup'));
 const WishList = lazy(() => import('./pages/wish-list'));
 const PaymentSuccess = lazy(() => import('./pages/payment-success'));
+const SuccessForgotPassword = lazy(() => import('./pages/success-forgot-password'));
+const ForgotPassword = lazy(() => import('./pages/forgot-password'));
+const ResetPassword = lazy(() => import('./pages/reset-password'));
+const VerifyAccount = lazy(() => import('./pages/verify-account'));
+const RequestVerifyAccount = lazy(() => import('./pages/request-verify-account'));
 
 const Error404 = lazy(() => import('./pages/404'));
 
@@ -168,10 +174,14 @@ function App() {
 									<Route path="payment-success" element={<PaymentSuccess />} />
 									<Route path="valid-withdraw" element={<ValidWithdraw />} />
 									<Route path="withdraw-success/:token" element={<WithdrawSuccess />} />
+									<Route path="success-reset-password" element={<SuccessForgotPassword />} />
+									<Route path="forgot-password" element={<ForgotPassword />} />
+									<Route path="auth/verify-account/:token" element={<ResetPassword />} />
+									<Route path="auth/active/:token" element={<VerifyAccount />} />
+									<Route path="auth/verify-account" element={<RequestVerifyAccount />} />
 									<Route path="*" element={<Error404 />} />
 								</Route>
-
-
+								<Route path="/register-store" element={<RegisterStore />} />
 								{/* Navbar */}
 								<Route path="/" element={
 									<NavbarLayout />
@@ -248,6 +258,8 @@ function App() {
 									<Route path="transactions" element={<PaymentAdmin />} />
 									<Route path="orders" element={<OrdersAdmin />} />
 									<Route path="orders/:id" element={<OrderDetailAdmin />} />
+									<Route path="statistics" element={<StatisticAdmin />} />
+
 								</Route>
 							</Routes>
 						</Suspense>

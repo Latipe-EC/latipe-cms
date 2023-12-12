@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Container from "../Container";
 import Grid from "../grid/Grid";
 import Hidden from "../hidden/Hidden";
@@ -11,8 +11,9 @@ import Sticky from "../sticky/Sticky";
 import MobileNavigationBar from "../mobile-navigation/MobileNavigationBar";
 import Footer from "../footer/Footer";
 import { Helmet } from "react-helmet";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { LoginResponse } from "api/interface/auth";
 
 const MainContent = styled.div`
 	margin-top: 5rem; /* Add some initial margin */
@@ -21,7 +22,19 @@ const MainContent = styled.div`
 `;
 
 const VendorDashboardLayout: React.FC = () => {
-
+	const navigate = useNavigate();
+	useEffect(() => {
+		const REACT_STARTER_AUTH: LoginResponse = JSON.parse(localStorage.getItem("REACT_STARTER_AUTH"));
+		if (!REACT_STARTER_AUTH) {
+			navigate("/login");
+			return;
+		}
+		if (REACT_STARTER_AUTH.role !== "VENDOR") {
+			navigate("/register-store");
+			return;
+		}
+		return () => { };
+	}, []);
 	return (
 		<StyledAppLayout>
 			<Helmet>
@@ -37,7 +50,7 @@ const VendorDashboardLayout: React.FC = () => {
 				<Navbar />
 			</div>
 			<MainContent >
-				<Container my="2rem" minH={"1000px"}>
+				<Container my="2rem" minHeight={"600px"}>
 					<Grid container spacing={6}>
 						<Hidden as={Grid} item lg={3} xs={12} down={1024}>
 							<VendorDashboardNavigation />

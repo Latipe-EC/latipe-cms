@@ -7,6 +7,7 @@ import React from "react";
 import StyledAppLayout from "./AppLayoutStyle";
 import { Helmet } from "react-helmet";
 import { Outlet } from "react-router-dom";
+import { minHeight } from "styled-system";
 
 
 type Props = {
@@ -35,13 +36,14 @@ const AppLayout: React.FC<Props> = ({
 
 			{navbar && <div className="section-after-sticky">{navbar}</div>}
 			{!navbar ? (
-				<div className="section-after-sticky"><Outlet /></div>
+				<div className="section-after-sticky" style={{ minHeight: "60vh" }}><Outlet /></div>
 			) : (
 				<Outlet />
-			)}
+			)
+			}
 			<MobileNavigationBar />
 			<Footer></Footer>
-		</StyledAppLayout>
+		</StyledAppLayout >
 	)
 };
 

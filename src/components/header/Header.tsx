@@ -30,9 +30,7 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
 	const REACT_STARTER_AUTH = JSON.parse(localStorage.getItem("REACT_STARTER_AUTH"));
 
 	const logout = () => {
-		localStorage.removeItem('accessToken');
-		localStorage.removeItem('refreshToken');
-		localStorage.removeItem('REACT_STARTER_AUTH');
+		localStorage.clear();
 		window.location.href = '/';
 	}
 	const carts = useAppSelector((state: RootState) => state.carts);

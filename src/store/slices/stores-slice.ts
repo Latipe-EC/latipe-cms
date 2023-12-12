@@ -4,10 +4,22 @@ import { CreateStoreRequest, ProductStoreRequest, UpdateBanStoreRequest, UpdateS
 
 const api = new Api();
 
-export const register = createAsyncThunk(
+export const registerStore = createAsyncThunk(
 	'stores/register',
-	async (input: CreateStoreRequest) => {
-		const response = await api.store.registerStore(input);
+	async (request: CreateStoreRequest) => {
+		if (request.coverFile) {
+			const file = await api.media.uploadFile({ file: request.coverFile });
+			if (file.status !== 201)
+				throw new Error("Some thing went wrong");
+			request.cover = file.data.url;
+		}
+		if (request.logoFile) {
+			const file = await api.media.uploadFile({ file: request.logoFile });
+			if (file.status !== 201)
+				throw new Error("Some thing went wrong");
+			request.logo = file.data.url;
+		}
+		const response = await api.store.registerStore(request);
 		return response;
 	}
 );
@@ -125,7 +137,7 @@ export const storesSlice = createSlice({
 				state.paginationBan.skip = action.payload.data.pagination.skip;
 				state.paginationBan.limit = action.payload.data.pagination.limit;
 			})
-			.addCase(register.fulfilled, (state, action) => {
+			.addCase(registerStore.fulfilled, (state, action) => {
 				state.store = action.payload.data;
 			})
 			.addCase(updateMyStore.fulfilled, (state, action) => {

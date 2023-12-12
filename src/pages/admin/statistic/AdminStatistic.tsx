@@ -5,14 +5,14 @@ import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "../../../store/store";
 import { useEffect, useState } from "react";
 import { GetTotalCommissionResponse, GetTotalOrderInMonthResponse, GetTotalOrderInYear } from "api/interface/order";
-import { getTotalCommission, getTotalOrderInMonth, getTotalOrderInYear } from "../../../store/slices/orders-slice";
+import { getTotalCommissionAdmin, getTotalOrderInMonthAdmin, getTotalOrderInYearAdmin } from "../../../store/slices/orders-slice";
 import { convertDateYYYYMMDD } from "../../../utils/utils";
 import { Box, Heading, Input } from "@chakra-ui/react";
 import MonthChart from "../../../components/chart/MonthChart";
 import YearChart from "../../../components/chart/YearChart";
 import CommissionChart from "../../../components/chart/CommissionChart";
 
-const StatisticVendor = () => {
+const StatisticAdmin = () => {
 	const dispatch = useDispatch<AppThunkDispatch>();
 	const navigate = useNavigate();
 
@@ -25,7 +25,7 @@ const StatisticVendor = () => {
 
 
 	useEffect(() => {
-		dispatch(getTotalOrderInMonth(
+		dispatch(getTotalOrderInMonthAdmin(
 			{ date: convertDateYYYYMMDD(dateMonth) }
 		)).unwrap().then(res => {
 			if (res.status !== 200) {
@@ -58,7 +58,7 @@ const StatisticVendor = () => {
 			setStatisticMonth(res.data);
 		});
 
-		dispatch(getTotalOrderInYear({ date: convertDateYYYYMMDD(dateYear) })).unwrap().then(res => {
+		dispatch(getTotalOrderInYearAdmin({ date: convertDateYYYYMMDD(dateYear) })).unwrap().then(res => {
 			if (res.status !== 200) {
 				navigate("/401");
 				return;
@@ -88,7 +88,7 @@ const StatisticVendor = () => {
 			setStatisticYear(res.data);
 		});
 
-		dispatch(getTotalCommission(
+		dispatch(getTotalCommissionAdmin(
 			{ date: convertDateYYYYMMDD(commissionStartMonth) }
 		)).unwrap().then(res => {
 			if (res.status !== 200) {
@@ -120,7 +120,7 @@ const StatisticVendor = () => {
 	}, []);
 
 	useEffect(() => {
-		dispatch(getTotalOrderInMonth(
+		dispatch(getTotalOrderInMonthAdmin(
 			{ date: convertDateYYYYMMDD(dateMonth) }
 		)).unwrap().then(res => {
 			if (res.status !== 200) {
@@ -156,7 +156,7 @@ const StatisticVendor = () => {
 
 	useEffect(() => {
 
-		dispatch(getTotalOrderInYear({ date: convertDateYYYYMMDD(dateYear) })).unwrap().then(res => {
+		dispatch(getTotalOrderInYearAdmin({ date: convertDateYYYYMMDD(dateYear) })).unwrap().then(res => {
 			if (res.status !== 200) {
 				navigate("/401");
 				return;
@@ -185,11 +185,10 @@ const StatisticVendor = () => {
 			}
 			setStatisticYear(res.data);
 		});
-
 	}, [dateYear]);
 
 	useEffect(() => {
-		dispatch(getTotalCommission(
+		dispatch(getTotalCommissionAdmin(
 			{ date: convertDateYYYYMMDD(commissionStartMonth) }
 		)).unwrap().then(res => {
 			if (res.status !== 200) {
@@ -235,7 +234,7 @@ const StatisticVendor = () => {
 			<Box p={5}>
 				<Heading mb={5}>Doanh thu theo tháng</Heading>
 				<Input
-					w="30%"
+					w="10%"
 					type="date"
 					value={dateMonth.toISOString().slice(0, 10)}
 					onChange={(e) => { setDateMonth(new Date(e.target.value)) }}
@@ -245,7 +244,7 @@ const StatisticVendor = () => {
 			<Box p={5}>
 				<Heading mb={5}>Doanh thu theo năm</Heading>
 				<Input
-					w="30%"
+					w="10%"
 					type="date"
 					value={dateYear.toISOString().slice(0, 10)}
 					onChange={(e) => { setDateYear(new Date(e.target.value)) }}
@@ -255,7 +254,7 @@ const StatisticVendor = () => {
 			<Box p={5}>
 				<Heading mb={5}>Hoa hồng</Heading>
 				<Input
-					w="30%"
+					w="10%"
 					type="date"
 					value={commissionStartMonth.toISOString().slice(0, 10)}
 					onChange={(e) => { setCommissionStartMonth(new Date(e.target.value)) }}
@@ -268,4 +267,4 @@ const StatisticVendor = () => {
 
 
 
-export default StatisticVendor;
+export default StatisticAdmin;

@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "store/store";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getMyStore, updateMyStore } from "../../../store/slices/stores-slice";
+import { registerStore } from "../../../store/slices/stores-slice";
 import { GetMyStoreResponse } from "api/interface/store";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -22,14 +22,46 @@ import provincesData from '../../../data/province.json';
 import districtsData from '../../../data/district.json';
 import wardsData from '../../../data/ward.json';
 import './index.css'
-import { Small } from "../../../components/Typography";
-import { Chip } from "../../../components/Chip";
+import { getMyProfile } from "../../../store/slices/user-slice";
 
-const AccountSettings = () => {
+const RegisterStore = () => {
 	const dispatch = useDispatch<AppThunkDispatch>();
 	const navigate = useNavigate();
 
-	const [store, setStore] = useState<GetMyStoreResponse>();
+	const [store, setStore] = useState<GetMyStoreResponse>(
+		{
+			"id": null,
+			"name": "",
+			"description": "",
+			"logo": null,
+			"ownerId": "",
+			"cover": "",
+			"address": {
+				"contactName": null,
+				"phone": "",
+				"detailAddress": null,
+				"zipCode": "",
+				"cityOrProvinceId": null,
+				"cityOrProvinceName": "",
+				"districtId": null,
+				"districtName": "",
+				"wardId": null,
+				"wardName": "",
+				"countryId": 84,
+				"countryName": "Việt Nam"
+			},
+			"isDeleted": false,
+			"feePerOrder": 0.04,
+			"eWallet": 9000093.0,
+			"ratings": [
+				0,
+				0,
+				0,
+				0,
+				0
+			]
+		}
+	);
 	const [logoFile, setLogoFile] = useState<File>(null);
 	const [coverFile, setCoverFile] = useState<File>(null);
 	const toast = useToast();
@@ -60,23 +92,6 @@ const AccountSettings = () => {
 		);
 	}, [store]);
 
-
-	useEffect(() => {
-		dispatch(getMyStore()).unwrap().then(
-			(res) => {
-				if (res.status !== 200) {
-					navigate("/401");
-					return;
-				}
-				setStore(res.data);
-				setProvince(Object.values(provinces).find(d => d.code == res.data.address.cityOrProvinceId));
-				setDistrict(Object.values(districts).find(d => d.code == res.data.address.districtId));
-				setWard(Object.values(wards).find(w => w.code == res.data.address.wardId));
-			}
-		);
-
-	}, []);
-
 	const getSourceLogo = () => {
 		if (logoFile) {
 			return URL.createObjectURL(logoFile);
@@ -97,9 +112,9 @@ const AccountSettings = () => {
 		return "/assets/images/banners/banner-10.png";
 	}
 
-	const handleUpdate = () => {
+	const handleCreate = () => {
 		const loadingToastId = toast({
-			title: 'Updating store.',
+			title: 'Đang đăng ký.',
 			description: "Loading...",
 			status: 'info',
 			duration: null,
@@ -107,7 +122,7 @@ const AccountSettings = () => {
 			position: "top-right",
 		})
 
-		dispatch(updateMyStore({
+		dispatch(registerStore({
 			...store, logoFile, coverFile
 		}))
 			.unwrap()
@@ -115,18 +130,23 @@ const AccountSettings = () => {
 				toast.close(loadingToastId)
 				if (res.status.toString().includes("20")) {
 					toast({
-						title: 'Success!',
-						description: "Update store success",
+						title: 'Thành công!',
+						description: "Đăng ký thành công chuyển về trang người bán sau 2s",
 						status: 'success',
 						duration: 2000,
 						isClosable: true,
 						position: "top-right",
 					})
+					dispatch(getMyProfile()).unwrap().then(() => {
+						setTimeout(() => {
+							navigate("/vendor");
+						}, 2000);
+					});
 				}
 				else {
 					toast({
-						title: 'Error!',
-						description: "Update store failed",
+						title: 'Thất bại!',
+						description: "Đăng ký thất bại",
 						status: 'error',
 						duration: 2000,
 						isClosable: true,
@@ -199,8 +219,13 @@ const AccountSettings = () => {
 
 
 	return (
-		<div>
-			<DashboardPageHeader title="Account" iconName="settings_filled" />
+		<Box px={6} py={4}>
+			<DashboardPageHeader title="Đăng ký bán hàng" iconName="settings_filled"
+				button={
+					<Button variant="outlined" color="primary" onClick={() => navigate("/")}>
+						Quay lại
+					</Button>
+				} />
 			{store && <Card1 p="24px 30px">
 				<Box
 					borderRadius="10px"
@@ -251,12 +276,6 @@ const AccountSettings = () => {
 								type="file"
 							/>
 						</Hidden>
-
-						<Box m="6px">
-							<Chip p="0.25rem 1rem" bg="green">
-								<Small textAlign="center" color="white" fontWeight="bold">Số dư: {store.eWallet.toLocaleString('vi-VN')}₫</Small>
-							</Chip>
-						</Box>
 					</Box>
 
 					<Box
@@ -395,17 +414,17 @@ const AccountSettings = () => {
 					</Grid>
 				</Box>
 
-				<Button onClick={handleUpdate} variant="contained" color="primary"
+				<Button onClick={handleCreate} variant="contained" color="primary"
 					disabled={isSaveDisabled}
 				>
-					Lưu thay đổi
+					Đăng ký
 				</Button>
 			</Card1>}
-		</div>
+		</Box>
 	);
 };
 
 
-AccountSettings.layout = VendorDashboardLayout;
+RegisterStore.layout = VendorDashboardLayout;
 
-export default AccountSettings;
+export default RegisterStore;

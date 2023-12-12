@@ -1,5 +1,5 @@
 import { PagedResultResponse } from 'api/interface/PagedResultResponse';
-import { LoginRequest, LoginResponse, RefreshTokenInput, RefreshTokenResponse } from '../api/interface/auth';
+import { FinishVerifyAccountRequest, ForgotPasswordRequest, LoginRequest, LoginResponse, RefreshTokenInput, RefreshTokenResponse, RegisterAccountRequest, ResetPasswordRequest, VerifyAccountRequest } from '../api/interface/auth';
 import { CreateUserAddressRequest, UpdateBanUserRequest, UpdateUserRequest, UpdateUsernameRequest, UserAddress, UserAdminResponse, UserResponse } from '../api/interface/user';
 import axios, {
 	AxiosInstance,
@@ -254,7 +254,49 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				body: data,
 				type: ContentType.Json,
 			}),
+
+		resetPassword: (request: ResetPasswordRequest) =>
+			this.request<void>({
+				path: `/auth/reset-password`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: request
+			}),
+
+		forgotPassword: (request: ForgotPasswordRequest) =>
+			this.request<void>({
+				path: `/auth/forgot-password`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: request
+			}),
+
+		registerAccount: (request: RegisterAccountRequest) =>
+			this.request<void>({
+				path: `/auth/register`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: request
+			}),
+
+		finishVerifyAccount: (request: FinishVerifyAccountRequest) =>
+			this.request<void>({
+				path: `/auth/finish-verify-account`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: request
+			}),
+
+		verifyAccount: (request: VerifyAccountRequest) =>
+			this.request<void>({
+				path: `/auth/verify-account`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: request
+			}),
 	};
+
+
 	users = {
 
 		addMyAddress: (data: CreateUserAddressRequest) =>
@@ -348,6 +390,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				type: ContentType.Json,
 				body: request
 			}),
+
 	}
 	category = {
 		getCategories: (params: QueryParamsType) =>
@@ -847,6 +890,46 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			method: 'GET',
 			type: ContentType.Json,
 		}),
+
+		getTotalOrderInMonthAdmin:
+			(params: QueryParamsType) => this.request<GetTotalOrderInMonthResponse>({
+				path: `/orders/statistic/admin/total-order/month`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+
+		getTotalOrderInYearAdmin:
+			(params: QueryParamsType) => this.request<GetTotalOrderInYear>({
+				path: `/orders/statistic/admin/total-order/year`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+
+		getTotalCommissionAdmin:
+			(params: QueryParamsType) => this.request<GetTotalCommissionResponse>({
+				path: `/orders/statistic/admin/total-commission`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+
+		getProductBestSellerAdmin:
+			(params: QueryParamsType) => this.request<GetProductBestSellerResponse>({
+				path: `/orders/statistic/admin/list-of-product`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
 	}
 	promotion = {
 		applyVoucher: (request: ApplyVoucherRequest) =>

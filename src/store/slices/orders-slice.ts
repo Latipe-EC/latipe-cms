@@ -139,6 +139,42 @@ export const
 		}
 	);
 
+export const
+	getTotalOrderInMonthAdmin = createAsyncThunk(
+		'orders/getTotalOrderInMonthAdmin',
+		async (params: QueryParamsType) => {
+			const response = await api.order.getTotalOrderInMonthAdmin(params);
+			return response;
+		}
+	);
+
+export const
+	getTotalOrderInYearAdmin = createAsyncThunk(
+		'orders/getTotalOrderInYearAdmin',
+		async (params: QueryParamsType) => {
+			const response = await api.order.getTotalOrderInYearAdmin(params);
+			return response;
+		}
+	);
+
+export const
+	getTotalCommissionAdmin = createAsyncThunk(
+		'orders/getTotalCommissionAdmin',
+		async (params: QueryParamsType) => {
+			const response = await api.order.getTotalCommissionAdmin(params);
+			return response;
+		}
+	);
+
+export const
+	getProductBestSellerAdmin = createAsyncThunk(
+		'orders/getProductBestSellerAdmin',
+		async (params: QueryParamsType) => {
+			const response = await api.order.getProductBestSellerAdmin(params);
+			return response;
+		}
+	);
+
 export const orderSlice = createSlice({
 	name: 'order',
 	initialState: {

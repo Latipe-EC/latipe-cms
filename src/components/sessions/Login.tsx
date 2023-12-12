@@ -209,13 +209,15 @@ const Login: React.FC = () => {
 				</FlexBox>
 			</form>
 
-			<FlexBox justifyContent="center" bg="gray.200" py="19px">
+			<FlexBox justifyContent="center" bg="gray.200" py="19px"
+				cursor="pointer"
+			>
 				<SemiSpan>Forgot your password?</SemiSpan>
-				<a href="/">
-					<H6 ml="0.5rem" borderBottom="1px solid" borderColor="gray.900">
-						Reset It
-					</H6>
-				</a>
+				<H6 ml="0.5rem" borderBottom="1px solid" borderColor="gray.900"
+					cursor="pointer"
+					onClick={() => navigate("/forgot-password")}>
+					Reset It
+				</H6>
 			</FlexBox>
 		</StyledSessionCard>
 	);

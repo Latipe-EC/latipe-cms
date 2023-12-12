@@ -28,13 +28,13 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
 
 	return (
 		<StyledCategoryDropdown open={open} position={position}>
-			{categories.children.length > 0 && categories.children.map((item: CategoryResponse) => {
+			{categories.children.length > 0 && categories.children.slice(0, 10).map((item: CategoryResponse) => {
 				// const MegaMenu = megaMenu[item.menuComponent];
 				return (
 					<CategoryMenuItem
 						title={item.name}
-						href={`/search?keyword=${item.name}`}
-						icon={item.image}
+						href={`/search?category=${item.name}`}
+						// icon={item.image}
 						caret={!!item.menuData}
 						key={item.id}
 					>

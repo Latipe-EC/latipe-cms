@@ -30,6 +30,9 @@ export interface CreateStoreRequest {
 	 * @memberof CreateStoreRequest
 	 */
 	'cover'?: string;
+	'address'?: StoreAddress;
+	coverFile?: File;
+	logoFile?: File;
 }
 /**
  * 

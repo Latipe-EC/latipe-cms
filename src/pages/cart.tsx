@@ -54,7 +54,7 @@ const Cart = () => {
 		<CartLayout>
 			<Fragment>
 				<Grid containe>
-					<Grid item xl={12} lg={8} md={8} xs={12} mb={8}>
+					<Grid item xl={12} lg={12} md={12} xs={12} mb={8}>
 						{carts.data.length > 0 && <InfiniteScroll
 							dataLength={carts.data.length}
 							next={fetchMoreData}

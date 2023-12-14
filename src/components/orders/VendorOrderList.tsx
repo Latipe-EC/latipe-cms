@@ -98,6 +98,19 @@ const VendorOrderList: React.FC<VendorOrderListProps> = () => {
 	return (
 		<Fragment>
 			<FlexBox flexDirection="column" justifyContent="flex-start" mb={0}>
+				<InputGroup mt={2} ml={4} w={"40%"}>
+					<InputLeftElement
+						pointerEvents="none"
+						children={<SearchIcon color="gray.300" />}
+					/>
+					<Input type="search" placeholder="Search"
+						maxLength={30}
+						value={search}
+						onChange={(e) => {
+							console.log(e.target.value);
+							setSearch(e.target.value)
+						}} />
+				</InputGroup>
 				<Tabs onChange={(index) => setTabIndex(index)}
 					position="relative" variant="unstyled">
 					<TabList display="flex" >
@@ -117,19 +130,7 @@ const VendorOrderList: React.FC<VendorOrderListProps> = () => {
 						borderRadius="1px"
 					/>
 
-					<InputGroup mt={2} ml={4} w={"40%"}>
-						<InputLeftElement
-							pointerEvents="none"
-							children={<SearchIcon color="gray.300" />}
-						/>
-						<Input type="search" placeholder="Search"
-							maxLength={30}
-							value={search}
-							onChange={(e) => {
-								console.log(e.target.value);
-								setSearch(e.target.value)
-							}} />
-					</InputGroup>
+
 
 					<TabPanels>
 						{Array.from({ length: 7 }).map((_, index) => (

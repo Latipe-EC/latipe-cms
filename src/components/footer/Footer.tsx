@@ -26,7 +26,7 @@ const Footer: React.FC = () => {
 								<a href="/">
 									<Image
 										mb="1.25rem"
-										src="/assets/images/logo.svg"
+										src="/assets/images/latipe_logo.jpeg"
 										alt="logo"
 									/>
 								</a>

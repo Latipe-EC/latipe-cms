@@ -40,7 +40,7 @@ const Section2: React.FC = () => {
 				<Carousel totalSlides={10} visibleSlides={visibleSlides}>
 					{resultList.length > 0 && resultList.map((item, ind) => (
 						<Box py="0.25rem" key={ind}
-						// onClick={() => navigate(`/products/${item.id}`)}
+							height="100%"
 						>
 							<ProductCard1
 								id={item.id}

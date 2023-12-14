@@ -101,6 +101,15 @@ export const updateBanStore = createAsyncThunk(
 	}
 );
 
+export const countAllStore = createAsyncThunk(
+	'Stores/countAllStore',
+	async () => {
+		const response = await api.store.countAllStore();
+		return response;
+	}
+);
+
+
 export const storesSlice = createSlice({
 	name: 'stores',
 	initialState: {

@@ -11,6 +11,7 @@ import searchReducer from './slices/search-slice';
 import orderReducer from './slices/orders-slice';
 import commissionReducer from './slices/commissions-slice';
 import paymentReducer from './slices/payment-slice';
+import deliveryReducer from './slices/deliveries-slice';
 
 import {
 	persistStore,
@@ -37,6 +38,7 @@ export const rootReducer = combineReducers({
 	order: orderReducer,
 	commissions: commissionReducer,
 	payments: paymentReducer,
+	deliveries: deliveryReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

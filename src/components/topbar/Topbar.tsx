@@ -38,7 +38,7 @@ const Topbar: React.FC = () => {
 			>
 				<FlexBox className="topbar-left">
 					<div className="logo">
-						<img src="/assets/images/logo.svg" alt="logo" />
+						<img src="/assets/images/latipe_logo.jpeg" alt="logo" />
 					</div>
 					<FlexBox alignItems="center">
 						<Icon size="14px">phone-call</Icon>

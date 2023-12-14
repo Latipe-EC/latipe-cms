@@ -3,8 +3,9 @@ import Box from "../Box";
 import { AttributeValue, CategoryResponse } from "api/interface/product";
 import { Text } from "@chakra-ui/react";
 import FlexBox from "../FlexBox";
-import ReactMarkdown from "react-markdown";
 import { useNavigate } from "react-router-dom";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 
 export interface ProductDescriptionProps {
@@ -20,6 +21,11 @@ const ProductDescription: React.FC<ProductDescriptionProps> = ({ description,
 		navigate(`/search?category=${category.name}`)
 	}
 
+	const editorConfiguration = {
+		toolbar: {
+			items: []
+		}
+	};
 
 	const categoryString = categories.map((category, index) => {
 		const categoryName = category.name;
@@ -40,7 +46,7 @@ const ProductDescription: React.FC<ProductDescriptionProps> = ({ description,
 	});
 
 	return (
-		<Box>
+		<Box >
 			<Text p={"2"} fontSize={"2xl"} mb="0.2rem" textTransform="uppercase">Danh Mục
 				:</Text>
 			{" "}
@@ -59,8 +65,16 @@ const ProductDescription: React.FC<ProductDescriptionProps> = ({ description,
 				))
 			}
 			<Text p={"2"} fontSize={"2xl"} mb="0.5rem" textTransform="uppercase">Mô tả sản phẩm:</Text>
-			<Box ml={3} mb={2} >
-				<ReactMarkdown children={description} />
+			<Box ml={3} >
+				<CKEditor
+					editor={ClassicEditor}
+					config={editorConfiguration}
+					data={description}
+					onReady={editor => {
+						console.log('Editor is ready to use!', editor);
+					}}
+					disabled={true}
+				/>
 			</Box>
 		</Box >
 	);

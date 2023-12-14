@@ -250,6 +250,25 @@ export interface GetTotalCommissionResponse {
 	data: DataGetTotalCommission
 }
 
+
+export interface GetTotalCommissionAdminResponse {
+	code: number
+	error_code: string
+	message: string
+	data: DataGetTotalCommissionAdmin
+}
+export interface DataGetTotalCommissionAdmin {
+	filter_date: string
+	items: ItemGetTotalCommissionAdmin[]
+}
+
+export interface ItemGetTotalCommissionAdmin {
+	month: number
+	store_received: number
+	system_received: number
+	total_orders: number
+}
+
 export interface DataGetTotalCommission {
 	filter_date: string
 	items: ItemGetTotalCommission[]
@@ -269,6 +288,32 @@ export interface GetProductBestSellerResponse {
 	data: DataGetProductBestSeller
 }
 
+export interface GetOrderDaysResponse {
+	code: number
+	error_code: string
+	message: string
+	data: DataGetOrderDays
+}
+
+export interface CountAllOrderResponse {
+	code: number
+	error_code: string
+	message: string
+	data: {
+		count: number
+	}
+}
+
+export interface DataGetOrderDays {
+	day: string
+	items: ItemGetOrderDays[]
+}
+
+export interface ItemGetOrderDays {
+	hour: string
+	amount: string
+	count: number
+}
 export interface DataGetProductBestSeller {
 	filter_date: string
 	items: ItemGetProductBestSeller[]

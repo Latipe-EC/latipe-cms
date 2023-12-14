@@ -33,7 +33,7 @@ const ProductDetails = () => {
 
 
 	return (
-		<Box bg={"gray.200"}>
+		<Box>
 			<Box bg="white">
 				{product && <ProductIntro product={product} />}
 			</Box>

@@ -31,7 +31,7 @@ const ProductReview: React.FC<ProductReviewProps> = ({ rating, selectedStar, set
 		}
 	};
 	return (
-		<Box p={2}>
+		<Box p={2} mt={2}>
 			<H2 fontWeight={"bold"} mb="1rem">Đánh giá sản phẩm</H2>
 			<Flex alignItems="center" mb="1rem">
 				{Array.from({ length: 5 }).map((_, index) => {

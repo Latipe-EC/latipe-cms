@@ -7,8 +7,6 @@ import React from "react";
 import StyledAppLayout from "./AppLayoutStyle";
 import { Helmet } from "react-helmet";
 import { Outlet } from "react-router-dom";
-import { minHeight } from "styled-system";
-
 
 type Props = {
 	title?: string;

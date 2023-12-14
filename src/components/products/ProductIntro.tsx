@@ -110,6 +110,10 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 	};
 
 	const handleCheckValid = () => {
+		const user = JSON.parse(localStorage.getItem('REACT_STARTER_AUTH'));
+
+		if (user.role === "ADMIN")
+			return false
 		if (product.productVariants.length > 0) {
 			if (selectOption.length !== product.productVariants.length)
 				return false;

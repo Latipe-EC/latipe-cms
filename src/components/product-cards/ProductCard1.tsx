@@ -57,22 +57,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 
 	return (
 		<StyledProductCard1 {...props}>
-			<div className="image-holder">
-				{/* {!!off && (
-					<Chip
-						position="absolute"
-						bg="primary.main"
-						color="primary.text"
-						fontSize="10px"
-						fontWeight="600"
-						p="5px 10px"
-						top="10px"
-						left="10px"
-					>
-						{off}% off
-					</Chip>
-				)} */}
-
+			<div className="image-holder" style={{ height: "100%" }}>
 				<FlexBox className="extra-icons">
 					<Icon
 						color="secondary"

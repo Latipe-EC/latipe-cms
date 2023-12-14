@@ -6,10 +6,20 @@ import Sidebar from '../../sidebar/Sidebar';
 import { useState } from 'react';
 import { RoutesType } from 'api/interface/interface';
 import routes from './routes.tsx';
+import { Navigate, useLocation } from 'react-router-dom';
 
 export default function Dashboard() {
 	// states and functions
 	const [fixed] = useState(false);
+	const { onOpen } = useDisclosure();
+	const user = JSON.parse(localStorage.getItem('REACT_STARTER_AUTH'));
+	const location = useLocation();
+
+	if (!user || user.role !== 'ADMIN') {
+		localStorage.clear();
+		return <Navigate to="/login" state={{ from: location }} />;
+	}
+
 
 	const getActiveRoute = (routes: RoutesType[]): string => {
 		const activeRoute = 'Latipe Admin';
@@ -40,7 +50,6 @@ export default function Dashboard() {
 	};
 
 	document.documentElement.dir = 'ltr';
-	const { onOpen } = useDisclosure();
 	return (
 		<Box>
 

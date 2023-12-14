@@ -167,7 +167,8 @@ const AddressEditor = () => {
 				iconName="pin_filled"
 				title="Edit Address"
 				button={
-					<Button color="primary" bg="primary.light" px="2rem" onClick={backToAddresses}>
+					<Button
+						color="primary" bg="primary.light" px="2rem" onClick={backToAddresses}>
 						Quay lại
 					</Button>
 				}

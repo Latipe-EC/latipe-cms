@@ -45,11 +45,18 @@ const Login: React.FC = () => {
 					toast({
 						title: 'Success Login !',
 						status: 'success',
-						duration: null,
+						duration: 1500,
 						isClosable: true,
 						position: 'top-right',
 					})
 					setTimeout(() => {
+						if (res.data.role === "ADMIN") {
+							navigate("/admin");
+							return;
+						} else if (res.data.role === "DELIVERY") {
+							navigate("/delivery");
+							return;
+						}
 						navigate("/");
 					}, 2000);
 				} else {

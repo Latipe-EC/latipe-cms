@@ -1,8 +1,8 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Tab, TabIndicator, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
 import { AppThunkDispatch } from 'store/store';
 import { useDispatch } from 'react-redux';
-import { searchStoreAdmin } from '../../../store/slices/orders-slice';
+import { searchOrderAdmin } from '../../../store/slices/orders-slice';
 import { searchStoreOrderResponse } from 'api/interface/order';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FlexBox from '../../../components/FlexBox';
@@ -81,10 +81,10 @@ const OrdersAdmin = () => {
 				paramFilter["filters[status][$eq]"] = 6;
 				break;
 		}
-		dispatch(searchStoreAdmin({
-			"size": "8",
+		dispatch(searchOrderAdmin({
+			"size": "7",
 			"page": currentPage,
-			"keyword": search,
+			"filters[order_uuid][$search]": search,
 			...paramFilter
 		})).unwrap().then((res) => {
 			setOrderList(res.data);

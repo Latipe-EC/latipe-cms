@@ -1,3 +1,4 @@
+import { CountAllOrderResponse, GetTotalCommissionAdminResponse } from './interface/order';
 import { PagedResultResponse } from 'api/interface/PagedResultResponse';
 import { FinishVerifyAccountRequest, ForgotPasswordRequest, LoginRequest, LoginResponse, RefreshTokenInput, RefreshTokenResponse, RegisterAccountRequest, ResetPasswordRequest, VerifyAccountRequest } from '../api/interface/auth';
 import { CreateUserAddressRequest, UpdateBanUserRequest, UpdateUserRequest, UpdateUsernameRequest, UserAddress, UserAdminResponse, UserResponse } from '../api/interface/user';
@@ -14,12 +15,12 @@ import { StoreResponse, CreateStoreRequest, UpdateStoreRequest, ProductStoreResp
 import { CreateRatingRequest, RatingResponse, UpdateRatingRequest } from 'api/interface/rating';
 import { CartGetDetailResponse, CartItemRequest, CartResponse, DeleteCartItemRequest, UpdateQuantityRequest } from 'api/interface/cart';
 import { ProductListGetVm, ProductNameListVm } from 'api/interface/search';
-import { calculateShippingOrderRequest, createDeliveryRequest, listDeliveryRequest } from 'api/interface/delivery';
+import { DeliveryResponse, CalculateShippingOrderRequest, CreateDeliveryRequest, ListDeliveryRequest, UpateDeliveryRequest } from 'api/interface/delivery';
 import {
 	CancelOrderRequest, CountMyOrderResponse, CreateOrderRequest, CreateOrderResponse, GetMyOrderResponse, GetOrderByIdResponse, StoreOrderDetailResponse, GetTotalOrderInMonthResponse,
 	searchStoreOrderResponse,
 	GetTotalOrderInYear, GetTotalCommissionResponse,
-	GetProductBestSellerResponse, StatusBodyRequest, UpdateOrderItemStatusByStoreResponse, AdminOrderDetailResponse
+	GetProductBestSellerResponse, StatusBodyRequest, UpdateOrderItemStatusByStoreResponse, AdminOrderDetailResponse, GetOrderDaysResponse
 } from 'api/interface/order';
 import { ApplyVoucherReponse, ApplyVoucherRequest, CheckVoucherReponse, createVoucherRequest } from 'api/interface/promotion';
 import { CheckPaymentOrderResponse, PayByPaypalRequest, PayOrderRequest, PaymentResponse, validWithdrawPayPalRequest, withdrawPayPalRequest } from 'api/interface/payment';
@@ -391,6 +392,13 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				body: request
 			}),
 
+		countAllUser: () =>
+			this.request<number>({
+				path: `/users/count`,
+				method: 'GET',
+				type: ContentType.Json,
+			}),
+
 	}
 	category = {
 		getCategories: (params: QueryParamsType) =>
@@ -450,6 +458,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				method: 'DELETE',
 				type: ContentType.Json,
 			}),
+
+
 	}
 	media = {
 		uploadFile: (data: {
@@ -463,6 +473,13 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			}),
 	}
 	product = {
+		countAllProduct: () =>
+			this.request<number>({
+				path: `/products/count`,
+				method: 'GET',
+				type: ContentType.Json,
+			}),
+
 		addProduct: (data: CreateProductRequest) =>
 			this.request<ProductResponse>({
 				path: `/products`,
@@ -513,7 +530,12 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 	}
 
 	store = {
-
+		countAllStore: () =>
+			this.request<number>({
+				path: `/stores/count`,
+				method: 'GET',
+				type: ContentType.Json,
+			}),
 		getMyStore: () =>
 			this.request<GetMyStoreResponse>({
 				path: `/stores/my`,
@@ -740,7 +762,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			}),
 	}
 	delivery = {
-		getListDelivery: (request: listDeliveryRequest) =>
+		getListDelivery: (request: ListDeliveryRequest) =>
 			this.request<[]>({
 				path: `/delivery/shipping/anonymous`,
 				method: 'POST',
@@ -748,20 +770,43 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				body: request
 			}),
 
-		createDelivery: (request: createDeliveryRequest) =>
-			this.request<unknown>({
+		createDelivery: (request: CreateDeliveryRequest) =>
+			this.request<{ id: string }>({
 				path: `/delivery/admin`,
 				method: 'POST',
 				type: ContentType.Json,
 				body: request
 			}),
 
-		calculateShippingOrder: (request: calculateShippingOrderRequest) =>
+		upateDelivery: (request: UpateDeliveryRequest) =>
+			this.request<void>({
+				path: `/delivery/admin/${request.id}`,
+				method: 'PATCH',
+				type: ContentType.Json,
+				body: request
+			}),
+
+		upateStatusDelivery: (request: { id: string, status: boolean }) =>
+			this.request<void>({
+				path: `/delivery/admin/${request.id}/status`,
+				method: 'PATCH',
+				type: ContentType.Json,
+				body: { status: request.status }
+			}),
+
+		calculateShippingOrder: (request: CalculateShippingOrderRequest) =>
 			this.request<unknown>({
 				path: `/delivery/shipping/order`,
 				method: 'POST',
 				type: ContentType.Json,
 				body: request
+			}),
+
+		getAdminListDelivery: () =>
+			this.request<DeliveryResponse[]>({
+				path: `/delivery/admin`,
+				method: 'GET',
+				type: ContentType.Json,
 			}),
 	}
 	order = {
@@ -875,13 +920,21 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				}
 			}),
 
-		searchStoreAdmin: (params: Record<string, string>) => {
+		searchOrderAdmin: (params: Record<string, string>) => {
 			const queryParams = new URLSearchParams(params).toString();
 			return this.request<searchStoreOrderResponse>({
 				path: `/orders/admin?${queryParams}`,
 				method: 'GET',
 				type: ContentType.Json,
+			})
+		},
 
+		searchOrderDelivery: (params: Record<string, string>) => {
+			const queryParams = new URLSearchParams(params).toString();
+			return this.request<searchStoreOrderResponse>({
+				path: `/orders/delivery?${queryParams}`,
+				method: 'GET',
+				type: ContentType.Json,
 			})
 		},
 
@@ -912,7 +965,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			}),
 
 		getTotalCommissionAdmin:
-			(params: QueryParamsType) => this.request<GetTotalCommissionResponse>({
+			(params: QueryParamsType) => this.request<GetTotalCommissionAdminResponse>({
 				path: `/orders/statistic/admin/total-commission`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -930,6 +983,22 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 					...params
 				}
 			}),
+
+		getOrderDaysAdmin:
+			(params: QueryParamsType) => this.request<GetOrderDaysResponse>({
+				path: `/orders/statistic/admin/total-order/day`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+
+		countAllOrder: () => this.request<CountAllOrderResponse>({
+			path: `/orders/user/count`,
+			method: 'GET',
+			type: ContentType.Json,
+		}),
 	}
 	promotion = {
 		applyVoucher: (request: ApplyVoucherRequest) =>

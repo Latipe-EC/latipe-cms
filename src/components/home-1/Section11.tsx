@@ -1,4 +1,3 @@
-import productDatabase from "../../data/product-database";
 import React, { useEffect, useState } from "react";
 import CategorySectionHeader from "../CategorySectionHeader";
 import Container from "../Container";
@@ -16,7 +15,6 @@ const Section11: React.FC = () => {
 	useEffect(() => {
 		dispatch(searchProduct({ sortType: "COUNT_SALE_DESC", page: 0, size: 12 })).unwrap().then((res) => {
 			setResultList(res.data.products);
-			console.log(res.data.products);
 			return;
 		});
 	}, []);

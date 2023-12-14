@@ -108,6 +108,14 @@ export const updateBanProduct = createAsyncThunk(
 	}
 );
 
+export const countAllProduct = createAsyncThunk(
+	'Products/countAllProduct',
+	async () => {
+		const response = await api.product.countAllProduct();
+		return response;
+	}
+);
+
 export const productsSlice = createSlice({
 	name: 'products',
 	initialState: {

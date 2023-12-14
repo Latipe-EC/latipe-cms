@@ -111,6 +111,13 @@ export const updateBanUser = createAsyncThunk(
 	}
 );
 
+export const countAllUser = createAsyncThunk(
+	'Users/countAllUser',
+	async () => {
+		const response = await api.users.countAllUser();
+		return response;
+	}
+);
 
 export const usersSlice = createSlice({
 	name: 'users',

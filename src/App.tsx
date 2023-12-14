@@ -60,8 +60,13 @@ const PaymentAdmin = lazy(() => import('./pages/admin/transactions/AdminTransact
 const OrdersAdmin = lazy(() => import('./pages/admin/order/AdminOrder'));
 const OrderDetailAdmin = lazy(() => import('./pages/admin/order/OrderDetailAdmin'));
 const StatisticAdmin = lazy(() => import('./pages/admin/statistic/AdminStatistic'));
+const HomeAdmin = lazy(() => import('./pages/admin/home/AdminHome'));
+const DeliveryAdmin = lazy(() => import('./pages/admin/delivery/AdminDelivery'));
 
 
+// Delivery Page
+const DeliveryPage = lazy(() => import('./pages/delivery'));
+const OrderDetailDelivery = lazy(() => import('./pages/delivery/delivery-order-detail'));
 
 const AboutPage = lazy(() => import('./pages/about'));
 const Cart = lazy(() => import('./pages/cart'));
@@ -92,11 +97,20 @@ const Error404 = lazy(() => import('./pages/404'));
 function App() {
 
 	const dispatch = useDispatch<AppThunkDispatch>();
-	if (!window.location.pathname.includes('/admin'))
-		dispatch(getChildsCategory(null));
+	const user = JSON.parse(localStorage.getItem('REACT_STARTER_AUTH'));
+	const allowRouteAdmin = ["/admin", "/products", "shop"]
 
+	if (user && user.role === 'ADMIN' &&
+		!allowRouteAdmin.some(route => window.location.pathname.includes(route))
+	) {
+		window.location.href = '/admin';
+	}
+
+
+	if (!window.location.pathname.includes('/admin') && !window.location.pathname.includes('/delivery'))
+		dispatch(getChildsCategory(null));
 	const auth = JSON.parse(localStorage.getItem('REACT_STARTER_AUTH'));
-	if (auth && auth.isAuthenticated && !window.location.pathname.includes('/admin')) {
+	if (auth && auth.isAuthenticated && !window.location.pathname.includes('/admin') && !window.location.pathname.includes('/delivery')) {
 		dispatch(getMyCart({ skip: 0, limit: 10 }))
 	}
 
@@ -230,6 +244,7 @@ function App() {
 										<DashboardVendor />
 									}
 									/>
+									<Route path="" element={<OrdersVendor />} />
 									<Route path="profile" element={<AccountSettings />} />
 									<Route path="orders/:id" element={<OrderDetailsVendor />} />
 									<Route path="orders" element={<OrdersVendor />} />
@@ -248,8 +263,9 @@ function App() {
 									<Route path="/vendor/products/add" element={<AddProduct />} />
 								</Route>
 								{/* Admin */}
-
 								<Route path="/admin/" element={<DashboardAdmin />}>
+									<Route path="" element={<HomeAdmin />} />
+									<Route path="home" element={<HomeAdmin />} />
 									<Route path="categories" element={<CategoriesAdmin />} />
 									<Route path="products" element={<ProductsAdmin />} />
 									<Route path="stores" element={<StoresAdmin />} />
@@ -259,8 +275,11 @@ function App() {
 									<Route path="orders" element={<OrdersAdmin />} />
 									<Route path="orders/:id" element={<OrderDetailAdmin />} />
 									<Route path="statistics" element={<StatisticAdmin />} />
-
+									<Route path="deliveries" element={<DeliveryAdmin />} />
 								</Route>
+
+								<Route path="/delivery" element={<DeliveryPage />} />
+								<Route path="/delivery/orders/:id" element={<OrderDetailDelivery />} />
 							</Routes>
 						</Suspense>
 					</Router>

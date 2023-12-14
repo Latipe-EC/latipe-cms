@@ -30,6 +30,7 @@ const VendorDashboardLayout: React.FC = () => {
 			return;
 		}
 		if (REACT_STARTER_AUTH.role !== "VENDOR") {
+			localStorage.clear();
 			navigate("/register-store");
 			return;
 		}

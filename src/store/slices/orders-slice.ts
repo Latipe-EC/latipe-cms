@@ -122,10 +122,19 @@ export const
 	);
 
 export const
-	searchStoreAdmin = createAsyncThunk(
-		'orders/searchStoreAdmin',
+	searchOrderAdmin = createAsyncThunk(
+		'orders/searchOrderAdmin',
 		async (params: Record<string, string>) => {
-			const response = await api.order.searchStoreAdmin(params);
+			const response = await api.order.searchOrderAdmin(params);
+			return response;
+		}
+	);
+
+export const
+	searchOrderDelivery = createAsyncThunk(
+		'orders/searchOrderDelivery',
+		async (params: Record<string, string>) => {
+			const response = await api.order.searchOrderDelivery(params);
 			return response;
 		}
 	);
@@ -175,6 +184,23 @@ export const
 		}
 	);
 
+export const
+	getOrderDaysAdmin = createAsyncThunk(
+		'orders/getOrderDaysAdmin',
+		async (params: QueryParamsType) => {
+			const response = await api.order.getOrderDaysAdmin(params);
+			return response;
+		}
+	);
+
+export const
+	countAllOrder = createAsyncThunk(
+		'orders/CountAllOrderResponse',
+		async () => {
+			const response = await api.order.countAllOrder();
+			return response;
+		}
+	);
 export const orderSlice = createSlice({
 	name: 'order',
 	initialState: {

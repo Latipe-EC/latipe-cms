@@ -170,26 +170,24 @@ const OrderDetailAdmin = () => {
 			</Card>
 
 			{response && <Grid container spacing={6}>
-				<Grid container alignItems="stretch" style={{ width: '100%' }}>
-					<Grid item lg={6} md={6} xs={12} style={{ display: 'flex' }}>
-						<Card p="20px 30px" mb="1.5rem" style={{ flexGrow: 1 }}>
-							<H5 mt="0px" mb="14px">
-								Địa chỉ giao hàng
-							</H5>
-							<H6 my="0px">{response.data.order.delivery.shipping_name} | {response.data.order.delivery.shipping_phone}
+				<Grid item lg={6} md={6} xs={12} style={{ display: 'flex' }}>
+					<Card p="20px 30px" mb="1.5rem" style={{ flexGrow: 1 }}>
+						<H5 mt="0px" mb="14px">
+							Địa chỉ giao hàng
+						</H5>
+						<H6 my="0px">{response.data.order.delivery.shipping_name} | {response.data.order.delivery.shipping_phone}
+						</H6>
+						<H6 my="0px">{response.data.order.delivery.shipping_address}
+						</H6>
+					</Card>
+				</Grid>
+				<Grid item lg={6} md={6} xs={12} style={{ display: 'flex' }}>
+					<Card p="20px 30px" mb="1.5rem" style={{ flexGrow: 1 }}>
+						{response.data.order.order_status.map((item) => (
+							<H6 my="0px">{format(new Date(item.created_at), "HH:mm dd-MM-yyyy")} | {item.message}
 							</H6>
-							<H6 my="0px">{response.data.order.delivery.shipping_address}
-							</H6>
-						</Card>
-					</Grid>
-					<Grid item lg={6} md={6} xs={12} style={{ display: 'flex' }}>
-						<Card p="20px 30px" mb="1.5rem" style={{ flexGrow: 1 }}>
-							{response.data.order.order_status.map((item) => (
-								<H6 my="0px">{format(new Date(item.created_at), "HH:mm dd-MM-yyyy")} | {item.message}
-								</H6>
-							))}
-						</Card>
-					</Grid>
+						))}
+					</Card>
 				</Grid>
 				{response &&
 					(

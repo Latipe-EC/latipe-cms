@@ -377,3 +377,4 @@ export interface StatusAdminOrderDetail {
 	created_at: string
 }
 
+export interface UpdateOrderByDeliveryRequest { id: string, status: number }

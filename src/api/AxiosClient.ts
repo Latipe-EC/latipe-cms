@@ -1,4 +1,4 @@
-import { CountAllOrderResponse, GetTotalCommissionAdminResponse } from './interface/order';
+import { CountAllOrderResponse, GetTotalCommissionAdminResponse, UpdateOrderByDeliveryRequest } from './interface/order';
 import { PagedResultResponse } from 'api/interface/PagedResultResponse';
 import { FinishVerifyAccountRequest, ForgotPasswordRequest, LoginRequest, LoginResponse, RefreshTokenInput, RefreshTokenResponse, RegisterAccountRequest, ResetPasswordRequest, VerifyAccountRequest } from '../api/interface/auth';
 import { CreateUserAddressRequest, UpdateBanUserRequest, UpdateUserRequest, UpdateUsernameRequest, UserAddress, UserAdminResponse, UserResponse } from '../api/interface/user';
@@ -935,6 +935,17 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				path: `/orders/delivery?${queryParams}`,
 				method: 'GET',
 				type: ContentType.Json,
+			})
+		},
+
+		updateStatusOrderByDelivery: (request: UpdateOrderByDeliveryRequest) => {
+			return this.request<searchStoreOrderResponse>({
+				path: `/orders/delivery/${request.id}`,
+				method: 'PATCH',
+				type: ContentType.Json,
+				body: {
+					status: request.status
+				}
 			})
 		},
 

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Api, QueryParamsType } from '../../api/AxiosClient';
-import { CancelOrderRequest, CreateOrderRequest, StatusBodyRequest } from 'api/interface/order';
+import { CancelOrderRequest, CreateOrderRequest, StatusBodyRequest, UpdateOrderByDeliveryRequest } from 'api/interface/order';
 
 const api = new Api();
 
@@ -135,6 +135,15 @@ export const
 		'orders/searchOrderDelivery',
 		async (params: Record<string, string>) => {
 			const response = await api.order.searchOrderDelivery(params);
+			return response;
+		}
+	);
+
+export const
+	updateStatusOrderByDelivery = createAsyncThunk(
+		'orders/updateStatusOrderByDelivery',
+		async (request: UpdateOrderByDeliveryRequest) => {
+			const response = await api.order.updateStatusOrderByDelivery(request);
 			return response;
 		}
 	);

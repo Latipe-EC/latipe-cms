@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import Avatar from "../../components/avatar/Avatar";
 import Box from "../../components/Box";
-import Button from "../../components/buttons/Button";
 import Card from "../../components/Card";
 import Divider from "../../components/Divider";
 import FlexBox from "../../components/FlexBox";
@@ -14,8 +13,9 @@ import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "store/store";
 import { useEffect, useState } from "react";
 import { AdminOrderDetailResponse } from "api/interface/order";
-import { getAdminOrderDetail } from "../../store/slices/orders-slice";
+import { getAdminOrderDetail, updateStatusOrderByDelivery } from "../../store/slices/orders-slice";
 import { Chip } from "../../components/Chip";
+import { Button, Flex } from "@chakra-ui/react";
 
 const OrderDetailDelivery = () => {
 
@@ -77,14 +77,19 @@ const OrderDetailDelivery = () => {
 		}
 	};
 
-	const handleUpdateStatus = () => {
+	const handleUpdateStatus = (status) => {
 		if (response.data.order.status === 3) {
-			dispatch(getAdminOrderDetail(id)).unwrap().then((res) => {
+			dispatch(updateStatusOrderByDelivery({
+				id: response.data.order.order_uuid,
+				status: status
+			})).unwrap().then((res) => {
 				if (res.data.error_code) {
 					navigate("/401");
 					return;
 				}
-				setResponse(res.data);
+				const newResponse = { ...response };
+				newResponse.data.order.status = status;
+				setResponse(newResponse);
 			});
 		} else if (response.data.order.status === 4) {
 			dispatch(getAdminOrderDetail(id)).unwrap().then((res) => {
@@ -253,11 +258,33 @@ const OrderDetailDelivery = () => {
 
 				</Grid>
 			}
-			{response && (response.data.order.status === 3 || response.data.order.status === 3) && <Button
-				bg="red"
-				color="white"
-				onClick={handleUpdateStatus}
-			> {response.data.order.status === 3 ? "Không tiếp nhận đơn hàng" : "Giao hàng không thành công"}</Button>}
+			{response && (response.data.order.status === 3) &&
+				<Flex direction="row" justifyContent="space-between">
+					<Button
+						bg="red"
+						color="white"
+						onClick={() => handleUpdateStatus(7)}
+						p={4}
+						borderRadius="md"
+						_hover={{ bg: "red.400" }}
+						mr={2}
+					>
+						Không tiếp nhận đơn hàng
+					</Button>
+					<Button
+						bg="green"
+						color="white"
+						onClick={() => handleUpdateStatus(4)}
+						p={4}
+						borderRadius="md"
+						ml={2}
+						_hover={{ bg: "green.400" }}
+					// _hover={{ filter: "blur(2px)" }}
+					>
+						Giao hàng thành công
+					</Button>
+				</Flex>
+			}
 		</Box >
 	);
 }

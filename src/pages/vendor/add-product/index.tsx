@@ -137,6 +137,7 @@ const AddProduct = () => {
 	const handleCategorySelect = (category, order) => {
 		const newSelectedListCategory = [...selectedCategory];
 		newSelectedListCategory.splice(order, newSelectedListCategory.length - order);
+		console.log([...newSelectedListCategory, { id: category.id, name: category.name, attributes: category.attributes }]);
 		setSelectedCategory([...newSelectedListCategory, { id: category.id, name: category.name, attributes: category.attributes }]);
 		const newCategory = [...categories];
 		newCategory.splice(order + 1, newCategory.length - order);
@@ -328,7 +329,7 @@ const AddProduct = () => {
 						position: "top-right",
 					})
 					setTimeout(() => {
-						navigate("/vendor/products");
+						// navigate("/vendor/products");
 					}, 2500)
 				} else {
 					toast({

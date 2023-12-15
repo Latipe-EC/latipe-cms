@@ -46,7 +46,7 @@ const CustomerDashboardLayout: React.FC<Props> = ({
 				<Navbar />
 			</div>
 			<MainContent >
-				<Container my="2rem" minH={"1000px"}>
+				<Container my="2rem" minHeight={"52vh"}>
 					<Grid container spacing={6}>
 						<Hidden as={Grid} item lg={3} xs={12} down={1024}>
 							<CustomerDashboardNavigation />

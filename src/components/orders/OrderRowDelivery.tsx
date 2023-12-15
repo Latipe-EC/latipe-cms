@@ -72,9 +72,9 @@ const OrderRowDelivery: React.FC<OrderRowDeliveryProps> = ({ order }) => {
 			}}
 		>
 			<H5 m="6px" textAlign="left">
-				{order.order_uuid}
+				{order.order_uuid.toUpperCase()}
 			</H5>
-			<Box m="6px">
+			<Box display="flex" justifyContent="center">
 				<Chip p="0.25rem 1rem" bg={`${getColor(order.status)}.light`}>
 					<Small textAlign="center" color={`${getColor(order.status)}.main`}>{handleRenderStaus()}</Small>
 				</Chip>

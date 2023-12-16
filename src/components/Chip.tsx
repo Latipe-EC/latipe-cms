@@ -16,7 +16,7 @@ type ChipProps = {
 };
 
 export const Chip = styled.div<
-  SpaceProps & ColorProps & TypographyProps & PositionProps & ChipProps
+    SpaceProps & ColorProps & TypographyProps & PositionProps & ChipProps
 >`
   display: inline-flex;
   border-radius: 300px;

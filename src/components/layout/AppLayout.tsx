@@ -5,44 +5,44 @@ import Sticky from "../sticky/Sticky";
 import Topbar from "../topbar/Topbar";
 import React from "react";
 import StyledAppLayout from "./AppLayoutStyle";
-import { Helmet } from "react-helmet";
-import { Outlet } from "react-router-dom";
+import {Helmet} from "react-helmet";
+import {Outlet} from "react-router-dom";
 
 type Props = {
-	title?: string;
-	navbar?: React.ReactNode;
-	children?: React.ReactNode;
+  title?: string;
+  navbar?: React.ReactNode;
+  children?: React.ReactNode;
 };
 const AppLayout: React.FC<Props> = ({
-	navbar,
-	title = "Latipe",
-}) => {
+                                      navbar,
+                                      title = "Latipe",
+                                    }) => {
 
-	return (
-		<StyledAppLayout>
-			<Helmet>
-				<title>{title}</title>
-				<meta charSet="utf-8" />
-				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
-			</Helmet>
+  return (
+      <StyledAppLayout>
+        <Helmet>
+          <title>{title}</title>
+          <meta charSet="utf-8"/>
+          <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
+        </Helmet>
 
-			<Topbar />
+        <Topbar/>
 
-			<Sticky fixedOn={0}>
-				<Header />
-			</Sticky>
+        <Sticky fixedOn={0}>
+          <Header/>
+        </Sticky>
 
-			{navbar && <div className="section-after-sticky">{navbar}</div>}
-			{!navbar ? (
-				<div className="section-after-sticky" style={{ minHeight: "60vh" }}><Outlet /></div>
-			) : (
-				<Outlet />
-			)
-			}
-			<MobileNavigationBar />
-			<Footer></Footer>
-		</StyledAppLayout >
-	)
+        {navbar && <div className="section-after-sticky">{navbar}</div>}
+        {!navbar ? (
+            <div className="section-after-sticky" style={{minHeight: "60vh"}}><Outlet/></div>
+        ) : (
+            <Outlet/>
+        )
+        }
+        <MobileNavigationBar/>
+        <Footer></Footer>
+      </StyledAppLayout>
+  )
 };
 
 export default AppLayout;

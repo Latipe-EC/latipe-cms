@@ -1,5 +1,5 @@
-import { deviceSize } from "./constants";
-import { colors } from "./themeColors";
+import {deviceSize} from "./constants";
+import {colors} from "./themeColors";
 import shadows from "./themeShadows";
 
 export interface ThemeProps {
@@ -17,7 +17,7 @@ export interface ThemeProps {
 }
 
 const breakpoints: any = Object.keys(deviceSize).map(
-  (key) => deviceSize[key] + "px"
+    (key) => deviceSize[key] + "px"
 );
 
 breakpoints.sm = breakpoints[0];

@@ -1,4 +1,4 @@
-import { deviceSize, layoutConstant } from "../../utils/constants";
+import {deviceSize, layoutConstant} from "../../utils/constants";
 import styled from "styled-components";
 
 type Home2WrapperProps = {
@@ -14,18 +14,18 @@ const GroceryWrapper = styled.div<Home2WrapperProps>`
 
   .sidenav {
     width: ${layoutConstant.grocerySidenavWidth};
-    position: ${({ isSidenavFixed }) =>
-      isSidenavFixed ? "fixed" : "relative"};
-    top: ${({ isSidenavFixed }) =>
-      isSidenavFixed ? layoutConstant.headerHeight : 0};
+    position: ${({isSidenavFixed}) =>
+    isSidenavFixed ? "fixed" : "relative"};
+    top: ${({isSidenavFixed}) =>
+    isSidenavFixed ? layoutConstant.headerHeight : 0};
     height: calc(100vh - ${layoutConstant.headerHeight});
     bottom: 0;
   }
 
   .content {
     position: relative;
-    left: ${({ isSidenavFixed }) =>
-      isSidenavFixed ? layoutConstant.grocerySidenavWidth : "unset"};
+    left: ${({isSidenavFixed}) =>
+    isSidenavFixed ? layoutConstant.grocerySidenavWidth : "unset"};
     width: calc(100% - 1.75rem - ${layoutConstant.grocerySidenavWidth});
     margin-left: 1.75rem;
   }

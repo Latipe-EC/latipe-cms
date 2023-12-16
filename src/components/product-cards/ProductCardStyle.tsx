@@ -1,7 +1,7 @@
-import { deviceSize } from "../../utils/constants";
+import {deviceSize} from "../../utils/constants";
 import styled from "styled-components";
-import { space } from "styled-system";
-import { getTheme } from "../../utils/utils";
+import {space} from "styled-system";
+import {getTheme} from "../../utils/utils";
 import Card from "../Card";
 
 export const StyledProductCard1 = styled(Card)`

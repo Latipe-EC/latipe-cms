@@ -3,14 +3,14 @@ import Login from "../components/sessions/Login";
 
 const LoginPage = () => {
   return (
-    <FlexBox
-      flexDirection="column"
-      minHeight="100vh"
-      alignItems="center"
-      justifyContent="center"
-    >
-      <Login />
-    </FlexBox>
+      <FlexBox
+          flexDirection="column"
+          minHeight="100vh"
+          alignItems="center"
+          justifyContent="center"
+      >
+        <Login/>
+      </FlexBox>
   );
 };
 

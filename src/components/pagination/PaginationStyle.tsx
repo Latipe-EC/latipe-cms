@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { space } from "styled-system";
-import { getTheme } from "../../utils/utils";
+import {space} from "styled-system";
+import {getTheme} from "../../utils/utils";
 
 export const StyledPagination = styled.div`
   .pagination {

@@ -6,8 +6,8 @@ import FlexBox from "../FlexBox";
 import Grid from "../grid/Grid";
 import Icon from "../icon/Icon";
 import Image from "../Image";
-import { H2 } from "../Typography";
-import React, { useState } from "react";
+import {H2} from "../Typography";
+import React, {useState} from "react";
 import styled from "styled-components";
 
 const SectionWrapper = styled.div`
@@ -44,88 +44,88 @@ const Section5: React.FC = () => {
   };
 
   return (
-    <SectionWrapper>
-      <FlexBox justifyContent="space-between" alignItems="center" mb="1.5rem">
-        <H2 fontWeight="bold" lineHeight="1">
-          Deal Of The Week
-        </H2>
+      <SectionWrapper>
+        <FlexBox justifyContent="space-between" alignItems="center" mb="1.5rem">
+          <H2 fontWeight="bold" lineHeight="1">
+            Deal Of The Week
+          </H2>
 
-        <FlexBox>
-          <IconButton
-            variant="contained"
-            color="primary"
-            mr="0.5rem"
-            disabled={currentSlide === 0}
-            onClick={handleSlideChange(currentSlide - 1)}
-          >
-            <Icon variant="small" defaultcolor="currentColor">
-              arrow-left
-            </Icon>
-          </IconButton>
-          <IconButton
-            variant="contained"
-            color="primary"
-            disabled={currentSlide === totalSlides - 1}
-            onClick={handleSlideChange(currentSlide + 1)}
-          >
-            <Icon variant="small" defaultcolor="currentColor">
-              arrow-right
-            </Icon>
-          </IconButton>
+          <FlexBox>
+            <IconButton
+                variant="contained"
+                color="primary"
+                mr="0.5rem"
+                disabled={currentSlide === 0}
+                onClick={handleSlideChange(currentSlide - 1)}
+            >
+              <Icon variant="small" defaultcolor="currentColor">
+                arrow-left
+              </Icon>
+            </IconButton>
+            <IconButton
+                variant="contained"
+                color="primary"
+                disabled={currentSlide === totalSlides - 1}
+                onClick={handleSlideChange(currentSlide + 1)}
+            >
+              <Icon variant="small" defaultcolor="currentColor">
+                arrow-right
+              </Icon>
+            </IconButton>
+          </FlexBox>
         </FlexBox>
-      </FlexBox>
 
-      <Box mt="-0.25rem" mb="-0.25rem">
-        <Carousel
-          totalSlides={3}
-          visibleSlides={1}
-          arrowButtonColor="primary"
-          showDots={true}
-          showArrow={false}
-          currentSlide={currentSlide}
-        >
-          {[...new Array(totalSlides)].map((_item, ind) => (
-            <Box py="0.25rem" key={ind}>
-              <Grid container spacing={6}>
-                {productList.map((item, ind) => (
-                  <Grid item md={6} xs={12} key={ind}>
-                      <a  href="/">
-                        <Card position="relative">
-                          <Image src={item.imgUrl} width="100%" />
+        <Box mt="-0.25rem" mb="-0.25rem">
+          <Carousel
+              totalSlides={3}
+              visibleSlides={1}
+              arrowButtonColor="primary"
+              showDots={true}
+              showArrow={false}
+              currentSlide={currentSlide}
+          >
+            {[...new Array(totalSlides)].map((_item, ind) => (
+                <Box py="0.25rem" key={ind}>
+                  <Grid container spacing={6}>
+                    {productList.map((item, ind) => (
+                        <Grid item md={6} xs={12} key={ind}>
+                          <a href="/">
+                            <Card position="relative">
+                              <Image src={item.imgUrl} width="100%"/>
 
-                          <Box
-                            position="absolute"
-                            bg="gray.200"
-                            fontWeight="600"
-                            p="6px 12px"
-                            top="1.25rem"
-                            left="1.25rem"
-                            borderRadius={5}
-                          >
-                            {item.brand}
-                          </Box>
-                          <Box
-                            position="absolute"
-                            bg="primary.main"
-                            color="white"
-                            fontWeight="600"
-                            p="6px 12px"
-                            top="1.25rem"
-                            right="1.25rem"
-                            borderRadius={5}
-                          >
-                            {item.off}% OFF
-                          </Box>
-                        </Card>
-                      </a>
+                              <Box
+                                  position="absolute"
+                                  bg="gray.200"
+                                  fontWeight="600"
+                                  p="6px 12px"
+                                  top="1.25rem"
+                                  left="1.25rem"
+                                  borderRadius={5}
+                              >
+                                {item.brand}
+                              </Box>
+                              <Box
+                                  position="absolute"
+                                  bg="primary.main"
+                                  color="white"
+                                  fontWeight="600"
+                                  p="6px 12px"
+                                  top="1.25rem"
+                                  right="1.25rem"
+                                  borderRadius={5}
+                              >
+                                {item.off}% OFF
+                              </Box>
+                            </Card>
+                          </a>
+                        </Grid>
+                    ))}
                   </Grid>
-                ))}
-              </Grid>
-            </Box>
-          ))}
-        </Carousel>
-      </Box>
-    </SectionWrapper>
+                </Box>
+            ))}
+          </Carousel>
+        </Box>
+      </SectionWrapper>
   );
 };
 

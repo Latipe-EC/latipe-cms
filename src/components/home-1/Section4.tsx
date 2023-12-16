@@ -9,50 +9,50 @@ import ProductCard5 from "../product-cards/ProductCard5";
 
 const Section4: React.FC = () => {
   return (
-    <Box mb="3.75rem">
-      <Container>
-        <Box>
-          <Grid container spacing={6}>
-            <Grid item lg={6} xs={12}>
-              <CategorySectionHeader
-                iconName="ranking-1"
-                title="Top Ratings"
-                seeMoreLink="#"
-              />
-              <Card p="1rem">
-                <Grid container spacing={4}>
-                  {topRatedList.map((item) => (
-                    <Grid item md={3} sm={6} xs={6} key={item.title}>
-                        <a  href={item.productUrl}>
-                          <ProductCard4 {...item} />
-                        </a>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Card>
+      <Box mb="3.75rem">
+        <Container>
+          <Box>
+            <Grid container spacing={6}>
+              <Grid item lg={6} xs={12}>
+                <CategorySectionHeader
+                    iconName="ranking-1"
+                    title="Top Ratings"
+                    seeMoreLink="#"
+                />
+                <Card p="1rem">
+                  <Grid container spacing={4}>
+                    {topRatedList.map((item) => (
+                        <Grid item md={3} sm={6} xs={6} key={item.title}>
+                          <a href={item.productUrl}>
+                            <ProductCard4 {...item} />
+                          </a>
+                        </Grid>
+                    ))}
+                  </Grid>
+                </Card>
+              </Grid>
+              <Grid item md={6} xs={12}>
+                <CategorySectionHeader
+                    iconName="Group"
+                    title="Featured Brands"
+                    seeMoreLink="#"
+                />
+                <Card p="1rem">
+                  <Grid container spacing={4}>
+                    {brandList.map((item) => (
+                        <Grid item sm={6} xs={12} key={item.title}>
+                          <a href={item.productUrl}>
+                            <ProductCard5 {...item} />
+                          </a>
+                        </Grid>
+                    ))}
+                  </Grid>
+                </Card>
+              </Grid>
             </Grid>
-            <Grid item md={6} xs={12}>
-              <CategorySectionHeader
-                iconName="Group"
-                title="Featured Brands"
-                seeMoreLink="#"
-              />
-              <Card p="1rem">
-                <Grid container spacing={4}>
-                  {brandList.map((item) => (
-                    <Grid item sm={6} xs={12} key={item.title}>
-                        <a  href={item.productUrl}>
-                          <ProductCard5 {...item} />
-                        </a>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Card>
-            </Grid>
-          </Grid>
-        </Box>
-      </Container>
-    </Box>
+          </Box>
+        </Container>
+      </Box>
   );
 };
 

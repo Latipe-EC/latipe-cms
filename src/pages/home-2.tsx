@@ -12,17 +12,17 @@ import GrocerySection9 from "../../src/components/home-2/GrocerySection9";
 import GrocerySidenav from "../../src/components/home-2/GrocerySidenav";
 import GroceryWrapper from "../../src/components/home-2/GroceryWrapper";
 import GroceryLayout from "../../src/components/layout/GroceryLayout";
-import { debounce } from "lodash";
-import { useCallback, useEffect, useState } from "react";
+import {debounce} from "lodash";
+import {useCallback, useEffect, useState} from "react";
 
 const Home2 = () => {
   const [isSidenavFixed, setSidenavFixed] = useState(false);
 
   const scrollListener = useCallback(
-    debounce(() => {
-      setSidenavFixed(window.pageYOffset > 60);
-    }, 0),
-    []
+      debounce(() => {
+        setSidenavFixed(window.pageYOffset > 60);
+      }, 0),
+      []
   );
 
   useEffect(() => {
@@ -31,42 +31,42 @@ const Home2 = () => {
   }, []);
 
   return (
-    <GroceryWrapper isSidenavFixed={isSidenavFixed}>
-      <Box className="sidenav">
-        <GrocerySidenav isFixed={isSidenavFixed} />
-      </Box>
-      <Box className="content">
-        <Box className="section-1">
-          <GrocerySection1 />
+      <GroceryWrapper isSidenavFixed={isSidenavFixed}>
+        <Box className="sidenav">
+          <GrocerySidenav isFixed={isSidenavFixed}/>
         </Box>
-        <Box mb="3rem" overflow="hidden">
-          <GrocerySection2 />
-        </Box>
-        <Box mb="3rem">
-          <GrocerySection3 />
-        </Box>
-        <Box mb="3rem">
-          <GrocerySection4 />
-        </Box>
-        <Box mb="3rem">
-          <GrocerySection5 />
-        </Box>
-        <Box mb="3rem">
-          <GrocerySection6 />
-        </Box>
-        <Box mb="3rem">
-          <GrocerySection7 />
-        </Box>
-        <Box mb="3rem">
-          <GrocerySection8 />
-        </Box>
-        <Box mb="3rem">
-          <GrocerySection9 />
-        </Box>
+        <Box className="content">
+          <Box className="section-1">
+            <GrocerySection1/>
+          </Box>
+          <Box mb="3rem" overflow="hidden">
+            <GrocerySection2/>
+          </Box>
+          <Box mb="3rem">
+            <GrocerySection3/>
+          </Box>
+          <Box mb="3rem">
+            <GrocerySection4/>
+          </Box>
+          <Box mb="3rem">
+            <GrocerySection5/>
+          </Box>
+          <Box mb="3rem">
+            <GrocerySection6/>
+          </Box>
+          <Box mb="3rem">
+            <GrocerySection7/>
+          </Box>
+          <Box mb="3rem">
+            <GrocerySection8/>
+          </Box>
+          <Box mb="3rem">
+            <GrocerySection9/>
+          </Box>
 
-        <GrocerFooter />
-      </Box>
-    </GroceryWrapper>
+          <GrocerFooter/>
+        </Box>
+      </GroceryWrapper>
   );
 };
 

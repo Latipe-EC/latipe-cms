@@ -5,9 +5,9 @@ import Grid from "../../grid/Grid";
 import Image from "../../Image";
 import LazyImage from "../../LazyImage";
 import NavLink from "../../nav-link/NavLink";
-import Typography, { H3, SemiSpan, Small } from "../../Typography";
+import Typography, {H3, SemiSpan, Small} from "../../Typography";
 import React from "react";
-import { StyledMegaMenu1 } from "./MegaMenuStyle";
+import {StyledMegaMenu1} from "./MegaMenuStyle";
 
 interface Image {
   imgUrl: string;
@@ -36,54 +36,54 @@ interface MegaMenuProps {
 }
 
 const MegaMenu3: React.FC<MegaMenuProps> = ({
-  data: { categories, rightImage },
-  minWidth,
-}) => {
+                                              data: {categories, rightImage},
+                                              minWidth,
+                                            }) => {
   return categories ? (
-    <StyledMegaMenu1 className="mega-menu">
-      <Card ml="1rem" minWidth={minWidth} boxShadow="regular">
-        <FlexBox px="1.25rem" py="0.875rem">
-          <Box flex="1 1 0">
-            <Grid container spacing={4}>
-              {categories?.map((item, ind) => (
-                <Grid item md={3} key={ind}>
-                  {item.href ? (
-                    <NavLink className="title-link" href={item.href}>
-                      {item.title}
-                    </NavLink>
-                  ) : (
-                    <SemiSpan className="title-link">{item.title}</SemiSpan>
-                  )}
-                  {item.subCategories?.map((sub) => (
-                    <NavLink className="child-link" href={sub.href}>
-                      {sub.title}
-                    </NavLink>
-                  ))}
-                </Grid>
-              ))}
-            </Grid>
-          </Box>
+      <StyledMegaMenu1 className="mega-menu">
+        <Card ml="1rem" minWidth={minWidth} boxShadow="regular">
+          <FlexBox px="1.25rem" py="0.875rem">
+            <Box flex="1 1 0">
+              <Grid container spacing={4}>
+                {categories?.map((item, ind) => (
+                    <Grid item md={3} key={ind}>
+                      {item.href ? (
+                          <NavLink className="title-link" href={item.href}>
+                            {item.title}
+                          </NavLink>
+                      ) : (
+                          <SemiSpan className="title-link">{item.title}</SemiSpan>
+                      )}
+                      {item.subCategories?.map((sub) => (
+                          <NavLink className="child-link" href={sub.href}>
+                            {sub.title}
+                          </NavLink>
+                      ))}
+                    </Grid>
+                ))}
+              </Grid>
+            </Box>
 
-          {rightImage && (
-              <a href={rightImage.href}>
-                <Box position="relative" width="153px" height="100%">
-                  <LazyImage
-                    src={rightImage.imgUrl}
-                    layout="fill"
-                    objectFit="contain"
-                  />
-                </Box>
-              </a>
-          )}
-        </FlexBox>
+            {rightImage && (
+                <a href={rightImage.href}>
+                  <Box position="relative" width="153px" height="100%">
+                    <LazyImage
+                        src={rightImage.imgUrl}
+                        layout="fill"
+                        objectFit="contain"
+                    />
+                  </Box>
+                </a>
+            )}
+          </FlexBox>
 
-          <a  href="/sale-page-2">
+          <a href="/sale-page-2">
             <Grid
-              container
-              spacing={0}
-              flexWrap="wrap-reverse"
-              containerHeight="100%"
-              alignItems="center"
+                container
+                spacing={0}
+                flexWrap="wrap-reverse"
+                containerHeight="100%"
+                alignItems="center"
             >
               <Grid item sm={6} xs={12}>
                 <Box px="1.25rem">
@@ -94,9 +94,9 @@ const MegaMenu3: React.FC<MegaMenuProps> = ({
                   </Typography>
 
                   <Small
-                    fontWeight="700"
-                    borderBottom="2px solid"
-                    borderColor="primary.main"
+                      fontWeight="700"
+                      borderBottom="2px solid"
+                      borderColor="primary.main"
                   >
                     SHOP NOW
                   </Small>
@@ -104,23 +104,23 @@ const MegaMenu3: React.FC<MegaMenuProps> = ({
               </Grid>
               <Grid item sm={6} xs={12}>
                 <FlexBox
-                  flexDirection="column"
-                  justifyContent="flex-end"
-                  height="160px"
-                  position="relative"
+                    flexDirection="column"
+                    justifyContent="flex-end"
+                    height="160px"
+                    position="relative"
                 >
                   <LazyImage
-                    layout="fill"
-                    objectFit="contain"
-                    src="/assets/images/products/paper-bag.png"
-                    alt="model"
+                      layout="fill"
+                      objectFit="contain"
+                      src="/assets/images/products/paper-bag.png"
+                      alt="model"
                   />
                 </FlexBox>
               </Grid>
             </Grid>
           </a>
-      </Card>
-    </StyledMegaMenu1>
+        </Card>
+      </StyledMegaMenu1>
   ) : null;
 };
 

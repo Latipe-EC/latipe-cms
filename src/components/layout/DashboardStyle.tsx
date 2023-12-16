@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { getTheme } from "../../utils/utils";
+import {getTheme} from "../../utils/utils";
 import Card from "../Card";
 import FlexBox from "../FlexBox";
 import NavLink from "../nav-link/NavLink";
@@ -17,9 +17,9 @@ export const StyledDashboardNav = styled(NavLink)<{ isCurrentPath?: boolean }>`
   justify-content: space-between;
   align-items: center;
   border-left: 4px solid;
-  color: ${({ isCurrentPath }) =>
+  color: ${({isCurrentPath}) =>
     isCurrentPath ? getTheme("colors.primary.main") : "inherit"};
-  border-left-color: ${({ isCurrentPath }) =>
+  border-left-color: ${({isCurrentPath}) =>
     isCurrentPath ? getTheme("colors.primary.main") : "transparent"};
 
   .dashboard-nav-icon-holder {

@@ -2,13 +2,14 @@ import FlexBox from "../FlexBox";
 import LazyImage from "../LazyImage";
 import React from "react";
 import styled from "styled-components";
-import { getTheme } from "../../utils/utils";
+import {getTheme} from "../../utils/utils";
 import Box from "../Box";
 import Card from "../Card";
 import Grid from "../grid/Grid";
-import Typography, { H3, Small } from "../Typography";
+import Typography, {H3, Small} from "../Typography";
 
-export interface Section4Props {}
+export interface Section4Props {
+}
 
 const StyledCard = styled(Card)`
   transition: all 250ms ease-in-out;
@@ -20,30 +21,30 @@ const StyledCard = styled(Card)`
 
 const Section4: React.FC<Section4Props> = () => {
   return (
-    <Box flex="1 1 0" mb="3rem">
-        <a  href="/">
+      <Box flex="1 1 0" mb="3rem">
+        <a href="/">
           <StyledCard boxShadow="border" borderRadius={4} height="100%">
             <Grid
-              container
-              spacing={0}
-              flexWrap="wrap-reverse"
-              containerHeight="100%"
+                container
+                spacing={0}
+                flexWrap="wrap-reverse"
+                containerHeight="100%"
             >
               <Grid item sm={6} xs={12}>
                 <Box p="1rem" position="relative">
                   <FlexBox
-                    flexDirection="column"
-                    height="100%"
-                    minHeight="190px"
-                    justifyContent="flex-end"
-                    alignItems="center"
-                    position="relative"
+                      flexDirection="column"
+                      height="100%"
+                      minHeight="190px"
+                      justifyContent="flex-end"
+                      alignItems="center"
+                      position="relative"
                   >
                     <LazyImage
-                      layout="fill"
-                      objectFit="contain"
-                      src="/assets/images/products/kris-gerhard-0BKZfcamvGg-unsplash-removebg-preview 1.png"
-                      alt="shoe"
+                        layout="fill"
+                        objectFit="contain"
+                        src="/assets/images/products/kris-gerhard-0BKZfcamvGg-unsplash-removebg-preview 1.png"
+                        alt="shoe"
                     />
                   </FlexBox>
                 </Box>
@@ -58,9 +59,9 @@ const Section4: React.FC<Section4Props> = () => {
                   </Typography>
 
                   <Small
-                    fontWeight="700"
-                    borderBottom="2px solid"
-                    borderColor="primary.main"
+                      fontWeight="700"
+                      borderBottom="2px solid"
+                      borderColor="primary.main"
                   >
                     SHOP NOW
                   </Small>
@@ -69,7 +70,7 @@ const Section4: React.FC<Section4Props> = () => {
             </Grid>
           </StyledCard>
         </a>
-    </Box>
+      </Box>
   );
 };
 

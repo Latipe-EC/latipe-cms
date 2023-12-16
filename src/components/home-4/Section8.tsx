@@ -1,31 +1,31 @@
 import Box from "../Box";
 import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
-import { H3, SemiSpan } from "../Typography";
+import {H3, SemiSpan} from "../Typography";
 import React from "react";
 
 const Section8: React.FC = () => {
   return (
-    <FlexBox
-      mb="3.75rem"
-      p="1rem"
-      border="1px solid"
-      borderColor="gray.400"
-      borderRadius={8}
-      flexWrap="wrap"
-    >
-      {serviceList.map((item) => (
-        <FlexBox alignItems="center" p="1rem" mx="auto" key={item.title}>
-          <Icon size="42px" mr="0.87rem">
-            {item.iconName}
-          </Icon>
-          <Box>
-            <H3 lineHeight="1.3">{item.title}</H3>
-            <SemiSpan color="text.muted">{item.subtitle}</SemiSpan>
-          </Box>
-        </FlexBox>
-      ))}
-    </FlexBox>
+      <FlexBox
+          mb="3.75rem"
+          p="1rem"
+          border="1px solid"
+          borderColor="gray.400"
+          borderRadius={8}
+          flexWrap="wrap"
+      >
+        {serviceList.map((item) => (
+            <FlexBox alignItems="center" p="1rem" mx="auto" key={item.title}>
+              <Icon size="42px" mr="0.87rem">
+                {item.iconName}
+              </Icon>
+              <Box>
+                <H3 lineHeight="1.3">{item.title}</H3>
+                <SemiSpan color="text.muted">{item.subtitle}</SemiSpan>
+              </Box>
+            </FlexBox>
+        ))}
+      </FlexBox>
   );
 };
 

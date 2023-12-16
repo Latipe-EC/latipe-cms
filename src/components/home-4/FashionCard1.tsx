@@ -1,28 +1,29 @@
 import Box from "../Box";
 import Card from "../Card";
 import LazyImage from "../LazyImage";
-import Typography, { H3, Small, Span } from "../Typography";
+import Typography, {H3, Small, Span} from "../Typography";
 import React from "react";
 
-export interface FashionCard1Props {}
+export interface FashionCard1Props {
+}
 
 const FashionCard1: React.FC<FashionCard1Props> = () => {
   return (
-      <a  href="/">
+      <a href="/">
         <Card
-          p="2.5rem"
-          boxShadow="border"
-          height="100%"
-          borderRadius={4}
-          hoverEffect
+            p="2.5rem"
+            boxShadow="border"
+            height="100%"
+            borderRadius={4}
+            hoverEffect
         >
           <LazyImage
-            width={30}
-            height={20}
-            layout="responsive"
-            objectFit="contain"
-            src="/assets/images/products/shoes-1.png"
-            alt="shoes"
+              width={30}
+              height={20}
+              layout="responsive"
+              objectFit="contain"
+              src="/assets/images/products/shoes-1.png"
+              alt="shoes"
           />
 
           <Box mt="3.5rem">
@@ -43,9 +44,9 @@ const FashionCard1: React.FC<FashionCard1Props> = () => {
             </Typography>
 
             <Small
-              fontWeight="700"
-              borderBottom="2px solid"
-              borderColor="primary.main"
+                fontWeight="700"
+                borderBottom="2px solid"
+                borderColor="primary.main"
             >
               SHOP NOW
             </Small>

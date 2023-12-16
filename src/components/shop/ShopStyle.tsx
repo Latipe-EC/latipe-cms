@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import Card from "../Card";
+
 interface ShopIntroWrapperProps {
-	imageSrc: string;
+  imageSrc: string;
 }
+
 export const ShopIntroWrapper = styled(Card) <ShopIntroWrapperProps>`
   .cover-image {
     background-image: url(${props => props.imageSrc});

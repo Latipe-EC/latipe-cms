@@ -1,6 +1,6 @@
-import React, { cloneElement, Fragment, useEffect, useState } from "react";
-import { createPortal } from "react-dom";
-import { StyledSidenav } from "./SidenavStyle";
+import React, {cloneElement, Fragment, useEffect, useState} from "react";
+import {createPortal} from "react-dom";
+import {StyledSidenav} from "./SidenavStyle";
 
 export interface SidenavProps {
   position?: "left" | "right";
@@ -13,14 +13,14 @@ export interface SidenavProps {
 }
 
 const Sidenav: React.FC<SidenavProps> = ({
-  position,
-  open,
-  width,
-  scroll,
-  handle,
-  children,
-  toggleSidenav,
-}) => {
+                                           position,
+                                           open,
+                                           width,
+                                           scroll,
+                                           handle,
+                                           children,
+                                           toggleSidenav,
+                                         }) => {
   const [sidenavOpen, setSidenavOpen] = useState(open);
   const handleModalContentClick = (e) => {
     e.stopPropagation();
@@ -44,36 +44,36 @@ const Sidenav: React.FC<SidenavProps> = ({
     }
 
     return (
-      <Fragment>
-        {createPortal(
-          <StyledSidenav
-            open={sidenavOpen}
-            width={width}
-            position={position}
-            scroll={scroll}
-            onClick={toggleSidenav || handleToggleSidenav}
-          >
-            <div className="sidenav-content" onClick={handleModalContentClick}>
-              {children}
-            </div>
-          </StyledSidenav>,
-          sidenav
-        )}
+        <Fragment>
+          {createPortal(
+              <StyledSidenav
+                  open={sidenavOpen}
+                  width={width}
+                  position={position}
+                  scroll={scroll}
+                  onClick={toggleSidenav || handleToggleSidenav}
+              >
+                <div className="sidenav-content" onClick={handleModalContentClick}>
+                  {children}
+                </div>
+              </StyledSidenav>,
+              sidenav
+          )}
 
-        {handle &&
-          cloneElement(handle, {
-            className: handle.props?.className + " cursor-pointer",
-            onClick: toggleSidenav || handleToggleSidenav,
-          })}
-      </Fragment>
+          {handle &&
+              cloneElement(handle, {
+                className: handle.props?.className + " cursor-pointer",
+                onClick: toggleSidenav || handleToggleSidenav,
+              })}
+        </Fragment>
     );
   } else
     return (
-      handle &&
-      cloneElement(handle, {
-        className: handle.props?.className + " cursor-pointer",
-        onClick: toggleSidenav || handleToggleSidenav,
-      })
+        handle &&
+        cloneElement(handle, {
+          className: handle.props?.className + " cursor-pointer",
+          onClick: toggleSidenav || handleToggleSidenav,
+        })
     );
 };
 

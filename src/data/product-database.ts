@@ -612,7 +612,7 @@ export default [
     price: 250,
     title: "Xeats bluetooth earphones",
     imgUrl:
-      "/assets/images/products/Electronics/35.beatsbluetoothearpohones.png",
+        "/assets/images/products/Electronics/35.beatsbluetoothearpohones.png",
     category: "electronics",
     id: "2592847245904619",
   },
@@ -675,7 +675,7 @@ export default [
     price: 250,
     title: "Police Gray Eyeglasses",
     imgUrl:
-      "/assets/images/products/Fashion/Accessories/7.PoliceGrayEyeglasses.png",
+        "/assets/images/products/Fashion/Accessories/7.PoliceGrayEyeglasses.png",
     category: "fashion",
     subcategory: "accessories",
     id: "9666097324355527",
@@ -708,7 +708,7 @@ export default [
     price: 250,
     title: "Sun glasses Collection",
     imgUrl:
-      "/assets/images/products/Fashion/Accessories/11.SunglassesCollection.png",
+        "/assets/images/products/Fashion/Accessories/11.SunglassesCollection.png",
     category: "fashion",
     subcategory: "accessories",
     id: "16046267561044392",
@@ -725,7 +725,7 @@ export default [
     price: 250,
     title: "Kossil Watch Brown",
     imgUrl:
-      "/assets/images/products/Fashion/Accessories/13.FossilWatchBrown.png",
+        "/assets/images/products/Fashion/Accessories/13.FossilWatchBrown.png",
     category: "fashion",
     subcategory: "accessories",
     id: "6851576725247721",
@@ -734,7 +734,7 @@ export default [
     price: 250,
     title: "MVMTM Watch Black",
     imgUrl:
-      "/assets/images/products/Fashion/Accessories/14.MVMTMWatchBlack.png",
+        "/assets/images/products/Fashion/Accessories/14.MVMTMWatchBlack.png",
     category: "fashion",
     subcategory: "accessories",
     id: "0731254935389758",
@@ -743,7 +743,7 @@ export default [
     price: 250,
     title: "Xarioho Watch Black",
     imgUrl:
-      "/assets/images/products/Fashion/Accessories/15.BarihoWatchBlack.png",
+        "/assets/images/products/Fashion/Accessories/15.BarihoWatchBlack.png",
     category: "fashion",
     subcategory: "accessories",
     id: "2121941501029705",
@@ -752,7 +752,7 @@ export default [
     price: 250,
     title: "Skmei Watch Black",
     imgUrl:
-      "/assets/images/products/Fashion/Accessories/16.SkmeiWatchBlack.png",
+        "/assets/images/products/Fashion/Accessories/16.SkmeiWatchBlack.png",
     category: "fashion",
     subcategory: "accessories",
     id: "9782727801248745",
@@ -761,7 +761,7 @@ export default [
     price: 250,
     title: "Digital Wrist Watch",
     imgUrl:
-      "/assets/images/products/Fashion/Accessories/17.DigitalWristWatch.png",
+        "/assets/images/products/Fashion/Accessories/17.DigitalWristWatch.png",
     category: "fashion",
     subcategory: "accessories",
     id: "8308589572862153",
@@ -770,7 +770,7 @@ export default [
     price: 250,
     title: "Dragon Red Wrist Watch",
     imgUrl:
-      "/assets/images/products/Fashion/Accessories/18.DragonRedWristWatch.png",
+        "/assets/images/products/Fashion/Accessories/18.DragonRedWristWatch.png",
     category: "fashion",
     subcategory: "accessories",
     id: "7442702726899737",
@@ -779,7 +779,7 @@ export default [
     price: 250,
     title: "SIlver High Neck Sweater",
     imgUrl:
-      "/assets/images/products/Fashion/Clothes/1.SilverHighNeckSweater.png",
+        "/assets/images/products/Fashion/Clothes/1.SilverHighNeckSweater.png",
     category: "fashion",
     subcategory: "clothes",
     id: "3556359043315229",
@@ -820,7 +820,7 @@ export default [
     price: 250,
     title: "Fashion Collection for Kids",
     imgUrl:
-      "/assets/images/products/Fashion/Clothes/6.FashionCollectionforKids.png",
+        "/assets/images/products/Fashion/Clothes/6.FashionCollectionforKids.png",
     category: "fashion",
     subcategory: "clothes",
     id: "29875524428757894",
@@ -829,7 +829,7 @@ export default [
     price: 250,
     title: "Denim Classic Blue Jeans",
     imgUrl:
-      "/assets/images/products/Fashion/Clothes/7.DenimClassicBlueJeans.png",
+        "/assets/images/products/Fashion/Clothes/7.DenimClassicBlueJeans.png",
     category: "fashion",
     subcategory: "clothes",
     id: "7039177534297374",
@@ -846,7 +846,7 @@ export default [
     price: 250,
     title: "Denim Gabardine Collection",
     imgUrl:
-      "/assets/images/products/Fashion/Clothes/9.DenimGabardineCollection.png",
+        "/assets/images/products/Fashion/Clothes/9.DenimGabardineCollection.png",
     category: "fashion",
     subcategory: "clothes",
     id: "032897429765161856",
@@ -879,7 +879,7 @@ export default [
     price: 250,
     title: "High Waisted Gabardine",
     imgUrl:
-      "/assets/images/products/Fashion/Clothes/13.HighWaistedGabardine.png",
+        "/assets/images/products/Fashion/Clothes/13.HighWaistedGabardine.png",
     category: "fashion",
     subcategory: "clothes",
     id: "8635694924439523",
@@ -944,7 +944,7 @@ export default [
     price: 250,
     title: "Yellow Casual Sweater",
     imgUrl:
-      "/assets/images/products/Fashion/Clothes/21.YellowCasualSweater.png",
+        "/assets/images/products/Fashion/Clothes/21.YellowCasualSweater.png",
     category: "fashion",
     subcategory: "clothes",
     id: "10238222880579828",
@@ -985,7 +985,7 @@ export default [
     price: 250,
     title: "Heavy 22kt Gold Necklace Set",
     imgUrl:
-      "/assets/images/products/Fashion/Jewellery/1.Heavy22ktGoldNecklaceSet.png",
+        "/assets/images/products/Fashion/Jewellery/1.Heavy22ktGoldNecklaceSet.png",
     category: "fashion",
     subcategory: "jewellery",
     id: "4716898315685121",
@@ -1010,7 +1010,7 @@ export default [
     price: 250,
     title: "Black Stones Necklace",
     imgUrl:
-      "/assets/images/products/Fashion/Jewellery/4.BlackStonesNecklace.png",
+        "/assets/images/products/Fashion/Jewellery/4.BlackStonesNecklace.png",
     category: "fashion",
     subcategory: "jewellery",
     id: "3321948105468153",
@@ -1019,7 +1019,7 @@ export default [
     price: 250,
     title: "Indian Pearl Earrings",
     imgUrl:
-      "/assets/images/products/Fashion/Jewellery/5.IndianPearlEarrings.png",
+        "/assets/images/products/Fashion/Jewellery/5.IndianPearlEarrings.png",
     category: "fashion",
     subcategory: "jewellery",
     id: "001903327694083412",
@@ -1028,7 +1028,7 @@ export default [
     price: 250,
     title: "Indian Copper Earrings",
     imgUrl:
-      "/assets/images/products/Fashion/Jewellery/6.IndianCopperEarrings.png",
+        "/assets/images/products/Fashion/Jewellery/6.IndianCopperEarrings.png",
     category: "fashion",
     subcategory: "jewellery",
     id: "11543217719526444",
@@ -1037,7 +1037,7 @@ export default [
     price: 250,
     title: "Indian Pearl Square Stone Necklace",
     imgUrl:
-      "/assets/images/products/Fashion/Jewellery/7.IndianPearlSquareStoneNecklace.png",
+        "/assets/images/products/Fashion/Jewellery/7.IndianPearlSquareStoneNecklace.png",
     category: "fashion",
     subcategory: "jewellery",
     id: "9631379746723581",
@@ -1046,7 +1046,7 @@ export default [
     price: 250,
     title: "Indian Pearl Thread Earring",
     imgUrl:
-      "/assets/images/products/Fashion/Jewellery/8.IndianPearlThreadEarrings.png",
+        "/assets/images/products/Fashion/Jewellery/8.IndianPearlThreadEarrings.png",
     category: "fashion",
     subcategory: "jewellery",
     id: "591985998938654",
@@ -1055,7 +1055,7 @@ export default [
     price: 250,
     title: "Heavy 20kt Gold Necklace",
     imgUrl:
-      "/assets/images/products/Fashion/Jewellery/9.Heavy20ktGoldNecklace.png",
+        "/assets/images/products/Fashion/Jewellery/9.Heavy20ktGoldNecklace.png",
     category: "fashion",
     subcategory: "jewellery",
     id: "9573201630529315",
@@ -1064,7 +1064,7 @@ export default [
     price: 250,
     title: "Indian 8kt Gold Bracelet",
     imgUrl:
-      "/assets/images/products/Fashion/Jewellery/10.Indian8ktGoldBracelet.png",
+        "/assets/images/products/Fashion/Jewellery/10.Indian8ktGoldBracelet.png",
     category: "fashion",
     subcategory: "jewellery",
     id: "9600460042041272",
@@ -1073,7 +1073,7 @@ export default [
     price: 250,
     title: "Heavy 5kt Gold Earrings",
     imgUrl:
-      "/assets/images/products/Fashion/Jewellery/11.Heavy5ktIndianEarrings.png",
+        "/assets/images/products/Fashion/Jewellery/11.Heavy5ktIndianEarrings.png",
     category: "fashion",
     subcategory: "jewellery",
     id: "5246618420483269",
@@ -1090,7 +1090,7 @@ export default [
     price: 250,
     title: "Black Stone Modern Locket",
     imgUrl:
-      "/assets/images/products/Fashion/Jewellery/13.BlackStoneModernLocket.png",
+        "/assets/images/products/Fashion/Jewellery/13.BlackStoneModernLocket.png",
     category: "fashion",
     subcategory: "jewellery",
     id: "2846646295564206",
@@ -1099,7 +1099,7 @@ export default [
     price: 250,
     title: "Diamond Wedding Rings",
     imgUrl:
-      "/assets/images/products/Fashion/Jewellery/14.DiamondWeddingRings.png",
+        "/assets/images/products/Fashion/Jewellery/14.DiamondWeddingRings.png",
     category: "fashion",
     subcategory: "jewellery",
     id: "6325232808589716",
@@ -1108,7 +1108,7 @@ export default [
     price: 250,
     title: "Indian 6kt Gold Earrings",
     imgUrl:
-      "/assets/images/products/Fashion/Jewellery/15.Indian6ktGoldEarrings.png",
+        "/assets/images/products/Fashion/Jewellery/15.Indian6ktGoldEarrings.png",
     category: "fashion",
     subcategory: "jewellery",
     id: "08761167496970046",
@@ -1117,7 +1117,7 @@ export default [
     price: 250,
     title: "Custom Made Threads Beads NEcklace set",
     imgUrl:
-      "/assets/images/products/Fashion/Jewellery/16.CustomMadeThreadsBeadsNecklaceSet.png",
+        "/assets/images/products/Fashion/Jewellery/16.CustomMadeThreadsBeadsNecklaceSet.png",
     category: "fashion",
     subcategory: "jewellery",
     id: "938049707395983",
@@ -1126,7 +1126,7 @@ export default [
     price: 250,
     title: "Heavy Stone Colorful Necklace",
     imgUrl:
-      "/assets/images/products/Fashion/Jewellery/17.HeavyStoneColorfulNecklace.png",
+        "/assets/images/products/Fashion/Jewellery/17.HeavyStoneColorfulNecklace.png",
     category: "fashion",
     subcategory: "jewellery",
     id: "5983652469725809",
@@ -1135,7 +1135,7 @@ export default [
     price: 250,
     title: "Beads and Threads Simple Earrings",
     imgUrl:
-      "/assets/images/products/Fashion/Jewellery/18.BeadsandThreadsSimpleEarrings.png",
+        "/assets/images/products/Fashion/Jewellery/18.BeadsandThreadsSimpleEarrings.png",
     category: "fashion",
     subcategory: "jewellery",
     id: "972696967439219",
@@ -1144,7 +1144,7 @@ export default [
     price: 250,
     title: "Tamil Wedding Necklace Set",
     imgUrl:
-      "/assets/images/products/Fashion/Jewellery/19.TamilWeddingNecklaceSet.png",
+        "/assets/images/products/Fashion/Jewellery/19.TamilWeddingNecklaceSet.png",
     category: "fashion",
     subcategory: "jewellery",
     id: "2766474666981631",
@@ -1153,7 +1153,7 @@ export default [
     price: 250,
     title: "Shahi 21kt Gold Necklace Set",
     imgUrl:
-      "/assets/images/products/Fashion/Jewellery/20.Shahi21ktGoldNecklaceSet.png",
+        "/assets/images/products/Fashion/Jewellery/20.Shahi21ktGoldNecklaceSet.png",
     category: "fashion",
     subcategory: "jewellery",
     id: "7043585830841899",
@@ -1162,7 +1162,7 @@ export default [
     price: 250,
     title: "Feathers and Beads Bohemian Necklace",
     imgUrl:
-      "/assets/images/products/Fashion/Jewellery/21.FeathersandBeadsBohemianNecklace.png",
+        "/assets/images/products/Fashion/Jewellery/21.FeathersandBeadsBohemianNecklace.png",
     category: "fashion",
     subcategory: "jewellery",
     id: "6501489081180665",
@@ -1171,7 +1171,7 @@ export default [
     price: 250,
     title: "Red Peacock Tail Earrings",
     imgUrl:
-      "/assets/images/products/Fashion/Jewellery/22.RedPeacockTailEarrings.png",
+        "/assets/images/products/Fashion/Jewellery/22.RedPeacockTailEarrings.png",
     category: "fashion",
     subcategory: "jewellery",
     id: "20976592953185347",
@@ -1180,7 +1180,7 @@ export default [
     price: 250,
     title: "heavy 13kt Gold Wedding Necklace Set",
     imgUrl:
-      "/assets/images/products/Fashion/Jewellery/23.Heavy13ktGoldWeddingNecklaceSet.png",
+        "/assets/images/products/Fashion/Jewellery/23.Heavy13ktGoldWeddingNecklaceSet.png",
     category: "fashion",
     subcategory: "jewellery",
     id: "9758936660790869",
@@ -1422,7 +1422,7 @@ export default [
     price: 250,
     title: "Colgate Advance Protection Toothpaste",
     imgUrl:
-      "/assets/images/products/Groceries/8.ColgateAdvanceProtectionToothpaste.png",
+        "/assets/images/products/Groceries/8.ColgateAdvanceProtectionToothpaste.png",
     category: "groceries",
     id: "15405364776989727",
   },
@@ -1437,7 +1437,7 @@ export default [
     price: 250,
     title: "Catch Italian Seasoning Grinder",
     imgUrl:
-      "/assets/images/products/Groceries/10.CatchItalianSeasoningGrinder.png",
+        "/assets/images/products/Groceries/10.CatchItalianSeasoningGrinder.png",
     category: "groceries",
     id: "44301273412220143",
   },
@@ -1641,7 +1641,7 @@ export default [
     price: 250,
     title: "Rahua Classic Conditioner",
     imgUrl:
-      "/assets/images/products/Health&Beauty/11.RahuaClassicConditioner.png",
+        "/assets/images/products/Health&Beauty/11.RahuaClassicConditioner.png",
     category: "health&beauty",
     id: "6674603340876586",
   },
@@ -1649,7 +1649,7 @@ export default [
     price: 250,
     title: "Beauty Society anti acne Mask",
     imgUrl:
-      "/assets/images/products/Health&Beauty/12.BeautySocietyantiacnemask.png",
+        "/assets/images/products/Health&Beauty/12.BeautySocietyantiacnemask.png",
     category: "health&beauty",
     id: "42822784078111553",
   },
@@ -1678,7 +1678,7 @@ export default [
     price: 250,
     title: "Caudalie Hand and Nail Cream",
     imgUrl:
-      "/assets/images/products/Health&Beauty/16.CaudalieHandandNailCream.png",
+        "/assets/images/products/Health&Beauty/16.CaudalieHandandNailCream.png",
     category: "health&beauty",
     id: "17360361404068203",
   },
@@ -1735,7 +1735,7 @@ export default [
     price: 250,
     title: "Koreal Kids Extra Gentle Shampoo",
     imgUrl:
-      "/assets/images/products/Health&Beauty/24.LorealKidsExtraGentleShampoo.png",
+        "/assets/images/products/Health&Beauty/24.LorealKidsExtraGentleShampoo.png",
     category: "health&beauty",
     id: "4479160269918778",
   },
@@ -1743,7 +1743,7 @@ export default [
     price: 250,
     title: "Jario Badescu Skin Care Shampoo",
     imgUrl:
-      "/assets/images/products/Health&Beauty/25.MarioBadescuSkinCareShampoo.png",
+        "/assets/images/products/Health&Beauty/25.MarioBadescuSkinCareShampoo.png",
     category: "health&beauty",
     id: "7785238301951232",
   },
@@ -1786,7 +1786,7 @@ export default [
     price: 250,
     title: "Green leaf Plant in Glass Jar",
     imgUrl:
-      "/assets/images/products/Home&Garden/6.GreenLeafPlantinGlassJar.png",
+        "/assets/images/products/Home&Garden/6.GreenLeafPlantinGlassJar.png",
     category: "home&garden",
     id: "4596117091415033",
   },
@@ -1801,7 +1801,7 @@ export default [
     price: 250,
     title: "Chamaedorea Elegance Plants With Ceramic Pot",
     imgUrl:
-      "/assets/images/products/Home&Garden/8.ChamaedoreaElegansPlantswithCeramicPot.png",
+        "/assets/images/products/Home&Garden/8.ChamaedoreaElegansPlantswithCeramicPot.png",
     category: "home&garden",
     id: "9280121655411975",
   },
@@ -1816,7 +1816,7 @@ export default [
     price: 250,
     title: "Fiddle-Leaf Plant in Bamboo Basket",
     imgUrl:
-      "/assets/images/products/Home&Garden/10.FiddleleafPlantinBambooBasket.png",
+        "/assets/images/products/Home&Garden/10.FiddleleafPlantinBambooBasket.png",
     category: "home&garden",
     id: "12679948560254317",
   },
@@ -1824,7 +1824,7 @@ export default [
     price: 250,
     title: "Beautiful Cactus in Ceramic Cup",
     imgUrl:
-      "/assets/images/products/Home&Garden/11.BeautifulCactusinCeramicCup.png",
+        "/assets/images/products/Home&Garden/11.BeautifulCactusinCeramicCup.png",
     category: "home&garden",
     id: "1915551356279519",
   },
@@ -1832,7 +1832,7 @@ export default [
     price: 250,
     title: "Cactus in Japanese Ceramic",
     imgUrl:
-      "/assets/images/products/Home&Garden/12.CactusinJapaneseCeramic.png",
+        "/assets/images/products/Home&Garden/12.CactusinJapaneseCeramic.png",
     category: "home&garden",
     id: "1877068436909417",
   },
@@ -1847,7 +1847,7 @@ export default [
     price: 250,
     title: "Hanging Planters with Green Plants",
     imgUrl:
-      "/assets/images/products/Home&Garden/14.HangingPlanterswithGreenPlants.png",
+        "/assets/images/products/Home&Garden/14.HangingPlanterswithGreenPlants.png",
     category: "home&garden",
     id: "5686877548921454",
   },
@@ -1855,7 +1855,7 @@ export default [
     price: 250,
     title: "Tilandsia Flexuosa in Wood Frame",
     imgUrl:
-      "/assets/images/products/Home&Garden/15.TilandsiaFlexuosainWoodFrame.png",
+        "/assets/images/products/Home&Garden/15.TilandsiaFlexuosainWoodFrame.png",
     category: "home&garden",
     id: "3646465293831638",
   },
@@ -1863,7 +1863,7 @@ export default [
     price: 250,
     title: "Copper Planter With Mixed Plants",
     imgUrl:
-      "/assets/images/products/Home&Garden/16.CopperPlanterwithMixedPlants.png",
+        "/assets/images/products/Home&Garden/16.CopperPlanterwithMixedPlants.png",
     category: "home&garden",
     id: "9090457132472443",
   },
@@ -1871,7 +1871,7 @@ export default [
     price: 250,
     title: "Molded Wax agave in Japanese Planter",
     imgUrl:
-      "/assets/images/products/Home&Garden/17.MoldedwaxagaveinJapanesePlanter.png",
+        "/assets/images/products/Home&Garden/17.MoldedwaxagaveinJapanesePlanter.png",
     category: "home&garden",
     id: "36023925702961",
   },
@@ -1886,7 +1886,7 @@ export default [
     price: 250,
     title: "Mammillaria Elongata Cactus",
     imgUrl:
-      "/assets/images/products/Home&Garden/19.MammillariaElongataCactus.png",
+        "/assets/images/products/Home&Garden/19.MammillariaElongataCactus.png",
     category: "home&garden",
     id: "986686905800001",
   },
@@ -1894,7 +1894,7 @@ export default [
     price: 250,
     title: "Set Green Plastic Pot 25CMS (Blue)",
     imgUrl:
-      "/assets/images/products/Home&Garden/20.SetgreenPlasticPot25CMSBlue.png",
+        "/assets/images/products/Home&Garden/20.SetgreenPlasticPot25CMSBlue.png",
     category: "home&garden",
     id: "2992974199596896",
   },
@@ -1909,7 +1909,7 @@ export default [
     price: 250,
     title: "Euphorbia Leuconeura with Orange Pot",
     imgUrl:
-      "/assets/images/products/Home&Garden/22.EuphorbiaLeuconeurawithOrangePot.png",
+        "/assets/images/products/Home&Garden/22.EuphorbiaLeuconeurawithOrangePot.png",
     category: "home&garden",
     id: "9888658182514298",
   },
@@ -1917,7 +1917,7 @@ export default [
     price: 250,
     title: "Euphorbia Lactea in Round Clay Pot",
     imgUrl:
-      "/assets/images/products/Home&Garden/23.EuphorbiaLacteainRoundClayPot.png",
+        "/assets/images/products/Home&Garden/23.EuphorbiaLacteainRoundClayPot.png",
     category: "home&garden",
     id: "16829989165487325",
   },
@@ -1925,7 +1925,7 @@ export default [
     price: 250,
     title: "Mixed Succulent in Glass Jar",
     imgUrl:
-      "/assets/images/products/Home&Garden/24.MixedSucculentinGlassJar.png",
+        "/assets/images/products/Home&Garden/24.MixedSucculentinGlassJar.png",
     category: "home&garden",
     id: "6034467575535363",
   },
@@ -1933,7 +1933,7 @@ export default [
     price: 250,
     title: "Painted Leaf Begonia Plant",
     imgUrl:
-      "/assets/images/products/Home&Garden/25.PaintedLeafBegoniaPlant.png",
+        "/assets/images/products/Home&Garden/25.PaintedLeafBegoniaPlant.png",
     category: "home&garden",
     id: "1792491211341667",
   },
@@ -1948,7 +1948,7 @@ export default [
     price: 250,
     title: "Black Coral Sansevieria Plant",
     imgUrl:
-      "/assets/images/products/Home&Garden/27.BlackCoralSansevieriaPlant.png",
+        "/assets/images/products/Home&Garden/27.BlackCoralSansevieriaPlant.png",
     category: "home&garden",
     id: "7244433689317422",
   },
@@ -2138,7 +2138,7 @@ export default [
     price: 250,
     title: "Affordable Cordoba Classical Guitar",
     imgUrl:
-      "/assets/images/products/Music/27.AffordableCordobaClassicalGuitar.png",
+        "/assets/images/products/Music/27.AffordableCordobaClassicalGuitar.png",
     category: "music",
     id: "06089299954927463",
   },

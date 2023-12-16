@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Container from "../Container";
 import Box from "../Box";
 import Grid from "../grid/Grid";
 import Navbar from "../navbar/Navbar";
 import Stepper from "../stepper/Stepper";
 import AppLayout from "./AppLayout";
-import { Outlet, useNavigate } from "react-router-dom";
+import {Outlet, useNavigate} from "react-router-dom";
 
 const CheckoutNavLayout: React.FC = () => {
   const [selectedStep, setSelectedStep] = useState(0);
   const navigate = useNavigate();
-  const pathname =window.location.pathname;
+  const pathname = window.location.pathname;
 
   const handleStepChange = (_step, ind) => {
     switch (ind) {
@@ -48,22 +48,22 @@ const CheckoutNavLayout: React.FC = () => {
   }, [pathname]);
 
   return (
-    <AppLayout navbar={<Navbar />}>
-      <Container my="2rem">
-        <Box mb="14px">
-          <Grid container spacing={6}>
-            <Grid item lg={8} md={8} xs={12}>
-              <Stepper
-                stepperList={stepperList}
-                selectedStep={selectedStep}
-                onChange={handleStepChange}
-              />
+      <AppLayout navbar={<Navbar/>}>
+        <Container my="2rem">
+          <Box mb="14px">
+            <Grid container spacing={6}>
+              <Grid item lg={8} md={8} xs={12}>
+                <Stepper
+                    stepperList={stepperList}
+                    selectedStep={selectedStep}
+                    onChange={handleStepChange}
+                />
+              </Grid>
             </Grid>
-          </Grid>
-        </Box>
-        <Outlet />
-      </Container>
-    </AppLayout>
+          </Box>
+          <Outlet/>
+        </Container>
+      </AppLayout>
   );
 };
 

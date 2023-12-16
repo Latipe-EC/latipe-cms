@@ -3,9 +3,10 @@ import Box from "../Box";
 import Card from "../Card";
 import Grid from "../grid/Grid";
 import Image from "../Image";
-import Typography, { H3, Small, Span } from "../Typography";
+import Typography, {H3, Small, Span} from "../Typography";
 
-export interface FashionCard3Props {}
+export interface FashionCard3Props {
+}
 
 const FashionCard3: React.FC<FashionCard3Props> = () => {
   return (
@@ -14,12 +15,12 @@ const FashionCard3: React.FC<FashionCard3Props> = () => {
           <Grid container spacing={0} flexWrap="wrap-reverse">
             <Grid item sm={6} xs={12}>
               <Image
-                pt="1.25rem"
-                mx="auto"
-                height="100%"
-                maxWidth="100%"
-                src="/assets/images/models/model-2.png"
-                alt="model"
+                  pt="1.25rem"
+                  mx="auto"
+                  height="100%"
+                  maxWidth="100%"
+                  src="/assets/images/models/model-2.png"
+                  alt="model"
               />
             </Grid>
 
@@ -42,9 +43,9 @@ const FashionCard3: React.FC<FashionCard3Props> = () => {
                 </Typography>
 
                 <Small
-                  fontWeight="700"
-                  borderBottom="2px solid"
-                  borderColor="primary.main"
+                    fontWeight="700"
+                    borderBottom="2px solid"
+                    borderColor="primary.main"
                 >
                   SHOP NOW
                 </Small>

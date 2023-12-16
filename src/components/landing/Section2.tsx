@@ -3,12 +3,13 @@ import Container from "../Container";
 import FlexBox from "../FlexBox";
 import Grid from "../grid/Grid";
 import Icon from "../icon/Icon";
-import { H3, H4 } from "../Typography";
-import { getTheme } from "../../utils/utils";
+import {H3, H4} from "../Typography";
+import {getTheme} from "../../utils/utils";
 import React from "react";
 import styled from "styled-components";
 
-export interface Section2Props {}
+export interface Section2Props {
+}
 
 const StyledContent = styled.div`
   position: relative;
@@ -46,47 +47,47 @@ const StyledContent = styled.div`
 
 const Section2: React.FC<Section2Props> = () => {
   return (
-    <Container mb="7rem" id="features">
-      <H3
-        fontSize="40px"
-        textAlign="center"
-        fontWeight="900"
-        color="secondary.main"
-        mb="3.75rem"
-      >
-        Powerful Features
-      </H3>
+      <Container mb="7rem" id="features">
+        <H3
+            fontSize="40px"
+            textAlign="center"
+            fontWeight="900"
+            color="secondary.main"
+            mb="3.75rem"
+        >
+          Powerful Features
+        </H3>
 
-      <StyledContent>
-        <Grid container spacing={7}>
-          {list.map((item) => (
-            <Grid item lg={3} md={4} sm={6} xs={12} key={item.title}>
-              <Card
-                as={FlexBox}
-                flexDirection="column"
-                justifyContent="center"
-                alignItems="center"
-                minHeight="260px"
-                boxShadow="large"
-              >
-                <Icon color="inherit" size="64px" mb="1.5rem">
-                  {item.iconName}
-                </Icon>
-                <H4
-                  fontSize="18px"
-                  fontWeight="700"
-                  maxWidth="200px"
-                  textAlign="center"
-                  mx="auto"
-                >
-                  {item.title}
-                </H4>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </StyledContent>
-    </Container>
+        <StyledContent>
+          <Grid container spacing={7}>
+            {list.map((item) => (
+                <Grid item lg={3} md={4} sm={6} xs={12} key={item.title}>
+                  <Card
+                      as={FlexBox}
+                      flexDirection="column"
+                      justifyContent="center"
+                      alignItems="center"
+                      minHeight="260px"
+                      boxShadow="large"
+                  >
+                    <Icon color="inherit" size="64px" mb="1.5rem">
+                      {item.iconName}
+                    </Icon>
+                    <H4
+                        fontSize="18px"
+                        fontWeight="700"
+                        maxWidth="200px"
+                        textAlign="center"
+                        mx="auto"
+                    >
+                      {item.title}
+                    </H4>
+                  </Card>
+                </Grid>
+            ))}
+          </Grid>
+        </StyledContent>
+      </Container>
   );
 };
 

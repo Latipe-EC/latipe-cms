@@ -3,7 +3,7 @@ import React from "react";
 import Box from "../Box";
 import Card from "../Card";
 import Grid from "../grid/Grid";
-import { H3, H6, SemiSpan } from "../Typography";
+import {H3, H6, SemiSpan} from "../Typography";
 
 export interface FashionCard5Props {
   title: string;
@@ -16,22 +16,22 @@ export interface FashionCard5Props {
 }
 
 const FashionCard5: React.FC<FashionCard5Props> = ({
-  title,
-  subtitle,
-  productUrl,
-  imgUrl,
-  bg,
-  color,
-  subtitleColor,
-}) => {
+                                                     title,
+                                                     subtitle,
+                                                     productUrl,
+                                                     imgUrl,
+                                                     bg,
+                                                     color,
+                                                     subtitleColor,
+                                                   }) => {
   return (
-      <a  href={productUrl}>
+      <a href={productUrl}>
         <Card height="100%" bg={bg || "body.paper"} color={color}>
           <Grid
-            container
-            spacing={1}
-            flexWrap="wrap-reverse"
-            alignItems="center"
+              container
+              spacing={1}
+              flexWrap="wrap-reverse"
+              alignItems="center"
           >
             <Grid item sm={6} xs={12}>
               <Box p="2rem">
@@ -39,8 +39,8 @@ const FashionCard5: React.FC<FashionCard5Props> = ({
                 <SemiSpan color={subtitleColor || "text.muted"} display="block">
                   {subtitle}
                 </SemiSpan>
-                  <a  href={productUrl}>
-                    <H6
+                <a href={productUrl}>
+                  <H6
                       display="inline-block"
                       mt="1.5rem"
                       fontSize="12px"
@@ -49,20 +49,20 @@ const FashionCard5: React.FC<FashionCard5Props> = ({
                       borderColor="primary.main"
                       pb="2px"
                       color={color || "inherit"}
-                    >
-                      SHOP NOW
-                    </H6>
-                  </a>
+                  >
+                    SHOP NOW
+                  </H6>
+                </a>
               </Box>
             </Grid>
             <Grid item sm={6} xs={12}>
               <LazyImage
-                src={imgUrl}
-                width="100%"
-                height="auto"
-                layout="responsive"
-                objectFit="contain"
-                alt="model"
+                  src={imgUrl}
+                  width="100%"
+                  height="auto"
+                  layout="responsive"
+                  objectFit="contain"
+                  alt="model"
               />
             </Grid>
           </Grid>

@@ -26,7 +26,7 @@ type BoxProps = {
 };
 
 const Box = styled.div<
-  BoxProps &
+    BoxProps &
     LayoutProps &
     ColorProps &
     PositionProps &
@@ -36,12 +36,12 @@ const Box = styled.div<
     FlexboxProps &
     TypographyProps
 >(
-  ({ shadow, cursor, transition, theme }) => ({
-    boxShadow: theme.shadows[shadow],
-    cursor,
-    transition,
-  }),
-  compose(layout, space, color, position, flexbox, flex, border, typography)
+    ({shadow, cursor, transition, theme}) => ({
+      boxShadow: theme.shadows[shadow],
+      cursor,
+      transition,
+    }),
+    compose(layout, space, color, position, flexbox, flex, border, typography)
 );
 
 Box.defaultProps = {

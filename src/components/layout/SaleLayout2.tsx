@@ -14,26 +14,26 @@ type Props = {
 };
 
 const SaleLayout2: React.FC<Props> = ({
-  children,
-  title = "Multivendor Ecommerce | Sale",
-}) => {
+                                        children,
+                                        title = "Multivendor Ecommerce | Sale",
+                                      }) => {
   return (
-    <StyledAppLayout>
-      <header>
-        <title>{title}</title>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </header>
-      <Topbar />
-      <Header />
-      <Divider />
-      <Sticky fixedOn={0}>
-        <SaleNavbar saleCategoryList={saleCategoryList} />
-      </Sticky>
-      <div className="section-after-sticky">{children}</div>
-      <MobileNavigationBar />
-      <Footer />
-    </StyledAppLayout>
+      <StyledAppLayout>
+        <header>
+          <title>{title}</title>
+          <meta charSet="utf-8"/>
+          <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
+        </header>
+        <Topbar/>
+        <Header/>
+        <Divider/>
+        <Sticky fixedOn={0}>
+          <SaleNavbar saleCategoryList={saleCategoryList}/>
+        </Sticky>
+        <div className="section-after-sticky">{children}</div>
+        <MobileNavigationBar/>
+        <Footer/>
+      </StyledAppLayout>
   );
 };
 

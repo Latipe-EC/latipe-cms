@@ -1,11 +1,5 @@
 import styled from "styled-components";
-import {
-  compose,
-  flexbox,
-  FlexboxProps,
-  grid,
-  GridTemplateColumnsProps,
-} from "styled-system";
+import {compose, flexbox, FlexboxProps, grid, GridTemplateColumnsProps,} from "styled-system";
 
 interface GridProps {
   spacing?: number;
@@ -19,18 +13,18 @@ interface GridProps {
 }
 
 const CssGrid = styled.div<GridProps & GridTemplateColumnsProps & FlexboxProps>(
-  ({ gridTemplateColumns, columnCount, spacing }) => {
-    let columnWidth = 100 / (columnCount + 1);
+    ({gridTemplateColumns, columnCount, spacing}) => {
+      let columnWidth = 100 / (columnCount + 1);
 
-    return {
-      display: "grid",
-      gridTemplateColumns:
-        gridTemplateColumns ||
-        `repeat(auto-fill, minmax(max(${columnWidth}%, 250px), 1fr))`,
-      gap: `calc(0.25rem * ${spacing})`,
-    };
-  },
-  compose(grid, flexbox)
+      return {
+        display: "grid",
+        gridTemplateColumns:
+            gridTemplateColumns ||
+            `repeat(auto-fill, minmax(max(${columnWidth}%, 250px), 1fr))`,
+        gap: `calc(0.25rem * ${spacing})`,
+      };
+    },
+    compose(grid, flexbox)
 );
 
 export default CssGrid;

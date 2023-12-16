@@ -1,7 +1,7 @@
-import { format } from "date-fns";
-import { useEffect, useState } from "react";
-import { Line } from "react-chartjs-2";
-import { colors } from "../../utils/themeColors";
+import {format} from "date-fns";
+import {useEffect, useState} from "react";
+import {Line} from "react-chartjs-2";
+import {colors} from "../../utils/themeColors";
 
 const datasetOptions = {
   fill: true,
@@ -79,7 +79,7 @@ const VendorAnalyticsChart = () => {
     });
   }, []);
 
-  return <Line data={data} options={options} />;
+  return <Line data={data} options={options}/>;
 };
 
 const datasetData = [

@@ -1,4 +1,4 @@
-import { configureStore, combineReducers, ThunkDispatch, AnyAction, Store } from '@reduxjs/toolkit';
+import {AnyAction, combineReducers, configureStore, Store, ThunkDispatch} from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
 import authReducer from './slices/auth-slice';
 import userReducer from './slices/user-slice';
@@ -13,32 +13,30 @@ import commissionReducer from './slices/commissions-slice';
 import paymentReducer from './slices/payment-slice';
 import deliveryReducer from './slices/deliveries-slice';
 
-import {
-	persistStore,
-	persistReducer,
-} from 'redux-persist'
+import {persistReducer, persistStore,} from 'redux-persist'
 
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
+
 const persistConfig = {
-	key: 'latipe',
-	version: 1.1,
-	storage,
+  key: 'latipe',
+  version: 1.1,
+  storage,
 };
 
 
 export const rootReducer = combineReducers({
-	auth: authReducer,
-	user: userReducer,
-	categories: categoryReducer,
-	products: productReducer,
-	stores: storeReducer,
-	ratings: ratingReducer,
-	carts: cartReducer,
-	searchs: searchReducer,
-	order: orderReducer,
-	commissions: commissionReducer,
-	payments: paymentReducer,
-	deliveries: deliveryReducer
+  auth: authReducer,
+  user: userReducer,
+  categories: categoryReducer,
+  products: productReducer,
+  stores: storeReducer,
+  ratings: ratingReducer,
+  carts: cartReducer,
+  searchs: searchReducer,
+  order: orderReducer,
+  commissions: commissionReducer,
+  payments: paymentReducer,
+  deliveries: deliveryReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -47,15 +45,15 @@ export type RootState = ReturnType<typeof rootReducer>;
 export type AppThunkDispatch = ThunkDispatch<RootState, unknown, AnyAction>;
 
 export type AppStore = Omit<Store<RootState, AnyAction>, "dispatch"> & {
-	dispatch: AppThunkDispatch;
+  dispatch: AppThunkDispatch;
 };
 
 //4. create the store with your custom AppStore
 export const store: AppStore = configureStore({
-	reducer: persistedReducer,
-	middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-		serializableCheck: false
-	}),
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: false
+  }),
 });
 
 // you can also create some redux hooks using the above explicit types

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { getTheme } from "../../utils/utils";
+import {getTheme} from "../../utils/utils";
 
 interface StyledSidenavProps {
   position?: "left" | "right";
@@ -19,20 +19,20 @@ export const StyledSidenav = styled.div<StyledSidenavProps>`
 
   @keyframes slide {
     from {
-      ${({ position }) => position}: -${(props) => props.width}px;
+      ${({position}) => position}: -${(props) => props.width}px;
     }
     to {
-      ${({ position }) => position}: 0;
+      ${({position}) => position}: 0;
     }
   }
 
   .sidenav-content {
     position: absolute;
     background-color: ${getTheme("colors.body.paper")};
-    ${({ position }) => position}: 0;
+    ${({position}) => position}: 0;
     width: ${(props) => props.width}px;
     height: 100%;
-    overflow: ${({ scroll }) => (scroll ? "auto" : "hidden")};
+    overflow: ${({scroll}) => (scroll ? "auto" : "hidden")};
     animation: slide 250ms linear;
   }
 

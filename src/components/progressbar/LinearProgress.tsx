@@ -1,4 +1,4 @@
-import { colorOptions } from "../../interfaces";
+import {colorOptions} from "../../interfaces";
 import React from "react";
 import StyledLinearProgress from "./LinearProgressStyle";
 

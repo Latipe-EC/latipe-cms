@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { themeGet } from "@styled-system/theme-get";
-import { LinearProgressProps } from "./LinearProgress";
-import { color } from "styled-system";
+import {themeGet} from "@styled-system/theme-get";
+import {LinearProgressProps} from "./LinearProgress";
+import {color} from "styled-system";
 
 const StyledLinearProgress = styled.div<LinearProgressProps>`
   position: relative;

@@ -3,31 +3,31 @@ import Grid from "../../src/components/grid/Grid";
 import NavbarLayout from "../../src/components/layout/NavbarLayout";
 import Pagination from "../../src/components/pagination/Pagination";
 import ShopCard1 from "../../src/components/shop/ShopCard1";
-import { H2, SemiSpan } from "../../src/components/Typography";
+import {H2, SemiSpan} from "../../src/components/Typography";
 
 const ShopList = () => {
   return (
-    <div>
-      <H2 mb="24px">All Shops</H2>
+      <div>
+        <H2 mb="24px">All Shops</H2>
 
-      <Grid container spacing={6}>
-        {shopList.map((item, ind) => (
-          <Grid item lg={4} sm={6} xs={12} key={ind}>
-            <ShopCard1 {...item} />
-          </Grid>
-        ))}
-      </Grid>
+        <Grid container spacing={6}>
+          {shopList.map((item, ind) => (
+              <Grid item lg={4} sm={6} xs={12} key={ind}>
+                <ShopCard1 {...item} />
+              </Grid>
+          ))}
+        </Grid>
 
-      <FlexBox
-        flexWrap="wrap"
-        justifyContent="space-between"
-        alignItems="center"
-        mt="32px"
-      >
-        <SemiSpan>Showing 1-9 of 300 Shops</SemiSpan>
-        <Pagination pageCount={shopList.length} />
-      </FlexBox>
-    </div>
+        <FlexBox
+            flexWrap="wrap"
+            justifyContent="space-between"
+            alignItems="center"
+            mt="32px"
+        >
+          <SemiSpan>Showing 1-9 of 300 Shops</SemiSpan>
+          <Pagination pageCount={shopList.length}/>
+        </FlexBox>
+      </div>
   );
 };
 

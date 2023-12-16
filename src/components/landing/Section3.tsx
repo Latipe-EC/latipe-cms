@@ -3,8 +3,8 @@ import Button from '../buttons/Button';
 import Container from '../Container';
 import FlexBox from '../FlexBox';
 import Grid from '../grid/Grid';
-import { H2, H4, Paragraph } from '../Typography';
-import React, { useState } from 'react';
+import {H2, H4, Paragraph} from '../Typography';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import PageCard from './PageCard';
 
@@ -25,65 +25,65 @@ const Section3: React.FC = () => {
   };
 
   return (
-    <SectionWrapper mb="7rem" id="demos">
-      <Container id="section-3" position="relative">
-        <Box maxWidth="830px" mx="auto" mb="100px" textAlign="center">
-          <H4 color="primary.main" fontSize="58px" fontWeight="900">
-            25+
-          </H4>
+      <SectionWrapper mb="7rem" id="demos">
+        <Container id="section-3" position="relative">
+          <Box maxWidth="830px" mx="auto" mb="100px" textAlign="center">
+            <H4 color="primary.main" fontSize="58px" fontWeight="900">
+              25+
+            </H4>
 
-          <Paragraph color="primary.main" fontSize="18px">
-            Server side rendered
-          </Paragraph>
+            <Paragraph color="primary.main" fontSize="18px">
+              Server side rendered
+            </Paragraph>
 
-          <H2 color="secondary.main" fontSize="40px" fontWeight="900" mb="2rem">
-            Demos & Pages
-          </H2>
+            <H2 color="secondary.main" fontSize="40px" fontWeight="900" mb="2rem">
+              Demos & Pages
+            </H2>
 
-          <FlexBox justifyContent="center" flexWrap="wrap" m="-0.5rem">
-            {['Demos', 'Shop Pages', 'User Account', 'Vendor Account'].map(
-              (item, ind) => (
-                <Button
-                  variant={selectedTab === ind ? 'contained' : 'outlined'}
-                  color="primary"
-                  m="0.5rem"
-                  onClick={handleTabChange(ind)}
-                  key={item}
-                >
-                  {item}
-                </Button>
-              )
-            )}
-          </FlexBox>
-        </Box>
+            <FlexBox justifyContent="center" flexWrap="wrap" m="-0.5rem">
+              {['Demos', 'Shop Pages', 'User Account', 'Vendor Account'].map(
+                  (item, ind) => (
+                      <Button
+                          variant={selectedTab === ind ? 'contained' : 'outlined'}
+                          color="primary"
+                          m="0.5rem"
+                          onClick={handleTabChange(ind)}
+                          key={item}
+                      >
+                        {item}
+                      </Button>
+                  )
+              )}
+            </FlexBox>
+          </Box>
 
-        <Grid container spacing={8}>
-          {list.map((item) => (
-            <Grid item md={6} xs={12} key={item.previewUrl}>
-              <PageCard {...item} />
-            </Grid>
-          ))}
-        </Grid>
+          <Grid container spacing={8}>
+            {list.map((item) => (
+                <Grid item md={6} xs={12} key={item.previewUrl}>
+                  <PageCard {...item} />
+                </Grid>
+            ))}
+          </Grid>
 
-        {/* <a
+          {/* <a
           href="https://themeforest.net/item/bonik-react-ecommerce-template/31837448?ref=bonik"
           target="_blank"
           rel="noreferrer noopener"
         > */}
-        <a href="https://1.envato.market/oeNbNe">
-          <Button
-            variant="contained"
-            color="primary"
-            minWidth="125px"
-            mx="auto"
-            mt="2.25rem"
-          >
-            Purchase Now
-          </Button>
-        </a>
-        {/* </a> */}
-      </Container>
-    </SectionWrapper>
+          <a href="https://1.envato.market/oeNbNe">
+            <Button
+                variant="contained"
+                color="primary"
+                minWidth="125px"
+                mx="auto"
+                mt="2.25rem"
+            >
+              Purchase Now
+            </Button>
+          </a>
+          {/* </a> */}
+        </Container>
+      </SectionWrapper>
   );
 };
 

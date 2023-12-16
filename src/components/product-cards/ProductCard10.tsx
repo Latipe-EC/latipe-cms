@@ -1,16 +1,16 @@
 import LazyImage from "../LazyImage";
-import React, { Fragment, useCallback, useState } from "react";
-import { CSSProperties } from "styled-components";
+import React, {Fragment, useCallback, useState} from "react";
+import {CSSProperties} from "styled-components";
 import Box from "../Box";
 import Button from "../buttons/Button";
 import Card from "../Card";
-import { Chip } from "../Chip";
+import {Chip} from "../Chip";
 import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
 import Modal from "../modal/Modal";
 import ProductIntro from "../products/ProductIntro";
-import { H3, SemiSpan } from "../Typography";
-import { StyledProductCard1 } from "./ProductCardStyle";
+import {H3, SemiSpan} from "../Typography";
+import {StyledProductCard1} from "./ProductCardStyle";
 
 export interface ProductCard10Props {
   className?: string;
@@ -38,14 +38,14 @@ export interface ProductCard10Props {
 }
 
 const ProductCard10: React.FC<ProductCard10Props> = ({
-  imgUrl,
-  title,
-  price,
-  off,
-  subcategories,
-  rating,
-  ...props
-}) => {
+                                                       imgUrl,
+                                                       title,
+                                                       price,
+                                                       off,
+                                                       subcategories,
+                                                       rating,
+                                                       ...props
+                                                     }) => {
   const [cartAmount, setCartAmount] = useState(0);
   const [open, setOpen] = useState(false);
 
@@ -54,152 +54,152 @@ const ProductCard10: React.FC<ProductCard10Props> = ({
   }, []);
 
   const handleCartAmountChange = useCallback(
-    (amount) => () => {
-      console.log(amount);
+      (amount) => () => {
+        console.log(amount);
 
-      if (amount >= 0) setCartAmount(amount);
-    },
-    []
+        if (amount >= 0) setCartAmount(amount);
+      },
+      []
   );
 
   return (
-    <StyledProductCard1 {...props}>
-      <div className="image-holder">
-        {off && (
-          <Chip
-            position="absolute"
-            bg="primary.main"
-            color="primary.text"
-            fontSize="10px"
-            fontWeight="600"
-            p="5px 10px"
-            top="10px"
-            left="10px"
-          >
-            {off}% off
-          </Chip>
-        )}
+      <StyledProductCard1 {...props}>
+        <div className="image-holder">
+          {off && (
+              <Chip
+                  position="absolute"
+                  bg="primary.main"
+                  color="primary.text"
+                  fontSize="10px"
+                  fontWeight="600"
+                  p="5px 10px"
+                  top="10px"
+                  left="10px"
+              >
+                {off}% off
+              </Chip>
+          )}
 
-        <FlexBox className="extra-icons">
-          <Icon
-            color="secondary"
-            variant="small"
-            mb="0.5rem"
-            onClick={toggleDialog}
-          >
-            eye-alt
-          </Icon>
+          <FlexBox className="extra-icons">
+            <Icon
+                color="secondary"
+                variant="small"
+                mb="0.5rem"
+                onClick={toggleDialog}
+            >
+              eye-alt
+            </Icon>
 
-          <Icon className="favorite-icon outlined-icon" variant="small">
-            heart
-          </Icon>
-          {/* <Icon className="favorite-icon" color="primary" variant="small">
+            <Icon className="favorite-icon outlined-icon" variant="small">
+              heart
+            </Icon>
+            {/* <Icon className="favorite-icon" color="primary" variant="small">
               heart-filled
             </Icon> */}
-        </FlexBox>
+          </FlexBox>
 
           <a href="/product/34324321">
             <LazyImage
-              src={imgUrl}
-              width="100%"
-              height="auto"
-              layout="responsive"
-              alt={title}
+                src={imgUrl}
+                width="100%"
+                height="auto"
+                layout="responsive"
+                alt={title}
             />
           </a>
-      </div>
-      <div className="details">
-        <FlexBox>
-          <Box flex="1 1 0" minWidth="0px" mr="0.5rem">
-              <a  href="/product/34324321">
+        </div>
+        <div className="details">
+          <FlexBox>
+            <Box flex="1 1 0" minWidth="0px" mr="0.5rem">
+              <a href="/product/34324321">
                 <H3
-                  className="title"
-                  fontSize="14px"
-                  textAlign="left"
-                  fontWeight="600"
-                  color="text.secondary"
-                  mb="6px"
-                  title={title}
+                    className="title"
+                    fontSize="14px"
+                    textAlign="left"
+                    fontWeight="600"
+                    color="text.secondary"
+                    mb="6px"
+                    title={title}
                 >
                   {title}
                 </H3>
               </a>
 
-            <SemiSpan>300ml</SemiSpan>
+              <SemiSpan>300ml</SemiSpan>
 
-            <FlexBox alignItems="center" mt="6px">
-              <SemiSpan pr="0.5rem" fontWeight="600" color="primary.main">
-                ${price?.toFixed(2)}
-              </SemiSpan>
-              {off && (
-                <SemiSpan color="text.muted" fontWeight="600">
-                  <del>${(price - (price * off) / 100).toFixed(2)}</del>
+              <FlexBox alignItems="center" mt="6px">
+                <SemiSpan pr="0.5rem" fontWeight="600" color="primary.main">
+                  ${price?.toFixed(2)}
                 </SemiSpan>
-              )}
-            </FlexBox>
-          </Box>
+                {off && (
+                    <SemiSpan color="text.muted" fontWeight="600">
+                      <del>${(price - (price * off) / 100).toFixed(2)}</del>
+                    </SemiSpan>
+                )}
+              </FlexBox>
+            </Box>
 
-          <FlexBox
-            flexDirection="column-reverse"
-            alignItems="center"
-            justifyContent={!!cartAmount ? "space-between" : "flex-start"}
-            width="30px"
-          >
-            {/* <div className="add-cart"> */}
-            <Button
-              variant="outlined"
-              color="primary"
-              padding="5px"
-              size="none"
-              borderColor="primary.light"
-              onClick={handleCartAmountChange(cartAmount + 1)}
+            <FlexBox
+                flexDirection="column-reverse"
+                alignItems="center"
+                justifyContent={!!cartAmount ? "space-between" : "flex-start"}
+                width="30px"
             >
-              <Icon variant="small">plus</Icon>
-            </Button>
-
-            {!!cartAmount && (
-              <Fragment>
-                <SemiSpan color="text.primary" fontWeight="600">
-                  {cartAmount}
-                </SemiSpan>
-                <Button
+              {/* <div className="add-cart"> */}
+              <Button
                   variant="outlined"
                   color="primary"
                   padding="5px"
                   size="none"
                   borderColor="primary.light"
-                  onClick={handleCartAmountChange(cartAmount - 1)}
-                >
-                  <Icon variant="small">minus</Icon>
-                </Button>
-              </Fragment>
-            )}
-            {/* </div> */}
-          </FlexBox>
-        </FlexBox>
-      </div>
+                  onClick={handleCartAmountChange(cartAmount + 1)}
+              >
+                <Icon variant="small">plus</Icon>
+              </Button>
 
-      <Modal open={open} onClose={toggleDialog}>
-        <Card p="1rem" position="relative">
-          <ProductIntro imgUrl={[imgUrl]} title={title} price={price} />
-          <Box
-            position="absolute"
-            top="0.75rem"
-            right="0.75rem"
-            cursor="pointer"
-          >
-            <Icon
-              className="close"
-              color="primary"
-              variant="small"
-              onClick={toggleDialog}
+              {!!cartAmount && (
+                  <Fragment>
+                    <SemiSpan color="text.primary" fontWeight="600">
+                      {cartAmount}
+                    </SemiSpan>
+                    <Button
+                        variant="outlined"
+                        color="primary"
+                        padding="5px"
+                        size="none"
+                        borderColor="primary.light"
+                        onClick={handleCartAmountChange(cartAmount - 1)}
+                    >
+                      <Icon variant="small">minus</Icon>
+                    </Button>
+                  </Fragment>
+              )}
+              {/* </div> */}
+            </FlexBox>
+          </FlexBox>
+        </div>
+
+        <Modal open={open} onClose={toggleDialog}>
+          <Card p="1rem" position="relative">
+            <ProductIntro imgUrl={[imgUrl]} title={title} price={price}/>
+            <Box
+                position="absolute"
+                top="0.75rem"
+                right="0.75rem"
+                cursor="pointer"
             >
-              close
-            </Icon>
-          </Box>
-        </Card>
-      </Modal>
-    </StyledProductCard1>
+              <Icon
+                  className="close"
+                  color="primary"
+                  variant="small"
+                  onClick={toggleDialog}
+              >
+                close
+              </Icon>
+            </Box>
+          </Card>
+        </Modal>
+      </StyledProductCard1>
   );
 };
 

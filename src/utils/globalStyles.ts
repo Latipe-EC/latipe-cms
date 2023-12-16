@@ -1,12 +1,13 @@
-import { createGlobalStyle } from "styled-components";
+import {createGlobalStyle} from "styled-components";
+
 export const GlobalStyles = createGlobalStyle`
   html,
   body {
     padding: 0;
     margin: 0;
     font-size: 14px;
-    background: ${({ theme }: any) => theme.colors.body.default};
-    color: ${({ theme }: any) => theme.colors.body.text};
+    background: ${({theme}: any) => theme.colors.body.default};
+    color: ${({theme}: any) => theme.colors.body.text};
     transition: all 0.50s linear;
     font-family: Open Sans, Roboto, -apple-system, BlinkMacSystemFont, Segoe UI,
     Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
@@ -23,7 +24,7 @@ export const GlobalStyles = createGlobalStyle`
   }
   a {
     text-decoration: none;
-    color: ${({ theme }: any) => theme.colors.body.text};
+    color: ${({theme}: any) => theme.colors.body.text};
   }
   .cursor-pointer {
     cursor: pointer;
@@ -34,7 +35,7 @@ export const GlobalStyles = createGlobalStyle`
 }
 
 #nprogress .bar {
-  background: ${({ theme }: any) => theme.colors.primary.main};
+  background: ${({theme}: any) => theme.colors.primary.main};
 
   position: fixed;
   z-index: 1031;
@@ -54,9 +55,9 @@ export const GlobalStyles = createGlobalStyle`
   right: 0px;
   width: 100px;
   height: 100%;
-  box-shadow: 0 0 10px ${({ theme }: any) =>
-    theme.colors.primary.main}, 0 0 5px ${({ theme }: any) =>
-  theme.colors.primary.main};
+  box-shadow: 0 0 10px ${({theme}: any) =>
+    theme.colors.primary.main}, 0 0 5px ${({theme}: any) =>
+    theme.colors.primary.main};
   opacity: 1.0;
 
   -webkit-transform: rotate(3deg) translate(0px, -4px);
@@ -79,8 +80,8 @@ export const GlobalStyles = createGlobalStyle`
   box-sizing: border-box;
 
   border: solid 2px transparent;
-  border-top-color: ${({ theme }: any) => theme.colors.primary.main};
-  border-left-color: ${({ theme }: any) => theme.colors.primary.main};
+  border-top-color: ${({theme}: any) => theme.colors.primary.main};
+  border-left-color: ${({theme}: any) => theme.colors.primary.main};
   border-radius: 50%;
 
   -webkit-animation: nprogress-spinner 400ms linear infinite;

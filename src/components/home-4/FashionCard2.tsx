@@ -3,20 +3,21 @@ import React from "react";
 import Box from "../Box";
 import Card from "../Card";
 import Grid from "../grid/Grid";
-import Typography, { H3, Small, Span } from "../Typography";
+import Typography, {H3, Small, Span} from "../Typography";
 
-export interface FashionCard2Props {}
+export interface FashionCard2Props {
+}
 
 const FashionCard2: React.FC<FashionCard2Props> = () => {
   return (
-    <Box flex="1 1 0">
-        <a  href="/">
+      <Box flex="1 1 0">
+        <a href="/">
           <Card
-            p="1rem"
-            boxShadow="border"
-            borderRadius={4}
-            mb="1.5rem"
-            hoverEffect
+              p="1rem"
+              boxShadow="border"
+              borderRadius={4}
+              mb="1.5rem"
+              hoverEffect
           >
             <Grid container spacing={0} flexWrap="wrap-reverse">
               <Grid item sm={6} xs={12}>
@@ -37,9 +38,9 @@ const FashionCard2: React.FC<FashionCard2Props> = () => {
                   </Typography>
 
                   <Small
-                    fontWeight="700"
-                    borderBottom="2px solid"
-                    borderColor="primary.main"
+                      fontWeight="700"
+                      borderBottom="2px solid"
+                      borderColor="primary.main"
                   >
                     SHOP NOW
                   </Small>
@@ -50,10 +51,10 @@ const FashionCard2: React.FC<FashionCard2Props> = () => {
                 <Box p="1.5rem">
                   <Box height="100%" minHeight="190px" position="relative">
                     <LazyImage
-                      src="/assets/images/products/jacket.png"
-                      layout="fill"
-                      objectFit="contain"
-                      alt="model"
+                        src="/assets/images/products/jacket.png"
+                        layout="fill"
+                        objectFit="contain"
+                        alt="model"
                     />
                   </Box>
                 </Box>
@@ -61,7 +62,7 @@ const FashionCard2: React.FC<FashionCard2Props> = () => {
             </Grid>
           </Card>
         </a>
-    </Box>
+      </Box>
   );
 };
 

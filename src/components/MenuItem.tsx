@@ -1,6 +1,6 @@
-import { themeGet } from "@styled-system/theme-get";
+import {themeGet} from "@styled-system/theme-get";
 import styled from "styled-components";
-import { color, ColorProps, space, SpaceProps } from "styled-system";
+import {color, ColorProps, space, SpaceProps} from "styled-system";
 
 const MenuItem = styled.div<ColorProps & SpaceProps>`
   padding: 0.5rem 1rem;

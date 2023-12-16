@@ -6,9 +6,9 @@ import MobileNavigationBar from "../mobile-navigation/MobileNavigationBar";
 import Sticky from "../sticky/Sticky";
 import Topbar from "../topbar/Topbar";
 import StyledAppLayout from "./AppLayoutStyle";
-import { Helmet } from "react-helmet";
+import {Helmet} from "react-helmet";
 import styled from "styled-components";
-import { Outlet } from "react-router-dom";
+import {Outlet} from "react-router-dom";
 import Navbar from "../navbar/Navbar";
 
 const MainContent = styled.div`
@@ -18,28 +18,28 @@ const MainContent = styled.div`
 `;
 
 const NavbarLayout: React.FC = () => {
-	return (
+  return (
 
-		<StyledAppLayout>
-			<Helmet>
-				<title>Latipe</title>
-				<meta charSet="utf-8" />
-				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
-			</Helmet>
+      <StyledAppLayout>
+        <Helmet>
+          <title>Latipe</title>
+          <meta charSet="utf-8"/>
+          <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
+        </Helmet>
 
-			<Topbar />
+        <Topbar/>
 
-			<Sticky fixedOn={0}>
-				<Header />
-			</Sticky>
-			<MainContent>
-				<div className="section-after-sticky"><Navbar /></div>
-				<Container my="2rem"><Outlet /></Container>
-			</MainContent>
-			<MobileNavigationBar />
-			<Footer></Footer>
-		</StyledAppLayout>
-	);
+        <Sticky fixedOn={0}>
+          <Header/>
+        </Sticky>
+        <MainContent>
+          <div className="section-after-sticky"><Navbar/></div>
+          <Container my="2rem"><Outlet/></Container>
+        </MainContent>
+        <MobileNavigationBar/>
+        <Footer></Footer>
+      </StyledAppLayout>
+  );
 };
 
 export default NavbarLayout;

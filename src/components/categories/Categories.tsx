@@ -1,13 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import CategoryDropdown from "./CategoryDropdown";
-import { StyledCategory } from "./CategoryStyle";
+import {StyledCategory} from "./CategoryStyle";
 
 export interface CategoriesProps {
   open?: boolean;
   children: React.ReactElement;
 }
 
-const Categories: React.FC<CategoriesProps> = ({ open: isOpen, children }) => {
+const Categories: React.FC<CategoriesProps> = ({open: isOpen, children}) => {
   const [open, setOpen] = useState(isOpen);
   const popoverRef = useRef(open);
   popoverRef.current = open;
@@ -29,14 +29,14 @@ const Categories: React.FC<CategoriesProps> = ({ open: isOpen, children }) => {
   }, []);
 
   return (
-    <StyledCategory open={open}>
-      {React.cloneElement(children, {
-        open,
-        className: `${children.props.className} cursor-pointer`,
-        onClick: toggleMenu,
-      })}
-      <CategoryDropdown open={open} />
-    </StyledCategory>
+      <StyledCategory open={open}>
+        {React.cloneElement(children, {
+          open,
+          className: `${children.props.className} cursor-pointer`,
+          onClick: toggleMenu,
+        })}
+        <CategoryDropdown open={open}/>
+      </StyledCategory>
   );
 };
 

@@ -1,16 +1,17 @@
 import React from "react";
 import styled from "styled-components";
-import { compose, flex, space, SpaceProps } from "styled-system";
-import { deviceOptions } from "../../interfaces";
-import { deviceSize } from "../../utils/constants";
+import {compose, flex, space, SpaceProps} from "styled-system";
+import {deviceOptions} from "../../interfaces";
+import {deviceSize} from "../../utils/constants";
 
 export interface HiddenProps {
   down?: number | deviceOptions;
   up?: number | deviceOptions;
+
   [key: string]: unknown;
 }
 
-const StyledHidden = styled.div<HiddenProps & SpaceProps>(({ up, down }) => {
+const StyledHidden = styled.div<HiddenProps & SpaceProps>(({up, down}) => {
   const upDeviceSize = deviceSize[up] || up;
   const downDeviceSize = deviceSize[down] || down;
 
@@ -32,7 +33,7 @@ const StyledHidden = styled.div<HiddenProps & SpaceProps>(({ up, down }) => {
     };
 }, compose(space, flex));
 
-const Hidden: React.FC<HiddenProps & SpaceProps> = ({ children, ...props }) => {
+const Hidden: React.FC<HiddenProps & SpaceProps> = ({children, ...props}) => {
   return <StyledHidden {...props}>{children}</StyledHidden>;
 };
 

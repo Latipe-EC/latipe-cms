@@ -1,6 +1,6 @@
-import { colorOptions } from "../../interfaces";
-import React, { useEffect, useState } from "react";
-import { CSSProperties } from "styled-components";
+import {colorOptions} from "../../interfaces";
+import React, {useEffect, useState} from "react";
+import {CSSProperties} from "styled-components";
 import StyledRating from "./RatingStyle";
 import Star from "./Star";
 
@@ -16,13 +16,13 @@ export interface RatingProps {
 }
 
 const Rating: React.FC<RatingProps> = ({
-  value,
-  color,
-  outof,
-  readonly,
-  onChange,
-  ...props
-}) => {
+                                         value,
+                                         color,
+                                         outof,
+                                         readonly,
+                                         onChange,
+                                         ...props
+                                       }) => {
   const [state, setState] = useState(value);
 
   let fullStar = parseInt(state.toString());
@@ -45,12 +45,12 @@ const Rating: React.FC<RatingProps> = ({
     let inputValue = i + 1;
 
     starList.push(
-      <Star
-        key={i}
-        value={5}
-        color={color}
-        onClick={() => handleStarClick(inputValue)}
-      />
+        <Star
+            key={i}
+            value={5}
+            color={color}
+            onClick={() => handleStarClick(inputValue)}
+        />
     );
   }
 
@@ -58,13 +58,13 @@ const Rating: React.FC<RatingProps> = ({
     let inputValue = i + fullStar + 1;
 
     starList.push(
-      <Star
-        key={inputValue}
-        value={(state - fullStar) * 10}
-        outof={10}
-        color={color}
-        onClick={() => handleStarClick(inputValue)}
-      />
+        <Star
+            key={inputValue}
+            value={(state - fullStar) * 10}
+            outof={10}
+            color={color}
+            onClick={() => handleStarClick(inputValue)}
+        />
     );
   }
 
@@ -72,19 +72,19 @@ const Rating: React.FC<RatingProps> = ({
     let inputValue = i + halfStar + fullStar + 1;
 
     starList.push(
-      <Star
-        key={inputValue}
-        value={0}
-        color={color}
-        onClick={() => handleStarClick(inputValue)}
-      />
+        <Star
+            key={inputValue}
+            value={0}
+            color={color}
+            onClick={() => handleStarClick(inputValue)}
+        />
     );
   }
 
   return (
-    <StyledRating color={color} value={state} readonly={readonly} {...props}>
-      {starList}
-    </StyledRating>
+      <StyledRating color={color} value={state} readonly={readonly} {...props}>
+        {starList}
+      </StyledRating>
   );
 };
 

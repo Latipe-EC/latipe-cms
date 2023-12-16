@@ -1,4 +1,4 @@
-import React, { cloneElement, Fragment, ReactElement, useState } from "react";
+import React, {cloneElement, Fragment, ReactElement, useState} from "react";
 import Modal from "../modal/Modal";
 
 export interface UserLoginDialogProps {
@@ -7,9 +7,9 @@ export interface UserLoginDialogProps {
 }
 
 const UserLoginDialog: React.FC<UserLoginDialogProps> = ({
-  handle,
-  children,
-}) => {
+                                                           handle,
+                                                           children,
+                                                         }) => {
   const [open, setOpen] = useState(false);
 
   const toggleDialog = () => {
@@ -17,13 +17,13 @@ const UserLoginDialog: React.FC<UserLoginDialogProps> = ({
   };
 
   return (
-    <Fragment>
-      {cloneElement(handle, { onClick: toggleDialog })}
+      <Fragment>
+        {cloneElement(handle, {onClick: toggleDialog})}
 
-      <Modal open={open} onClose={toggleDialog}>
-        {children}
-      </Modal>
-    </Fragment>
+        <Modal open={open} onClose={toggleDialog}>
+          {children}
+        </Modal>
+      </Fragment>
   );
 };
 

@@ -1,8 +1,8 @@
-import { cloneElement, InputHTMLAttributes, useEffect, useState } from "react";
-import { SpaceProps } from "styled-system";
-import { colorOptions } from "../../interfaces";
+import {cloneElement, InputHTMLAttributes, useEffect, useState} from "react";
+import {SpaceProps} from "styled-system";
+import {colorOptions} from "../../interfaces";
 import Box from "../Box";
-import { SyledTextField, TextFieldWrapper } from "./TextFieldStyle";
+import {SyledTextField, TextFieldWrapper} from "./TextFieldStyle";
 
 export interface TextFieldProps {
   labelColor?: colorOptions;
@@ -14,8 +14,8 @@ export interface TextFieldProps {
 }
 
 const TextField: React.FC<
-  InputHTMLAttributes<HTMLInputElement> & TextFieldProps & SpaceProps
-> = ({ id, label, errorText, labelColor, endAdornment, ...props }) => {
+    InputHTMLAttributes<HTMLInputElement> & TextFieldProps & SpaceProps
+> = ({id, label, errorText, labelColor, endAdornment, ...props}) => {
   const [textId, setTextId] = useState(id);
 
   // extract spacing props
@@ -30,21 +30,21 @@ const TextField: React.FC<
   }, []);
 
   return (
-    <TextFieldWrapper
-      color={labelColor && `${labelColor}.main`}
-      fullwidth={props.fullwidth}
-      {...spacingProps}
-    >
-      {label && <label htmlFor={textId}>{label}</label>}
-      <Box position="relative">
-        <SyledTextField id={textId} {...props} />
-        {endAdornment &&
-          cloneElement(endAdornment, {
-            className: `end-adornment ${endAdornment.className}`,
-          })}
-      </Box>
-      {errorText && <small>{errorText}</small>}
-    </TextFieldWrapper>
+      <TextFieldWrapper
+          color={labelColor && `${labelColor}.main`}
+          fullwidth={props.fullwidth}
+          {...spacingProps}
+      >
+        {label && <label htmlFor={textId}>{label}</label>}
+        <Box position="relative">
+          <SyledTextField id={textId} {...props} />
+          {endAdornment &&
+              cloneElement(endAdornment, {
+                className: `end-adornment ${endAdornment.className}`,
+              })}
+        </Box>
+        {errorText && <small>{errorText}</small>}
+      </TextFieldWrapper>
   );
 };
 

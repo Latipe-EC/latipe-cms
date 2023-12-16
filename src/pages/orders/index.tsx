@@ -2,7 +2,7 @@ import CustomerDashboardLayout from "../../../src/components/layout/CustomerDash
 import CustomerOrderList from "../../../src/components/orders/CustomerOrderList";
 
 const Orders = () => {
-  return <CustomerOrderList />;
+  return <CustomerOrderList/>;
 };
 
 Orders.layout = CustomerDashboardLayout;

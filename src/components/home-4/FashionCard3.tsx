@@ -3,35 +3,36 @@ import React from "react";
 import Box from "../Box";
 import Card from "../Card";
 import Grid from "../grid/Grid";
-import Typography, { H3, Small, Span } from "../Typography";
+import Typography, {H3, Small, Span} from "../Typography";
 
-export interface FashionCard3Props {}
+export interface FashionCard3Props {
+}
 
 const FashionCard3: React.FC<FashionCard3Props> = () => {
   return (
-    <Box flex="1 1 0">
-        <a  href="/">
+      <Box flex="1 1 0">
+        <a href="/">
           <Card
-            p="1rem"
-            boxShadow="border"
-            borderRadius={4}
-            height="100%"
-            hoverEffect
+              p="1rem"
+              boxShadow="border"
+              borderRadius={4}
+              height="100%"
+              hoverEffect
           >
             <Grid
-              container
-              spacing={0}
-              flexWrap="wrap-reverse"
-              containerHeight="100%"
+                container
+                spacing={0}
+                flexWrap="wrap-reverse"
+                containerHeight="100%"
             >
               <Grid item sm={6} xs={12}>
                 <Box p="1.5rem" height="100%">
                   <Box height="100%" minHeight="190px" position="relative">
                     <LazyImage
-                      src="/assets/images/products/t-shirt-1.png"
-                      layout="fill"
-                      objectFit="contain"
-                      alt="model"
+                        src="/assets/images/products/t-shirt-1.png"
+                        layout="fill"
+                        objectFit="contain"
+                        alt="model"
                     />
                   </Box>
                 </Box>
@@ -56,9 +57,9 @@ const FashionCard3: React.FC<FashionCard3Props> = () => {
                   </Typography>
 
                   <Small
-                    fontWeight="700"
-                    borderBottom="2px solid"
-                    borderColor="primary.main"
+                      fontWeight="700"
+                      borderBottom="2px solid"
+                      borderColor="primary.main"
                   >
                     SHOP NOW
                   </Small>
@@ -67,7 +68,7 @@ const FashionCard3: React.FC<FashionCard3Props> = () => {
             </Grid>
           </Card>
         </a>
-    </Box>
+      </Box>
   );
 };
 

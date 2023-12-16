@@ -1,4 +1,4 @@
-import styled, { css, keyframes } from "styled-components";
+import styled, {css, keyframes} from "styled-components";
 import systemCss from "@styled-system/css";
 
 const rotate = keyframes`
@@ -7,16 +7,16 @@ const rotate = keyframes`
 `;
 
 const Spinner = styled.div(
-  systemCss({
-    width: 24,
-    height: 24,
-    border: "4px solid",
-    borderColor: "primary",
-    borderTop: `3px solid white`,
-    borderRadius: "50%",
-    transitionProperty: "transform",
-  }),
-  css`
+    systemCss({
+      width: 24,
+      height: 24,
+      border: "4px solid",
+      borderColor: "primary",
+      borderTop: `3px solid white`,
+      borderRadius: "50%",
+      transitionProperty: "transform",
+    }),
+    css`
     animation: ${rotate} 1.2s infinite linear;
   `
 );

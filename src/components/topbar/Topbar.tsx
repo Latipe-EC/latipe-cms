@@ -1,64 +1,62 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Container from '../Container';
 import FlexBox from '../FlexBox';
 import Icon from '../icon/Icon';
-import Image from '../Image';
-import Menu from '../Menu';
-import MenuItem from '../MenuItem';
 import NavLink from '../nav-link/NavLink';
-import { Small } from '../Typography';
 import StyledTopbar from './Topbar.style';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 const Topbar: React.FC = () => {
-	const [currency, setCurrency] = useState(currencyList[0]);
-	const [language, setLanguage] = useState(languageList[0]);
-	const navigate = useNavigate();
+  const [currency, setCurrency] = useState(currencyList[0]);
+  const [language, setLanguage] = useState(languageList[0]);
+  const navigate = useNavigate();
 
-	const handleCurrencyClick = (curr) => () => {
-		setCurrency(curr);
-	};
+  const handleCurrencyClick = (curr) => () => {
+    setCurrency(curr);
+  };
 
-	const handleLanguageClick = (lang) => () => {
-		setLanguage(lang);
-	};
+  const handleLanguageClick = (lang) => () => {
+    setLanguage(lang);
+  };
 
-	useEffect(() => {
-		// get language from browser
-		// console.log(navigator.language);
-	}, []);
+  useEffect(() => {
+    // get language from browser
+    // console.log(navigator.language);
+  }, []);
 
-	return (
-		<StyledTopbar>
-			<Container
-				display="flex"
-				justifyContent="space-between"
-				alignItems="center"
-				height="100%"
-			>
-				<FlexBox className="topbar-left">
-					<div className="logo">
-						<img src="/assets/images/latipe_logo.jpeg" alt="logo" />
-					</div>
-					<FlexBox alignItems="center">
-						<Icon size="14px">phone-call</Icon>
-						<span>+82 232 232 323</span>
-					</FlexBox>
-					<FlexBox alignItems="center" ml="20px">
-						<Icon size="14px">mail</Icon>
-						<span>support@latipe.com</span>
-					</FlexBox>
-					<FlexBox alignItems="center" ml="20px" style={{ cursor: "pointer" }}
-						onClick={() => { navigate("/vendor") }}>
-						<Icon size="14px">user</Icon>
-						<span>Kênh người bán</span>
-					</FlexBox>
-				</FlexBox>
-				<FlexBox className="topbar-right" alignItems="center">
-					<NavLink className="link" href="/help">
-						Need Help?
-					</NavLink>
-					{/* <Menu
+  return (
+      <StyledTopbar>
+        <Container
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            height="100%"
+        >
+          <FlexBox className="topbar-left">
+            <div className="logo">
+              <img src="/assets/images/latipe_logo.jpeg" alt="logo"/>
+            </div>
+            <FlexBox alignItems="center">
+              <Icon size="14px">phone-call</Icon>
+              <span>+82 232 232 323</span>
+            </FlexBox>
+            <FlexBox alignItems="center" ml="20px">
+              <Icon size="14px">mail</Icon>
+              <span>support@latipe.com</span>
+            </FlexBox>
+            <FlexBox alignItems="center" ml="20px" style={{cursor: "pointer"}}
+                     onClick={() => {
+                       navigate("/vendor")
+                     }}>
+              <Icon size="14px">user</Icon>
+              <span>Kênh người bán</span>
+            </FlexBox>
+          </FlexBox>
+          <FlexBox className="topbar-right" alignItems="center">
+            <NavLink className="link" href="/help">
+              Need Help?
+            </NavLink>
+            {/* <Menu
 						direction="right"
 						handler={
 							<FlexBox
@@ -111,44 +109,44 @@ const Topbar: React.FC = () => {
 							</MenuItem>
 						))}
 					</Menu> */}
-				</FlexBox>
-			</Container>
-		</StyledTopbar>
-	);
+          </FlexBox>
+        </Container>
+      </StyledTopbar>
+  );
 };
 
 const languageList = [
-	{
-		title: 'EN',
-		imgUrl: '/assets/images/flags/usa.png',
-	},
-	{
-		title: 'BN',
-		imgUrl: '/assets/images/flags/bd.png',
-	},
-	{
-		title: 'HN',
-		imgUrl: '/assets/images/flags/in.png',
-	},
+  {
+    title: 'EN',
+    imgUrl: '/assets/images/flags/usa.png',
+  },
+  {
+    title: 'BN',
+    imgUrl: '/assets/images/flags/bd.png',
+  },
+  {
+    title: 'HN',
+    imgUrl: '/assets/images/flags/in.png',
+  },
 ];
 
 const currencyList = [
-	{
-		title: 'USD',
-		imgUrl: '/assets/images/flags/usa.png',
-	},
-	{
-		title: 'EUR',
-		imgUrl: '/assets/images/flags/uk.png',
-	},
-	{
-		title: 'BDT',
-		imgUrl: '/assets/images/flags/bd.png',
-	},
-	{
-		title: 'INR',
-		imgUrl: '/assets/images/flags/in.png',
-	},
+  {
+    title: 'USD',
+    imgUrl: '/assets/images/flags/usa.png',
+  },
+  {
+    title: 'EUR',
+    imgUrl: '/assets/images/flags/uk.png',
+  },
+  {
+    title: 'BDT',
+    imgUrl: '/assets/images/flags/bd.png',
+  },
+  {
+    title: 'INR',
+    imgUrl: '/assets/images/flags/in.png',
+  },
 ];
 
 export default Topbar;

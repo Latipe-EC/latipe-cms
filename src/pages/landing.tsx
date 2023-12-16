@@ -8,14 +8,14 @@ import Section5 from "../../src/components/landing/Section5";
 
 const IndexPage = () => {
   return (
-    <Box id="top" overflow="hidden" bg="gray.white">
-      <Section1 />
-      <Section2 />
-      <Section3 />
-      <Section4 />
-      <Section5 />
-      <Footer />
-    </Box>
+      <Box id="top" overflow="hidden" bg="gray.white">
+        <Section1/>
+        <Section2/>
+        <Section3/>
+        <Section4/>
+        <Section5/>
+        <Footer/>
+      </Box>
   );
 };
 

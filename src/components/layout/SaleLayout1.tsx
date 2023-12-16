@@ -12,22 +12,22 @@ type Props = {
 };
 
 const SaleLayout1: React.FC<Props> = ({
-  children,
-  title = "Multivendor Ecommerce | Sale",
-}) => (
-  <StyledAppLayout>
-    <header>
-      <title>{title}</title>
-      <meta charSet="utf-8" />
-      <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-    </header>
-    <Topbar />
-    <Header />
-    <Navbar />
-    {children}
-    <MobileNavigationBar />
-    <Footer />
-  </StyledAppLayout>
+                                        children,
+                                        title = "Multivendor Ecommerce | Sale",
+                                      }) => (
+    <StyledAppLayout>
+      <header>
+        <title>{title}</title>
+        <meta charSet="utf-8"/>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
+      </header>
+      <Topbar/>
+      <Header/>
+      <Navbar/>
+      {children}
+      <MobileNavigationBar/>
+      <Footer/>
+    </StyledAppLayout>
 );
 
 export default SaleLayout1;

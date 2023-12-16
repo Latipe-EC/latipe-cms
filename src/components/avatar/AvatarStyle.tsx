@@ -1,18 +1,10 @@
 import styled from "styled-components";
-import {
-  border,
-  BorderProps,
-  color,
-  ColorProps,
-  layout,
-  space,
-  SpaceProps,
-} from "styled-system";
+import {border, BorderProps, color, ColorProps, layout, space, SpaceProps,} from "styled-system";
 // import { themeGet } from "@styled-system/theme-get";
-import { AvatarProps } from "./Avatar";
+import {AvatarProps} from "./Avatar";
 
 const StyledAvatar = styled.div<
-  AvatarProps & BorderProps & ColorProps & SpaceProps
+    AvatarProps & BorderProps & ColorProps & SpaceProps
 >`
   display: block;
   position: relative;

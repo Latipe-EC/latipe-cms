@@ -1,5 +1,4 @@
 
-
 .chakra-button.selected::after {
   content: "\2713";
   display: block;

@@ -14,7 +14,7 @@ import {
 import Box from "./Box";
 
 const FlexBox = styled(Box)<
-  FlexboxProps & LayoutProps & SpaceProps & ColorProps & BorderProps
+    FlexboxProps & LayoutProps & SpaceProps & ColorProps & BorderProps
 >`
   display: flex;
   flex-direction: row;

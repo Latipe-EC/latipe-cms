@@ -5,12 +5,15 @@ import Divider from "../../src/components/Divider";
 import Grid from "../../src/components/grid/Grid";
 import Header from "../../src/components/header/Header";
 import Icon from "../../src/components/icon/Icon";
-import MobileCategoryImageBox from "../../src/components/mobile-category-nav/MobileCategoryImageBox";
-import { MobileCategoryNavStyle } from "../../src/components/mobile-category-nav/MobileCategoryNavStyle";
+import MobileCategoryImageBox
+  from "../../src/components/mobile-category-nav/MobileCategoryImageBox";
+import {
+  MobileCategoryNavStyle
+} from "../../src/components/mobile-category-nav/MobileCategoryNavStyle";
 import MobileNavigationBar from "../../src/components/mobile-navigation/MobileNavigationBar";
 import Typography from "../../src/components/Typography";
 import navigations from "../data/navigations";
-import { Fragment, useEffect, useState } from "react";
+import {Fragment, useEffect, useState} from "react";
 
 const MobileCategoryNav = () => {
   const [category, setCategory] = useState(null);
@@ -30,59 +33,76 @@ const MobileCategoryNav = () => {
   }, []);
 
   return (
-    <MobileCategoryNavStyle>
-      <Header className="header" />
-      <div className="main-category-holder">
-        {navigations.map((item) => (
-          <Box
-            className="main-category-box"
-            borderLeft={`${category?.href === item.href ? "3" : "0"}px solid`}
-            onClick={handleCategoryClick(item)}
-            key={item.title}
-          >
-            <Icon size="28px" mb="0.5rem">
-              {item.icon}
-            </Icon>
-            <Typography
-              className="ellipsis"
-              textAlign="center"
-              fontSize="11px"
-              lineHeight="1"
-            >
-              {item.title}
-            </Typography>
+      <MobileCategoryNavStyle>
+        <Header className="header"/>
+        <div className="main-category-holder">
+          {navigations.map((item) => (
+              <Box
+                  className="main-category-box"
+                  borderLeft={`${category?.href === item.href ? "3" : "0"}px solid`}
+                  onClick={handleCategoryClick(item)}
+                  key={item.title}
+              >
+                <Icon size="28px" mb="0.5rem">
+                  {item.icon}
+                </Icon>
+                <Typography
+                    className="ellipsis"
+                    textAlign="center"
+                    fontSize="11px"
+                    lineHeight="1"
+                >
+                  {item.title}
+                </Typography>
+              </Box>
+          ))}
+        </div>
+        <Box className="container">
+          <Typography fontWeight="600" fontSize="15px" mb="1rem">
+            Recommended Categories
+          </Typography>
+          <Box mb="2rem">
+            <Grid container spacing={3}>
+              {suggestedList.map((item, ind) => (
+                  <Grid item lg={1} md={2} sm={3} xs={4} key={ind}>
+                    <a href="/product/search/423423">
+                      <MobileCategoryImageBox {...item} />
+                    </a>
+                  </Grid>
+              ))}
+            </Grid>
           </Box>
-        ))}
-      </div>
-      <Box className="container">
-        <Typography fontWeight="600" fontSize="15px" mb="1rem">
-          Recommended Categories
-        </Typography>
-        <Box mb="2rem">
-          <Grid container spacing={3}>
-            {suggestedList.map((item, ind) => (
-              <Grid item lg={1} md={2} sm={3} xs={4} key={ind}>
-                <a href="/product/search/423423">
-                    <MobileCategoryImageBox {...item} />
-                </a>
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
 
-        {category?.menuComponent === "MegaMenu1" ? (
-          subCategoryList.map((item, ind) => (
-            <Fragment key={ind}>
-              <Divider />
-              <Accordion>
-                <AccordionHeader px="0px" py="10px">
-                  <Typography fontWeight="600" fontSize="15px">
-                    {item.title}
-                  </Typography>
-                </AccordionHeader>
-                <Box mb="2rem" mt="0.5rem">
-                  <Grid container spacing={3}>
-                    {item.subCategories?.map((item, ind) => (
+          {category?.menuComponent === "MegaMenu1" ? (
+              subCategoryList.map((item, ind) => (
+                  <Fragment key={ind}>
+                    <Divider/>
+                    <Accordion>
+                      <AccordionHeader px="0px" py="10px">
+                        <Typography fontWeight="600" fontSize="15px">
+                          {item.title}
+                        </Typography>
+                      </AccordionHeader>
+                      <Box mb="2rem" mt="0.5rem">
+                        <Grid container spacing={3}>
+                          {item.subCategories?.map((item, ind) => (
+                              <Grid item lg={1} md={2} sm={3} xs={4} key={ind}>
+                                <a href="/product/search/423423">
+                                  <a>
+                                    <MobileCategoryImageBox {...item} />
+                                  </a>
+                                </a>
+                              </Grid>
+                          ))}
+                        </Grid>
+                      </Box>
+                    </Accordion>
+                  </Fragment>
+              ))
+          ) : (
+              <Box mb="2rem">
+                <Grid container spacing={3}>
+                  {subCategoryList.map((item, ind) => (
                       <Grid item lg={1} md={2} sm={3} xs={4} key={ind}>
                         <a href="/product/search/423423">
                           <a>
@@ -90,30 +110,13 @@ const MobileCategoryNav = () => {
                           </a>
                         </a>
                       </Grid>
-                    ))}
-                  </Grid>
-                </Box>
-              </Accordion>
-            </Fragment>
-          ))
-        ) : (
-          <Box mb="2rem">
-            <Grid container spacing={3}>
-              {subCategoryList.map((item, ind) => (
-                <Grid item lg={1} md={2} sm={3} xs={4} key={ind}>
-                  <a href="/product/search/423423">
-                    <a>
-                      <MobileCategoryImageBox {...item} />
-                    </a>
-                  </a>
+                  ))}
                 </Grid>
-              ))}
-            </Grid>
-          </Box>
-        )}
-      </Box>
-      <MobileNavigationBar />
-    </MobileCategoryNavStyle>
+              </Box>
+          )}
+        </Box>
+        <MobileNavigationBar/>
+      </MobileCategoryNavStyle>
   );
 };
 

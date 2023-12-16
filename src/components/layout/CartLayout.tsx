@@ -4,10 +4,10 @@ import MobileNavigationBar from "../mobile-navigation/MobileNavigationBar";
 import Sticky from "../sticky/Sticky";
 import Topbar from "../topbar/Topbar";
 import StyledAppLayout from "./AppLayoutStyle";
-import { Helmet } from "react-helmet";
+import {Helmet} from "react-helmet";
 import styled from "styled-components";
 import Navbar from "../navbar/Navbar";
-import React, { ReactNode } from "react";
+import React, {ReactNode} from "react";
 
 const MainContent = styled.div`
   margin-top: 5rem; /* Add some initial margin */
@@ -17,32 +17,32 @@ const MainContent = styled.div`
 
 
 interface CartLayoutProps {
-	children: ReactNode;
+  children: ReactNode;
 }
 
-const CartLayout: React.FC<CartLayoutProps> = ({ children }) => {
-	return (
-		<StyledAppLayout>
-			<Helmet>
-				<title>Latipe</title>
-				<meta charSet="utf-8" />
-				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
-			</Helmet>
+const CartLayout: React.FC<CartLayoutProps> = ({children}) => {
+  return (
+      <StyledAppLayout>
+        <Helmet>
+          <title>Latipe</title>
+          <meta charSet="utf-8"/>
+          <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
+        </Helmet>
 
-			<Topbar />
+        <Topbar/>
 
-			<Sticky fixedOn={0}>
-				<Header />
-			</Sticky>
-			<MainContent>
-				<div className="section-after-sticky">
-					<Navbar />
-				</div>
-				<Container my="2rem">{children}</Container>
-			</MainContent>
-			<MobileNavigationBar />
-		</StyledAppLayout>
-	);
+        <Sticky fixedOn={0}>
+          <Header/>
+        </Sticky>
+        <MainContent>
+          <div className="section-after-sticky">
+            <Navbar/>
+          </div>
+          <Container my="2rem">{children}</Container>
+        </MainContent>
+        <MobileNavigationBar/>
+      </StyledAppLayout>
+  );
 };
 
 export default CartLayout;

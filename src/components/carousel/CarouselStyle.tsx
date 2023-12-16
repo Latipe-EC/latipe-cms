@@ -1,7 +1,7 @@
-import { deviceSize } from "../../utils/constants";
-import { CarouselProvider, CarouselProviderProps } from "pure-react-carousel";
+import {deviceSize} from "../../utils/constants";
+import {CarouselProvider, CarouselProviderProps} from "pure-react-carousel";
 import styled from "styled-components";
-import { getTheme } from "../../utils/utils";
+import {getTheme} from "../../utils/utils";
 
 type StyledCarouselProps = {
   showDots?: boolean;
@@ -12,28 +12,28 @@ type StyledCarouselProps = {
 };
 
 export const StyledCarousel = styled(
-  ({
-    spacing,
-    showDots,
-    showArrowOnHover,
-    dotGroupMarginTop,
-    dotColor,
-    ...props
-  }: CarouselProviderProps & StyledCarouselProps) => (
-    <CarouselProvider {...props} />
-  )
+    ({
+       spacing,
+       showDots,
+       showArrowOnHover,
+       dotGroupMarginTop,
+       dotColor,
+       ...props
+     }: CarouselProviderProps & StyledCarouselProps) => (
+        <CarouselProvider {...props} />
+    )
 )`
   position: relative;
   min-width: 0px;
 
   .custom-slider {
-    margin-left: calc(-1 * ${({ spacing }) => spacing || "0px"} / 2);
-    margin-right: calc(-1 * ${({ spacing }) => spacing || "0px"} / 2);
+    margin-left: calc(-1 * ${({spacing}) => spacing || "0px"} / 2);
+    margin-right: calc(-1 * ${({spacing}) => spacing || "0px"} / 2);
   }
 
   .carousel__inner-slide {
     margin: auto;
-    width: calc(100% - ${({ spacing }) => spacing || "0px"});
+    width: calc(100% - ${({spacing}) => spacing || "0px"});
   }
 
   .arrow-button {
@@ -55,7 +55,7 @@ export const StyledCarousel = styled(
 
   ${(props) =>
     props.showArrowOnHover
-      ? `
+        ? `
   [class*="arrow-class"] {
     display: none;
   }
@@ -72,7 +72,7 @@ export const StyledCarousel = styled(
     }
   }
   `
-      : ""}
+        : ""}
 
   @media only screen and (max-width: 1330px) {
     .right-arrow-class {
@@ -97,7 +97,7 @@ export const StyledCarousel = styled(
     margin: 0.25rem;
     cursor: pointer;
     border: 1px solid
-      ${({ dotColor }) => dotColor || getTheme("colors.secondary.main")};
+      ${({dotColor}) => dotColor || getTheme("colors.secondary.main")};
   }
   .dot:after {
     position: absolute;
@@ -108,7 +108,7 @@ export const StyledCarousel = styled(
     left: 50%;
     border-radius: 300px;
     transform: translate(-50%, -50%) scaleX(0);
-    background: ${({ dotColor }) =>
+    background: ${({dotColor}) =>
     dotColor || getTheme("colors.secondary.main")};
   }
   .dot-active:after {

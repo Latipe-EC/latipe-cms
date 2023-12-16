@@ -9,34 +9,34 @@ import ProductCard1 from "../components/product-cards/ProductCard1";
 
 const WishList = () => {
   return (
-    <div>
-      <DashboardPageHeader
-        title="My Wish List"
-        iconName="heart_filled"
-        button={
-          <Button color="primary" bg="primary.light" px="2rem">
-            Add All to Cart
-          </Button>
-        }
-      />
-
-      <Grid container spacing={6}>
-        {productDatabase.slice(53, 59).map((item) => (
-          <Grid item lg={4} sm={6} xs={12} key={item.id}>
-            <ProductCard1 {...item} />
-          </Grid>
-        ))}
-      </Grid>
-
-      <FlexBox justifyContent="center" mt="2.5rem">
-        <Pagination
-          pageCount={5}
-          onChange={(data) => {
-            console.log(data.selected);
-          }}
+      <div>
+        <DashboardPageHeader
+            title="My Wish List"
+            iconName="heart_filled"
+            button={
+              <Button color="primary" bg="primary.light" px="2rem">
+                Add All to Cart
+              </Button>
+            }
         />
-      </FlexBox>
-    </div>
+
+        <Grid container spacing={6}>
+          {productDatabase.slice(53, 59).map((item) => (
+              <Grid item lg={4} sm={6} xs={12} key={item.id}>
+                <ProductCard1 {...item} />
+              </Grid>
+          ))}
+        </Grid>
+
+        <FlexBox justifyContent="center" mt="2.5rem">
+          <Pagination
+              pageCount={5}
+              onChange={(data) => {
+                console.log(data.selected);
+              }}
+          />
+        </FlexBox>
+      </div>
   );
 };
 

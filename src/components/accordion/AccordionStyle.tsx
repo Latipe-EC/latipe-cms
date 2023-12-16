@@ -14,7 +14,7 @@ export const AccordionWrapper = styled(Box)`
 
 export const AccordionHeaderWrapper = styled(FlexBox)<HeaderProps>`
   .caret-icon {
-    transform: ${({ open }) => (open ? "rotate(90deg)" : "rotate(0deg)")};
+    transform: ${({open}) => (open ? "rotate(90deg)" : "rotate(0deg)")};
     transition: transform 250ms ease-in-out;
   }
 `;

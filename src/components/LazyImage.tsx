@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image } from 'react-bootstrap';
+import {Image} from 'react-bootstrap';
 import styled from 'styled-components';
 import {
   border,
@@ -11,9 +11,14 @@ import {
   SpaceProps,
 } from 'styled-system';
 
-type LazyImageProps = React.ImgHTMLAttributes<HTMLImageElement> & BorderProps & SpaceProps & ColorProps & LayoutProps ;
+type LazyImageProps =
+    React.ImgHTMLAttributes<HTMLImageElement>
+    & BorderProps
+    & SpaceProps
+    & ColorProps
+    & LayoutProps;
 
-const LazyImage = styled(({ ...props }: LazyImageProps) => {
+const LazyImage = styled(({...props}: LazyImageProps) => {
   return <Image {...props} />;
 })<React.ImgHTMLAttributes<HTMLImageElement>>`
   display: block;

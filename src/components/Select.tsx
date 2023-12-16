@@ -1,29 +1,30 @@
-import React, { InputHTMLAttributes } from "react";
+import React, {InputHTMLAttributes} from "react";
 import ReactSelect from "react-select";
-import { SpaceProps } from "styled-system";
-import { colors } from "../utils/themeColors";
+import {SpaceProps} from "styled-system";
+import {colors} from "../utils/themeColors";
 import Box from "./Box";
 import Typography from "./Typography";
 
-type SelectOption = { label: string; value: string; mb?: string  }[]
+type SelectOption = { label: string; value: string; mb?: string }[]
+
 interface SelectProps
-  extends InputHTMLAttributes<HTMLInputElement>,
-    SpaceProps {
+    extends InputHTMLAttributes<HTMLInputElement>,
+        SpaceProps {
   options: SelectOption;
   value?: any;
   defaultValue?: any;
   label?: string;
   errorText?: any;
-  mb?: any ;
+  mb?: any;
 }
 
 const Select: React.FC<SelectProps> = ({
-  label,
-  errorText,
-  options,
-  mb = "6px",
-  ...props
-}) => {
+                                         label,
+                                         errorText,
+                                         options,
+                                         mb = "6px",
+                                         ...props
+                                       }) => {
   // extract spacing props
   const spacingProps = {};
   for (const key in props) {
@@ -32,47 +33,47 @@ const Select: React.FC<SelectProps> = ({
   }
 
   return (
-    <Box {...spacingProps}>
-      {label && (
-        <Typography fontSize="0.875rem" mb={mb}>
-          {label}
-        </Typography>
-      )}
-      <ReactSelect
-        // label="Single Select"
-        // placeholder="Single Select"
-        // defaultValue={options[0]}
-        // isDisabled={isDisabled}
-        // isLoading={isLoading}
-        // isClearable={true}
-        // isRtl={isRtl}
-        // isSearchable={isSearchable}
-        // menuIsOpen={true}
-        // name="color"
-        options={options}
-        styles={customStyles}
-        theme={(theme) => ({
-          ...theme,
-          colors: {
-            ...theme.colors,
-            primary50: colors.gray[100],
-            primary: colors.primary.main,
-            neutral20: colors.text.disabled,
-          },
-        })}
-        {...props}
-      />
-      {errorText && (
-        <Typography color="error.main" ml="0.25rem" mt="0.25rem" as="small">
-          {errorText}
-        </Typography>
-      )}
-    </Box>
+      <Box {...spacingProps}>
+        {label && (
+            <Typography fontSize="0.875rem" mb={mb}>
+              {label}
+            </Typography>
+        )}
+        <ReactSelect
+            // label="Single Select"
+            // placeholder="Single Select"
+            // defaultValue={options[0]}
+            // isDisabled={isDisabled}
+            // isLoading={isLoading}
+            // isClearable={true}
+            // isRtl={isRtl}
+            // isSearchable={isSearchable}
+            // menuIsOpen={true}
+            // name="color"
+            options={options}
+            styles={customStyles}
+            theme={(theme) => ({
+              ...theme,
+              colors: {
+                ...theme.colors,
+                primary50: colors.gray[100],
+                primary: colors.primary.main,
+                neutral20: colors.text.disabled,
+              },
+            })}
+            {...props}
+        />
+        {errorText && (
+            <Typography color="error.main" ml="0.25rem" mt="0.25rem" as="small">
+              {errorText}
+            </Typography>
+        )}
+      </Box>
   );
 };
 
 const customStyles = {
-  input: (styles) => ({ ...styles, height: 30 }),
+  input: (styles) => ({...styles, height: 30}),
   option: (provided, state) => ({
     ...provided,
     color: "inherit",

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { space, SpaceProps } from "styled-system";
+import {space, SpaceProps} from "styled-system";
 
 const StyledRadioGroup = styled.fieldset<HTMLFieldSetElement | SpaceProps>`
   margin: 0;

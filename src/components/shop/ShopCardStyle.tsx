@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { colors } from "../../utils/themeColors";
-import { convertHexToRGB } from "../../utils/utils";
+import {colors} from "../../utils/themeColors";
+import {convertHexToRGB} from "../../utils/utils";
 import Card from "../Card";
 
 type ShopWrapperProps = {

@@ -1,12 +1,5 @@
-import React, {
-  Children,
-  cloneElement,
-  ReactElement,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { AccordionWrapper } from "./AccordionStyle";
+import React, {Children, cloneElement, ReactElement, useEffect, useRef, useState,} from "react";
+import {AccordionWrapper} from "./AccordionStyle";
 
 export interface AccordionProps {
   expanded?: boolean;
@@ -14,9 +7,9 @@ export interface AccordionProps {
 }
 
 const Accordion: React.FC<AccordionProps> = ({
-  expanded = false,
-  children,
-}) => {
+                                               expanded = false,
+                                               children,
+                                             }) => {
   const [open, setOpen] = useState(expanded);
   const [headerHeight, setHeaderHeight] = useState(0);
   const [parentHeight, setParentHeight] = useState(0);
@@ -37,14 +30,14 @@ const Accordion: React.FC<AccordionProps> = ({
   }, [ref.current]);
 
   const modifiedChildren = Children.map(children, (child, ind) => {
-    if (ind === 0) return cloneElement(child, { open, onClick: toggle });
+    if (ind === 0) return cloneElement(child, {open, onClick: toggle});
     else return child;
   });
 
   return (
-    <AccordionWrapper ref={ref} height={open ? parentHeight : headerHeight}>
-      {modifiedChildren}
-    </AccordionWrapper>
+      <AccordionWrapper ref={ref} height={open ? parentHeight : headerHeight}>
+        {modifiedChildren}
+      </AccordionWrapper>
   );
 };
 

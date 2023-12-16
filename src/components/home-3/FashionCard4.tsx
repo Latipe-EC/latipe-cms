@@ -3,9 +3,10 @@ import React from "react";
 import Box from "../Box";
 import Card from "../Card";
 import Grid from "../grid/Grid";
-import Typography, { H3, Span } from "../Typography";
+import Typography, {H3, Span} from "../Typography";
 
-export interface FashionCard4Props {}
+export interface FashionCard4Props {
+}
 
 const FashionCard4: React.FC<FashionCard4Props> = () => {
   return (
@@ -33,10 +34,10 @@ const FashionCard4: React.FC<FashionCard4Props> = () => {
             <Grid item sm={6} xs={12}>
               <Box height="100%" position="relative">
                 <LazyImage
-                  src="/assets/images/products/paper-bag.png"
-                  layout="fill"
-                  objectFit="contain"
-                  alt="model"
+                    src="/assets/images/products/paper-bag.png"
+                    layout="fill"
+                    objectFit="contain"
+                    alt="model"
                 />
               </Box>
               {/*

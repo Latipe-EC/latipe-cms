@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { deviceSize } from "../../utils/constants";
+import {deviceSize} from "../../utils/constants";
 
 export const GrocerySection1Wrapper = styled.div`
   border-radius: 8px;

@@ -20,7 +20,7 @@ export const cartInitialState = {
       price: 250,
       name: "Heavy 20kt Gold Necklace",
       imgUrl:
-        "/assets/images/products/Fashion/Jewellery/9.Heavy20ktGoldNecklace.png",
+          "/assets/images/products/Fashion/Jewellery/9.Heavy20ktGoldNecklace.png",
       id: "9573201630529315",
       qty: 1,
     },
@@ -45,8 +45,8 @@ export type cartActionType = {
 };
 
 export const cartReducer: React.Reducer<cartStateType, cartActionType> = (
-  state: cartStateType,
-  action: cartActionType
+    state: cartStateType,
+    action: cartActionType
 ) => {
   switch (action.type) {
     case CHANGE_CART_AMOUNT:
@@ -61,7 +61,7 @@ export const cartReducer: React.Reducer<cartStateType, cartActionType> = (
       else if (exist)
         return {
           cartList: cartList.map((item) => {
-            if (item.id === cartItem.id) return { ...item, qty: cartItem.qty };
+            if (item.id === cartItem.id) return {...item, qty: cartItem.qty};
             else return item;
           }),
         };

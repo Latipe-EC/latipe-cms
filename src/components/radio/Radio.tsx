@@ -1,8 +1,8 @@
 import systemCss from "@styled-system/css";
-import { colorOptions } from "../../interfaces";
-import { InputHTMLAttributes, useEffect, useState } from "react";
+import {colorOptions} from "../../interfaces";
+import {InputHTMLAttributes, useEffect, useState} from "react";
 import styled from "styled-components";
-import { color, ColorProps, compose, space, SpaceProps } from "styled-system";
+import {color, ColorProps, compose, space, SpaceProps} from "styled-system";
 
 export interface RadioProps {
   color?: colorOptions;
@@ -17,62 +17,62 @@ interface WrapperProps extends ColorProps, SpaceProps {
 }
 
 const SyledRadio = styled.input<
-  InputHTMLAttributes<HTMLInputElement> & RadioProps
+    InputHTMLAttributes<HTMLInputElement> & RadioProps
 >(
-  (props) =>
-    systemCss({
-      /* remove standard background appearance */
-      "-webkit-appearance": "none",
-      "-moz-appearance": "none",
-      "-webkit-user-select": "none",
-      "-moz-user-select": "none",
-      "-ms-user-select": "none",
-      "user-select": "none",
-      appearance: "none",
-      outline: "none",
-      cursor: "pointer",
+    (props) =>
+        systemCss({
+          /* remove standard background appearance */
+          "-webkit-appearance": "none",
+          "-moz-appearance": "none",
+          "-webkit-user-select": "none",
+          "-moz-user-select": "none",
+          "-ms-user-select": "none",
+          "user-select": "none",
+          appearance: "none",
+          outline: "none",
+          cursor: "pointer",
 
-      margin: 0,
-      width: 20,
-      height: 20,
-      borderRadius: 20,
-      border: "2px solid",
-      borderColor: "text.hint",
-      position: "relative",
+          margin: 0,
+          width: 20,
+          height: 20,
+          borderRadius: 20,
+          border: "2px solid",
+          borderColor: "text.hint",
+          position: "relative",
 
-      "&:checked": {
-        borderColor: `${props.color}.main`,
-      },
+          "&:checked": {
+            borderColor: `${props.color}.main`,
+          },
 
-      /* create custom radiobutton appearance */
-      "&:after": {
-        width: "calc(100% - 6px)",
-        height: "calc(100% - 6px)",
-        top: "50%",
-        left: "50%",
-        transform: "translateX(-50%) translateY(-50%)",
-        borderRadius: "50%",
-        position: "absolute",
-        bg: "transparent",
-        content: '" "',
-        visibility: "visible",
-        transition: "all 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-      },
+          /* create custom radiobutton appearance */
+          "&:after": {
+            width: "calc(100% - 6px)",
+            height: "calc(100% - 6px)",
+            top: "50%",
+            left: "50%",
+            transform: "translateX(-50%) translateY(-50%)",
+            borderRadius: "50%",
+            position: "absolute",
+            bg: "transparent",
+            content: '" "',
+            visibility: "visible",
+            transition: "all 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+          },
 
-      /* appearance for checked radiobutton */
-      "&:checked:after": {
-        bg: `${props.color}.main`,
-      },
+          /* appearance for checked radiobutton */
+          "&:checked:after": {
+            bg: `${props.color}.main`,
+          },
 
-      "&:disabled": {
-        borderColor: `text.disabled`,
-      },
+          "&:disabled": {
+            borderColor: `text.disabled`,
+          },
 
-      "&:checked:disabled:after": {
-        bg: `text.disabled`,
-      },
-    }),
-  compose(color)
+          "&:checked:disabled:after": {
+            bg: `text.disabled`,
+          },
+        }),
+    compose(color)
 );
 
 const Wrapper = styled.div<WrapperProps>`
@@ -82,7 +82,7 @@ const Wrapper = styled.div<WrapperProps>`
     props.labelPlacement !== "end" ? "row" : "row-reverse"};
   input {
     ${(props) =>
-      props.labelPlacement !== "end"
+    props.labelPlacement !== "end"
         ? "margin-right: 0.5rem"
         : "margin-left: 0.5rem"};
   }
@@ -99,8 +99,8 @@ const Wrapper = styled.div<WrapperProps>`
 `;
 
 const Radio: React.FC<
-  InputHTMLAttributes<HTMLInputElement> & SpaceProps & RadioProps
-> = ({ id, label, labelPlacement, labelColor, ...props }: RadioProps) => {
+    InputHTMLAttributes<HTMLInputElement> & SpaceProps & RadioProps
+> = ({id, label, labelPlacement, labelColor, ...props}: RadioProps) => {
   const [radioId, setRadioId] = useState(id);
 
   // extract spacing props
@@ -115,14 +115,14 @@ const Radio: React.FC<
   }, []);
 
   return (
-    <Wrapper
-      labelPlacement={labelPlacement}
-      color={`${labelColor}.main`}
-      {...spacingProps}
-    >
-      <SyledRadio id={radioId} type="radio" {...props} />
-      <label htmlFor={radioId}>{label}</label>
-    </Wrapper>
+      <Wrapper
+          labelPlacement={labelPlacement}
+          color={`${labelColor}.main`}
+          {...spacingProps}
+      >
+        <SyledRadio id={radioId} type="radio" {...props} />
+        <label htmlFor={radioId}>{label}</label>
+      </Wrapper>
   );
 };
 

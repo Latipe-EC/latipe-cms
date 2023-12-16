@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { getTheme } from "../../utils/utils";
+import {getTheme} from "../../utils/utils";
 
 const StyledAppLayout = styled.div`
   width: 100%;

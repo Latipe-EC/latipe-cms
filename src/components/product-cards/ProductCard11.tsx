@@ -2,7 +2,7 @@ import Box from "../Box";
 import FlexBox from "../FlexBox";
 import LazyImage from "../LazyImage";
 import Rating from "../rating/Rating";
-import { H6, SemiSpan, Small } from "../Typography";
+import {H6, SemiSpan, Small} from "../Typography";
 import React from "react";
 import styled from "styled-components";
 
@@ -41,29 +41,29 @@ const StyledProductCard = styled.div`
 `;
 
 const ProductCard11: React.FC<ProductCard11Props> = ({
-  imgUrl,
-  title,
-  productUrl,
-  price,
-  oldPrice,
-  rating,
-}) => {
+                                                       imgUrl,
+                                                       title,
+                                                       productUrl,
+                                                       price,
+                                                       oldPrice,
+                                                       rating,
+                                                     }) => {
   return (
-      <a  href={productUrl}>
+      <a href={productUrl}>
         <StyledProductCard>
           <Box className="image-holder">
             <LazyImage
-              src={imgUrl}
-              width="100%"
-              height="auto"
-              layout="responsive"
-              objectFit="cover"
-              mb="1rem"
+                src={imgUrl}
+                width="100%"
+                height="auto"
+                layout="responsive"
+                objectFit="cover"
+                mb="1rem"
             />
           </Box>
 
           <Box mb="0.5rem">
-            <Rating value={rating} outof={5} color="warn" readonly />
+            <Rating value={rating} outof={5} color="warn" readonly/>
           </Box>
 
           <H6 className="ellipsis" mb="6px" title={title}>
@@ -76,9 +76,9 @@ const ProductCard11: React.FC<ProductCard11Props> = ({
             </SemiSpan>
 
             {oldPrice && (
-              <Small color="text.muted" lineHeight="1.3">
-                {oldPrice}
-              </Small>
+                <Small color="text.muted" lineHeight="1.3">
+                  {oldPrice}
+                </Small>
             )}
           </FlexBox>
         </StyledProductCard>

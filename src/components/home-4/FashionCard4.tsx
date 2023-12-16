@@ -3,19 +3,20 @@ import React from "react";
 import Box from "../Box";
 import Card from "../Card";
 import Grid from "../grid/Grid";
-import Typography, { H3, Span } from "../Typography";
+import Typography, {H3, Span} from "../Typography";
 
-export interface FashionCard4Props {}
+export interface FashionCard4Props {
+}
 
 const FashionCard4: React.FC<FashionCard4Props> = () => {
   return (
       <a href="/">
         <Card boxShadow="border" height="100%" borderRadius={4} hoverEffect>
           <Grid
-            container
-            spacing={0}
-            flexWrap="wrap-reverse"
-            containerHeight="100%"
+              container
+              spacing={0}
+              flexWrap="wrap-reverse"
+              containerHeight="100%"
           >
             <Grid item sm={6} xs={12}>
               <Box p="2rem 2rem 0px">
@@ -38,10 +39,10 @@ const FashionCard4: React.FC<FashionCard4Props> = () => {
             <Grid item sm={6} xs={12}>
               <Box height="100%" minHeight="200px" position="relative">
                 <LazyImage
-                  src="/assets/images/products/paper-bag.png"
-                  layout="fill"
-                  objectFit="contain"
-                  alt="model"
+                    src="/assets/images/products/paper-bag.png"
+                    layout="fill"
+                    objectFit="contain"
+                    alt="model"
                 />
               </Box>
             </Grid>

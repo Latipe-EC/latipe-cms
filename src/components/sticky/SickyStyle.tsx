@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { getTheme } from "../../utils/utils";
+import {getTheme} from "../../utils/utils";
 
 interface StyledStickyProps {
   fixedOn: number;
@@ -22,7 +22,7 @@ const StyledSticky = styled.div<StyledStickyProps>`
 
   & + .section-after-sticky {
     padding-top: ${(props) =>
-      props.fixed ? `${props.componentHeight}px` : "inherit"};
+    props.fixed ? `${props.componentHeight}px` : "inherit"};
   }
 `;
 

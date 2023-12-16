@@ -11,25 +11,25 @@ export interface CategorySectionCreatorProps {
 }
 
 const CategorySectionCreator: React.FC<CategorySectionCreatorProps> = ({
-  iconName,
-  seeMoreLink,
-  title,
-  children,
-}) => {
+                                                                         iconName,
+                                                                         seeMoreLink,
+                                                                         title,
+                                                                         children,
+                                                                       }) => {
   return (
-    <Box mb="3.75rem">
-      <Container pb="1rem">
-        {title && (
-          <CategorySectionHeader
-            title={title}
-            seeMoreLink={seeMoreLink}
-            iconName={iconName}
-          />
-        )}
+      <Box mb="3.75rem">
+        <Container pb="1rem">
+          {title && (
+              <CategorySectionHeader
+                  title={title}
+                  seeMoreLink={seeMoreLink}
+                  iconName={iconName}
+              />
+          )}
 
-        {children}
-      </Container>
-    </Box>
+          {children}
+        </Container>
+      </Box>
   );
 };
 

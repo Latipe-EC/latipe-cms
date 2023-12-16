@@ -1,5 +1,5 @@
-import React, { Children, cloneElement, ReactElement } from "react";
-import { FlexboxProps } from "styled-system";
+import React, {Children, cloneElement, ReactElement} from "react";
+import {FlexboxProps} from "styled-system";
 import StyledGrid from "./GridStyle";
 
 export interface GridProps {
@@ -15,11 +15,12 @@ export interface GridProps {
   horizontal_spacing?: number;
   vertical_spacing?: number;
   className?: string;
-  children: ReactElement<GridProps>[] | any;
+  children: ReactElement<GridProps>[] | unknown;
+
   [key: string]: unknown;
 }
 
-const Grid: React.FC<GridProps & FlexboxProps> = ({ children, ...props }) => {
+const Grid: React.FC<GridProps & FlexboxProps> = ({children, ...props}) => {
   let childList = children;
 
   if (props.container) {

@@ -3,11 +3,11 @@ import Carousel from "../carousel/Carousel";
 import CategorySectionCreator from "../CategorySectionCreator";
 import ProductCard2 from "../product-cards/ProductCard2";
 import useWindowSize from "../../hooks/useWindowSize";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 
 const Section9: React.FC = () => {
   const [visibleSlides, setVisibleSlides] = useState(6);
-    const { width } = useWindowSize();
+  const {width} = useWindowSize();
 
   useEffect(() => {
     if (width < 500) setVisibleSlides(2);
@@ -17,15 +17,15 @@ const Section9: React.FC = () => {
   }, [width]);
 
   return (
-    <CategorySectionCreator title="New Arrivals">
-      <Carousel totalSlides={productList.length} visibleSlides={visibleSlides}>
-        {productList.map((item, ind) => (
-          <Box key={ind}>
-            <ProductCard2 {...item} />
-          </Box>
-        ))}
-      </Carousel>
-    </CategorySectionCreator>
+      <CategorySectionCreator title="New Arrivals">
+        <Carousel totalSlides={productList.length} visibleSlides={visibleSlides}>
+          {productList.map((item, ind) => (
+              <Box key={ind}>
+                <ProductCard2 {...item} />
+              </Box>
+          ))}
+        </Carousel>
+      </CategorySectionCreator>
   );
 };
 

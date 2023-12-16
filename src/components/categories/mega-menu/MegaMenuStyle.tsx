@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { getTheme } from "../../../utils/utils";
+import {getTheme} from "../../../utils/utils";
 
 export const StyledMegaMenu1 = styled.div`
   display: none;

@@ -1,20 +1,20 @@
-import {ThemeProvider} from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 import './App.css'
-import {GlobalStyles} from './utils/globalStyles';
-import {AppProvider} from './contexts/app/AppContext';
+import { GlobalStyles } from './utils/globalStyles';
+import { AppProvider } from './contexts/app/AppContext';
 import AppLayout from './components/layout/AppLayout';
-import {theme} from './utils/theme';
-import {lazy, Suspense} from 'react';
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import { theme } from './utils/theme';
+import { lazy, Suspense } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import VendorDashboardLayout from './components/layout/VendorDashboardLayout';
 import CustomerDashboardLayout from './components/layout/CustomerDashboardLayout';
 import NavbarLayout from './components/layout/NavbarLayout';
-import {ChakraProvider} from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/react';
 import AddProductLayout from './components/layout/AddProductLayout';
-import {AppThunkDispatch} from './store/store';
-import {useDispatch} from 'react-redux';
-import {getMyCart} from './store/slices/carts-slice';
-import {getChildsCategory} from './store/slices/categories-slice';
+import { AppThunkDispatch } from './store/store';
+import { useDispatch } from 'react-redux';
+import { getMyCart } from './store/slices/carts-slice';
+import { getChildsCategory } from './store/slices/categories-slice';
 
 // home pages
 const Address = lazy(() => import('./pages/address'));
@@ -89,191 +89,191 @@ const Error404 = lazy(() => import('./pages/404'));
 
 function App() {
 
-  const dispatch = useDispatch<AppThunkDispatch>();
-  const user = JSON.parse(localStorage.getItem('REACT_STARTER_AUTH'));
-  const allowRouteAdmin = ["/admin", "/products", "shop"]
+	const dispatch = useDispatch<AppThunkDispatch>();
+	const user = JSON.parse(localStorage.getItem('REACT_STARTER_AUTH'));
+	const allowRouteAdmin = ["/admin", "/products", "shop"]
 
-  if (user && user.role === 'ADMIN' &&
-      !allowRouteAdmin.some(route => window.location.pathname.includes(route))
-  ) {
-    window.location.href = '/admin';
-  }
-
-
-  if (!window.location.pathname.includes('/admin') && !window.location.pathname.includes('/delivery'))
-    dispatch(getChildsCategory(null));
-  const auth = JSON.parse(localStorage.getItem('REACT_STARTER_AUTH'));
-  if (auth && auth.isAuthenticated && !window.location.pathname.includes('/admin') && !window.location.pathname.includes('/delivery')) {
-    dispatch(getMyCart({skip: 0, limit: 10}))
-  }
+	if (user && user.role === 'ADMIN' &&
+		!allowRouteAdmin.some(route => window.location.pathname.includes(route))
+	) {
+		window.location.href = '/admin';
+	}
 
 
-  return (
-      <ThemeProvider theme={theme}>
-        <ChakraProvider>
-          <head>
-            <meta name="viewport" content="width=device-width, initial-scale=1"/>
-            <meta httpEquiv="Content-Type" content="text/html; charset=utf-8"/>
-            <meta
-                property="og:url"
-                content="https://bonik-react.vercel.app/landing"
-            />
-            {/* thumbnail And title for social media */}
-            <meta property="og:type" content="website"/>
-            <meta property="og:title" content="React Next JS Ecommerce Template"/>
-            <meta
-                property="og:description"
-                content="Minimal, clean and Fast Next js ecommerce template. Build Super store, Grocery delivery app, Multivendor store and niche market"
-            />
-            <meta
-                property="og:image"
-                content="/assets/images/landing/preview.png"
-            />
+	if (!window.location.pathname.includes('/admin') && !window.location.pathname.includes('/delivery'))
+		dispatch(getChildsCategory(null));
+	const auth = JSON.parse(localStorage.getItem('REACT_STARTER_AUTH'));
+	if (auth && auth.isAuthenticated && !window.location.pathname.includes('/admin') && !window.location.pathname.includes('/delivery')) {
+		dispatch(getMyCart({ skip: 0, limit: 10 }))
+	}
 
-            {/* Google analytics */}
-            <script
-                async
-                src="https://www.googletagmanager.com/gtag/js?id=G-SGG7GE7HZC"
-            ></script>
-            <script
-                dangerouslySetInnerHTML={{
-                  __html: `
+
+	return (
+		<ThemeProvider theme={theme}>
+			<ChakraProvider>
+				<head>
+					<meta name="viewport" content="width=device-width, initial-scale=1" />
+					<meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+					<meta
+						property="og:url"
+						content="https://bonik-react.vercel.app/landing"
+					/>
+					{/* thumbnail And title for social media */}
+					<meta property="og:type" content="website" />
+					<meta property="og:title" content="React Next JS Ecommerce Template" />
+					<meta
+						property="og:description"
+						content="Minimal, clean and Fast Next js ecommerce template. Build Super store, Grocery delivery app, Multivendor store and niche market"
+					/>
+					<meta
+						property="og:image"
+						content="/assets/images/landing/preview.png"
+					/>
+
+					{/* Google analytics */}
+					<script
+						async
+						src="https://www.googletagmanager.com/gtag/js?id=G-SGG7GE7HZC"
+					></script>
+					<script
+						dangerouslySetInnerHTML={{
+							__html: `
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           gtag('config', 'G-SGG7GE7HZC');
         `,
-                }}
-            ></script>
-            <title>Latipe</title>
-          </head>
-          <GlobalStyles/>
-          <AppProvider>
-            <Router>
-              <Suspense
-                  fallback={
-                    <div className="latipe-preloader-wrapper">
-                      <div className="latipe-preloader">
-                        <span></span>
-                        <span></span>
-                      </div>
-                    </div>
-                  }
-              >
-                <Routes>
-                  {/* <AppLayout> */}
-                  <Route path="/" element={<AppLayout/>}>
-                    <Route index element={<IndexPage/>}/>
-                    <Route path="about" element={<AboutPage/>}/>
-                    <Route path="checkout" element={<CheckoutAlternative/>}/>
-                    {/* <Route path="checkout" element={<Checkout />} /> */}
-                    <Route path="login" element={<LoginPage/>}/>
-                    <Route path="payment" element={<CheckoutPage/>}/>
-                    <Route path="shops" element={<ShopList/>}/>
-                    <Route path="signup" element={<SignUpPage/>}/>
-                    <Route path="orders/success" element={<OrderSuccess/>}/>
-                    <Route path="payment-success" element={<PaymentSuccess/>}/>
-                    <Route path="valid-withdraw" element={<ValidWithdraw/>}/>
-                    <Route path="withdraw-success/:token" element={<WithdrawSuccess/>}/>
-                    <Route path="success-reset-password" element={<SuccessForgotPassword/>}/>
-                    <Route path="forgot-password" element={<ForgotPassword/>}/>
-                    <Route path="auth/verify-account/:token" element={<ResetPassword/>}/>
-                    <Route path="auth/active/:token" element={<VerifyAccount/>}/>
-                    <Route path="auth/verify-account" element={<RequestVerifyAccount/>}/>
-                    <Route path="*" element={<Error404/>}/>
-                  </Route>
-                  <Route path="/register-store" element={<RegisterStore/>}/>
-                  {/* Navbar */}
-                  <Route path="/" element={
-                    <NavbarLayout/>
-                  }>
-                    <Route path="products/:id" element={<ProductDetails/>}/>
-                    <Route path="search" element={<ProductSearchResult/>}/>
-                    <Route path="shop/:id" element={<Shop/>}/>
-                  </Route>
-                  <Route path="/cart" element={<Cart/>}/>
+						}}
+					></script>
+					<title>Latipe</title>
+				</head>
+				<GlobalStyles />
+				<AppProvider>
+					<Router>
+						<Suspense
+							fallback={
+								<div className="latipe-preloader-wrapper">
+									<div className="latipe-preloader">
+										<span></span>
+										<span></span>
+									</div>
+								</div>
+							}
+						>
+							<Routes>
+								{/* <AppLayout> */}
+								<Route path="/" element={<AppLayout />}>
+									<Route index element={<IndexPage />} />
+									<Route path="about" element={<AboutPage />} />
+									<Route path="checkout" element={<CheckoutAlternative />} />
+									{/* <Route path="checkout" element={<Checkout />} /> */}
+									<Route path="login" element={<LoginPage />} />
+									<Route path="payment" element={<CheckoutPage />} />
+									<Route path="shops" element={<ShopList />} />
+									<Route path="signup" element={<SignUpPage />} />
+									<Route path="orders/success" element={<OrderSuccess />} />
+									<Route path="payment-success" element={<PaymentSuccess />} />
+									<Route path="valid-withdraw" element={<ValidWithdraw />} />
+									<Route path="withdraw-success/:token" element={<WithdrawSuccess />} />
+									<Route path="success-forgot-password" element={<SuccessForgotPassword />} />
+									<Route path="forgot-password" element={<ForgotPassword />} />
+									<Route path="auth/reset-password/:token" element={<ResetPassword />} />
+									<Route path="auth/verify-account/:token" element={<VerifyAccount />} />
+									<Route path="auth/verify-account" element={<RequestVerifyAccount />} />
+									<Route path="*" element={<Error404 />} />
+								</Route>
+								<Route path="/register-store" element={<RegisterStore />} />
+								{/* Navbar */}
+								<Route path="/" element={
+									<NavbarLayout />
+								}>
+									<Route path="products/:id" element={<ProductDetails />} />
+									<Route path="search" element={<ProductSearchResult />} />
+									<Route path="shop/:id" element={<Shop />} />
+								</Route>
+								<Route path="/cart" element={<Cart />} />
 
-                  {/* Support Ticket */}
-                  <Route path="/support-tickets/" element={
-                    <CustomerDashboardLayout/>
-                  }>
-                    <Route path=":id" element={<SupportTicketDetails/>}/>
-                    <Route path="" element={<TicketList/>}/>
-                  </Route>
+								{/* Support Ticket */}
+								<Route path="/support-tickets/" element={
+									<CustomerDashboardLayout />
+								}>
+									<Route path=":id" element={<SupportTicketDetails />} />
+									<Route path="" element={<TicketList />} />
+								</Route>
 
 
-                  {/* Profile */}
-                  <Route path="/profile/" element={<CustomerDashboardLayout/>}>
-                    <Route index element={<Profile/>}/>
-                    <Route path="edit" element={<ProfileEditor/>}/>
-                  </Route>
+								{/* Profile */}
+								<Route path="/profile/" element={<CustomerDashboardLayout />}>
+									<Route index element={<Profile />} />
+									<Route path="edit" element={<ProfileEditor />} />
+								</Route>
 
-                  <Route path="/" element={
-                    <CustomerDashboardLayout/>
-                  }>
-                    <Route path="address" element={<Address/>}/>
-                    <Route path="address/:id" element={<AddressUpdater/>}/>
+								<Route path="/" element={
+									<CustomerDashboardLayout />
+								}>
+									<Route path="address" element={<Address />} />
+									<Route path="address/:id" element={<AddressUpdater />} />
 
-                    <Route path="orders" element={<Orders/>}/>
-                    <Route path="orders/:id" element={<OrderDetails/>}/>
-                    <Route path="payment-paypal/:id" element={<Paypal/>}/>
-                    <Route path="payment-methods" element={<AddressList/>}/>
-                    <Route path="payment-methods/add" element={<PaymentMethodEditor/>}/>
-                    <Route path="wish-list" element={<WishList/>}/>
+									<Route path="orders" element={<Orders />} />
+									<Route path="orders/:id" element={<OrderDetails />} />
+									<Route path="payment-paypal/:id" element={<Paypal />} />
+									<Route path="payment-methods" element={<AddressList />} />
+									<Route path="payment-methods/add" element={<PaymentMethodEditor />} />
+									<Route path="wish-list" element={<WishList />} />
 
-                  </Route>
+								</Route>
 
-                  {/* Vendor */}
-                  <Route path="/vendor/" element={
-                    <VendorDashboardLayout/>
-                  }>
-                    <Route path="dashboard" element={
-                      <DashboardVendor/>
-                    }
-                    />
-                    <Route path="" element={<OrdersVendor/>}/>
-                    <Route path="profile" element={<AccountSettings/>}/>
-                    <Route path="orders/:id" element={<OrderDetailsVendor/>}/>
-                    <Route path="orders" element={<OrdersVendor/>}/>
-                    <Route path="ratings" element={<RatingVendor/>}/>
-                    <Route path="revenues" element={<StatisticVendor/>}/>
-                    <Route path="products" element={<ProductsVendor/>}/>
-                    <Route path="analysis" element={<AnalyzeVendor/>}/>
-                    <Route path="bank" element={<BankVendor/>}/>
-                    <Route path="products/ban" element={<BanProductsVendor/>}/>
-                  </Route>
+								{/* Vendor */}
+								<Route path="/vendor/" element={
+									<VendorDashboardLayout />
+								}>
+									<Route path="dashboard" element={
+										<DashboardVendor />
+									}
+									/>
+									<Route path="" element={<OrdersVendor />} />
+									<Route path="profile" element={<AccountSettings />} />
+									<Route path="orders/:id" element={<OrderDetailsVendor />} />
+									<Route path="orders" element={<OrdersVendor />} />
+									<Route path="ratings" element={<RatingVendor />} />
+									<Route path="revenues" element={<StatisticVendor />} />
+									<Route path="products" element={<ProductsVendor />} />
+									<Route path="analysis" element={<AnalyzeVendor />} />
+									<Route path="bank" element={<BankVendor />} />
+									<Route path="products/ban" element={<BanProductsVendor />} />
+								</Route>
 
-                  <Route path="/vendor/" element={
-                    <AddProductLayout/>
-                  }>
-                    <Route path="/vendor/products/:id" element={<ProductDetailsVendor/>}/>
-                    <Route path="/vendor/products/add" element={<AddProduct/>}/>
-                  </Route>
-                  {/* Admin */}
-                  <Route path="/admin/" element={<DashboardAdmin/>}>
-                    <Route path="" element={<HomeAdmin/>}/>
-                    <Route path="home" element={<HomeAdmin/>}/>
-                    <Route path="categories" element={<CategoriesAdmin/>}/>
-                    <Route path="products" element={<ProductsAdmin/>}/>
-                    <Route path="stores" element={<StoresAdmin/>}/>
-                    <Route path="users" element={<UsersAdmin/>}/>
-                    <Route path="commissions" element={<CommissionAdmin/>}/>
-                    <Route path="transactions" element={<PaymentAdmin/>}/>
-                    <Route path="orders" element={<OrdersAdmin/>}/>
-                    <Route path="orders/:id" element={<OrderDetailAdmin/>}/>
-                    <Route path="statistics" element={<StatisticAdmin/>}/>
-                    <Route path="deliveries" element={<DeliveryAdmin/>}/>
-                  </Route>
+								<Route path="/vendor/" element={
+									<AddProductLayout />
+								}>
+									<Route path="/vendor/products/:id" element={<ProductDetailsVendor />} />
+									<Route path="/vendor/products/add" element={<AddProduct />} />
+								</Route>
+								{/* Admin */}
+								<Route path="/admin/" element={<DashboardAdmin />}>
+									<Route path="" element={<HomeAdmin />} />
+									<Route path="home" element={<HomeAdmin />} />
+									<Route path="categories" element={<CategoriesAdmin />} />
+									<Route path="products" element={<ProductsAdmin />} />
+									<Route path="stores" element={<StoresAdmin />} />
+									<Route path="users" element={<UsersAdmin />} />
+									<Route path="commissions" element={<CommissionAdmin />} />
+									<Route path="transactions" element={<PaymentAdmin />} />
+									<Route path="orders" element={<OrdersAdmin />} />
+									<Route path="orders/:id" element={<OrderDetailAdmin />} />
+									<Route path="statistics" element={<StatisticAdmin />} />
+									<Route path="deliveries" element={<DeliveryAdmin />} />
+								</Route>
 
-                  <Route path="/delivery" element={<DeliveryPage/>}/>
-                  <Route path="/delivery/orders/:id" element={<OrderDetailDelivery/>}/>
-                </Routes>
-              </Suspense>
-            </Router>
-          </AppProvider>
-        </ChakraProvider>
-      </ThemeProvider>
-  )
+								<Route path="/delivery" element={<DeliveryPage />} />
+								<Route path="/delivery/orders/:id" element={<OrderDetailDelivery />} />
+							</Routes>
+						</Suspense>
+					</Router>
+				</AppProvider>
+			</ChakraProvider>
+		</ThemeProvider>
+	)
 }
 
 export default App

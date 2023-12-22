@@ -1,80 +1,133 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {Api, QueryParamsType} from '../../api/AxiosClient';
-import {ApplyVoucherRequest, createVoucherRequest} from 'api/interface/promotion';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { Api } from '../../api/AxiosClient';
+import { ApplyVoucherRequest, UpdateStatusVoucher, createVoucherRequest } from 'api/interface/promotion';
 
 const api = new Api();
 
 export const
-    applyVoucher = createAsyncThunk(
-        'promotions/applyVoucher',
-        async (request: ApplyVoucherRequest) => {
-          const response = await api.promotion.applyVoucher(request);
-          return response;
-        }
-    );
+	applyVoucher = createAsyncThunk(
+		'promotions/applyVoucher',
+		async (request: ApplyVoucherRequest) => {
+			const response = await api.promotion.applyVoucher(request);
+			return response;
+		}
+	);
 
 export const
-    createVoucher = createAsyncThunk(
-        'promotions/createVoucher',
-        async (request: createVoucherRequest) => {
-          const response = await api.promotion.createVoucher(request);
-          return response;
-        }
-    );
+	createVoucher = createAsyncThunk(
+		'promotions/createVoucher',
+		async (request: createVoucherRequest) => {
+			const response = await api.promotion.createVoucher(request);
+			return response;
+		}
+	);
 
 export const
-    getById = createAsyncThunk(
-        'promotions/getById',
-        async (id: string) => {
-          const response = await api.promotion.getById(id);
-          return response;
-        }
-    );
+	getById = createAsyncThunk(
+		'promotions/getById',
+		async (id: string) => {
+			const response = await api.promotion.getById(id);
+			return response;
+		}
+	);
 
 export const
-    getByCode = createAsyncThunk(
-        'promotions/getByCode',
-        async (code: string) => {
-          const response = await api.promotion.getByCode(code);
-          return response;
-        }
-    );
+	getByCode = createAsyncThunk(
+		'promotions/getByCode',
+		async (code: string) => {
+			const response = await api.promotion.getByCode(code);
+			return response;
+		}
+	);
 
 export const
-    getAll = createAsyncThunk(
-        'promotions/getAll',
-        async (params: QueryParamsType) => {
-          const response = await api.promotion.getAll(params);
-          return response;
-        }
-    );
+	getAllPromotion = createAsyncThunk(
+		'promotions/getAll',
+		async (params: Record<string, string>) => {
+			if (params["filters[voucher_type][$eq]"] == "0") {
+				delete params["filters[voucher_type][$eq]"];
+			}
+			if (params["filters[is_expired][$eq]"] == "0") {
+				delete params["filters[is_expired][$eq]"];
+			}
+			const response = await api.promotion.getAll(params);
+			return response;
+		}
+	);
+export const
+	getVoucherUser = createAsyncThunk(
+		'promotions/get_voucher_user',
+		async (params: Record<string, string>) => {
+			if (params["filters[voucher_type][$eq]"] == "0") {
+				delete params["filters[voucher_type][$eq]"];
+			}
+			if (params["filters[is_expired][$eq]"] == "0") {
+				delete params["filters[is_expired][$eq]"];
+			}
+			const response = await api.promotion.getVoucherUser(params);
+			return response;
+		}
+	);
 
 export const
-    checkVoucher = createAsyncThunk(
-        'promotions/checkVoucher',
-        async (request: ApplyVoucherRequest) => {
-          const response = await api.promotion.checkVoucher(request);
-          return response;
-        }
-    );
+	checkVoucher = createAsyncThunk(
+		'promotions/checkVoucher',
+		async (request: ApplyVoucherRequest) => {
+			const response = await api.promotion.checkVoucher(request);
+			return response;
+		}
+	);
+
+export const
+	updateStatusVoucher = createAsyncThunk(
+		'promotions/update-status-voucher',
+		async (request: UpdateStatusVoucher) => {
+			const response = await api.promotion.updateStatusVoucher(request);
+			return response;
+		}
+	);
 
 
 export const promotionSlice = createSlice({
-  name: 'promotion',
-  initialState: {
-    data: [],
-    pagination: {
-      total: 0,
-      skip: 0,
-      limit: 10,
-    },
-    loading: false,
-    error: null,
-  },
-  extraReducers: () => {
-
-  },
-  reducers: {}
+	name: 'promotion',
+	initialState: {
+		data: [],
+		pagination: {
+			total: 0,
+			page: 1,
+			size: 10,
+		},
+		loading: false,
+		error: null,
+	},
+	extraReducers: (builder) => {
+		builder
+			.addCase(getAllPromotion.fulfilled, (state, action) => {
+				state.data = action.payload.data.data.items ? action.payload.data.data.items : [];
+				state.pagination = {
+					total: action.payload.data.data.total,
+					size: action.payload.data.data.page,
+					page: action.payload.data.data.size,
+				};
+			})
+			.addCase(updateStatusVoucher.fulfilled, (state, action) => {
+				const request = action.meta.arg;
+				const index = state.data.findIndex((item) => item.voucher_code === request.code);
+				if (index !== -1) {
+					state.data[index].status = request.status;
+				}
+			})
+			.addCase(createVoucher.fulfilled, (state, action) => {
+				if (action.payload.status !== 200) return;
+				const request = action.meta.arg;
+				state.data.push({
+					_id: action.payload.data,
+					...request
+				});
+			})
+	},
+	reducers: {}
 });
 
 export const selectPromotions = (state) => state.promotion;
+export default promotionSlice.reducer;

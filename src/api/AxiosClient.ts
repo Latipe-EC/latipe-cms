@@ -91,6 +91,8 @@ import {
 	ApplyVoucherReponse,
 	ApplyVoucherRequest,
 	CheckVoucherReponse,
+	ListVoucherReponse,
+	UpdateStatusVoucher,
 	createVoucherRequest
 } from 'api/interface/promotion';
 import {
@@ -1137,15 +1139,23 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				type: ContentType.Json,
 			}),
 
-		getAll: (param: QueryParamsType) =>
-			this.request<[]>({
-				path: `/vouchers`,
+		getAll: (params: Record<string, string>) => {
+			const queryParams = new URLSearchParams(params).toString();
+			return this.request<ListVoucherReponse>({
+				path: `/vouchers?${queryParams}`,
 				method: 'GET',
 				type: ContentType.Json,
-				query: {
-					...param
-				}
-			}),
+			})
+		},
+		getVoucherUser: (params: Record<string, string>) => {
+			const queryParams = new URLSearchParams(params).toString();
+			return this.request<ListVoucherReponse>({
+				path: `/vouchers/user/foryou?${queryParams}`,
+				method: 'GET',
+				type: ContentType.Json,
+			})
+		}
+		,
 
 		checkVoucher: (request: ApplyVoucherRequest) =>
 			this.request<CheckVoucherReponse>({
@@ -1153,6 +1163,16 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				method: 'POST',
 				type: ContentType.Json,
 				body: request
+			}),
+
+		updateStatusVoucher: (request: UpdateStatusVoucher) =>
+			this.request<CheckVoucherReponse>({
+				path: `/vouchers/code/${request.code}`,
+				method: 'PATCH',
+				type: ContentType.Json,
+				body: {
+					status: request.status
+				}
 			}),
 
 	}

@@ -62,7 +62,7 @@ const OrderDetailAdmin = lazy(() => import('./pages/admin/order/OrderDetailAdmin
 const StatisticAdmin = lazy(() => import('./pages/admin/statistic/AdminStatistic'));
 const HomeAdmin = lazy(() => import('./pages/admin/home/AdminHome'));
 const DeliveryAdmin = lazy(() => import('./pages/admin/delivery/AdminDelivery'));
-
+const PromotionsAdmin = lazy(() => import('./pages/admin/promotion/AdminPromotion'));
 
 // Delivery Page
 const DeliveryPage = lazy(() => import('./pages/delivery'));
@@ -84,7 +84,7 @@ const ForgotPassword = lazy(() => import('./pages/forgot-password'));
 const ResetPassword = lazy(() => import('./pages/reset-password'));
 const VerifyAccount = lazy(() => import('./pages/verify-account'));
 const RequestVerifyAccount = lazy(() => import('./pages/request-verify-account'));
-
+const Promotion = lazy(() => import('./pages/promotion'));
 const Error404 = lazy(() => import('./pages/404'));
 
 function App() {
@@ -167,6 +167,8 @@ function App() {
 									<Route path="about" element={<AboutPage />} />
 									<Route path="checkout" element={<CheckoutAlternative />} />
 									{/* <Route path="checkout" element={<Checkout />} /> */}
+									<Route path="promotions" element={<Promotion />} />
+
 									<Route path="login" element={<LoginPage />} />
 									<Route path="payment" element={<CheckoutPage />} />
 									<Route path="shops" element={<ShopList />} />
@@ -263,6 +265,7 @@ function App() {
 									<Route path="orders/:id" element={<OrderDetailAdmin />} />
 									<Route path="statistics" element={<StatisticAdmin />} />
 									<Route path="deliveries" element={<DeliveryAdmin />} />
+									<Route path="promotions" element={<PromotionsAdmin />} />
 								</Route>
 
 								<Route path="/delivery" element={<DeliveryPage />} />

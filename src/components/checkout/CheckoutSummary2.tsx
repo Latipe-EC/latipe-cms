@@ -64,14 +64,8 @@ const CheckoutSummary2: React.FC<CheckoutSummary2Props> = ({
 		const totalPriceProduct = products.reduce((acc, item) => acc + item.price * item.quantity, 0);
 		for (const voucher of vouchers) {
 			if (voucher.voucher_type === 2) {
-				if (voucher.discount_percent && voucher.discount_value) {
-					const priceSale = (totalPriceProduct * voucher.discount_percent / 100);
-					const newPrice = priceSale < voucher.discount_value ? priceSale : voucher.discount_value;
-					return newPrice > 0 ? newPrice : 0;
-				} else {
-					return totalPriceProduct - voucher.discount_value > 0 ?
-						totalPriceProduct - voucher.discount_value : 0;
-				}
+				return totalPriceProduct - voucher.discount_value > 0 ?
+					voucher.discount_value : totalPriceProduct;
 			}
 		}
 		return 0;

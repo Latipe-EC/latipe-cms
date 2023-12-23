@@ -107,7 +107,6 @@ function App() {
 		dispatch(getMyCart({ skip: 0, limit: 10 }))
 	}
 
-
 	return (
 		<ThemeProvider theme={theme}>
 			<ChakraProvider>
@@ -215,7 +214,6 @@ function App() {
 								}>
 									<Route path="address" element={<Address />} />
 									<Route path="address/:id" element={<AddressUpdater />} />
-
 									<Route path="orders" element={<Orders />} />
 									<Route path="orders/:id" element={<OrderDetails />} />
 									<Route path="payment-paypal/:id" element={<Paypal />} />

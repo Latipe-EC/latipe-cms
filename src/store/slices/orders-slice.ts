@@ -230,6 +230,10 @@ export const orderSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder.addCase(countMyOrder.fulfilled, (state, action) => {
+			if (action.payload.data.error_code) {
+				state.count = 0;
+				return;
+			}
 			state.count = action.payload.data.data.count;
 		})
 	},

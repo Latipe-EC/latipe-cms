@@ -152,6 +152,10 @@ export const usersSlice = createSlice({
 				state.dataAddress.push(action.payload.data);
 			})
 			.addCase(getMyProfile.fulfilled, (_, action) => {
+				if (action.payload.status !== 200) {
+					localStorage.removeItem('REACT_STARTER_AUTH');
+					return;
+				}
 				const user = JSON.parse(localStorage.getItem('REACT_STARTER_AUTH'));
 				localStorage.setItem('REACT_STARTER_AUTH', JSON.stringify({
 					...action.payload.data,
@@ -180,6 +184,10 @@ export const usersSlice = createSlice({
 				}
 			})
 			.addCase(countMyAddress.fulfilled, (state, action) => {
+				if (action.payload.status !== 200) {
+					state.countAddress = 0;
+					return;
+				}
 				state.countAddress = action.payload.data;
 			})
 			.addCase(updateMyAddress.fulfilled, (state, action) => {

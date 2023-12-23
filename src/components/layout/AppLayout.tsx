@@ -3,46 +3,62 @@ import Header from "../header/Header";
 import MobileNavigationBar from "../mobile-navigation/MobileNavigationBar";
 import Sticky from "../sticky/Sticky";
 import Topbar from "../topbar/Topbar";
-import React from "react";
+import React, { useEffect } from "react";
 import StyledAppLayout from "./AppLayoutStyle";
-import {Helmet} from "react-helmet";
-import {Outlet} from "react-router-dom";
+import { Helmet } from "react-helmet";
+import { Outlet, useLocation } from "react-router-dom";
+import { LoginResponse } from "api/interface/auth";
 
 type Props = {
-  title?: string;
-  navbar?: React.ReactNode;
-  children?: React.ReactNode;
+	title?: string;
+	navbar?: React.ReactNode;
+	children?: React.ReactNode;
 };
 const AppLayout: React.FC<Props> = ({
-                                      navbar,
-                                      title = "Latipe",
-                                    }) => {
+	navbar,
+	title = "Latipe",
+}) => {
+	const location = useLocation();
+	const authRoute = ["checkout", "payment", "withdraw"];
 
-  return (
-      <StyledAppLayout>
-        <Helmet>
-          <title>{title}</title>
-          <meta charSet="utf-8"/>
-          <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
-        </Helmet>
+	useEffect(() => {
+		const path = location.pathname.substring(1); // remove the leading slash
 
-        <Topbar/>
+		const REACT_STARTER_AUTH: LoginResponse = JSON.parse(localStorage.getItem("REACT_STARTER_AUTH"));
 
-        <Sticky fixedOn={0}>
-          <Header/>
-        </Sticky>
+		if (!REACT_STARTER_AUTH && authRoute.includes(path)) {
+			window.location.href = "/login";
+			return;
+		}
+		return () => {
+		};
+	}, []);
 
-        {navbar && <div className="section-after-sticky">{navbar}</div>}
-        {!navbar ? (
-            <div className="section-after-sticky" style={{minHeight: "60vh"}}><Outlet/></div>
-        ) : (
-            <Outlet/>
-        )
-        }
-        <MobileNavigationBar/>
-        <Footer></Footer>
-      </StyledAppLayout>
-  )
+	return (
+		<StyledAppLayout>
+			<Helmet>
+				<title>{title}</title>
+				<meta charSet="utf-8" />
+				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+			</Helmet>
+
+			<Topbar />
+
+			<Sticky fixedOn={0}>
+				<Header />
+			</Sticky>
+
+			{navbar && <div className="section-after-sticky">{navbar}</div>}
+			{!navbar ? (
+				<div className="section-after-sticky" style={{ minHeight: "60vh" }}><Outlet /></div>
+			) : (
+				<Outlet />
+			)
+			}
+			<MobileNavigationBar />
+			<Footer></Footer>
+		</StyledAppLayout>
+	)
 };
 
 export default AppLayout;

@@ -31,6 +31,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart, incrementCount } from "../../store/slices/carts-slice";
 import { AppThunkDispatch } from "../../store/store";
+import { LoginResponse } from "api/interface/auth";
 
 export interface ProductIntroProps {
 	product: ProductDetailResponse
@@ -59,6 +60,14 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 	};
 
 	const handleBuyNow = () => {
+		const REACT_STARTER_AUTH: LoginResponse = JSON.parse(localStorage.getItem("REACT_STARTER_AUTH"));
+		console.log(123123123123, REACT_STARTER_AUTH);
+		if (!REACT_STARTER_AUTH) {
+			window.location.href = "/login";
+
+			return;
+		}
+
 		if (product.productVariants.length > 0 && product.productVariants.length !== selectOption.length) {
 			return;
 		}

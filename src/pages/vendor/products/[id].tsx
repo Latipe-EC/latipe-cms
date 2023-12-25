@@ -60,6 +60,7 @@ import { getProductById, updateProduct } from "../../../store/slices/products-sl
 import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { truncateFilename } from "../../../utils/utils";
 
 
 const ProductDetailVendor = () => {
@@ -468,7 +469,7 @@ const ProductDetailVendor = () => {
 	}
 
 	return (
-		<div>
+		<Box py={4}>
 			<Modal size={"6xl"} isOpen={isModalCateOpen} onClose={() => {
 				setModalCateOpen(false);
 				setSelectedCategory([])
@@ -926,7 +927,7 @@ const ProductDetailVendor = () => {
 														<Flex alignItems="center" justifyContent="space-between">
 															<Text mr={2}>
 																{productVariants[0].options[index].file !== null ?
-																	productVariants[0].options[index].file.name : "Upload"}
+																	truncateFilename(productVariants[0].options[index].file, 3) : "Upload"}
 															</Text>
 															{productVariants[0].options[index].file !== null &&
 																<IconButton
@@ -1227,12 +1228,12 @@ const ProductDetailVendor = () => {
 							onClick={handleSaveProduct}
 							isDisabled={disableSaveProduct}
 						>
-							Save
+							Lưu
 						</Button>
 					</Flex>
 				</Accordion>
 			</Box>
-		</div>
+		</Box>
 	);
 };
 

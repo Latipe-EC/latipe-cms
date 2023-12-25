@@ -75,7 +75,7 @@ const Login: React.FC = () => {
 
 			}).catch((err) => {
 				toast.close(loadingToastId)
-				const error = err.message.includes('404') ? 'Wrong Email or Phone Number!' : 'Wrong password!';
+				const error = err.message.includes('404') ? 'Wrong Email or Điện thoại Number!' : 'Wrong password!';
 				toast({
 					title: 'Error !',
 					status: 'error',
@@ -122,7 +122,7 @@ const Login: React.FC = () => {
 					mb="0.75rem"
 					name="email"
 					placeholder="exmple@mail.com"
-					label="Email or Phone Number"
+					label="Email or Điện thoại Number"
 					type="email"
 					fullwidth
 					onBlur={handleBlur}

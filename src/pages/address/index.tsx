@@ -225,12 +225,12 @@ const AddressList = () => {
 	return (
 		<div>
 			<DashboardPageHeader
-				title="My Addresses"
+				title="Địa chỉ của tôi"
 				iconName="pin_filled"
 				button={
 					<Button color="primary" bg="primary.light" px="2rem"
 						onClick={() => setIsDialogOpen(!isDialogOpen)}>
-						Add New Address
+						Thêm địa chỉ mới
 					</Button>
 				}
 			/>
@@ -277,7 +277,7 @@ const AddressList = () => {
 					<ModalBody ref={formRef}>
 
 						<FormControl isRequired isInvalid={contactName === ""}>
-							<FormLabel>Contact Name</FormLabel>
+							<FormLabel>Tên</FormLabel>
 							<Input value={contactName} onChange={handleContactNameChange} required />
 							<FormErrorMessage>contact name is required</FormErrorMessage>
 						</FormControl>
@@ -289,7 +289,7 @@ const AddressList = () => {
 						</FormControl>
 
 						<FormControl isRequired isInvalid={province === null}>
-							<FormLabel>City/Province Name</FormLabel>
+							<FormLabel>Tỉnh/Thành phố</FormLabel>
 							<Select value={JSON.stringify(province)} onChange={handleProvinceChange} required>
 								<option value="">Select a province</option>
 								{Object.values(provinces).map((p) => (
@@ -301,7 +301,7 @@ const AddressList = () => {
 						</FormControl>
 
 						<FormControl isRequired isInvalid={district === null}>
-							<FormLabel>District Name</FormLabel>
+							<FormLabel>Tên huyện</FormLabel>
 							<Select value={JSON.stringify(district)} onChange={handleDistrictChange}
 								disabled={!province} required>
 								<option value="">Select a district</option>
@@ -314,7 +314,7 @@ const AddressList = () => {
 						</FormControl>
 
 						<FormControl isRequired isInvalid={ward === null}>
-							<FormLabel>Ward Name</FormLabel>
+							<FormLabel>Tên xã</FormLabel>
 							<Select value={JSON.stringify(ward)} onChange={handleWardChange}
 								disabled={!district} required>
 								<option value="">Select a ward</option>
@@ -327,7 +327,7 @@ const AddressList = () => {
 						</FormControl>
 
 						<FormControl isRequired isInvalid={detailAddress === ''}>
-							<FormLabel>Detail Address</FormLabel>
+							<FormLabel>Địa chỉ chi tiết</FormLabel>
 							<Input value={detailAddress} onChange={handleDetailAddressChange} required />
 							<FormErrorMessage>
 								detail address is required

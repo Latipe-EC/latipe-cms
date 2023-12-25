@@ -71,7 +71,7 @@ export default function Dashboard() {
 					<Box>
 						<Navbar
 							onOpen={onOpen}
-							logoText={'Horizon UI Dashboard PRO'}
+							logoText={'Latipe Admin Dashboard'}
 							brandText={getActiveRoute(routes)}
 							secondary={getActiveNavbar(routes)}
 							message={getActiveNavbarText(routes)}

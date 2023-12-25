@@ -458,7 +458,7 @@ const UsersAdmin = () => {
 									/>
 									<Text><b>ID:</b> {showDetailUser.id}</Text>
 									<Text><b>Name:</b> {showDetailUser.displayName}</Text>
-									<Text><b>Phone Number:</b> {showDetailUser.phoneNumber}</Text>
+									<Text><b>Điện thoại Number:</b> {showDetailUser.phoneNumber}</Text>
 									<Text><b>Email:</b> {showDetailUser.email}</Text>
 
 									<Text><b>Role:</b> {showDetailUser.role}</Text>

@@ -97,7 +97,7 @@
 // 				</Hidden>
 
 // 				<Box flex="1 1 0" minWidth="0px">
-// 					<CategorySectionHeader title="Mobile Phones" seeMoreLink="#" />
+// 					<CategorySectionHeader title="Mobile Điện thoạis" seeMoreLink="#" />
 
 // 					<Grid container spacing={6}>
 // 						{productDatabase.slice(81, 90).map((item, ind) => (

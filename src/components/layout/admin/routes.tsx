@@ -8,7 +8,6 @@ import {
 	MdPayment,
 	MdPerson,
 	MdProductionQuantityLimits,
-	MdReport,
 	MdStarRate,
 	MdStore
 } from 'react-icons/md';
@@ -17,14 +16,14 @@ import { IoGift } from 'react-icons/io5';
 
 const routes = [
 	{
-		name: 'Home',
+		name: 'Trang chủ',
 		layout: '/admin',
 		path: '/home',
 		icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
 		component: ''
 	},
 	{
-		name: 'Users',
+		name: 'Người dùng',
 		layout: '/admin',
 		path: '/users',
 		icon: <Icon as={MdPerson} width='20px' height='20px' color='inherit' />,
@@ -32,76 +31,76 @@ const routes = [
 		secondary: true
 	},
 	{
-		name: 'Categories',
+		name: 'Danh mục',
 		layout: '/admin',
 		icon: <Icon as={MdCategory} width='20px' height='20px' color='inherit' />,
 		path: '/categories',
 		component: <CategoriesAdmin />
 	},
 	{
-		name: 'Store',
+		name: 'Cửa hàng',
 		layout: '/admin',
 		path: '/stores',
 		icon: <Icon as={MdStore} width='20px' height='20px' color='inherit' />,
 		component: ''
 	},
 	{
-		name: 'Commissions',
+		name: 'Hoa hồng',
 		layout: '/admin',
 		path: '/commissions',
 		icon: <Icon as={MdMoney} width='20px' height='20px' color='inherit' />,
 		component: ''
 	},
 	{
-		name: 'Products',
+		name: 'Sản phẩm',
 		layout: '/admin',
 		path: '/products',
 		icon: <Icon as={MdProductionQuantityLimits} width='20px' height='20px' color='inherit' />,
 		component: ''
 	},
 	{
-		name: 'Delivery',
+		name: 'Vận chuyển',
 		layout: '/admin',
 		path: '/deliveries',
 		icon: <Icon as={MdDeliveryDining} width='20px' height='20px' color='inherit' />,
 		component: ''
 	},
 	{
-		name: 'Orders',
+		name: 'Đơn hàng',
 		layout: '/admin',
 		path: '/orders',
 		icon: <Icon as={IoMdCart} width='20px' height='20px' color='inherit' />,
 		component: ''
 	},
 	{
-		name: 'Promotions',
+		name: 'Voucher',
 		layout: '/admin',
 		path: '/promotions',
 		icon: <Icon as={IoGift} width='20px' height='20px' color='inherit' />,
 		component: ''
 	},
 	{
-		name: 'Transactions',
+		name: 'Giao dịch',
 		layout: '/admin',
 		path: '/transactions',
 		icon: <Icon as={MdPayment} width='20px' height='20px' color='inherit' />,
 		component: ''
 	},
 	{
-		name: 'Statistics',
+		name: 'Thống kê',
 		layout: '/admin',
 		path: '/statistics',
 		icon: <Icon as={MdStarRate} width='20px' height='20px' color='inherit' />,
 		component: ''
 	}
 	,
-	{
-		name: 'Ticket',
-		layout: '/admin',
-		path: '/ticket',
-		icon: <Icon as={MdReport} width='20px' height='20px' color='inherit' />,
-		component: ''
-	}
+	// {
+	// 	name: 'Ticket',
+	// 	layout: '/admin',
+	// 	path: '/ticket',
+	// 	icon: <Icon as={MdReport} width='20px' height='20px' color='inherit' />,
+	// 	component: ''
+	// }
 
 ];
 

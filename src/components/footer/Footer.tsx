@@ -94,7 +94,7 @@ const Footer: React.FC = () => {
 									Email: support.help@latipe.com
 								</Typography>
 								<Typography py="0.3rem" mb="1rem" color="gray.500">
-									Phone: +84 123 456 789
+									Điện thoại: +84 123 456 789
 								</Typography>
 
 								<FlexBox className="flex" mx="-5px">

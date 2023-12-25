@@ -54,6 +54,7 @@ import { createProduct } from "../../../store/slices/products-slice";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { truncateFilename } from "../../../utils/utils";
 
 const AddProduct = () => {
 
@@ -383,7 +384,7 @@ const AddProduct = () => {
 	}
 
 	return (
-		<div>
+		<Box py={8}>
 			<Modal size={"6xl"} isOpen={isModalCateOpen} onClose={() => {
 				setModalCateOpen(false);
 				setSelectedCategory([])
@@ -465,7 +466,7 @@ const AddProduct = () => {
 				</ModalContent>
 			</Modal>
 			<DashboardPageHeader
-				title="Add Product"
+				title="Thêm sản phẩm"
 				iconName="delivery-box"
 				button={
 					<a href="/vendor/products">
@@ -579,8 +580,8 @@ const AddProduct = () => {
 					</AccordionItem>
 					<AccordionItem>
 						<AccordionButton>
-								<Box flex="1" textAlign="left" fontWeight="bold" fontSize="xl">
-									Mô tả chi tiết
+							<Box flex="1" textAlign="left" fontWeight="bold" fontSize="xl">
+								Mô tả chi tiết
 							</Box>
 						</AccordionButton>
 						<AccordionPanel ml={2}>
@@ -845,7 +846,7 @@ const AddProduct = () => {
 														<Flex alignItems="center" justifyContent="space-between">
 															<Text mr={2}>
 																{productVariants[0].options[index].file !== null ?
-																	productVariants[0].options[index].file.name : "Upload"}
+																	truncateFilename(productVariants[0].options[index].file, 3) : "Upload"}
 															</Text>
 															{productVariants[0].options[index].file !== null &&
 																<IconButton
@@ -1144,12 +1145,12 @@ const AddProduct = () => {
 							onClick={handleSaveProduct}
 							isDisabled={disableSaveProduct}
 						>
-							Save
+							Lưu
 						</Button>
 					</Flex>
 				</Accordion>
 			</Box>
-		</div>
+		</Box>
 	);
 };
 

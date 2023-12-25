@@ -24,6 +24,24 @@ export const convertHexToRGB = (hex) => {
 	}
 };
 
+export function truncateFilename(file: File, maxWords: number): string {
+	// Split the filename into name and extension
+
+	const filename = file.name ? file.name : "image.png";
+	const [name, extension] = filename.split('.');
+
+	// Split the name into words
+	const words = name.split(' ');
+
+	// If the name is longer than maxWords, truncate it and add '...'
+	const truncatedName = words.length > maxWords
+		? `${words.slice(0, maxWords).join(' ')}...`
+		: name;
+
+	// Return the truncated name with the extension
+	return `${truncatedName}.${extension}`;
+}
+
 export const getDateDifference = (date) => {
 	let diff = differenceInMinutes(new Date(), new Date(date));
 

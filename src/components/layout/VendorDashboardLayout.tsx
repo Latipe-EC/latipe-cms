@@ -29,6 +29,7 @@ const VendorDashboardLayout: React.FC = () => {
 			navigate("/login");
 			return;
 		}
+		console.log(REACT_STARTER_AUTH);
 		if (REACT_STARTER_AUTH.role !== "VENDOR") {
 			navigate("/register-store");
 			return;

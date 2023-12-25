@@ -9,7 +9,7 @@ import Divider from "../Divider";
 import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
 import TextField from "../text-field/TextField";
-import { H3, H5, H6, SemiSpan, Small, Span } from "../Typography";
+import { H3, H5, H6, SemiSpan, Span } from "../Typography";
 import { StyledSessionCard } from "./SessionStyle";
 import { FormLabel, Radio, RadioGroup, Spinner, Stack, useToast } from "@chakra-ui/react";
 import { registerAccount } from "../../store/slices/auth-slice";
@@ -26,7 +26,7 @@ const Signup: React.FC = () => {
 	const toast = useToast();
 	const dispatch = useDispatch<AppThunkDispatch>();
 	const navigate = useNavigate();
-
+	const [gender, setGender] = useState("Other")
 	const handleFormSubmit = async (values) => {
 		const loadingToastId = toast({
 			title: 'Đang tạo tài khoản...',
@@ -39,8 +39,9 @@ const Signup: React.FC = () => {
 		// handle the form submission here
 		dispatch(registerAccount({
 			...values,
-			gender: values.gender.toUpperCase(),
-			birthday: values.birthday.toISOString().slice(0, 10)
+			birthday: values.birthday,
+			hashedPassword: values.password,
+			gender: gender.toUpperCase()
 		})).unwrap().then((res) => {
 			toast.close(loadingToastId);
 			if (res.status !== 200) {
@@ -101,7 +102,7 @@ const Signup: React.FC = () => {
 
 				<TextField
 					mb="0.75rem"
-					name="name"
+					name="firstName"
 					label="Tên"
 					placeholder="firstName"
 					fullwidth
@@ -158,7 +159,9 @@ const Signup: React.FC = () => {
 					errorText={touched.birthday && errors.birthday}
 				/>
 				<FormLabel fontSize="sm">Giới tính</FormLabel>
-				<RadioGroup defaultValue="Male" mb="0.75rem" name="Gioi tinh">
+				<RadioGroup defaultValue="Male" mb="0.75rem" name="Gioi tinh"
+					onChange={(e) => { setGender(e) }}
+				>
 					<Stack direction="row">
 						<Radio value="Male">Nam</Radio>
 						<Radio value="Female">Nữ</Radio>
@@ -245,6 +248,7 @@ const Signup: React.FC = () => {
 					color="primary"
 					type="submit"
 					fullwidth
+					onClick={() => handleFormSubmit(values)}
 				>
 					Tạo tài khoản
 				</Button>

@@ -1,8 +1,8 @@
 import React from "react";
 import CategoryMenuItem from "./category-menu-item/CategoryMenuItem";
 import { StyledCategoryDropdown } from "./CategoryDropdownStyle";
-import MegaMenu1 from "./mega-menu/MegaMenu1";
-import MegaMenu2 from "./mega-menu/MegaMenu2";
+// import MegaMenu1 from "./mega-menu/MegaMenu1";
+// import MegaMenu2 from "./mega-menu/MegaMenu2";
 import { RootState, useAppSelector } from "../../store/store";
 import { CategoryResponse } from "api/interface/product";
 
@@ -18,10 +18,10 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
 
 	const categories = useAppSelector((state: RootState) => state.categories);
 
-	const megaMenu = {
-		MegaMenu1,
-		MegaMenu2,
-	};
+	// const megaMenu = {
+	// 	MegaMenu1,
+	// 	MegaMenu2,
+	// };
 
 	return (
 		<StyledCategoryDropdown open={open} position={position}>
@@ -32,7 +32,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
 						title={item.name}
 						href={`/search?category=${encodeURIComponent(item.name)}`}
 						// icon={item.image}
-						caret={!!item.menuData}
+						// caret={!!item.menuData}
 						key={item.id}
 					>
 						{/* <MegaMenu data={item.menuData || {}} /> */}

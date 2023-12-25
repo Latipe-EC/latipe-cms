@@ -579,8 +579,8 @@ const AddProduct = () => {
 					</AccordionItem>
 					<AccordionItem>
 						<AccordionButton>
-							<Box flex="1" textAlign="left" fontWeight="bold" fontSize="xl">
-								Mô tả chi tốt
+								<Box flex="1" textAlign="left" fontWeight="bold" fontSize="xl">
+									Mô tả chi tiết
 							</Box>
 						</AccordionButton>
 						<AccordionPanel ml={2}>

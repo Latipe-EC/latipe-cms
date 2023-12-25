@@ -68,6 +68,9 @@ const Login: React.FC = () => {
 						isClosable: true,
 						position: 'top-right',
 					})
+					if (res.data.detail.includes("verified")) {
+						navigate("/auth/verify-account")
+					}
 				}
 
 			}).catch((err) => {

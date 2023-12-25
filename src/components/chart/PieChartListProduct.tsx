@@ -46,7 +46,7 @@ const PieChartListProduct = ({ data }: MiniCartProps) => {
 		},
 		legend: {
 			show: true, // Show the legend
-			position: 'right' // Position the legend to the right
+			position: 'right' as 'top' | 'bottom' | 'left' | 'right'
 		},
 		hover: { mode: null },
 		tooltip: {

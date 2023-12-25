@@ -255,7 +255,7 @@ const OrderDetailAdmin = () => {
 
 								<Typography
 									fontSize="14px">{response.data.order.payment_method === 1 ? " Thanh toán khi nhận hàng" : response.data.order.payment_method === 2 ?
-										" Thanh toán qua thẻ" : " Thanh toán bằng ví Latipe"}</Typography>
+										" Thanh toán bằng paypal" : " Thanh toán bằng ví Latipe"}</Typography>
 							</Card>
 
 						</Grid>

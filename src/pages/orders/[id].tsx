@@ -332,7 +332,7 @@ const OrderDetails = () => {
 								</Box>
 								<Box d="flex" mb={4}
 								>
-									{[...Array(5)].map((e, i) => (
+									{[...Array(5)].map((_, i) => (
 										<StarIcon
 											key={i}
 											color={i < detailRating.rating ? "teal.500" : "gray.300"}
@@ -379,7 +379,7 @@ const OrderDetails = () => {
 								</Box>
 								<Box d="flex" mb={4}
 								>
-									{[...Array(5)].map((e, i) => (
+									{[...Array(5)].map((_, i) => (
 										<StarIcon
 											key={i}
 											color={i < ratingStar ? "teal.500" : "gray.300"}
@@ -498,7 +498,7 @@ const OrderDetails = () => {
 						> Mua lại</ButtonChakra>
 					</FlexCharkra>
 					{statusPaymentOrder &&
-						statusPaymentOrder.paymentStatus === EPaymentStatus.PENDING &&
+
 						orderDetail.order.status <= 3 && (
 							<FlexCharkra justifyContent={size.width < breakpoint ? "center" : "flex-end"}
 								mt={2}
@@ -734,7 +734,7 @@ const OrderDetails = () => {
 							<Typography fontSize="14px" fontWeight="bold">Phương thức Thanh toán:</Typography>
 							<Typography fontSize="14px">
 								{orderDetail.order.payment_method === 1 ? " Thanh toán khi nhận hàng" : orderDetail.order.payment_method === 2 ?
-									" Thanh toán qua thẻ" : " Thanh toán bằng ví Latipe"}
+									" Thanh toán bằng paypal" : " Thanh toán bằng ví Latipe"}
 							</Typography>
 						</FlexBox>
 					</Card>

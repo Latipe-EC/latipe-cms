@@ -593,13 +593,13 @@ const ProductDetailVendor = () => {
 								<CKEditor
 									editor={ClassicEditor}
 									data={description}
-									onChange={(event, editor) => {
+									onChange={(_, editor) => {
 										setDescription(editor.getData());
 									}}
-									onBlur={(event, editor) => {
+									onBlur={(editor) => {
 										console.log('Blur.', editor);
 									}}
-									onFocus={(event, editor) => {
+									onFocus={(editor) => {
 										console.log('Focus.', editor);
 									}}
 								/>

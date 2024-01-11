@@ -52,7 +52,7 @@ const Section2: React.FC = () => {
 								images={item.images}
 								name={item.name}
 								ratings={item.ratings}
-								price={250}
+								price={item.price}
 								// off={56}
 								key={ind}
 							/>

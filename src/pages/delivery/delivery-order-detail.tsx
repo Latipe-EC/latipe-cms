@@ -187,13 +187,13 @@ const OrderDetailDelivery = () => {
 								</FlexBox>)
 							}
 
-							{response.data.order.status === 1 && item.is_prepared === 1 && (
+							{/* {response.data.order.status === 1 && item.is_prepared === 1 && (
 								<FlexBox flex="0 0 0 !important" m="6px" alignItems="center">
 									<Typography fontSize="14px" color="text.muted">
 										Thuộc tính: {item.name_option}
 									</Typography>
 								</FlexBox>
-							)}
+							)} */}
 
 						</FlexBox>
 					))}

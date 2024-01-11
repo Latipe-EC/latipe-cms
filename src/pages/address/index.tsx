@@ -283,7 +283,7 @@ const AddressList = () => {
 						</FormControl>
 
 						<FormControl isRequired isInvalid={phoneError !== ""}>
-							<FormLabel>Phone</FormLabel>
+							<FormLabel>Số điện thoại</FormLabel>
 							<Input pattern="[0-9]{10}" value={phone} onChange={handlePhoneChange} required />
 							<FormErrorMessage>{phoneError}</FormErrorMessage>
 						</FormControl>
@@ -291,7 +291,7 @@ const AddressList = () => {
 						<FormControl isRequired isInvalid={province === null}>
 							<FormLabel>Tỉnh/Thành phố</FormLabel>
 							<Select value={JSON.stringify(province)} onChange={handleProvinceChange} required>
-								<option value="">Select a province</option>
+								<option value="">Chọn tỉnh hoặc thành phố</option>
 								{Object.values(provinces).map((p) => (
 									<option key={p.code} value={JSON.stringify(p)}>
 										{p.name_with_type}
@@ -304,7 +304,7 @@ const AddressList = () => {
 							<FormLabel>Tên huyện</FormLabel>
 							<Select value={JSON.stringify(district)} onChange={handleDistrictChange}
 								disabled={!province} required>
-								<option value="">Select a district</option>
+								<option value="">Chọn huyện</option>
 								{filteredDistricts.map((d) => (
 									<option key={d.code} value={JSON.stringify(d)}>
 										{d.name_with_type}
@@ -317,7 +317,7 @@ const AddressList = () => {
 							<FormLabel>Tên xã</FormLabel>
 							<Select value={JSON.stringify(ward)} onChange={handleWardChange}
 								disabled={!district} required>
-								<option value="">Select a ward</option>
+								<option value="">Chọn quận</option>
 								{filteredWards.map((w) => (
 									<option key={w.code} value={JSON.stringify(w)}>
 										{w.name_with_type}

@@ -595,7 +595,7 @@ const OrderDetails = () => {
 									<Box ml="20px">
 										<H6 my="0px">{item.product_name}</H6>
 										<Typography fontSize="14px" color="text.muted">
-											{item.price.toLocaleString('vi-VN')} x {item.quantity}
+											{(item.net_price > 0 ? item.net_price : item.price).toLocaleString('vi-VN')}₫ x {item.quantity}
 										</Typography>
 									</Box>
 								</FlexBox>

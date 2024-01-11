@@ -40,7 +40,7 @@ const Topbar: React.FC = () => {
 				</FlexBox>
 				<FlexBox className="topbar-right" alignItems="center">
 					<NavLink className="link" href="/help">
-						Need Help?
+						Cần giúp đỡ?
 					</NavLink>
 					{/* <Menu
 						direction="right"

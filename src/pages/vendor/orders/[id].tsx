@@ -193,14 +193,14 @@ const OrderDetails = () => {
 											x {item.quantity}
 										</Typography>
 										<Typography fontSize="14px" color="text.muted">
-											{(item.price * item.quantity).toLocaleString('vi-VN')}₫
+											{((item.net_price > 0 ? item.net_price : item.price) * item.quantity).toLocaleString('vi-VN')}₫
 										</Typography>
 									</FlexBox>
 								</Box>
 							</FlexBox>
 
 							{
-								item.name_option !== "" && (
+								item.name_option && (
 									<FlexBox flex="1 1 260px" m="6px" alignItems="center">
 										<Typography fontSize="14px" color="text.muted">
 											Thuộc tính: {item.name_option}
@@ -208,13 +208,13 @@ const OrderDetails = () => {
 									</FlexBox>)
 							}
 
-							{response.data.status === 1 && item.is_prepared === 1 && (
+							{/* {response.data.status === 1 && item.is_prepared === 1 && (
 								<FlexBox flex="0 0 0 !important" m="6px" alignItems="center">
 									<Typography fontSize="14px" color="text.muted">
 										Thuộc tính: {item.name_option}
 									</Typography>
 								</FlexBox>
-							)}
+							)} */}
 
 							{response.data.status !== 7 && item.is_prepared === 0 && (
 								<FlexBox flex="0 0 0 !important" m="6px" alignItems="center">

@@ -1,5 +1,5 @@
 import LazyImage from "../LazyImage";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Avatar from "../avatar/Avatar";
 import Box from "../Box";
 import Button from "../buttons/Button";
@@ -50,11 +50,14 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 	const [selectQuantity, setSelectQuantity] = useState(product.productClassifications[0].quantity);
 	const [quantity, setQuantity] = useState(1);
 	const [selectClassification, setSelectClassification] = useState(null);
+	const [avg, setAvg] = useState(0);
 	// const routerId = router.query.id as string;
-	const sum = product.ratings ? product.ratings.reduce((acc, cur) => acc + cur, 0) : 0;
-	const avg = product.ratings ? sum / product.ratings.length : 0;
+	const sum = product.ratings ? product.ratings.reduce((acc, cur, index) => acc + cur * (index + 1), 0) : 0;
 	const navigate = useNavigate();
 
+	useEffect(() => {
+		setAvg(product.ratings ? sum / product.ratings.reduce((a, b) => a + b, 0) : 0)
+	}, [])
 	const handleImageClick = (ind) => () => {
 		setSelectedImage({ id: ind, value: product.images[ind] });
 	};
@@ -83,8 +86,9 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 	};
 
 	const handleAddToCart = () => {
+		console.log(selectOption);
 		if (product.productVariants.length > 0 && (product.productVariants.length
-			!== selectOption.length || selectClassification === null)) {
+			!== selectOption.length || selectOption === null)) {
 			return;
 		}
 		dispatch(addToCart(
@@ -125,6 +129,8 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 			);
 			setSelectClassification(product.productClassifications[indexFinal].id);
 			setQuantity(1);
+		} else {
+			setSelectClassification(product.productClassifications[index].id);
 		}
 
 		setSelectOption(newSelectOption);
@@ -215,7 +221,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 						<Box ml="8px" mr="8px">
 							<SemiSpan color="text.secondary" fontSize={3}>
 								<span style={{ textDecoration: 'underline', fontWeight: 'bold' }}>
-									5</span> Đánh giá
+									{product.ratings.reduce((a, b) => a + b, 0)}</span> Đánh giá
 							</SemiSpan>
 						</Box>
 						<Divider orientation="vertical" width="1px" h="20px" bgColor="red.300" />

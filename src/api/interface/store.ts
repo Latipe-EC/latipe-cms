@@ -1,4 +1,4 @@
-import {QueryParamsType} from "api/AxiosClient";
+import { QueryParamsType } from "api/AxiosClient";
 
 /**
  *
@@ -6,33 +6,33 @@ import {QueryParamsType} from "api/AxiosClient";
  * @interface CreateStoreRequest
  */
 export interface CreateStoreRequest {
-  /**
-   *
-   * @type {string}
-   * @memberof CreateStoreRequest
-   */
-  'name': string;
-  /**
-   *
-   * @type {string}
-   * @memberof CreateStoreRequest
-   */
-  'description': string;
-  /**
-   *
-   * @type {string}
-   * @memberof CreateStoreRequest
-   */
-  'logo'?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof CreateStoreRequest
-   */
-  'cover'?: string;
-  'address'?: StoreAddress;
-  coverFile?: File;
-  logoFile?: File;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof CreateStoreRequest
+	 */
+	'name': string;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof CreateStoreRequest
+	 */
+	'description': string;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof CreateStoreRequest
+	 */
+	'logo'?: string;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof CreateStoreRequest
+	 */
+	'cover'?: string;
+	'address'?: StoreAddress;
+	coverFile?: File;
+	logoFile?: File;
 }
 
 /**
@@ -41,51 +41,51 @@ export interface CreateStoreRequest {
  * @interface StoreResponse
  */
 export interface StoreResponse {
-  /**
-   *
-   * @type {string}
-   * @memberof StoreResponse
-   */
-  'id': string;
-  /**
-   *
-   * @type {boolean}
-   * @memberof StoreResponse
-   */
-  'isDeleted'?: boolean;
-  /**
-   *
-   * @type {string}
-   * @memberof StoreResponse
-   */
-  'name'?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof StoreResponse
-   */
-  'description'?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof StoreResponse
-   */
-  'logo'?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof StoreResponse
-   */
-  'ownerId'?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof StoreResponse
-   */
-  'cover'?: string;
-  'feePerOrder'?: number;
-  'address'?: StoreAddress;
-  'rating'?: number;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof StoreResponse
+	 */
+	'id': string;
+	/**
+	 *
+	 * @type {boolean}
+	 * @memberof StoreResponse
+	 */
+	'isDeleted'?: boolean;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof StoreResponse
+	 */
+	'name'?: string;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof StoreResponse
+	 */
+	'description'?: string;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof StoreResponse
+	 */
+	'logo'?: string;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof StoreResponse
+	 */
+	'ownerId'?: string;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof StoreResponse
+	 */
+	'cover'?: string;
+	'feePerOrder'?: number;
+	'address'?: StoreAddress;
+	'ratings'?: Array<number>;
 }
 
 
@@ -95,40 +95,40 @@ export interface StoreResponse {
  * @interface UpdateStoreRequest
  */
 export interface UpdateStoreRequest {
-  /**
-   *
-   * @type {string}
-   * @memberof UpdateStoreRequest
-   */
-  'name': string;
-  /**
-   *
-   * @type {string}
-   * @memberof UpdateStoreRequest
-   */
-  'description': string;
-  /**
-   *
-   * @type {string}
-   * @memberof UpdateStoreRequest
-   */
-  'logo'?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof UpdateStoreRequest
-   */
-  'cover'?: string;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof UpdateStoreRequest
+	 */
+	'name': string;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof UpdateStoreRequest
+	 */
+	'description': string;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof UpdateStoreRequest
+	 */
+	'logo'?: string;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof UpdateStoreRequest
+	 */
+	'cover'?: string;
 
-  /**
-   *
-   * @type {string}
-   * @memberof UpdateStoreRequest
-   */
-  'address'?: StoreAddress;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof UpdateStoreRequest
+	 */
+	'address'?: StoreAddress;
 
-  coverFile?: File;
-  logoFile?: File;
+	coverFile?: File;
+	logoFile?: File;
 
 }
 
@@ -139,78 +139,78 @@ export interface UpdateStoreRequest {
  * @interface StoreAddress
  */
 export interface StoreAddress {
-  /**
-   *
-   * @type {string}
-   * @memberof StoreAddress
-   */
-  'contactName': string;
-  /**
-   *
-   * @type {string}
-   * @memberof StoreAddress
-   */
-  'phone': string;
-  /**
-   *
-   * @type {string}
-   * @memberof StoreAddress
-   */
-  'detailAddress': string;
-  /**
-   *
-   * @type {string}
-   * @memberof StoreAddress
-   */
-  'zipCode'?: string;
-  /**
-   *
-   * @type {number}
-   * @memberof StoreAddress
-   */
-  'cityOrProvinceId'?: number;
-  /**
-   *
-   * @type {string}
-   * @memberof StoreAddress
-   */
-  'cityOrProvinceName'?: string;
-  /**
-   *
-   * @type {number}
-   * @memberof StoreAddress
-   */
-  'districtId'?: number;
-  /**
-   *
-   * @type {string}
-   * @memberof StoreAddress
-   */
-  'districtName'?: string;
-  /**
-   *
-   * @type {number}
-   * @memberof StoreAddress
-   */
-  'wardId'?: number;
-  /**
-   *
-   * @type {string}
-   * @memberof StoreAddress
-   */
-  'wardName'?: string;
-  /**
-   *
-   * @type {number}
-   * @memberof StoreAddress
-   */
-  'countryId'?: number;
-  /**
-   *
-   * @type {string}
-   * @memberof StoreAddress
-   */
-  'countryName'?: string;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof StoreAddress
+	 */
+	'contactName': string;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof StoreAddress
+	 */
+	'phone': string;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof StoreAddress
+	 */
+	'detailAddress': string;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof StoreAddress
+	 */
+	'zipCode'?: string;
+	/**
+	 *
+	 * @type {number}
+	 * @memberof StoreAddress
+	 */
+	'cityOrProvinceId'?: number;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof StoreAddress
+	 */
+	'cityOrProvinceName'?: string;
+	/**
+	 *
+	 * @type {number}
+	 * @memberof StoreAddress
+	 */
+	'districtId'?: number;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof StoreAddress
+	 */
+	'districtName'?: string;
+	/**
+	 *
+	 * @type {number}
+	 * @memberof StoreAddress
+	 */
+	'wardId'?: number;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof StoreAddress
+	 */
+	'wardName'?: string;
+	/**
+	 *
+	 * @type {number}
+	 * @memberof StoreAddress
+	 */
+	'countryId'?: number;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof StoreAddress
+	 */
+	'countryName'?: string;
 }
 
 
@@ -220,79 +220,79 @@ export interface StoreAddress {
  * @interface ProductStoreResponse
  */
 export interface ProductStoreResponse {
-  /**
-   *
-   * @type {string}
-   * @memberof ProductStoreResponse
-   */
-  'id': string;
-  /**
-   *
-   * @type {string}
-   * @memberof ProductStoreResponse
-   */
-  'name'?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof ProductStoreResponse
-   */
-  'image'?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof ProductStoreResponse
-   */
-  'countProductVariants'?: number;
-  /**
-   *
-   * @type {string}
-   * @memberof ProductStoreResponse
-   */
-  'countSale'?: number;
-  /**
-   *
-   * @type {string}
-   * @memberof ProductStoreResponse
-   */
-  'reasonBan'?: string;
-  'price'?: number;
-  'rating'?: number;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof ProductStoreResponse
+	 */
+	'id': string;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof ProductStoreResponse
+	 */
+	'name'?: string;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof ProductStoreResponse
+	 */
+	'image'?: string;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof ProductStoreResponse
+	 */
+	'countProductVariants'?: number;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof ProductStoreResponse
+	 */
+	'countSale'?: number;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof ProductStoreResponse
+	 */
+	'reasonBan'?: string;
+	'price'?: number;
+	'rating'?: number;
 }
 
 export interface ProductStoreRequest {
-  id: string,
-  params: QueryParamsType
+	id: string,
+	params: QueryParamsType
 }
 
 export interface GetMyStoreResponse {
-  isDeleted: boolean
-  id: string
-  name: string
-  description: string
-  logo: string
-  ownerId: string
-  cover: string
-  address: StoreAddress
-  feePerOrder: number
-  ratings: Array<number>
-  eWallet: number
+	isDeleted: boolean
+	id: string
+	name: string
+	description: string
+	logo: string
+	ownerId: string
+	cover: string
+	address: StoreAddress
+	feePerOrder: number
+	ratings: Array<number>
+	eWallet: number
 }
 
 export interface StoreAdminResponse {
-  id: string;
-  name: string;
-  point: number;
-  eWallet: number;
-  isDeleted: boolean;
-  isBan: boolean;
-  reasonBan: string;
-  ratings: number[];
+	id: string;
+	name: string;
+	point: number;
+	eWallet: number;
+	isDeleted: boolean;
+	isBan: boolean;
+	reasonBan: string;
+	ratings: number[];
 }
 
 export interface UpdateBanStoreRequest {
-  id: string;
-  isBanned: boolean;
-  reason: string;
+	id: string;
+	isBanned: boolean;
+	reason: string;
 }
 

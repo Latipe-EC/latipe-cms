@@ -54,7 +54,6 @@ import { createProduct } from "../../../store/slices/products-slice";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { truncateFilename } from "../../../utils/utils";
 
 const AddProduct = () => {
 
@@ -670,7 +669,7 @@ const AddProduct = () => {
 												</FormLabel>
 												<Input
 													borderColor='gray.600'
-													placeholder="Product Classification Name"
+													placeholder="Tên"
 													value={productVariant.name}
 													onChange={(event) => handleProductVariantNameChange(index, event.target.value)}
 												/>
@@ -686,7 +685,7 @@ const AddProduct = () => {
 															<InputGroup w="50%">
 																<Input
 																	borderColor='gray.600'
-																	placeholder="Product Classification Value"
+																	placeholder="Giá trị"
 																	value={value.value}
 																	mr={2}
 																	mb={2}
@@ -720,17 +719,15 @@ const AddProduct = () => {
 									</Box>
 								))}
 
-								{/* // table */}
-								{productVariants.length > 0 && (
-									<Table mt={8} variant="striped" colorScheme='WhiteAlpha' style={{
-										borderCollapse: "separate",
-										border: "4px solid #ddd",
-									}}>
+								{/* // Table */}
+								{productVariants.length > 0 && productVariants[0].name && (
+									<Table mt={8}  >
 										<Thead h="100px">
 											<Tr>
+												{/* Header */}
 												<Th
 													bg="green.200"
-													borderBottom="2px"
+													borderBottom="1px"
 													borderColor="gray.300"
 													fontWeight="bold"
 													textTransform="uppercase"
@@ -742,14 +739,13 @@ const AddProduct = () => {
 													overflow="hidden"
 													maxW="100px"
 													textOverflow="ellipsis"
-
 												>
 													{productVariants[0].name}
 												</Th>
 												{productVariants.length === 2 && (
 													<Th
 														bg="green.200"
-														borderBottom="2px"
+														borderBottom="1px"
 														borderColor="gray.300"
 														fontWeight="bold"
 														textTransform="uppercase"
@@ -767,7 +763,7 @@ const AddProduct = () => {
 												)}
 												<Th
 													bg="green.200"
-													borderBottom="2px"
+													borderBottom="1px"
 													borderColor="gray.300"
 													fontWeight="bold"
 													textTransform="uppercase"
@@ -780,7 +776,7 @@ const AddProduct = () => {
 												</Th>
 												<Th
 													bg="green.200"
-													borderBottom="2px"
+													borderBottom="1px"
 													borderColor="gray.300"
 													fontWeight="bold"
 													textTransform="uppercase"
@@ -793,7 +789,7 @@ const AddProduct = () => {
 												</Th>
 												<Th
 													bg="green.200"
-													borderBottom="2px"
+													borderBottom="1px"
 													borderColor="gray.300"
 													fontWeight="bold"
 													textTransform="uppercase"
@@ -806,7 +802,7 @@ const AddProduct = () => {
 												</Th>
 												<Th
 													bg="green.200"
-													borderBottom="2px"
+													borderBottom="1px"
 													borderColor="gray.300"
 													fontWeight="bold"
 													textTransform="uppercase"
@@ -823,8 +819,9 @@ const AddProduct = () => {
 											{productVariants[0].options.map((item, index) => (
 												<Tr key={index}>
 													<Td style={{
+														borderLeft: "2px solid #ddd",
 														borderRight: "2px solid #ddd",
-														borderBottom: index === productVariants[0].options.length - 1 ? "none" : "2px solid #ddd",
+														borderBottom: "2px solid #ddd",
 													}}
 													>
 														<Flex alignItems="center" justifyContent="space-between">
@@ -834,7 +831,6 @@ const AddProduct = () => {
 																icon={<AddIcon />}
 																onClick={() => {
 																	const fileInput = document.getElementById(`fileInput-${index}`);
-																	console.log(fileInput);
 																	if (fileInput) {
 																		fileInput.click();
 																	}
@@ -845,10 +841,11 @@ const AddProduct = () => {
 
 														<Flex alignItems="center" justifyContent="space-between">
 															<Text mr={2}>
-																{productVariants[0].options[index].file !== null ?
-																	truncateFilename(productVariants[0].options[index].file, 3) : "Upload"}
+																{productVariants[0].options[index].file
+																	&& productVariants[0].options[index].file.name ?
+																	`Ảnh ${index + 1}` : "Upload"}
 															</Text>
-															{productVariants[0].options[index].file !== null &&
+															{productVariants[0].options[index].file && productVariants[0].options[index].file.name &&
 																<IconButton
 																	aria-label="Remove file"
 																	icon={<CloseIcon boxSize={3} color="red.500" />}
@@ -885,13 +882,12 @@ const AddProduct = () => {
 															<>
 																<Td style={{
 																	borderRight: "2px solid #ddd",
+																	borderBottom: "2px solid #ddd"
 																}}>
 																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
 																		item !== null && item.value !== '' && (
 																			<>
-																				<Tr style={{
-																					borderRight: "5px solid #ddd",
-																				}} key={`classd2${valueIndex}`}>
+																				<Tr key={`classd2${valueIndex}`}>
 																					<Input
 																						value={item.value}
 																						maxLength={maxLength}
@@ -906,6 +902,7 @@ const AddProduct = () => {
 
 																<Td style={{
 																	borderRight: "2px solid #ddd",
+																	borderBottom: "2px solid #ddd"
 																}}>
 																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
 																		item !== null && item.value !== '' && (
@@ -941,6 +938,7 @@ const AddProduct = () => {
 
 																<Td style={{
 																	borderRight: "2px solid #ddd",
+																	borderBottom: "2px solid #ddd"
 																}}>
 																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
 																		item !== null && item.value !== '' && (
@@ -976,6 +974,7 @@ const AddProduct = () => {
 
 																<Td style={{
 																	borderRight: "2px solid #ddd",
+																	borderBottom: "2px solid #ddd"
 																}}>
 																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
 																		item !== null && item.value !== '' && (
@@ -999,7 +998,11 @@ const AddProduct = () => {
 																			</Tr>
 																		))}
 																</Td>
-																<Td>
+
+																<Td style={{
+																	borderRight: "2px solid #ddd",
+																	borderBottom: "2px solid #ddd"
+																}}>
 																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
 																		item !== null && item.value !== '' && (
 																			<Tr key={`sku${valueIndex}${index}`}>
@@ -1028,7 +1031,11 @@ const AddProduct = () => {
 														productVariants.length === 1 &&
 														item !== null && item.value !== '' && (
 															<>
-																<Td>
+																<Td
+																	style={{
+																		borderRight: "2px solid #ddd",
+																		borderBottom: "2px solid #ddd"
+																	}}>
 																	<Tr key={`price${index}`}>
 																		<InputGroup>
 																			<Input
@@ -1057,7 +1064,11 @@ const AddProduct = () => {
 																	</Tr>
 																</Td>
 
-																<Td>
+																<Td
+																	style={{
+																		borderRight: "2px solid #ddd",
+																		borderBottom: "2px solid #ddd"
+																	}}>
 																	<Tr key={`promotionalPrice${index}`}>
 																		<InputGroup>
 																			<Input
@@ -1086,7 +1097,11 @@ const AddProduct = () => {
 																		</InputGroup>
 																	</Tr>
 																</Td>
-																<Td>
+
+																<Td style={{
+																	borderRight: "2px solid #ddd",
+																	borderBottom: "2px solid #ddd"
+																}}>
 																	<Tr key={`store${index}`}>
 																		<Input
 																			placeholder="inventory"
@@ -1103,7 +1118,11 @@ const AddProduct = () => {
 																		/>
 																	</Tr>
 																</Td>
-																<Td>
+																<Td
+																	style={{
+																		borderRight: "2px solid #ddd",
+																		borderBottom: "2px solid #ddd"
+																	}}>
 																	<Tr key={`sku${index}`}>
 																		<Input
 																			placeholder="sku"

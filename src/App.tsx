@@ -99,6 +99,8 @@ function App() {
 		window.location.href = '/admin';
 	}
 
+	console.log(import.meta.env.VITE_SEARCH);
+
 
 	if (!window.location.pathname.includes('/admin') && !window.location.pathname.includes('/delivery'))
 		dispatch(getChildsCategory(null));

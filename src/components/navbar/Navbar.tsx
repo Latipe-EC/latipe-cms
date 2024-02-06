@@ -23,8 +23,8 @@ interface Nav {
 	extLink?: boolean;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
-	console.log(navListOpen);
+const Navbar: React.FC<NavbarProps> = ({ }) => {
+
 	const renderNestedNav = (list: unknown[], isRoot = false) => {
 		return list?.map((nav: Nav) => {
 			if (isRoot) {

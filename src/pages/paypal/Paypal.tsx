@@ -22,8 +22,6 @@ export default function Paypal() {
 			} else
 				navigate('/404');
 		});
-
-
 	}, []);
 
 	const onCreateOrder = (_, actions) => actions.order.create({
@@ -80,10 +78,12 @@ export default function Paypal() {
 	const onApproveOrder = (_, actions) =>
 		actions.order.capture().then((response: CapturePayment) => {
 			if (response.status === "COMPLETED") {
+				console.log(response);
 				dispatch(payByPaypal({
 					orderId: orderDetail.order.order_uuid,
 					id: response.id,
 					status: response.status,
+					email: response.payer.email_address,
 				})).unwrap().then((res) => {
 					if (res.status === 200) {
 						navigate('/payment-success');

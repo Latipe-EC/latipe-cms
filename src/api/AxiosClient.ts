@@ -838,9 +838,10 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			}),
 	}
 	search = {
+
 		searchProduct: (params: QueryParamsType) =>
 			this.request<ProductListGetVm>({
-				path: `/search/catalog-search`,
+				path: `/${import.meta.env.VITE_SEARCH ? 'search' : 'products'}/catalog-search`,
 				method: 'GET',
 				type: ContentType.Json,
 				query: {
@@ -850,13 +851,14 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		autoComplete: (params: QueryParamsType) =>
 			this.request<ProductNameListVm>({
-				path: `/search/search_suggest`,
+				path: `/${import.meta.env.VITE_SEARCH ? 'search' : 'products'}/search_suggest`,
 				method: 'GET',
 				type: ContentType.Json,
 				query: {
 					...params
 				}
-			}),
+			})
+
 	}
 	delivery = {
 		getListDelivery: (request: ListDeliveryRequest) =>

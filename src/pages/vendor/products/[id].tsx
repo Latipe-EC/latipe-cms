@@ -733,6 +733,7 @@ const ProductDetailVendor = () => {
 										</FormControl>
 									</>
 								)}
+
 								{productVariants.length > 0 && productVariants.map((productVariant, index) => (
 									<Box key={index} mt={4} bg="gray.100" p={4}>
 										<Box display="flex" justifyContent="space-between" alignItems="center">
@@ -801,18 +802,15 @@ const ProductDetailVendor = () => {
 									</Box>
 								))}
 
-								{/* // table */}
+								{/* // Table product classification */}
 								{productVariants.length > 0 && (
-									<Table mt={8} variant="striped" colorScheme='WhiteAlpha' style={{
-										borderCollapse: "separate",
-										border: "4px solid #ddd",
-
-									}}>
+									<Table mt={8} variant="striped"
+									>
 										<Thead h="100px">
 											<Tr>
 												<Th
 													bg="green.200"
-													borderBottom="2px"
+													borderBottom="1px"
 													borderColor="gray.300"
 													fontWeight="bold"
 													textTransform="uppercase"
@@ -824,14 +822,13 @@ const ProductDetailVendor = () => {
 													overflow="hidden"
 													maxW="100px"
 													textOverflow="ellipsis"
-
 												>
 													{productVariants[0].name}
 												</Th>
 												{productVariants.length === 2 && (
 													<Th
 														bg="green.200"
-														borderBottom="2px"
+														borderBottom="1px"
 														borderColor="gray.300"
 														fontWeight="bold"
 														textTransform="uppercase"
@@ -849,7 +846,7 @@ const ProductDetailVendor = () => {
 												)}
 												<Th
 													bg="green.200"
-													borderBottom="2px"
+													borderBottom="1px"
 													borderColor="gray.300"
 													fontWeight="bold"
 													textTransform="uppercase"
@@ -858,11 +855,11 @@ const ProductDetailVendor = () => {
 													py="2"
 													textAlign="center"
 												>
-													Price
+													Giá
 												</Th>
 												<Th
 													bg="green.200"
-													borderBottom="2px"
+													borderBottom="1px"
 													borderColor="gray.300"
 													fontWeight="bold"
 													textTransform="uppercase"
@@ -875,7 +872,7 @@ const ProductDetailVendor = () => {
 												</Th>
 												<Th
 													bg="green.200"
-													borderBottom="2px"
+													borderBottom="1px"
 													borderColor="gray.300"
 													fontWeight="bold"
 													textTransform="uppercase"

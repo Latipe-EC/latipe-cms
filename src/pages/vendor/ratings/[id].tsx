@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import Button from "../../../components/buttons/Button";
-import DashboardPageHeader from "../../../components/layout/DashboardPageHeader";
-import ProductReview from "../../../components/products/ProductReview";
+import Button from "@components/buttons/Button";
+import DashboardPageHeader from "@components/layout/DashboardPageHeader";
+import ProductReview from "@components/products/ProductReview";
 import { useDispatch } from "react-redux";
-import { AppThunkDispatch } from "../../../store/store";
-import { getMyStore } from "../../../store/slices/stores-slice";
+import { AppThunkDispatch } from "@stores/store";
+import { getMyStore } from "@stores/slices/stores-slice";
 import { useEffect, useState } from "react";
 import { GetMyStoreResponse } from "../../../api/interface/store";
 

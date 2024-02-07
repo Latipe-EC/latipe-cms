@@ -1,11 +1,11 @@
 import { useParams } from "react-router-dom";
-import Box from "../../../src/components/Box";
-import Button from "../../../src/components/buttons/Button";
-import { Card1 } from "../../../src/components/Card1";
-import Grid from "../../../src/components/grid/Grid";
-import DashboardLayout from "../../../src/components/layout/CustomerDashboardLayout";
-import DashboardPageHeader from "../../../src/components/layout/DashboardPageHeader";
-import TextField from "../../../src/components/text-field/TextField";
+import Box from "@components/Box";
+import Button from "@components/buttons/Button";
+import { Card1 } from "@components/Card1";
+import Grid from "@components/grid/Grid";
+import DashboardLayout from "@components/layout/CustomerDashboardLayout";
+import DashboardPageHeader from "@components/layout/DashboardPageHeader";
+import TextField from "@components/text-field/TextField";
 import { Formik } from "formik";
 
 import * as yup from "yup";

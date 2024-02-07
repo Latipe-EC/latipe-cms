@@ -24,14 +24,14 @@ import Grid from "../grid/Grid";
 import Icon from "../icon/Icon";
 import Rating from "../rating/Rating";
 import { H1, H3, H5, H6, SemiSpan } from "../Typography";
-import { ProductDetailResponse } from "api/interface/product";
+import { ProductDetailResponse } from "@interfaces/product";
 import { FaFlag, FaShoppingCart } from "react-icons/fa";
 import './ProductIntro.css'
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addToCart, incrementCount } from "../../store/slices/carts-slice";
-import { AppThunkDispatch } from "../../store/store";
-import { LoginResponse } from "api/interface/auth";
+import { addToCart, incrementCount } from "../../stores/slices/carts-slice";
+import { AppThunkDispatch } from "../../stores/store";
+import { LoginResponse } from "@interfaces/auth";
 
 export interface ProductIntroProps {
 	product: ProductDetailResponse

@@ -13,7 +13,7 @@ import Footer from "../footer/Footer";
 import { Helmet } from "react-helmet";
 import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { LoginResponse } from "api/interface/auth";
+import { LoginResponse } from "@interfaces/auth";
 
 const MainContent = styled.div`
 	margin-top: 5rem; /* Add some initial margin */

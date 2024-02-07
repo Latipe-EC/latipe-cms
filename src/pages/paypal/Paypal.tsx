@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { getOrderById } from "../../store/slices/orders-slice";
-import { AppThunkDispatch } from "../../store/store";
+import { getOrderById } from "../../stores/slices/orders-slice";
+import { AppThunkDispatch } from "../../stores/store";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { DataGetOrderById } from "../../api/interface/order";
 import { CapturePayment } from "../../api/interface/payment";
-import { payByPaypal } from "../../store/slices/payment-slice";
+import { payByPaypal } from "../../stores/slices/payment-slice";
 
 export default function Paypal() {
 	const { id } = useParams();

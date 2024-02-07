@@ -19,4 +19,17 @@ module.exports = {
 			{ allowConstantExport: true },
 		],
 	},
+	settings: {
+		react: {
+			version: 'detect', // auto-detect React version from package.json.
+		},
+		'import/parsers': {
+			'@typescript-eslint/parser': ['.ts', '.tsx'], // use typescript-eslint parser for .ts|tsx files.
+		},
+		'import/resolver': {
+			typescript: {
+				alwaysTryTypes: true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`.
+			},
+		},
+	},
 }

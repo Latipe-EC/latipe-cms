@@ -12,10 +12,10 @@ import { SemiSpan } from '../Typography';
 import { StyledProductCard1 } from './ProductCardStyle';
 import { Center, Spinner, Text, Tooltip } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
-import { AppThunkDispatch } from '../../store/store';
-import { getProductById } from '../../store/slices/products-slice';
+import { AppThunkDispatch } from '../../stores/store';
+import { getProductById } from '../../stores/slices/products-slice';
 import { useNavigate } from 'react-router-dom';
-import { ProductDetailResponse } from 'api/interface/product';
+import { ProductDetailResponse } from '@interfaces/product';
 
 export interface ProductCard1Props extends CardProps {
 	className?: string;

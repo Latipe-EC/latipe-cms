@@ -2,90 +2,90 @@ import { ThemeProvider } from 'styled-components';
 import './App.css'
 import { GlobalStyles } from './utils/globalStyles';
 import { AppProvider } from './contexts/app/AppContext';
-import AppLayout from './components/layout/AppLayout';
+import AppLayout from '@components/layout/AppLayout';
 import { theme } from './utils/theme';
 import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import VendorDashboardLayout from './components/layout/VendorDashboardLayout';
-import CustomerDashboardLayout from './components/layout/CustomerDashboardLayout';
-import NavbarLayout from './components/layout/NavbarLayout';
+import VendorDashboardLayout from '@components/layout/VendorDashboardLayout';
+import CustomerDashboardLayout from '@components/layout/CustomerDashboardLayout';
+import NavbarLayout from '@components/layout/NavbarLayout';
 import { ChakraProvider } from '@chakra-ui/react';
-import AddProductLayout from './components/layout/AddProductLayout';
-import { AppThunkDispatch } from './store/store';
+import AddProductLayout from '@components/layout/AddProductLayout';
+import { AppThunkDispatch } from './stores/store';
 import { useDispatch } from 'react-redux';
-import { getMyCart } from './store/slices/carts-slice';
-import { getChildsCategory } from './store/slices/categories-slice';
+import { getMyCart } from './stores/slices/carts-slice';
+import { getChildsCategory } from './stores/slices/categories-slice';
 
 // home pages
-const Address = lazy(() => import('./pages/address'));
-const AddressUpdater = lazy(() => import('./pages/address/[id]'));
-const OrderDetails = lazy(() => import('./pages/orders/[id]'));
-const Orders = lazy(() => import('./pages/orders/index'));
-const AddressList = lazy(() => import('./pages/payment-methods/index'));
-const PaymentMethodEditor = lazy(() => import('./pages/payment-methods/[id]'));
-const ProductDetails = lazy(() => import('./pages/product/[id]'));
-const ProductSearchResult = lazy(() => import('./pages/product/search/[id]'));
-const ProfileEditor = lazy(() => import('./pages/profile/edit'));
-const Profile = lazy(() => import('./pages/profile/index'));
-const Shop = lazy(() => import('./pages/shop/[id]'));
-const SupportTicketDetails = lazy(() => import('./pages/support-tickets/[id]'));
-const TicketList = lazy(() => import('./pages/support-tickets/index'));
-const Paypal = lazy(() => import('./pages/paypal/Paypal'));
+const Address = lazy(() => import('@pages/address'));
+const AddressUpdater = lazy(() => import('@pages/address/[id]'));
+const OrderDetails = lazy(() => import('@pages/orders/[id]'));
+const Orders = lazy(() => import('@pages/orders/index'));
+const AddressList = lazy(() => import('@pages/payment-methods/index'));
+const PaymentMethodEditor = lazy(() => import('@pages/payment-methods/[id]'));
+const ProductDetails = lazy(() => import('@pages/product/[id]'));
+const ProductSearchResult = lazy(() => import('@pages/product/search/[id]'));
+const ProfileEditor = lazy(() => import('@pages/profile/edit'));
+const Profile = lazy(() => import('@pages/profile/index'));
+const Shop = lazy(() => import('@pages/shop/[id]'));
+const SupportTicketDetails = lazy(() => import('@pages/support-tickets/[id]'));
+const TicketList = lazy(() => import('@pages/support-tickets/index'));
+const Paypal = lazy(() => import('@pages/paypal/Paypal'));
 
 // vendor pages
-const DashboardVendor = lazy(() => import('./pages/vendor/dashboard/index'));
-const AccountSettings = lazy(() => import('./pages/vendor/account-settings/index'));
-const AddProduct = lazy(() => import('./pages/vendor/add-product/index'));
-const OrderDetailsVendor = lazy(() => import('./pages/vendor/orders/[id]'));
-const OrdersVendor = lazy(() => import('./pages/vendor/orders/index'));
-const ProductDetailsVendor = lazy(() => import('./pages/vendor/products/[id]'));
-const ProductsVendor = lazy(() => import('./pages/vendor/products/index'));
-const BanProductsVendor = lazy(() => import('./pages/vendor/products/BanProduct'));
-const RatingVendor = lazy(() => import('./pages/vendor/ratings/[id]'));
-const StatisticVendor = lazy(() => import('./pages/vendor/statistic/statistic'));
-const AnalyzeVendor = lazy(() => import('./pages/vendor/analyze-vendor/index'));
-const BankVendor = lazy(() => import('./pages/vendor/bank/index'));
-const ValidWithdraw = lazy(() => import('./pages/vendor/bank/valid_withdraw'));
-const WithdrawSuccess = lazy(() => import('./pages/vendor/bank/withdraw-success'));
-const RegisterStore = lazy(() => import('./pages/vendor/register'));
+const DashboardVendor = lazy(() => import('@pages/vendor/dashboard/index'));
+const AccountSettings = lazy(() => import('@pages/vendor/account-settings/index'));
+const AddProduct = lazy(() => import('@pages/vendor/add-product/index'));
+const OrderDetailsVendor = lazy(() => import('@pages/vendor/orders/[id]'));
+const OrdersVendor = lazy(() => import('@pages/vendor/orders/index'));
+const ProductDetailsVendor = lazy(() => import('@pages/vendor/products/[id]'));
+const ProductsVendor = lazy(() => import('@pages/vendor/products/index'));
+const BanProductsVendor = lazy(() => import('@pages/vendor/products/BanProduct'));
+const RatingVendor = lazy(() => import('@pages/vendor/ratings/[id]'));
+const StatisticVendor = lazy(() => import('@pages/vendor/statistic/statistic'));
+const AnalyzeVendor = lazy(() => import('@pages/vendor/analyze-vendor/index'));
+const BankVendor = lazy(() => import('@pages/vendor/bank/index'));
+const ValidWithdraw = lazy(() => import('@pages/vendor/bank/valid_withdraw'));
+const WithdrawSuccess = lazy(() => import('@pages/vendor/bank/withdraw-success'));
+const RegisterStore = lazy(() => import('@pages/vendor/register'));
 
 // admin pages
-const DashboardAdmin = lazy(() => import('./components/layout/admin/AdminLayout'));
-const CategoriesAdmin = lazy(() => import('./pages/admin/category/AdminCategories'));
-const ProductsAdmin = lazy(() => import('./pages/admin/product/AdminProduct'));
-const StoresAdmin = lazy(() => import('./pages/admin/store/AdminStore'));
-const UsersAdmin = lazy(() => import('./pages/admin/user/AdminUser'));
-const CommissionAdmin = lazy(() => import('./pages/admin/commission/AdminCommission'));
-const PaymentAdmin = lazy(() => import('./pages/admin/transactions/AdminTransaction'));
-const OrdersAdmin = lazy(() => import('./pages/admin/order/AdminOrder'));
-const OrderDetailAdmin = lazy(() => import('./pages/admin/order/OrderDetailAdmin'));
-const StatisticAdmin = lazy(() => import('./pages/admin/statistic/AdminStatistic'));
-const HomeAdmin = lazy(() => import('./pages/admin/home/AdminHome'));
-const DeliveryAdmin = lazy(() => import('./pages/admin/delivery/AdminDelivery'));
-const PromotionsAdmin = lazy(() => import('./pages/admin/promotion/AdminPromotion'));
+const DashboardAdmin = lazy(() => import('@components/layout/admin/AdminLayout'));
+const CategoriesAdmin = lazy(() => import('@pages/admin/category/AdminCategories'));
+const ProductsAdmin = lazy(() => import('@pages/admin/product/AdminProduct'));
+const StoresAdmin = lazy(() => import('@pages/admin/store/AdminStore'));
+const UsersAdmin = lazy(() => import('@pages/admin/user/AdminUser'));
+const CommissionAdmin = lazy(() => import('@pages/admin/commission/AdminCommission'));
+const PaymentAdmin = lazy(() => import('@pages/admin/transactions/AdminTransaction'));
+const OrdersAdmin = lazy(() => import('@pages/admin/order/AdminOrder'));
+const OrderDetailAdmin = lazy(() => import('@pages/admin/order/OrderDetailAdmin'));
+const StatisticAdmin = lazy(() => import('@pages/admin/statistic/AdminStatistic'));
+const HomeAdmin = lazy(() => import('@pages/admin/home/AdminHome'));
+const DeliveryAdmin = lazy(() => import('@pages/admin/delivery/AdminDelivery'));
+const PromotionsAdmin = lazy(() => import('@pages/admin/promotion/AdminPromotion'));
 
 // Delivery Page
-const DeliveryPage = lazy(() => import('./pages/delivery'));
-const OrderDetailDelivery = lazy(() => import('./pages/delivery/delivery-order-detail'));
+const DeliveryPage = lazy(() => import('@pages/delivery'));
+const OrderDetailDelivery = lazy(() => import('@pages/delivery/delivery-order-detail'));
 
-const AboutPage = lazy(() => import('./pages/about'));
-const Cart = lazy(() => import('./pages/cart'));
-const CheckoutAlternative = lazy(() => import('./pages/checkout-alternative'));
-const OrderSuccess = lazy(() => import('./pages/order-success'));
-const IndexPage = lazy(() => import('./pages/index'));
-const LoginPage = lazy(() => import('./pages/login'));
-const CheckoutPage = lazy(() => import('./pages/payment'));
-const ShopList = lazy(() => import('./pages/shops'));
-const SignUpPage = lazy(() => import('./pages/signup'));
-const WishList = lazy(() => import('./pages/wish-list'));
-const PaymentSuccess = lazy(() => import('./pages/payment-success'));
-const SuccessForgotPassword = lazy(() => import('./pages/success-forgot-password'));
-const ForgotPassword = lazy(() => import('./pages/forgot-password'));
-const ResetPassword = lazy(() => import('./pages/reset-password'));
-const VerifyAccount = lazy(() => import('./pages/verify-account'));
-const RequestVerifyAccount = lazy(() => import('./pages/request-verify-account'));
-const Promotion = lazy(() => import('./pages/promotion'));
-const Error404 = lazy(() => import('./pages/404'));
+const AboutPage = lazy(() => import('@pages/about'));
+const Cart = lazy(() => import('@pages/cart'));
+const CheckoutAlternative = lazy(() => import('@pages/checkout-alternative'));
+const OrderSuccess = lazy(() => import('@pages/order-success'));
+const IndexPage = lazy(() => import('@pages/index'));
+const LoginPage = lazy(() => import('@pages/login'));
+const CheckoutPage = lazy(() => import('@pages/payment'));
+const ShopList = lazy(() => import('@pages/shops'));
+const SignUpPage = lazy(() => import('@pages/signup'));
+const WishList = lazy(() => import('@pages/wish-list'));
+const PaymentSuccess = lazy(() => import('@pages/payment-success'));
+const SuccessForgotPassword = lazy(() => import('@pages/success-forgot-password'));
+const ForgotPassword = lazy(() => import('@pages/forgot-password'));
+const ResetPassword = lazy(() => import('@pages/reset-password'));
+const VerifyAccount = lazy(() => import('@pages/verify-account'));
+const RequestVerifyAccount = lazy(() => import('@pages/request-verify-account'));
+const Promotion = lazy(() => import('@pages/promotion'));
+const Error404 = lazy(() => import('@pages/404'));
 
 function App() {
 
@@ -99,7 +99,6 @@ function App() {
 		window.location.href = '/admin';
 	}
 
-	console.log(import.meta.env.VITE_SEARCH);
 
 
 	if (!window.location.pathname.includes('/admin') && !window.location.pathname.includes('/delivery'))

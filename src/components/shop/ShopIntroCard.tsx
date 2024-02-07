@@ -8,7 +8,7 @@ import Rating from "../rating/Rating";
 import { H3, SemiSpan, Small } from "../Typography";
 import { ShopIntroWrapper } from "./ShopStyle";
 import { useNavigate } from "react-router-dom";
-import { StoreResponse } from "api/interface/store";
+import { StoreResponse } from "@interfaces/store";
 
 export interface ShopIntroCardProps {
 	store: StoreResponse

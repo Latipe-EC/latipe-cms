@@ -16,7 +16,7 @@ import {
 	ModalOverlay,
 	Select,
 } from "@chakra-ui/react";
-import { Attribute } from "api/interface/product";
+import { Attribute } from "@interfaces/product";
 import { AddIcon, SmallCloseIcon } from "@chakra-ui/icons";
 
 

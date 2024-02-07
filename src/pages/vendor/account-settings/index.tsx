@@ -1,29 +1,29 @@
-import Avatar from "../../../components/avatar/Avatar";
-import Box from "../../../components/Box";
-import Button from "../../../components/buttons/Button";
-import { Card1 } from "../../../components/Card1";
-import Grid from "../../../components/grid/Grid";
-import Hidden from "../../../components/hidden/Hidden";
-import Icon from "../../../components/icon/Icon";
-import DashboardPageHeader from "../../../components/layout/DashboardPageHeader";
-import VendorDashboardLayout from "../../../components/layout/VendorDashboardLayout";
-import TextField from "../../../components/text-field/TextField";
+import Avatar from "@components/avatar/Avatar";
+import Box from "@components/Box";
+import Button from "@components/buttons/Button";
+import { Card1 } from "@components/Card1";
+import Grid from "@components/grid/Grid";
+import Hidden from "@components/hidden/Hidden";
+import Icon from "@components/icon/Icon";
+import DashboardPageHeader from "@components/layout/DashboardPageHeader";
+import VendorDashboardLayout from "@components/layout/VendorDashboardLayout";
+import TextField from "@components/text-field/TextField";
 import { useDispatch } from "react-redux";
-import { AppThunkDispatch } from "store/store";
+import { AppThunkDispatch } from "@stores/store";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getMyStore, updateMyStore } from "../../../store/slices/stores-slice";
-import { GetMyStoreResponse } from "api/interface/store";
+import { getMyStore, updateMyStore } from "@stores/slices/stores-slice";
+import { GetMyStoreResponse } from "@interfaces/store";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { FormControl, FormErrorMessage, FormLabel, Input, Select, useToast } from "@chakra-ui/react";
-import { District, Province, Ward } from "api/interface/user";
+import { District, Province, Ward } from "@interfaces/user";
 import provincesData from '../../../data/province.json';
 import districtsData from '../../../data/district.json';
 import wardsData from '../../../data/ward.json';
 import './index.css'
-import { Small } from "../../../components/Typography";
-import { Chip } from "../../../components/Chip";
+import { Small } from "@components/Typography";
+import { Chip } from "@components/Chip";
 
 const AccountSettings = () => {
 	const dispatch = useDispatch<AppThunkDispatch>();

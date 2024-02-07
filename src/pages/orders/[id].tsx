@@ -1,23 +1,23 @@
 import { useNavigate, useParams } from "react-router-dom";
-import Avatar from "../../../src/components/avatar/Avatar";
-import Box from "../../../src/components/Box";
-import Button from "../../../src/components/buttons/Button";
-import Card from "../../../src/components/Card";
-import Divider from "../../../src/components/Divider";
-import FlexBox from "../../../src/components/FlexBox";
-import Grid from "../../../src/components/grid/Grid";
-import Icon from "../../../src/components/icon/Icon";
-import DashboardLayout from "../../../src/components/layout/CustomerDashboardLayout";
-import DashboardPageHeader from "../../../src/components/layout/DashboardPageHeader";
-import TableRow from "../../../src/components/TableRow";
-import Typography, { H5, H6 } from "../../../src/components/Typography";
+import Avatar from "@components/avatar/Avatar";
+import Box from "@components/Box";
+import Button from "@components/buttons/Button";
+import Card from "@components/Card";
+import Divider from "@components/Divider";
+import FlexBox from "@components/FlexBox";
+import Grid from "@components/grid/Grid";
+import Icon from "@components/icon/Icon";
+import DashboardLayout from "@components/layout/CustomerDashboardLayout";
+import DashboardPageHeader from "@components/layout/DashboardPageHeader";
+import TableRow from "@components/TableRow";
+import Typography, { H5, H6 } from "@components/Typography";
 import useWindowSize from "../../hooks/useWindowSize";
 import { format } from "date-fns";
 import { Fragment, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { AppThunkDispatch } from "../../store/store";
-import { cancelOrder, getOrderById } from "../../store/slices/orders-slice";
-import { DataGetOrderById, OrderItem } from "api/interface/order";
+import { AppThunkDispatch } from "../../stores/store";
+import { cancelOrder, getOrderById } from "../../stores/slices/orders-slice";
+import { DataGetOrderById, OrderItem } from "@interfaces/order";
 import {
 	Button as ButtonChakra,
 	Center,
@@ -40,16 +40,16 @@ import {
 	EPaymentMethod,
 	EPaymentStatus
 } from "../../api/interface/payment";
-import { checkPaymentOrder, validPayment } from "../../store/slices/payment-slice";
-import { getMyProfile } from "../../store/slices/user-slice";
+import { checkPaymentOrder, validPayment } from "../../stores/slices/payment-slice";
+import { getMyProfile } from "../../stores/slices/user-slice";
 import { StarIcon, WarningIcon } from "@chakra-ui/icons";
 import {
 	createRating,
 	deleteRating,
 	getRatingDetail,
 	updateRating
-} from "../../store/slices/ratings-slice";
-import { RatingResponse } from "api/interface/rating";
+} from "../../stores/slices/ratings-slice";
+import { RatingResponse } from "@interfaces/rating";
 
 const OrderDetails = () => {
 	const stepIconList = ["package-box", "payment_success", "truck-1", "receive_package", "rating"];

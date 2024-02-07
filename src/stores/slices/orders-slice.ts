@@ -5,7 +5,7 @@ import {
 	CreateOrderRequest,
 	StatusBodyRequest,
 	UpdateOrderByDeliveryRequest
-} from 'api/interface/order';
+} from '@interfaces/order';
 
 const api = new Api();
 

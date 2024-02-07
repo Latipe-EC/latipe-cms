@@ -11,8 +11,8 @@ import TextField from "../text-field/TextField";
 import { H3, H5, H6, SemiSpan, Small, Span } from "../Typography";
 import { StyledSessionCard } from "./SessionStyle";
 import { useDispatch } from "react-redux";
-import { createAuthenticationToken } from "../../store/slices/auth-slice";
-import { AppThunkDispatch } from "store/store";
+import { createAuthenticationToken } from "../../stores/slices/auth-slice";
+import { AppThunkDispatch } from "@stores/store";
 import { Spinner, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 

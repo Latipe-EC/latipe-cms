@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import Button from "../../../src/components/buttons/Button";
-import IconButton from "../../../src/components/buttons/IconButton";
-import FlexBox from "../../../src/components/FlexBox";
-import Icon from "../../../src/components/icon/Icon";
-import DashboardLayout from "../../../src/components/layout/CustomerDashboardLayout";
-import DashboardPageHeader from "../../../src/components/layout/DashboardPageHeader";
-import Pagination from "../../../src/components/pagination/Pagination";
-import TableRow from "../../../src/components/TableRow";
-import Typography from "../../../src/components/Typography";
+import Button from "@components/buttons/Button";
+import IconButton from "@components/buttons/IconButton";
+import FlexBox from "@components/FlexBox";
+import Icon from "@components/icon/Icon";
+import DashboardLayout from "@components/layout/CustomerDashboardLayout";
+import DashboardPageHeader from "@components/layout/DashboardPageHeader";
+import Pagination from "@components/pagination/Pagination";
+import TableRow from "@components/TableRow";
+import Typography from "@components/Typography";
 import { ModalHeader, Spinner } from "react-bootstrap";
 import {
 	FormControl,
@@ -26,10 +26,10 @@ import {
 import provincesData from '../../data/province.json';
 import districtsData from '../../data/district.json';
 import wardsData from '../../data/ward.json';
-import { AppThunkDispatch, RootState, useAppSelector } from "../../store/store";
+import { AppThunkDispatch, RootState, useAppSelector } from "../../stores/store";
 import { useDispatch } from "react-redux";
-import { addMyAddress, deleteMyAddress, getMyAddress } from "../../store/slices/user-slice";
-import { District, Province, Ward } from "api/interface/user";
+import { addMyAddress, deleteMyAddress, getMyAddress } from "../../stores/slices/user-slice";
+import { District, Province, Ward } from "@interfaces/user";
 import { useNavigate } from "react-router-dom";
 
 

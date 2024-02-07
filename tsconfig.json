@@ -1,9 +1,13 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
-      "@pages/*": ["pages/*"]
+			"@/*": ["src/*"],
+			"@components/*": ["src/components/*"],
+      "@pages/*": ["src/pages/*"],
+			"@interfaces/*": ["src/api/interface/*"],
+			"@stores/*": ["src/stores/*"],
     },
     "useDefineForClassFields": true,
     "lib": [

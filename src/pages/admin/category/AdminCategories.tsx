@@ -1,4 +1,4 @@
-import { AppThunkDispatch, RootState, useAppSelector } from '../../../store/store';
+import { AppThunkDispatch, RootState, useAppSelector } from '@stores/store';
 import React, { useEffect, useRef, useState } from 'react';
 import { usePagination, useSortBy, useTable } from 'react-table';
 import { useDispatch } from 'react-redux';
@@ -28,18 +28,18 @@ import {
 	Tr,
 	useToast
 } from '@chakra-ui/react';
-import { Attribute, CreateCategoryRequest, UpdateCategoryRequest } from 'api/interface/product';
+import { Attribute, CreateCategoryRequest, UpdateCategoryRequest } from '@interfaces/product';
 import { MdSearch } from 'react-icons/md';
-import Pagination from "../../../components/pagination/Pagination";
+import Pagination from "@components/pagination/Pagination";
 
 import {
 	addCategory,
 	deleteCategory,
 	fetchCategories,
 	updateCategory
-} from '../../../store/slices/categories-slice';
+} from '@stores/slices/categories-slice';
 import { AddIcon, ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
-import FlexBox from '../../../components/FlexBox';
+import FlexBox from '@components/FlexBox';
 import defaultImage from '../../../assets/default.jpg';
 import CategoryForm from './CategoryForm';
 

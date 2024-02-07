@@ -5,7 +5,7 @@ import {
 	ProductFeatureRequest,
 	UpdateBanProductRequest,
 	UpdateProductRequest
-} from 'api/interface/product';
+} from '@interfaces/product';
 
 const api = new Api();
 

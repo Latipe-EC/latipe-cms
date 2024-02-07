@@ -8,8 +8,8 @@ import MenuItem from "../MenuItem";
 import TextField from "../text-field/TextField";
 import StyledSearchBox from "./SearchBoxStyle";
 import { useDispatch } from "react-redux";
-import { AppThunkDispatch } from "store/store";
-import { autoComplete } from "../../store/slices/search-slice";
+import { AppThunkDispatch } from "@stores/store";
+import { autoComplete } from "../../stores/slices/search-slice";
 import { useNavigate } from "react-router-dom";
 
 export interface SearchBoxProps {

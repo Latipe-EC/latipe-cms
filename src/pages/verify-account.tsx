@@ -1,12 +1,12 @@
 import { Spinner, Text } from "@chakra-ui/react";
-import Button from "../components/buttons/Button";
-import FlexBox from "../components/FlexBox";
-import Image from "../components/Image";
+import Button from "@components/buttons/Button";
+import FlexBox from "@components/FlexBox";
+import Image from "@components/Image";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { AppThunkDispatch } from "../store/store";
-import { finishVerifyAccount } from "../store/slices/auth-slice";
+import { AppThunkDispatch } from "@stores/store";
+import { finishVerifyAccount } from "@stores/slices/auth-slice";
 
 const VerifyAccount = () => {
 	const dispatch = useDispatch<AppThunkDispatch>();

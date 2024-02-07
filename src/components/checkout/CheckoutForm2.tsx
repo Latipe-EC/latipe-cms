@@ -31,14 +31,14 @@ import {
 } from "@chakra-ui/react";
 import { FaMoneyBillWave, FaPaypal, FaSync, FaWallet } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { AppThunkDispatch, RootState, useAppSelector } from "../../store/store";
-import { getMyAddress, getMyProfile } from "../../store/slices/user-slice";
-import Divider from "../../components/Divider";
+import { AppThunkDispatch, RootState, useAppSelector } from "../../stores/store";
+import { getMyAddress, getMyProfile } from "../../stores/slices/user-slice";
+import Divider from "@components/Divider";
 import './Checkout2.css';
-import { getListDelivery } from "../../store/slices/deliveries-slice";
-import { checkVoucher } from "../../store/slices/promotions-slice";
+import { getListDelivery } from "../../stores/slices/deliveries-slice";
+import { checkVoucher } from "../../stores/slices/promotions-slice";
 import { CloseIcon } from "@chakra-ui/icons";
-import { createOrder } from "../../store/slices/orders-slice";
+import { createOrder } from "../../stores/slices/orders-slice";
 
 const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) => {
 	const [hasVoucher, setHasVoucher] = useState(false);

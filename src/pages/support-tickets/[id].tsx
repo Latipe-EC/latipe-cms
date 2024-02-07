@@ -1,12 +1,12 @@
-import Avatar from "../../../src/components/avatar/Avatar";
-import Box from "../../../src/components/Box";
-import Button from "../../../src/components/buttons/Button";
-import Divider from "../../../src/components/Divider";
-import FlexBox from "../../../src/components/FlexBox";
-import DashboardLayout from "../../../src/components/layout/CustomerDashboardLayout";
-import DashboardPageHeader from "../../../src/components/layout/DashboardPageHeader";
-import TextArea from "../../../src/components/textarea/TextArea";
-import { H5, SemiSpan } from "../../../src/components/Typography";
+import Avatar from "@components/avatar/Avatar";
+import Box from "@components/Box";
+import Button from "@components/buttons/Button";
+import Divider from "@components/Divider";
+import FlexBox from "@components/FlexBox";
+import DashboardLayout from "@components/layout/CustomerDashboardLayout";
+import DashboardPageHeader from "@components/layout/DashboardPageHeader";
+import TextArea from "@components/textarea/TextArea";
+import { H5, SemiSpan } from "@components/Typography";
 import { format } from "date-fns";
 
 const PaymentMethodEditor = () => {

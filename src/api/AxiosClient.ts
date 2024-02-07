@@ -3,7 +3,7 @@ import {
 	GetTotalCommissionAdminResponse,
 	UpdateOrderByDeliveryRequest
 } from './interface/order';
-import { PagedResultResponse } from 'api/interface/PagedResultResponse';
+import { PagedResultResponse } from '@interfaces/PagedResultResponse';
 import {
 	FinishVerifyAccountRequest,
 	ForgotPasswordRequest,
@@ -42,8 +42,8 @@ import {
 	UpdateBanProductRequest,
 	UpdateCategoryRequest,
 	UpdateProductRequest
-} from 'api/interface/product';
-import { MediaVm } from 'api/interface/media';
+} from '@interfaces/product';
+import { MediaVm } from '@interfaces/media';
 import {
 	CreateStoreRequest,
 	GetMyStoreResponse,
@@ -52,23 +52,23 @@ import {
 	StoreAdminResponse,
 	StoreResponse,
 	UpdateStoreRequest
-} from 'api/interface/store';
-import { CreateRatingRequest, RatingResponse, UpdateRatingRequest } from 'api/interface/rating';
+} from '@interfaces/store';
+import { CreateRatingRequest, RatingResponse, UpdateRatingRequest } from '@interfaces/rating';
 import {
 	CartGetDetailResponse,
 	CartItemRequest,
 	CartResponse,
 	DeleteCartItemRequest,
 	UpdateQuantityRequest
-} from 'api/interface/cart';
-import { ProductListGetVm, ProductNameListVm } from 'api/interface/search';
+} from '@interfaces/cart';
+import { ProductListGetVm, ProductNameListVm } from '@interfaces/search';
 import {
 	CalculateShippingOrderRequest,
 	CreateDeliveryRequest,
 	DeliveryResponse,
 	ListDeliveryRequest,
 	UpateDeliveryRequest
-} from 'api/interface/delivery';
+} from '@interfaces/delivery';
 import {
 	AdminOrderDetailResponse,
 	CancelOrderRequest,
@@ -86,7 +86,7 @@ import {
 	StatusBodyRequest,
 	StoreOrderDetailResponse,
 	UpdateOrderItemStatusByStoreResponse
-} from 'api/interface/order';
+} from '@interfaces/order';
 import {
 	ApplyVoucherReponse,
 	ApplyVoucherRequest,
@@ -94,7 +94,7 @@ import {
 	ListVoucherReponse,
 	UpdateStatusVoucher,
 	createVoucherRequest
-} from 'api/interface/promotion';
+} from '@interfaces/promotion';
 import {
 	CheckPaymentOrderResponse,
 	PayByPaypalRequest,
@@ -102,12 +102,12 @@ import {
 	PayOrderRequest,
 	validWithdrawPayPalRequest,
 	withdrawPayPalRequest
-} from 'api/interface/payment';
+} from '@interfaces/payment';
 import {
 	CommissionResponse,
 	CreateCommissionRequest,
 	UpdateCommissionRequest
-} from 'api/interface/commission';
+} from '@interfaces/commission';
 
 export type QueryParamsType = Record<string | number, unknown>;
 

@@ -3,13 +3,13 @@ import { Card1 } from "../Card1";
 import DashboardPageHeader from "../layout/DashboardPageHeader";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { AppThunkDispatch } from "../../store/store";
+import { AppThunkDispatch } from "../../stores/store";
 import { useDispatch } from "react-redux";
-import { getMyAddressById, updateMyAddress } from "../../store/slices/user-slice";
+import { getMyAddressById, updateMyAddress } from "../../stores/slices/user-slice";
 import provincesData from '../../data/province.json';
 import districtsData from '../../data/district.json';
 import wardsData from '../../data/ward.json';
-import { District, Province, UserAddress, Ward } from "api/interface/user";
+import { District, Province, UserAddress, Ward } from "@interfaces/user";
 import {
 	Flex,
 	FormControl,

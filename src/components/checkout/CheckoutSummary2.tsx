@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import Divider from "../Divider";
 import FlexBox from "../FlexBox";
 import Typography, { Span } from "../Typography";
-import { CartGetDetailResponse } from "api/interface/cart";
-import { ItemVoucher } from "api/interface/promotion";
-import { CostDelivery } from "api/interface/delivery";
+import { CartGetDetailResponse } from "@interfaces/cart";
+import { ItemVoucher } from "@interfaces/promotion";
+import { CostDelivery } from "@interfaces/delivery";
 
 type CheckoutSummary2Props = {
 	products: CartGetDetailResponse[];

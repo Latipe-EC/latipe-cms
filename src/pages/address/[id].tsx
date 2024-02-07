@@ -1,8 +1,8 @@
-import AddressEditor from "../../../src/components/address/AddressEditor";
-import DashboardLayout from "../../../src/components/layout/CustomerDashboardLayout";
+import AddressEditor from "@components/address/AddressEditor";
+import DashboardLayout from "@components/layout/CustomerDashboardLayout";
 
 const AddressUpdater = () => {
-  return <AddressEditor/>;
+	return <AddressEditor />;
 };
 
 AddressUpdater.layout = DashboardLayout;

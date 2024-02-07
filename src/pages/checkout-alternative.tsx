@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import CheckoutForm2 from "../../src/components/checkout/CheckoutForm2";
-import CheckoutSummary2 from "../../src/components/checkout/CheckoutSummary2";
-import Container from "../../src/components/Container";
-import GroceryLayout from "../../src/components/layout/GroceryLayout";
-import Grid from "../components/grid/Grid";
+import CheckoutForm2 from "@components/checkout/CheckoutForm2";
+import CheckoutSummary2 from "@components/checkout/CheckoutSummary2";
+import Container from "@components/Container";
+import GroceryLayout from "@components/layout/GroceryLayout";
+import Grid from "@components/grid/Grid";
 import { useDispatch } from "react-redux";
-import { AppThunkDispatch } from "store/store";
-import { getMultiCart } from "../store/slices/carts-slice";
-import { getFeatureProduct } from "../store/slices/products-slice";
+import { AppThunkDispatch } from "@stores/store";
+import { getMultiCart } from "@stores/slices/carts-slice";
+import { getFeatureProduct } from "@stores/slices/products-slice";
 import { useNavigate } from "react-router-dom";
 
 const CheckoutAlternative = () => {

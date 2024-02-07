@@ -1,4 +1,4 @@
-import { AppThunkDispatch, RootState, useAppSelector } from '../../../store/store';
+import { AppThunkDispatch, RootState, useAppSelector } from '@stores/store';
 import React, { useEffect, useRef, useState } from 'react';
 import { usePagination, useSortBy, useTable } from 'react-table';
 import { useDispatch } from 'react-redux';
@@ -33,15 +33,15 @@ import {
 	useToast,
 	VStack
 } from '@chakra-ui/react';
-import { UserAdminResponse } from 'api/interface/user';
+import { UserAdminResponse } from '@interfaces/user';
 import { MdSearch } from 'react-icons/md';
-import Pagination from "../../../components/pagination/Pagination";
+import Pagination from "@components/pagination/Pagination";
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
-import FlexBox from '../../../components/FlexBox';
+import FlexBox from '@components/FlexBox';
 import defaultImage from '../../../assets/default.jpg';
-import { getAdminUser, updateBanUser } from '../../../store/slices/user-slice';
-import { Chip } from '../../../components/Chip';
-import { Small } from '../../../components/Typography';
+import { getAdminUser, updateBanUser } from '@stores/slices/user-slice';
+import { Chip } from '@components/Chip';
+import { Small } from '@components/Typography';
 
 const UsersAdmin = () => {
 

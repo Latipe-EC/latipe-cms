@@ -13,7 +13,7 @@ import Sticky from "../sticky/Sticky";
 import Topbar from "../topbar/Topbar";
 import { Helmet } from "react-helmet";
 import styled from "styled-components";
-import { LoginResponse } from "api/interface/auth";
+import { LoginResponse } from "@interfaces/auth";
 
 
 type Props = {

@@ -1,4 +1,4 @@
-import { QueryParamsType } from "api/AxiosClient";
+import { QueryParamsType } from "src/api/AxiosClient";
 
 /**
  *

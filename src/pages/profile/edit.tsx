@@ -1,14 +1,14 @@
-import Avatar from "../../../src/components/avatar/Avatar";
-import Box from "../../../src/components/Box";
-import Button from "../../../src/components/buttons/Button";
-import { Card1 } from "../../../src/components/Card1";
-import FlexBox from "../../../src/components/FlexBox";
-import Grid from "../../../src/components/grid/Grid";
-import Hidden from "../../../src/components/hidden/Hidden";
-import Icon from "../../../src/components/icon/Icon";
-import DashboardLayout from "../../../src/components/layout/CustomerDashboardLayout";
-import DashboardPageHeader from "../../../src/components/layout/DashboardPageHeader";
-import TextField from "../../../src/components/text-field/TextField";
+import Avatar from "@components/avatar/Avatar";
+import Box from "@components/Box";
+import Button from "@components/buttons/Button";
+import { Card1 } from "@components/Card1";
+import FlexBox from "@components/FlexBox";
+import Grid from "@components/grid/Grid";
+import Hidden from "@components/hidden/Hidden";
+import Icon from "@components/icon/Icon";
+import DashboardLayout from "@components/layout/CustomerDashboardLayout";
+import DashboardPageHeader from "@components/layout/DashboardPageHeader";
+import TextField from "@components/text-field/TextField";
 import { Formik } from "formik";
 import * as yup from "yup";
 

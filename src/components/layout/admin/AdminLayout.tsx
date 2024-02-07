@@ -4,7 +4,7 @@ import { Box, Portal, useDisclosure } from '@chakra-ui/react';
 import Navbar from '../../navbar/NavbarAdmin';
 import Sidebar from '../../sidebar/Sidebar';
 import { useState } from 'react';
-import { RoutesType } from 'api/interface/interface';
+import { RoutesType } from '@interfaces/interface';
 import routes from './routes.tsx';
 import { Navigate, useLocation } from 'react-router-dom';
 

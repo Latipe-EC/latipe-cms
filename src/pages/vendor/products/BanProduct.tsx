@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import Avatar from "../../../components/avatar/Avatar";
-import IconButton from "../../../components/buttons/IconButton";
-import FlexBox from "../../../components/FlexBox";
-import Hidden from "../../../components/hidden/Hidden";
-import DashboardPageHeader from "../../../components/layout/DashboardPageHeader";
-import Pagination from "../../../components/pagination/Pagination";
-import TableRow from "../../../components/TableRow";
-import Typography, { H5 } from "../../../components/Typography";
-import { AppThunkDispatch, RootState, useAppSelector } from '../../../store/store';
+import Avatar from "@components/avatar/Avatar";
+import IconButton from "@components/buttons/IconButton";
+import FlexBox from "@components/FlexBox";
+import Hidden from "@components/hidden/Hidden";
+import DashboardPageHeader from "@components/layout/DashboardPageHeader";
+import Pagination from "@components/pagination/Pagination";
+import TableRow from "@components/TableRow";
+import Typography, { H5 } from "@components/Typography";
+import { AppThunkDispatch, RootState, useAppSelector } from '@stores/store';
 import { useDispatch } from 'react-redux';
-import { getMyProductBanStore } from "../../../store/slices/stores-slice";
+import { getMyProductBanStore } from "@stores/slices/stores-slice";
 import {
 	Alert,
 	AlertIcon,

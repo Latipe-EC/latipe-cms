@@ -1,4 +1,4 @@
-import { AppThunkDispatch, RootState, useAppSelector } from '../../../store/store';
+import { AppThunkDispatch, RootState, useAppSelector } from '@stores/store';
 import React, { useEffect, useState } from 'react';
 import { usePagination, useSortBy, useTable } from 'react-table';
 import { useDispatch } from 'react-redux';
@@ -31,15 +31,15 @@ import {
 	Tr,
 	useToast
 } from '@chakra-ui/react';
-import Pagination from "../../../components/pagination/Pagination";
+import Pagination from "@components/pagination/Pagination";
 import { ChevronDownIcon, ChevronUpIcon, WarningIcon } from '@chakra-ui/icons';
-import FlexBox from '../../../components/FlexBox';
+import FlexBox from '@components/FlexBox';
 
 import { ItemVoucher } from '../../../api/interface/promotion';
-import { createVoucher, getAllPromotion, updateStatusVoucher } from '../../../store/slices/promotions-slice';
+import { createVoucher, getAllPromotion, updateStatusVoucher } from '@stores/slices/promotions-slice';
 import { convertDateTimeYYYYMMDD } from "../../../utils/utils";
-import { Chip } from '../../../components/Chip';
-import { Small } from '../../../components/Typography';
+import { Chip } from '@components/Chip';
+import { Small } from '@components/Typography';
 
 const PromotionsAdmin = () => {
 

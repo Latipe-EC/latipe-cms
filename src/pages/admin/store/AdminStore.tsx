@@ -1,4 +1,4 @@
-import { AppThunkDispatch, RootState, useAppSelector } from '../../../store/store';
+import { AppThunkDispatch, RootState, useAppSelector } from '@stores/store';
 import React, { useEffect, useRef, useState } from 'react';
 import { usePagination, useSortBy, useTable } from 'react-table';
 import { useDispatch } from 'react-redux';
@@ -30,13 +30,13 @@ import {
 	useToast
 } from '@chakra-ui/react';
 import { MdSearch } from 'react-icons/md';
-import Pagination from "../../../components/pagination/Pagination";
+import Pagination from "@components/pagination/Pagination";
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
-import FlexBox from '../../../components/FlexBox';
-import { Chip } from '../../../components/Chip';
-import { Small } from '../../../components/Typography';
-import { getAdminStore, updateBanStore } from '../../../store/slices/stores-slice';
-import { StoreAdminResponse } from 'api/interface/store';
+import FlexBox from '@components/FlexBox';
+import { Chip } from '@components/Chip';
+import { Small } from '@components/Typography';
+import { getAdminStore, updateBanStore } from '@stores/slices/stores-slice';
+import { StoreAdminResponse } from '@interfaces/store';
 
 const StoresAdmin = () => {
 

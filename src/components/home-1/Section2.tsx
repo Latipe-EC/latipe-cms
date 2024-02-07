@@ -5,8 +5,8 @@ import Carousel from "../carousel/Carousel";
 import CategorySectionCreator from "../CategorySectionCreator";
 import ProductCard1 from "../product-cards/ProductCard1";
 import { useDispatch } from "react-redux";
-import { AppThunkDispatch } from "../../store/store";
-import { searchProduct } from "../../store/slices/search-slice";
+import { AppThunkDispatch } from "../../stores/store";
+import { searchProduct } from "../../stores/slices/search-slice";
 
 const Section2: React.FC = () => {
 	const [visibleSlides, setVisibleSlides] = useState(4);

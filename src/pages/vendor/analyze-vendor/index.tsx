@@ -1,15 +1,15 @@
 import { useNavigate } from "react-router-dom";
-import Button from "../../../components/buttons/Button";
-import DashboardPageHeader from "../../../components/layout/DashboardPageHeader";
+import Button from "@components/buttons/Button";
+import DashboardPageHeader from "@components/layout/DashboardPageHeader";
 import { useDispatch } from "react-redux";
-import { AppThunkDispatch } from "../../../store/store";
+import { AppThunkDispatch } from "@stores/store";
 import { useEffect, useState } from "react";
 import {
 	getProductBestSeller
-} from "../../../store/slices/orders-slice";
+} from "@stores/slices/orders-slice";
 import { convertDateYYYYMMDD } from "../../../utils/utils";
-import { GetProductBestSellerResponse } from "api/interface/order";
-import PieChartListProduct from "../../../components/chart/PieChartListProduct";
+import { GetProductBestSellerResponse } from "@interfaces/order";
+import PieChartListProduct from "@components/chart/PieChartListProduct";
 import { Box, Flex, Input, Select, Text } from "@chakra-ui/react";
 
 const date = new Date();

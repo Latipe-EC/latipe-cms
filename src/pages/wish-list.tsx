@@ -1,11 +1,11 @@
 import productDatabase from "../data/product-database";
-import Button from "../components/buttons/Button";
-import FlexBox from "../components/FlexBox";
-import Grid from "../components/grid/Grid";
-import DashboardLayout from "../components/layout/CustomerDashboardLayout";
-import DashboardPageHeader from "../components/layout/DashboardPageHeader";
-import Pagination from "../components/pagination/Pagination";
-import ProductCard1 from "../components/product-cards/ProductCard1";
+import Button from "@components/buttons/Button";
+import FlexBox from "@components/FlexBox";
+import Grid from "@components/grid/Grid";
+import DashboardLayout from "@components/layout/CustomerDashboardLayout";
+import DashboardPageHeader from "@components/layout/DashboardPageHeader";
+import Pagination from "@components/pagination/Pagination";
+import ProductCard1 from "@components/product-cards/ProductCard1";
 
 const WishList = () => {
 	return (

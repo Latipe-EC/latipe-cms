@@ -1,12 +1,12 @@
-import { LoginResponse } from "api/interface/auth";
-import Avatar from "../../../components/avatar/Avatar";
-import Card from "../../../components/Card";
-// import VendorAnalyticsChart from "../../../components/dashboard/VendorAnalyticsChart";
-import FlexBox from "../../../components/FlexBox";
-import Grid from "../../../components/grid/Grid";
-import DashboardPageHeader from "../../../components/layout/DashboardPageHeader";
-import VendorDashboardLayout from "../../../components/layout/VendorDashboardLayout";
-import Typography, { H1, H5, Paragraph } from "../../../components/Typography";
+import { LoginResponse } from "@interfaces/auth";
+import Avatar from "@components/avatar/Avatar";
+import Card from "@components/Card";
+// import VendorAnalyticsChart from "@components/dashboard/VendorAnalyticsChart";
+import FlexBox from "@components/FlexBox";
+import Grid from "@components/grid/Grid";
+import DashboardPageHeader from "@components/layout/DashboardPageHeader";
+import VendorDashboardLayout from "@components/layout/VendorDashboardLayout";
+import Typography, { H1, H5, Paragraph } from "@components/Typography";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 

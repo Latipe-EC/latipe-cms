@@ -39,8 +39,8 @@ import {
 	useToast,
 	VStack
 } from "@chakra-ui/react";
-import DropZone from "../../../components/DropZone";
-import DashboardPageHeader from "../../../components/layout/DashboardPageHeader";
+import DropZone from "@components/DropZone";
+import DashboardPageHeader from "@components/layout/DashboardPageHeader";
 import './index.css'
 import { useEffect, useState } from "react";
 import { AddIcon, CloseIcon } from '@chakra-ui/icons';
@@ -50,13 +50,13 @@ import {
 	ProductResponse,
 	ProductVariant,
 	UpdateProductRequest
-} from "api/interface/product";
-import AttributeRenderForm from "../../../components/attribute/AttributeRenderForm";
+} from "@interfaces/product";
+import AttributeRenderForm from "@components/attribute/AttributeRenderForm";
 import { debounce } from "lodash";
 import { useDispatch } from "react-redux";
-import { getChildsCategory, searchCategory } from "../../../store/slices/categories-slice";
-import { AppThunkDispatch } from "../../../store/store";
-import { getProductById, updateProduct } from "../../../store/slices/products-slice";
+import { getChildsCategory, searchCategory } from "@stores/slices/categories-slice";
+import { AppThunkDispatch } from "@stores/store";
+import { getProductById, updateProduct } from "@stores/slices/products-slice";
 import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';

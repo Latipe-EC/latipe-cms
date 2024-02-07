@@ -1,21 +1,21 @@
 import { useNavigate, useParams } from "react-router-dom";
-import Avatar from "../../../components/avatar/Avatar";
-import Box from "../../../components/Box";
-import Button from "../../../components/buttons/Button";
-import Card from "../../../components/Card";
-import Divider from "../../../components/Divider";
-import FlexBox from "../../../components/FlexBox";
-import Grid from "../../../components/grid/Grid";
-import DashboardPageHeader from "../../../components/layout/DashboardPageHeader";
-import TableRow from "../../../components/TableRow";
-import Typography, { H5, H6, Small } from "../../../components/Typography";
+import Avatar from "@components/avatar/Avatar";
+import Box from "@components/Box";
+import Button from "@components/buttons/Button";
+import Card from "@components/Card";
+import Divider from "@components/Divider";
+import FlexBox from "@components/FlexBox";
+import Grid from "@components/grid/Grid";
+import DashboardPageHeader from "@components/layout/DashboardPageHeader";
+import TableRow from "@components/TableRow";
+import Typography, { H5, H6, Small } from "@components/Typography";
 import { format } from "date-fns";
 import { useDispatch } from "react-redux";
-import { AppThunkDispatch } from "store/store";
+import { AppThunkDispatch } from "@stores/store";
 import { useEffect, useState } from "react";
-import { AdminOrderDetailResponse } from "api/interface/order";
-import { getAdminOrderDetail } from "../../../store/slices/orders-slice";
-import { Chip } from "../../../components/Chip";
+import { AdminOrderDetailResponse } from "@interfaces/order";
+import { getAdminOrderDetail } from "@stores/slices/orders-slice";
+import { Chip } from "@components/Chip";
 
 const OrderDetailAdmin = () => {
 

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Api } from '../../api/AxiosClient';
-import { ApplyVoucherRequest, UpdateStatusVoucher, createVoucherRequest } from 'api/interface/promotion';
+import { ApplyVoucherRequest, UpdateStatusVoucher, createVoucherRequest } from '@interfaces/promotion';
 
 const api = new Api();
 

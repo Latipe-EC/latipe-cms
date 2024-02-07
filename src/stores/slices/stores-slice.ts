@@ -5,7 +5,7 @@ import {
 	ProductStoreRequest,
 	UpdateBanStoreRequest,
 	UpdateStoreRequest
-} from 'api/interface/store';
+} from '@interfaces/store';
 
 const api = new Api();
 

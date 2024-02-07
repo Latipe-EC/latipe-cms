@@ -1,13 +1,13 @@
-import Button from "../../../src/components/buttons/Button";
-import IconButton from "../../../src/components/buttons/IconButton";
-import Card from "../../../src/components/Card";
-import FlexBox from "../../../src/components/FlexBox";
-import Icon from "../../../src/components/icon/Icon";
-import DashboardLayout from "../../../src/components/layout/CustomerDashboardLayout";
-import DashboardPageHeader from "../../../src/components/layout/DashboardPageHeader";
-import Pagination from "../../../src/components/pagination/Pagination";
-import TableRow from "../../../src/components/TableRow";
-import Typography, { H5 } from "../../../src/components/Typography";
+import Button from "@components/buttons/Button";
+import IconButton from "@components/buttons/IconButton";
+import Card from "@components/Card";
+import FlexBox from "@components/FlexBox";
+import Icon from "@components/icon/Icon";
+import DashboardLayout from "@components/layout/CustomerDashboardLayout";
+import DashboardPageHeader from "@components/layout/DashboardPageHeader";
+import Pagination from "@components/pagination/Pagination";
+import TableRow from "@components/TableRow";
+import Typography, { H5 } from "@components/Typography";
 
 const AddressList = () => {
 	return (

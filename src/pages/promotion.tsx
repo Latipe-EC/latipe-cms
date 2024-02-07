@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import CheckoutNavLayout from "../components/layout/CheckoutNavLayout";
-import { AppThunkDispatch } from "../store/store";
+import CheckoutNavLayout from "@components/layout/CheckoutNavLayout";
+import { AppThunkDispatch } from "@stores/store";
 import { useDispatch } from "react-redux";
 import { Box, Flex, IconButton, Text, useToast } from "@chakra-ui/react";
-import DashboardPageHeader from "../components/layout/DashboardPageHeader";
-import { getVoucherUser } from "../store/slices/promotions-slice";
-import { ListVoucherReponse } from "api/interface/promotion";
+import DashboardPageHeader from "@components/layout/DashboardPageHeader";
+import { getVoucherUser } from "@stores/slices/promotions-slice";
+import { ListVoucherReponse } from "@interfaces/promotion";
 import { CopyIcon } from "@chakra-ui/icons";
 
 const Promotion = () => {

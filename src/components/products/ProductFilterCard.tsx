@@ -5,10 +5,10 @@ import Divider from "../Divider";
 import FlexBox from "../FlexBox";
 import TextField from "../text-field/TextField";
 import { H5, H6, Paragraph, SemiSpan } from "../Typography";
-import { AppThunkDispatch, RootState, useAppSelector } from '../../store/store';
+import { AppThunkDispatch, RootState, useAppSelector } from '../../stores/store';
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { getChildsCategory } from "../../store/slices/categories-slice";
+import { getChildsCategory } from "../../stores/slices/categories-slice";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Button, Tooltip } from "@chakra-ui/react";
 

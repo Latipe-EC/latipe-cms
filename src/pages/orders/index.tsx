@@ -1,8 +1,8 @@
-import CustomerDashboardLayout from "../../../src/components/layout/CustomerDashboardLayout";
-import CustomerOrderList from "../../../src/components/orders/CustomerOrderList";
+import CustomerDashboardLayout from "@components/layout/CustomerDashboardLayout";
+import CustomerOrderList from "@components/orders/CustomerOrderList";
 
 const Orders = () => {
-  return <CustomerOrderList/>;
+	return <CustomerOrderList />;
 };
 
 Orders.layout = CustomerDashboardLayout;

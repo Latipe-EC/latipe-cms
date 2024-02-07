@@ -7,7 +7,7 @@ import React, { useEffect } from "react";
 import StyledAppLayout from "./AppLayoutStyle";
 import { Helmet } from "react-helmet";
 import { Outlet, useLocation } from "react-router-dom";
-import { LoginResponse } from "api/interface/auth";
+import { LoginResponse } from "@interfaces/auth";
 
 type Props = {
 	title?: string;

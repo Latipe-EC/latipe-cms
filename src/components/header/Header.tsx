@@ -16,7 +16,7 @@ import UserLoginDialog from "./UserLoginDialog";
 import MenuItem from "../MenuItem";
 import Menu from "../Menu";
 import { useNavigate } from "react-router-dom";
-import { RootState, useAppSelector } from "../../stores/store";
+import { RootState, useAppSelector } from "@stores/store";
 
 type HeaderProps = {
 	isFixed?: boolean;

@@ -3,7 +3,7 @@ import CategoryMenuItem from "./category-menu-item/CategoryMenuItem";
 import { StyledCategoryDropdown } from "./CategoryDropdownStyle";
 // import MegaMenu1 from "./mega-menu/MegaMenu1";
 // import MegaMenu2 from "./mega-menu/MegaMenu2";
-import { RootState, useAppSelector } from "../../stores/store";
+import { RootState, useAppSelector } from "@stores/store";
 import { CategoryResponse } from "@interfaces/product";
 
 export interface CategoryDropdownProps {

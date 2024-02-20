@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 interface ImportMetaEnv {
-	readonly VITE_SEARCH: boolean
+	readonly VITE_SEARCH: string
 }
 
 interface ImportMeta {

@@ -4,8 +4,8 @@ import Container from "../Container";
 import Grid from "../grid/Grid";
 import ProductCard1 from "../product-cards/ProductCard1";
 import { useDispatch } from "react-redux";
-import { AppThunkDispatch } from "../../stores/store";
-import { searchProduct } from "../../stores/slices/search-slice";
+import { AppThunkDispatch } from "@stores/store";
+import { searchProduct } from "@stores/slices/search-slice";
 
 const Section11: React.FC = () => {
 	const [resultList, setResultList] = useState([]);

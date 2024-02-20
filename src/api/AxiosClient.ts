@@ -111,6 +111,7 @@ import {
 
 export type QueryParamsType = Record<string | number, unknown>;
 
+
 export interface FullRequestParams
 	extends Omit<AxiosRequestConfig, 'data' | 'params' | 'url' | 'responseType'> {
 	/** set parameter to `true` for call `securityWorker` for this request */
@@ -841,17 +842,18 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		searchProduct: (params: QueryParamsType) =>
 			this.request<ProductListGetVm>({
-				path: `/${import.meta.env.VITE_SEARCH ? 'search' : 'products'}/catalog-search`,
+				path: `/${import.meta.env.VITE_SEARCH === 'true' ? 'search' : 'products'}/catalog-search`,
 				method: 'GET',
 				type: ContentType.Json,
 				query: {
 					...params
 				}
-			}),
+			})
+		,
 
 		autoComplete: (params: QueryParamsType) =>
 			this.request<ProductNameListVm>({
-				path: `/${import.meta.env.VITE_SEARCH ? 'search' : 'products'}/search_suggest`,
+				path: `/${import.meta.env.VITE_SEARCH === 'true' ? 'search' : 'products'}/search_suggest`,
 				method: 'GET',
 				type: ContentType.Json,
 				query: {

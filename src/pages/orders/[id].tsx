@@ -15,8 +15,8 @@ import useWindowSize from "../../hooks/useWindowSize";
 import { format } from "date-fns";
 import { Fragment, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { AppThunkDispatch } from "../../stores/store";
-import { cancelOrder, getOrderById } from "../../stores/slices/orders-slice";
+import { AppThunkDispatch } from "@stores/store";
+import { cancelOrder, getOrderById } from "@stores/slices/orders-slice";
 import { DataGetOrderById, OrderItem } from "@interfaces/order";
 import {
 	Button as ButtonChakra,
@@ -40,15 +40,15 @@ import {
 	EPaymentMethod,
 	EPaymentStatus
 } from "../../api/interface/payment";
-import { checkPaymentOrder, validPayment } from "../../stores/slices/payment-slice";
-import { getMyProfile } from "../../stores/slices/user-slice";
+import { checkPaymentOrder, validPayment } from "@stores/slices/payment-slice";
+import { getMyProfile } from "@stores/slices/user-slice";
 import { StarIcon, WarningIcon } from "@chakra-ui/icons";
 import {
 	createRating,
 	deleteRating,
 	getRatingDetail,
 	updateRating
-} from "../../stores/slices/ratings-slice";
+} from "@stores/slices/ratings-slice";
 import { RatingResponse } from "@interfaces/rating";
 
 const OrderDetails = () => {

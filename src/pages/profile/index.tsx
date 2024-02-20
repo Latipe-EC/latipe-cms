@@ -10,7 +10,7 @@ import { format } from "date-fns";
 import { UserResponse } from "@interfaces/user";
 import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "@stores/store";
-import { getMyProfile, updateProfile, updateUsername } from "../../stores/slices/user-slice";
+import { getMyProfile, updateProfile, updateUsername } from "@stores/slices/user-slice";
 import {
 	Flex,
 	FormControl,

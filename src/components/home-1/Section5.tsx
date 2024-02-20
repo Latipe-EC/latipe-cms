@@ -4,8 +4,8 @@ import CategorySectionCreator from "../CategorySectionCreator";
 import Grid from "../grid/Grid";
 import ProductCard2 from "../product-cards/ProductCard2";
 import { useDispatch } from "react-redux";
-import { AppThunkDispatch } from "../../stores/store";
-import { searchProduct } from "../../stores/slices/search-slice";
+import { AppThunkDispatch } from "@stores/store";
+import { searchProduct } from "@stores/slices/search-slice";
 
 const Section5: React.FC = () => {
 	const [resultList, setResultList] = useState([]);

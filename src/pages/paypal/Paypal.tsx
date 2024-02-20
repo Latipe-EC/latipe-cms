@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { getOrderById } from "../../stores/slices/orders-slice";
-import { AppThunkDispatch } from "../../stores/store";
+import { getOrderById } from "@stores/slices/orders-slice";
+import { AppThunkDispatch } from "@stores/store";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { DataGetOrderById } from "../../api/interface/order";
 import { CapturePayment } from "../../api/interface/payment";
-import { payByPaypal } from "../../stores/slices/payment-slice";
+import { payByPaypal } from "@stores/slices/payment-slice";
 
 export default function Paypal() {
 	const { id } = useParams();
@@ -78,7 +78,6 @@ export default function Paypal() {
 	const onApproveOrder = (_, actions) =>
 		actions.order.capture().then((response: CapturePayment) => {
 			if (response.status === "COMPLETED") {
-				console.log(response);
 				dispatch(payByPaypal({
 					orderId: orderDetail.order.order_uuid,
 					id: response.id,

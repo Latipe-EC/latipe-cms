@@ -11,7 +11,7 @@ import Login from "../sessions/Login";
 import Sidenav from "../sidenav/Sidenav";
 import StyledHeader from "./HeaderStyle";
 import UserLoginDialog from "./UserLoginDialog";
-import { RootState, useAppSelector } from "../../stores/store";
+import { RootState, useAppSelector } from "@stores/store";
 
 type HeaderProps = {
 	isFixed?: boolean;

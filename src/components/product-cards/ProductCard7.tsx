@@ -8,9 +8,9 @@ import Icon from "../icon/Icon";
 import Typography from "../Typography";
 import { StyledProductCard7 } from "./ProductCardStyle";
 import { CartGetDetailResponse } from "@interfaces/cart";
-import { deleteCartItem, updateQuantity } from "../../stores/slices/carts-slice";
+import { deleteCartItem, updateQuantity } from "@stores/slices/carts-slice";
 import { useDispatch } from "react-redux";
-import { AppThunkDispatch } from "../../stores/store";
+import { AppThunkDispatch } from "@stores/store";
 import { Checkbox } from "@chakra-ui/react";
 
 export interface ProductCard7Props {

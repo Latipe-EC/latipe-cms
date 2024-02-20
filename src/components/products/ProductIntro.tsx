@@ -29,8 +29,8 @@ import { FaFlag, FaShoppingCart } from "react-icons/fa";
 import './ProductIntro.css'
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addToCart, incrementCount } from "../../stores/slices/carts-slice";
-import { AppThunkDispatch } from "../../stores/store";
+import { addToCart, incrementCount } from "@stores/slices/carts-slice";
+import { AppThunkDispatch } from "@stores/store";
 import { LoginResponse } from "@interfaces/auth";
 
 export interface ProductIntroProps {

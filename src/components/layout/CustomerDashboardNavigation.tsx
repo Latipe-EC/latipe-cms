@@ -5,9 +5,9 @@ import Icon from "../icon/Icon";
 import Typography from "../Typography";
 import { DashboardNavigationWrapper, StyledDashboardNav, } from "./DashboardStyle";
 import { useDispatch } from "react-redux";
-import { countMyAddress } from "../../stores/slices/user-slice";
-import { countMyOrder } from "../../stores/slices/orders-slice";
-import { AppThunkDispatch, RootState, useAppSelector } from "../../stores/store";
+import { countMyAddress } from "@stores/slices/user-slice";
+import { countMyOrder } from "@stores/slices/orders-slice";
+import { AppThunkDispatch, RootState, useAppSelector } from "@stores/store";
 
 const CustomerDashboardNavigation = () => {
 	const pathname = window.location.pathname;

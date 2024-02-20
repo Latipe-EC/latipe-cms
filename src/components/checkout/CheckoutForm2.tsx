@@ -27,18 +27,20 @@ import {
 	RadioGroup,
 	Spinner,
 	Text,
-	Tooltip
+	Tooltip,
+	list
 } from "@chakra-ui/react";
 import { FaMoneyBillWave, FaPaypal, FaSync, FaWallet } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { AppThunkDispatch, RootState, useAppSelector } from "../../stores/store";
-import { getMyAddress, getMyProfile } from "../../stores/slices/user-slice";
+import { AppThunkDispatch, RootState, useAppSelector } from "@stores/store";
+import { getMyAddress, getMyProfile } from "@stores/slices/user-slice";
 import Divider from "@components/Divider";
 import './Checkout2.css';
-import { getListDelivery } from "../../stores/slices/deliveries-slice";
-import { checkVoucher } from "../../stores/slices/promotions-slice";
+import { getListDelivery } from "@stores/slices/deliveries-slice";
+import { checkVoucher } from "@stores/slices/promotions-slice";
 import { CloseIcon } from "@chakra-ui/icons";
-import { createOrder } from "../../stores/slices/orders-slice";
+import { createOrder } from "@stores/slices/orders-slice";
+
 
 const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) => {
 	const [hasVoucher, setHasVoucher] = useState(false);
@@ -52,11 +54,14 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 	const [errorVoucher, setErrorVoucher] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [showErrorOrder, setShowErrorOrder] = useState(false);
+	const [newProducts, setNewProducts] = useState([]);
+	const [listDelivery, setListDelivery] = useState([]);
+	const [methodPayment, setMethodPayment] = useState('COD');
+	const [voucher, setVoucher] = useState('');
 
 	const users = useAppSelector((state: RootState) => state.user);
 
-	const handleFormSubmit = async (values) => {
-		console.log(values);
+	const handleFormSubmit = async () => {
 		navigate("/payment");
 	};
 
@@ -70,6 +75,15 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 		}
 		setFieldValue(fieldName, value);
 	};
+
+	const handleSelectAddress = (address, index) => {
+		const tmp = [...listDelivery];
+		tmp[index] = {
+			id: address.delivery_id,
+			name: address.delivery_name
+		};
+		setListDelivery(tmp);
+	}
 
 	const toggleHasVoucher = () => {
 		setHasVoucher((has) => !has);
@@ -86,7 +100,6 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 	useEffect(() => {
 		if (!selectAddress || products.length === 0)
 			return
-		console.log(selectAddress);
 		dispatch(getListDelivery({
 			src_code: products.map(x => x.cityOrProvinceId),
 			dest_code: selectAddress ? selectAddress.cityOrProvinceId : 0,
@@ -98,6 +111,24 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 	useEffect(() => {
 		if (products.length > 0) {
 			setGetTotalPrice(products.reduce((acc, item) => acc + item.price * item.quantity, 0));
+
+			const prods = products.reduce((acc, product) => {
+				const key = product.storeId;
+				if (!acc[key]) {
+					acc[key] = [];
+				}
+				acc[key].push(product);
+				return acc;
+			}, {})
+			setNewProducts(prods);
+
+			setListDelivery(Object.keys(prods).map(() => {
+				return {
+					id: '',
+					name: ''
+				}
+			}));
+
 		}
 
 	}, [products]);
@@ -105,6 +136,9 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 	const loadAddress = () => {
 		dispatch(getMyAddress({})).unwrap().then((res) => {
 			const address = res.data.data.length > 0 ? res.data.data[0] : null
+			if (selectAddress && res.data.data[0].id === selectAddress.id) {
+				return;
+			}
 			setSelectAddress(address)
 		});
 	}
@@ -118,7 +152,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 		setErrorVoucher("");
 	}
 
-	const handleAddVoucher = (values: typeInitValue) => {
+	const handleAddVoucher = (values) => {
 		if (vouchers.map(x => x.voucher_code).includes(values.voucher)) {
 			setErrorVoucher("Voucher đã được áp dụng");
 			return;
@@ -146,15 +180,15 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 		});
 	}
 
-	const handleOrder = (values: typeInitValue) => {
-		if (values.card === "Wallet" && profile && profile.eWallet < getTotalPrice) {
+	const handleOrder = (values) => {
+		if (methodPayment === "Wallet" && profile && profile.eWallet < getTotalPrice) {
 			return;
 		}
 		setIsLoading(true);
 		let payment_method = 1;
-		if (values.card === "PayPal")
+		if (methodPayment === "PayPal")
 			payment_method = 2;
-		else if (values.card === "Wallet")
+		else if (methodPayment === "Wallet")
 			payment_method = 3;
 		dispatch(createOrder({
 			address: {
@@ -176,8 +210,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 		})).unwrap().then((res) => {
 			setIsLoading(false);
 			if (res.status === 200) {
-				console.log(values.card);
-				if (values.card === "PayPal") {
+				if (methodPayment === "PayPal") {
 					navigate(`/payment-paypal/${res.data.data.order_key}`);
 					return;
 				}
@@ -199,11 +232,11 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 						textAlign: "center",
 						marginTop: '20px'
 					}}>
-						Add Attribute
+						Lỗi
 					</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
-						<Text>Có lỗi xảy ra xin vui lòng thử lại sau</Text>
+						<Text>Có lỗi xảy ra xin vui lòng thử lại sau!</Text>
 					</ModalBody>
 					<ModalFooter>
 						<Button variant='ghost' color="red" mr={3} onClick={() => setShowErrorOrder(false)}>
@@ -212,6 +245,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
+
 			{isLoading && (
 				<Box
 					position="absolute"
@@ -227,89 +261,92 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 					<Spinner size="xl" color="orange" thickness="4px" />
 				</Box>
 			)}
-			<Formik
-				initialValues={initialValues}
-				validationSchema={checkoutSchema}
-				onSubmit={handleFormSubmit}
-			>
-				{({
-					values,
-					handleChange,
-					handleSubmit,
-					setFieldValue,
-				}) => (
-					<form onSubmit={handleSubmit}>
-						<Modal isOpen={openSelectAddress} onClose={() => {
-							setOpenSelectAddress(false)
-						}} isCentered>
-							<ModalOverlay />
-							<ModalContent minH="400px">
-								<ModalHeader>Chọn địa chỉ</ModalHeader>
-								<ModalCloseButton />
-								<ModalBody>
-									<RadioGroup value={selectAddress}>
-										{users.dataAddress.map((address, index) => (
-											<Box key={index} my={4}>
-												<Flex align="center" justifyContent="space-between">
-													<Typography fontSize="lg">
-														{`${address.contactName} | ${address.phone} | ${address.detailAddress}`}
-													</Typography>
-													<Radio value={address}
-														onChange={() => setSelectAddress(address)}></Radio>
-												</Flex>
-												{index < users.dataAddress.length - 1 && <Divider />}
-											</Box>
-										))}
-									</RadioGroup>
-								</ModalBody>
-							</ModalContent>
-						</Modal>
-						<Card1 mb="1.5rem">
-							<FlexBox alignItems="center" mb="1.75rem">
-								<Avatar
-									bg="primary.main"
-									size={32}
-									color="primary.text"
-									mr="0.875rem"
-								>
-									1
-								</Avatar>
-								<Typography fontSize="20px">Địa Chỉ Nhận Hàng</Typography>
-								<IconButton
-									aria-label="Reload address"
-									icon={<FaSync />}
-									onClick={() => loadAddress()}
-									ml="1rem"
-								/>
 
-							</FlexBox>
+			<form onSubmit={handleOrder}>
+				<Modal isOpen={openSelectAddress} onClose={() => {
+					setOpenSelectAddress(false)
+				}} isCentered>
+					<ModalOverlay />
+					<ModalContent minH="400px">
+						<ModalHeader>Chọn địa chỉ</ModalHeader>
+						<ModalCloseButton />
+						<ModalBody>
+							<RadioGroup value={selectAddress}>
+								{users.dataAddress.map((address, index) => (
+									<Box key={index} my={4}>
+										<Flex align="center" justifyContent="space-between">
+											<Typography fontSize="lg">
+												{`${address.contactName} | ${address.phone} | ${address.detailAddress}`}
+											</Typography>
+											<Radio value={address}
+												onChange={() => setSelectAddress(address)}></Radio>
+										</Flex>
+										{index < users.dataAddress.length - 1 && <Divider />}
+									</Box>
+								))}
+							</RadioGroup>
+						</ModalBody>
+					</ModalContent>
+				</Modal>
+				<Card1 mb="1.5rem">
+					<FlexBox alignItems="center" mb="1.75rem">
+						<Avatar
+							bg="primary.main"
+							size={32}
+							color="primary.text"
+							mr="0.875rem"
+						>
+							1
+						</Avatar>
+						<Typography fontSize="20px">Địa Chỉ Nhận Hàng</Typography>
+						<IconButton
+							aria-label="Reload address"
+							icon={<FaSync />}
+							onClick={() => loadAddress()}
+							ml="1rem"
+						/>
 
-							{selectAddress ? (
-								<Box>
-									<Typography mb="0.75rem">
-										{`${selectAddress.contactName} | ${selectAddress.phone} | ${selectAddress.detailAddress}`}</Typography>
-									<CharkraButton onClick={() => setOpenSelectAddress(true)}>Thay
-										đổi</CharkraButton>
-								</Box>) : (
-								<CharkraButton onClick={() => window.open('/address', '_blank')}>Thêm địa
-									chỉ</CharkraButton>
-							)}
-						</Card1>
+					</FlexBox>
 
-						<Card1 mb="1.5rem">
-							<FlexBox alignItems="center" mb="1.75rem">
-								<Avatar
-									bg="primary.main"
-									size={32}
-									color="primary.text"
-									mr="0.875rem"
-								>
-									2
-								</Avatar>
-								<Typography fontSize="20px">Sản phẩm</Typography>
-							</FlexBox>
+					{selectAddress ? (
+						<Box>
+							<Typography mb="0.75rem">
+								{`${selectAddress.contactName} | ${selectAddress.phone} | ${selectAddress.detailAddress}`}</Typography>
+							<CharkraButton onClick={() => setOpenSelectAddress(true)}>Thay
+								đổi</CharkraButton>
+						</Box>) : (
+						<CharkraButton onClick={() => window.open('/address', '_blank')}>Thêm địa
+							chỉ</CharkraButton>
+					)}
+				</Card1>
 
-							{products.map((item) => (
+				<Card1 mb="0.5rem">
+					<FlexBox alignItems="center" >
+						<Avatar
+							bg="primary.main"
+							size={32}
+							color="primary.text"
+							mr="0.875rem"
+						>
+							2
+						</Avatar>
+						<Typography fontSize="20px">Sản phẩm</Typography>
+					</FlexBox>
+				</Card1>
+
+
+				{
+					Object.keys(newProducts).map((key, index) => {
+						return <Card1 mb="1.5rem">
+							<Box>
+								<Flex
+									justifyContent="flex-start"
+								> <strong>Giỏ hàng {index + 1}</strong></Flex>
+								<Flex
+									justifyContent="flex-end"
+								>Được giao bởi&nbsp; <b>{newProducts[key][0].storeName}</b></Flex>
+							</Box>
+							{newProducts[key].map((item) => (
 								<Fragment key={item.id}>
 									<div className="cart-item">
 										<a href={`/products/${item.productId}`}>
@@ -328,7 +365,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 												</H5>
 											</a>
 											<Tiny color="text.muted">
-												₫{item.price.toFixed(2)} x {item.quantity}
+												{item.price.toFixed(2)}₫ x {item.quantity}
 											</Tiny>
 											<Typography
 												fontWeight={600}
@@ -336,197 +373,184 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 												color="primary.main"
 												mt="4px"
 											>
-												₫{(item.quantity * item.price).toLocaleString('vi-VN')}
+												{(item.quantity * item.price).toLocaleString('vi-VN')}₫
 											</Typography>
 										</div>
 									</div>
 									<Divider />
 								</Fragment>
 							))}
-
-						</Card1>
-
-						<Card1 mb="1.5rem">
-							<FlexBox alignItems="center" mb="1.75rem">
-								<Avatar
-									bg="primary.main"
-									size={32}
-									color="primary.text"
-									mr="0.875rem"
-								>
-									3
-								</Avatar>
-								<Typography fontSize="20px">Đơn vị vận chuyển</Typography>
-							</FlexBox>
+							{!deliveries || deliveries.length === 0 && <Box mt={2} color="red">Vui lòng chọn địa chỉ nhận hàng</Box>}
 							{deliveries && deliveries.length > 0 &&
-								<Grid container spacing={6} key="container-delivery">
-									{deliveries.map((item, ind) => (
-										<Grid item md={4} sm={6} xs={12} key={`del-${ind}`}>
-											<Box
-												p="1rem"
-												boxShadow="none"
-												border="1px solid"
-												cursor="pointer"
-												borderRadius="10px"
-												borderColor={
-													item.delivery_id === values.address
-														? "primary.main"
-														: "transparent"
-												}
-												onClick={handleFieldValueChange(
-													item,
-													"address",
-													setFieldValue
-												)}
-											>
-												<Text mb="0.25rem" fontWeight="bold">{item.delivery_name}</Text>
-												<Text color="gray.700">₫{item.cost.toLocaleString('vi-VN')}</Text>
-											</Box>
-										</Grid>
-									))}
-								</Grid>}
-						</Card1>
-
-
-						<Card1 mb="1.5rem">
-							<FlexBox alignItems="center" mb="1.75rem">
-								<Avatar
-									bg="primary.main"
-									size={32}
-									color="primary.text"
-									mr="0.875rem"
-								>
-									4
-								</Avatar>
-								<Typography fontSize="20px" fontWeight="bold">Phương thức thanh
-									toán</Typography>
-							</FlexBox>
-
-							<Grid container spacing={6} key="container-method-list">
-								{paymentMethodList.map((item) => (
-									<Grid item md={4} sm={6} xs={12} key={item.name}>
-										<Tooltip
-											isOpen={item.name === 'Wallet' && profile && profile.eWallet < getTotalPrice}
-											label="Không đủ tiền"
-											placement="top"
-										>
-											<Card
-												bg={item.color}
-												p="1rem"
-												boxShadow="none"
-												border="2px solid"
-												cursor="pointer"
-												disabled={item.name === 'Wallet' && profile && profile.eWallet < getTotalPrice}
-												borderColor={
-													item.name === values.card
-														? "primary.main"
-														: "transparent"
-												}
-												onClick={handleFieldValueChange(
-													item.name,
-													"card",
-													setFieldValue
-												)}
-											>
+								<Box my={2}>
+									<Box>Hình thức giao hàng</Box>
+									<Grid container spacing={6} key="container-delivery">
+										{deliveries.map((item, ind) => (
+											<Grid item md={4} sm={6} xs={12} key={`del-${ind}`}>
 												<Box
-													height="24px"
-													width="36px"
-													position="relative"
-													mb="0.5rem"
+													p="1rem"
+													boxShadow="none"
+													border="1px solid"
+													cursor="pointer"
+													borderRadius="10px"
+													borderColor={
+														item.delivery_id === listDelivery[index].id
+															? "primary.main"
+															: "transparent"
+													}
+													onClick={() => handleSelectAddress(
+														item,
+														index,
+													)}
 												>
-													<Icon as={item.icon} />
+													<Text mb="0.25rem" fontWeight="bold">{item.delivery_name}</Text>
+													<Text color="gray.700">{item.cost.toLocaleString('vi-VN')}₫</Text>
 												</Box>
-												<Paragraph color="white" fontWeight="bold">{item.name}</Paragraph>
-											</Card>
-										</Tooltip>
+											</Grid>
+										))}
 									</Grid>
-								))}
-							</Grid>
+								</Box>}
+						</Card1>
+					}
+					)
+				}
 
-							<Paragraph
-								className="cursor-pointer"
-								color="primary.main"
-								mt="1.5rem"
-								lineHeight="2"
-								onClick={toggleHasVoucher}
-								fontWeight="medium"
-								fontSize="lg"
-							>
-								Thêm voucher.
-							</Paragraph>
-							{vouchers.length > 0 &&
-								vouchers.map((voucher, index) => (
-									<Flex key={`vou-${index}`} direction="row" alignItems="center">
-										<Box mr={2}>
-											<Text color="primary.main" fontWeight="bold">{voucher.detail}</Text>
-										</Box>
-										<Box mr={2}>
-											<Text>|</Text>
-										</Box>
-										<Box mr={2}>
-											<Text color="gray.500">{voucher.voucher_code}</Text>
-										</Box>
-										<Box mr={2}>
-											<Text>|</Text>
-										</Box>
-										<Box mr={2}>
-											<Text
-												color="green.500">₫{voucher.discount_value.toLocaleString('vi-VN')}</Text>
-										</Box>
-										<IconButton
-											aria-label="Delete voucher"
-											icon={<CloseIcon />}
-											colorScheme="red"
-											size="xs"
-											onClick={() => removeVoucher(voucher.voucher_code)}
-										/>
-									</Flex>
-								))
-							}
-							{errorVoucher && <Text color="red.500">{errorVoucher}</Text>}
-							{hasVoucher && (
-								<FlexBox mt="0.5rem" maxWidth="400px">
-									<TextField
-										name="voucher"
-										placeholder="Nhập voucher code ở đây"
-										fullwidth
-										value={values.voucher || ""}
-										onChange={handleChange}
-									/>
-									<Button
-										variant="contained"
-										color="primary"
-										type="button"
-										ml="1rem"
-										onClick={() => {
-											if (values.voucher === "")
-												return
-											handleAddVoucher(values);
-											values.voucher = "";
-										}}
-										disabled={values.voucher === ""}
+
+				<Card1 mb="1.5rem">
+					<FlexBox alignItems="center" mb="1.75rem">
+						<Avatar
+							bg="primary.main"
+							size={32}
+							color="primary.text"
+							mr="0.875rem"
+						>
+							4
+						</Avatar>
+						<Typography fontSize="20px" fontWeight="bold">Phương thức thanh
+							toán</Typography>
+					</FlexBox>
+
+					<Grid container spacing={6} key="container-method-list">
+						{paymentMethodList.map((item) => (
+							<Grid item md={4} sm={6} xs={12} key={item.name}>
+								<Tooltip
+									isOpen={item.name === 'Wallet' && profile && profile.eWallet < getTotalPrice}
+									label="Không đủ tiền"
+									placement="top"
+								>
+									<Card
+										bg={item.color}
+										p="1rem"
+										boxShadow="none"
+										border="2px solid"
+										cursor="pointer"
+										disabled={item.name === 'Wallet' && profile && profile.eWallet < getTotalPrice}
+										borderColor={
+											item.name === methodPayment
+												? "primary.main"
+												: "transparent"
+										}
+										onClick={() => setMethodPayment(item.name)}
 									>
-										Áp dụng
-									</Button>
-								</FlexBox>
-							)}
+										<Box
+											height="24px"
+											width="36px"
+											position="relative"
+											mb="0.5rem"
+										>
+											<Icon as={item.icon} />
+										</Box>
+										<Paragraph color="white" fontWeight="bold">{item.name}</Paragraph>
+									</Card>
+								</Tooltip>
+							</Grid>
+						))}
+					</Grid>
 
+					<Paragraph
+						className="cursor-pointer"
+						color="primary.main"
+						mt="1.5rem"
+						lineHeight="2"
+						onClick={toggleHasVoucher}
+						fontWeight="medium"
+						fontSize="lg"
+					>
+						Thêm voucher.
+					</Paragraph>
+					{vouchers.length > 0 &&
+						vouchers.map((voucher, index) => (
+							<Flex key={`vou-${index}`} direction="row" alignItems="center">
+								<Box mr={2}>
+									<Text color="primary.main" fontWeight="bold">{voucher.detail}</Text>
+								</Box>
+								<Box mr={2}>
+									<Text>|</Text>
+								</Box>
+								<Box mr={2}>
+									<Text color="gray.500">{voucher.voucher_code}</Text>
+								</Box>
+								<Box mr={2}>
+									<Text>|</Text>
+								</Box>
+								<Box mr={2}>
+									<Text
+										color="green.500">₫{voucher.discount_value.toLocaleString('vi-VN')}</Text>
+								</Box>
+								<IconButton
+									aria-label="Delete voucher"
+									icon={<CloseIcon />}
+									colorScheme="red"
+									size="xs"
+									onClick={() => removeVoucher(voucher.voucher_code)}
+								/>
+							</Flex>
+						))
+					}
+					{errorVoucher && <Text color="red.500">{errorVoucher}</Text>}
+					{hasVoucher && (
+						<FlexBox mt="0.5rem" maxWidth="400px">
+							<TextField
+								name="voucher"
+								placeholder="Nhập voucher code ở đây"
+								fullwidth
+								value={voucher || ""}
+								onChange={() => setVoucher(voucher)}
+							/>
 							<Button
 								variant="contained"
 								color="primary"
-								mt="1.5rem"
-								type="submit"
-								fullwidth
-								disabled={values.card === "" || values.address === ""}
-								onClick={() => handleOrder(values)}
+								type="button"
+								ml="1rem"
+								onClick={() => {
+									if (voucher === "")
+										return
+									handleAddVoucher(voucher);
+									setVoucher("")
+								}}
+								disabled={voucher === ""}
 							>
-								Đặt hàng
+								Áp dụng
 							</Button>
-						</Card1>
-					</form>
-				)}
-			</Formik>
-		</Box>
+						</FlexBox>
+					)}
+
+					<Button
+						variant="contained"
+						color="primary"
+						mt="1.5rem"
+						type="submit"
+						fullwidth
+						disabled={methodPayment === "" || listDelivery.some(x => x === '')}
+						onClick={handleOrder}
+					>
+						Đặt hàng
+					</Button>
+				</Card1>
+			</form>
+
+
+		</Box >
 	);
 };
 
@@ -536,31 +560,5 @@ const paymentMethodList = [
 	{ name: 'Wallet', icon: FaWallet, color: "#32a86d" },
 ];
 
-const initialValues: typeInitValue = {
-	address: "",
-	contact: "",
-	card: "",
-	date: "",
-	time: "",
-	voucher: "",
-};
-
-const checkoutSchema = yup.object().shape({
-	address: yup.string().required("required"),
-	contact: yup.string().required("required"),
-	card: yup.string().required("required"),
-	date: yup.object().required("required"),
-	time: yup.object().required("required"),
-	voucher: yup.string(),
-});
-
-interface typeInitValue {
-	address: string;
-	contact: string;
-	card: string;
-	date: string;
-	time: string;
-	voucher: string;
-}
 
 export default CheckoutForm2;

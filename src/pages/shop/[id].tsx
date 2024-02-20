@@ -4,7 +4,7 @@ import NavbarLayout from "@components/layout/NavbarLayout";
 import ShopIntroCard from "@components/shop/ShopIntroCard";
 import { AppThunkDispatch } from "@stores/store";
 import { useEffect, useState } from "react";
-import { getProductStore, getStoreById } from "../../stores/slices/stores-slice";
+import { getProductStore, getStoreById } from "@stores/slices/stores-slice";
 import { PagedResultResponse } from "../../api/interface/PagedResultResponse";
 import { ProductStoreResponse, StoreResponse } from "../../api/interface/store";
 import StoreProductListCard from "@components/products/StoreProductCardList";

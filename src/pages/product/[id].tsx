@@ -7,7 +7,7 @@ import ProductReview from "@components/products/ProductReview";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "@stores/store";
-import { getProductById } from "../../stores/slices/products-slice";
+import { getProductById } from "@stores/slices/products-slice";
 
 const ProductDetails = () => {
 	const dispatch = useDispatch<AppThunkDispatch>();

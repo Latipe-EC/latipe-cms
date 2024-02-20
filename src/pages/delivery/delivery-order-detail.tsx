@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "@stores/store";
 import { useEffect, useState } from "react";
 import { AdminOrderDetailResponse } from "@interfaces/order";
-import { getAdminOrderDetail, updateStatusOrderByDelivery } from "../../stores/slices/orders-slice";
+import { getAdminOrderDetail, updateStatusOrderByDelivery } from "@stores/slices/orders-slice";
 import { Chip } from "@components/Chip";
 import { Button, Flex } from "@chakra-ui/react";
 

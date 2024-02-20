@@ -26,9 +26,9 @@ import {
 import provincesData from '../../data/province.json';
 import districtsData from '../../data/district.json';
 import wardsData from '../../data/ward.json';
-import { AppThunkDispatch, RootState, useAppSelector } from "../../stores/store";
+import { AppThunkDispatch, RootState, useAppSelector } from "@stores/store";
 import { useDispatch } from "react-redux";
-import { addMyAddress, deleteMyAddress, getMyAddress } from "../../stores/slices/user-slice";
+import { addMyAddress, deleteMyAddress, getMyAddress } from "@stores/slices/user-slice";
 import { District, Province, Ward } from "@interfaces/user";
 import { useNavigate } from "react-router-dom";
 

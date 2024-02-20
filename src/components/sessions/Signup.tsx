@@ -12,7 +12,7 @@ import TextField from "../text-field/TextField";
 import { H3, H5, H6, SemiSpan, Span } from "../Typography";
 import { StyledSessionCard } from "./SessionStyle";
 import { FormLabel, Radio, RadioGroup, Spinner, Stack, useToast } from "@chakra-ui/react";
-import { registerAccount } from "../../stores/slices/auth-slice";
+import { registerAccount } from "@stores/slices/auth-slice";
 import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "@stores/store";
 import { useNavigate } from "react-router-dom";

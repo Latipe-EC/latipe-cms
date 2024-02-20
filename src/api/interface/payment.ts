@@ -29,7 +29,6 @@ export interface PayByPaypalRequest {
 	email: string,
 }
 
-
 export interface CapturePayment {
 	id: string
 	intent: string

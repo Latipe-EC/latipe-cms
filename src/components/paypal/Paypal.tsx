@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { getOrderById } from "../../stores/slices/orders-slice";
-import { AppThunkDispatch } from "../../stores/store";
+import { getOrderById } from "@stores/slices/orders-slice";
+import { AppThunkDispatch } from "@stores/store";
 import { PayPalButtons, PayPalScriptProvider, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import { Spinner } from "@chakra-ui/react";
 

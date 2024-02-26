@@ -3,10 +3,8 @@ import Box from "../Box";
 import Card from "../Card";
 import FlexBox from "../FlexBox";
 import TextField from "../text-field/TextField";
-import { Formik } from "formik";
 import { useNavigate } from 'react-router-dom';
 import { Fragment, useEffect, useState } from "react";
-import * as yup from "yup";
 import Button from "../buttons/Button";
 import { Card1 } from "../Card1";
 import Grid from "../grid/Grid";
@@ -28,7 +26,6 @@ import {
 	Spinner,
 	Text,
 	Tooltip,
-	list
 } from "@chakra-ui/react";
 import { FaMoneyBillWave, FaPaypal, FaSync, FaWallet } from "react-icons/fa";
 import { useDispatch } from "react-redux";
@@ -42,7 +39,7 @@ import { CloseIcon } from "@chakra-ui/icons";
 import { createOrder } from "@stores/slices/orders-slice";
 
 
-const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) => {
+const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDelivery, listDelivery }) => {
 	const [hasVoucher, setHasVoucher] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch<AppThunkDispatch>();
@@ -55,32 +52,16 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 	const [isLoading, setIsLoading] = useState(false);
 	const [showErrorOrder, setShowErrorOrder] = useState(false);
 	const [newProducts, setNewProducts] = useState([]);
-	const [listDelivery, setListDelivery] = useState([]);
+
 	const [methodPayment, setMethodPayment] = useState('COD');
 	const [voucher, setVoucher] = useState('');
 
 	const users = useAppSelector((state: RootState) => state.user);
 
-	const handleFormSubmit = async () => {
-		navigate("/payment");
-	};
-
-	const handleFieldValueChange = (value, fieldName, setFieldValue) => () => {
-		if (fieldName === 'card' && value === 'Wallet' && profile && profile.eWallet < getTotalPrice)
-			return
-		if (fieldName === 'address') {
-			setSelectDelivery(value)
-			setFieldValue(fieldName, value.delivery_id);
-			return;
-		}
-		setFieldValue(fieldName, value);
-	};
-
 	const handleSelectAddress = (address, index) => {
 		const tmp = [...listDelivery];
 		tmp[index] = {
-			id: address.delivery_id,
-			name: address.delivery_name
+			...address
 		};
 		setListDelivery(tmp);
 	}
@@ -124,8 +105,12 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 
 			setListDelivery(Object.keys(prods).map(() => {
 				return {
-					id: '',
-					name: ''
+					src_code: '',
+					dest_code: '',
+					receive_date: '',
+					delivery_id: '',
+					delivery_name: '',
+					cost: 0
 				}
 			}));
 
@@ -152,16 +137,16 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 		setErrorVoucher("");
 	}
 
-	const handleAddVoucher = (values) => {
-		if (vouchers.map(x => x.voucher_code).includes(values.voucher)) {
+	const handleAddVoucher = (voucher) => {
+		if (vouchers.map(x => x.voucher_code).includes(voucher)) {
 			setErrorVoucher("Voucher đã được áp dụng");
 			return;
 		}
 		dispatch(checkVoucher({
-			"order_total_amount": 900000,
-			"payment_method": values.card === "PayPal" ? 2 : 1,
-			"user_id": "2323",
-			vouchers: [...vouchers.map(x => x.voucher_code), values.voucher]
+			"order_total_amount": products.reduce((acc, item) => acc + item.promotionalPrice > 0 ?
+				item.promotionalPrice : item.price * item.quantity, 0),
+			"payment_method": methodPayment === "PayPal" ? 2 : 1,
+			vouchers: [...vouchers.map(x => x.voucher_code), voucher]
 		})).unwrap().then((res) => {
 			if (res.status !== 200) {
 				setErrorVoucher("Voucher không hợp lệ");
@@ -394,7 +379,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 													cursor="pointer"
 													borderRadius="10px"
 													borderColor={
-														item.delivery_id === listDelivery[index].id
+														item.delivery_id === listDelivery[index].delivery_id
 															? "primary.main"
 															: "transparent"
 													}
@@ -424,7 +409,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 							color="primary.text"
 							mr="0.875rem"
 						>
-							4
+							3
 						</Avatar>
 						<Typography fontSize="20px" fontWeight="bold">Phương thức thanh
 							toán</Typography>
@@ -509,30 +494,31 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 					}
 					{errorVoucher && <Text color="red.500">{errorVoucher}</Text>}
 					{hasVoucher && (
-						<FlexBox mt="0.5rem" maxWidth="400px">
-							<TextField
-								name="voucher"
-								placeholder="Nhập voucher code ở đây"
-								fullwidth
-								value={voucher || ""}
-								onChange={() => setVoucher(voucher)}
-							/>
-							<Button
-								variant="contained"
-								color="primary"
-								type="button"
-								ml="1rem"
-								onClick={() => {
-									if (voucher === "")
-										return
-									handleAddVoucher(voucher);
-									setVoucher("")
-								}}
-								disabled={voucher === ""}
-							>
-								Áp dụng
-							</Button>
-						</FlexBox>
+						<>
+							<FlexBox mt="0.5rem" maxWidth="500px">
+								<TextField
+									name="voucher"
+									placeholder="Nhập voucher code ở đây"
+									fullwidth
+									value={voucher || ""}
+									onChange={(e) => setVoucher(e.target.value)}
+								/>
+								<Button
+									variant="contained"
+									color="primary"
+									type="button"
+									ml="1rem"
+									onClick={() => {
+										if (voucher === "")
+											return
+										handleAddVoucher(voucher);
+										setVoucher("")
+									}}
+									disabled={voucher === ""}
+								>
+									Áp dụng
+								</Button>
+							</FlexBox></>
 					)}
 
 					<Button
@@ -541,7 +527,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setSelectDelivery }) =
 						mt="1.5rem"
 						type="submit"
 						fullwidth
-						disabled={methodPayment === "" || listDelivery.some(x => x === '')}
+						disabled={methodPayment === "" || listDelivery.some(x => x.delivery_id === '')}
 						onClick={handleOrder}
 					>
 						Đặt hàng

@@ -6,17 +6,18 @@ import Typography, { Span } from "../Typography";
 import { CartGetDetailResponse } from "@interfaces/cart";
 import { ItemVoucher } from "@interfaces/promotion";
 import { CostDelivery } from "@interfaces/delivery";
+import { DiscountType } from "@/utils/constants";
 
 type CheckoutSummary2Props = {
 	products: CartGetDetailResponse[];
 	vouchers: ItemVoucher[];
-	selectDelivery: CostDelivery;
+	listDelivery: CostDelivery[];
 };
 
 
 const CheckoutSummary2: React.FC<CheckoutSummary2Props> = ({
 	products,
-	vouchers, selectDelivery
+	vouchers, listDelivery
 }) => {
 	const [priceProduct, setPriceProduct] = useState(0);
 	const [totalPrice, setTotalPrice] = useState(0);
@@ -35,39 +36,76 @@ const CheckoutSummary2: React.FC<CheckoutSummary2Props> = ({
 	}, [vouchers]);
 
 	useEffect(() => {
+		if (listDelivery.length === 0) return;
+
+		if (listDelivery.some((item) => item.cost === 0)) {
+			return;
+		}
+
 		setFeeDelivery(calcPriceDelivery());
 		setTotalPrice(calcTotalPrice() + calcPriceDelivery() - saleProduct());
-	}, [selectDelivery]);
+	}, [listDelivery]);
 
 	const calcTotalPrice = () => {
 		return products.reduce((acc, item) => acc + item.price * item.quantity, 0);
 	}
 
 	const calcPriceDelivery = () => {
-		if (selectDelivery === null) return 0;
+
+		if (listDelivery.length === 0) return 0;
+
+		if (listDelivery.some((item) => item.cost === 0)) {
+			return 0;
+		}
+
 		for (const voucher of vouchers) {
 			if (voucher.voucher_type === 1) {
-				if (voucher.discount_percent && voucher.discount_value) {
-					const priceDelivery = selectDelivery.cost - (selectDelivery.cost * voucher.discount_percent / 100) - voucher.discount_value;
-					const newPrice = priceDelivery < voucher.discount_value ? priceDelivery : selectDelivery.cost - voucher.discount_value;
-					return newPrice > 0 ? newPrice : 0;
+
+				if (voucher.voucher_require.min_require > calcTotalPrice()) {
+					return listDelivery.reduce((acc, item) => acc + item.cost, 0);
+				}
+				// TODO: confirm with api voucher discount delivery have 2 type ?
+				if (voucher.discount_data.discount_type === DiscountType.FIXED_DISCOUNT) {
+					return listDelivery.reduce((acc, item) => {
+						if (item.cost - voucher.discount_data.discount_value < 0) {
+							return acc + 0;
+						}
+						return acc + item.cost - voucher.discount_data.discount_value;
+					}, 0);
 				} else {
-					return selectDelivery.cost - voucher.discount_value > 0 ?
-						selectDelivery.cost - voucher.discount_value : 0;
+					return listDelivery.reduce((acc, item) => {
+						const valAfter = acc + item.cost * (1 - voucher.discount_data.discount_percent);
+						return acc + item.cost - valAfter > voucher.discount_data.maximum_value ? item.cost - voucher.discount_data.maximum_value : valAfter;
+					}, 0);
 				}
 			}
 		}
-		return selectDelivery.cost;
+
+		return listDelivery.reduce((acc, item) => acc + item.cost, 0);
 	}
 
 	const saleProduct = () => {
 		const totalPriceProduct = products.reduce((acc, item) => acc + item.price * item.quantity, 0);
 		for (const voucher of vouchers) {
 			if (voucher.voucher_type === 2) {
-				return totalPriceProduct - voucher.discount_value > 0 ?
-					voucher.discount_value : totalPriceProduct;
+
+				if (voucher.voucher_require.min_require > calcTotalPrice()) {
+					return totalPriceProduct;
+				}
+
+				if (voucher.discount_data.discount_type === DiscountType.FIXED_DISCOUNT) {
+					if (totalPriceProduct - voucher.discount_data.discount_value < 0) {
+						return 0;
+					}
+					return totalPriceProduct - voucher.discount_data.discount_value;
+				} else {
+					const valAfter = totalPriceProduct * (1 - voucher.discount_data.discount_percent);
+					return totalPriceProduct - valAfter > voucher.discount_data.maximum_value
+						? totalPriceProduct - voucher.discount_data.maximum_value : valAfter;
+				}
 			}
 		}
+
 		return 0;
 	}
 
@@ -102,13 +140,21 @@ const CheckoutSummary2: React.FC<CheckoutSummary2Props> = ({
 				<Typography fontWeight="700">{priceProduct.toLocaleString('vi-VN')}₫</Typography>
 			</FlexBox>
 
+
 			<FlexBox justifyContent="space-between" alignItems="center" mb="0.5rem">
 				<Typography color="text.hint">Phí ship:</Typography>
-				<Typography fontWeight="700">{feeDelivery.toLocaleString('vi-VN')}₫</Typography>
+
+
+				<Typography fontWeight="700">{listDelivery.reduce((acc, item) => acc + item.cost, 0).toLocaleString('vi-VN')}₫</Typography>
+			</FlexBox>
+
+			<FlexBox justifyContent="space-between" alignItems="center" mb="0.5rem">
+				<Typography color="text.hint">Giảm giá vận chuyển:</Typography>
+				<Typography fontWeight="700">{(listDelivery.reduce((acc, item) => acc + item.cost, 0) - feeDelivery).toLocaleString('vi-VN')}₫</Typography>
 			</FlexBox>
 
 			<FlexBox justifyContent="space-between" alignItems="center" mb="1.5rem">
-				<Typography color="text.hint">Giảm giá:</Typography>
+				<Typography color="text.hint">Giảm giá sản phẩm:</Typography>
 				<Typography fontWeight="700">{sale.toLocaleString('vi-VN')}₫</Typography>
 			</FlexBox>
 

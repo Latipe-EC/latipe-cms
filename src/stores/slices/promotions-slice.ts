@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Api } from '../../api/AxiosClient';
-import { ApplyVoucherRequest, UpdateStatusVoucher, createVoucherRequest } from '@interfaces/promotion';
+import { ApplyVoucherRequest, CheckingVoucherRequest, UpdateStatusVoucher, createVoucherRequest } from '@interfaces/promotion';
 
 const api = new Api();
 
@@ -72,7 +72,7 @@ export const
 export const
 	checkVoucher = createAsyncThunk(
 		'promotions/checkVoucher',
-		async (request: ApplyVoucherRequest) => {
+		async (request: CheckingVoucherRequest) => {
 			const response = await api.promotion.checkVoucher(request);
 			return response;
 		}

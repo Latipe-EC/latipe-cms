@@ -48,21 +48,28 @@ export interface ApplyVoucherReponse {
 }
 
 export interface ItemVoucher {
-	_id: string
+	id: string
 	voucher_code: string
 	voucher_type: number
 	voucher_counts: number
-	discount_percent: number
 	detail: string
-	discount_value: number
+	owner_voucher: string
+	status: number
+	discount_data: DiscountData
 	voucher_require: VoucherRequire
-	created_at: string
-	updated_at: string
 	stated_time: string
 	ended_time: string
-	status: number
+	created_at: string
+	updated_at: string
 }
 
+export interface DiscountData {
+	discount_type: number
+	discount_percent: number
+	maximum_value: number
+	discount_value: number
+	shipping_value: number
+}
 
 export interface ListVoucherReponse {
 	code: number
@@ -80,4 +87,13 @@ export interface ListVoucherData {
 
 export interface VoucherRequire {
 	min_require: number
+	payment_method: number
+	max_voucher_per_user: number
+}
+
+export interface CheckingVoucherRequest {
+	order_total_amount: number
+	payment_method: number
+	user_id: string
+	vouchers: string[]
 }

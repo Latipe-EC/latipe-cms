@@ -91,6 +91,7 @@ import {
 	ApplyVoucherReponse,
 	ApplyVoucherRequest,
 	CheckVoucherReponse,
+	CheckingVoucherRequest,
 	ListVoucherReponse,
 	UpdateStatusVoucher,
 	createVoucherRequest
@@ -1161,7 +1162,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 		}
 		,
 
-		checkVoucher: (request: ApplyVoucherRequest) =>
+		checkVoucher: (request: CheckingVoucherRequest) =>
 			this.request<CheckVoucherReponse>({
 				path: `/vouchers/checking`,
 				method: 'POST',

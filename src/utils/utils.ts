@@ -1,3 +1,4 @@
+import { PaymentMethodName } from "@/utils/constants";
 import { themeGet } from "@styled-system/theme-get";
 import { differenceInMinutes } from "date-fns";
 import { ceil } from "lodash";
@@ -83,4 +84,9 @@ export function getMonthDifference(startDate, endDate) {
 		startDate.getMonth() +
 		12 * (endDate.getFullYear() - startDate.getFullYear())
 	);
+}
+
+
+export function getPaymentMethod(method: string): number {
+	return method === PaymentMethodName.COD ? 0 : method === PaymentMethodName.PayPal ? 1 : 2;
 }

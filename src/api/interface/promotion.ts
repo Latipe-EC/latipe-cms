@@ -37,7 +37,6 @@ export interface ApplyVoucherRequest {
 }
 
 export interface CheckVoucherData {
-	is_success: boolean
 	items: ItemVoucher[]
 }
 
@@ -61,8 +60,14 @@ export interface ItemVoucher {
 	ended_time: string
 	created_at: string
 	updated_at: string
+	count_usable: number
+	real_discount: RealDiscount
 }
 
+export interface RealDiscount {
+	totalPrice: number
+	deliveries: string[]
+}
 export interface DiscountData {
 	discount_type: number
 	discount_percent: number
@@ -92,8 +97,5 @@ export interface VoucherRequire {
 }
 
 export interface CheckingVoucherRequest {
-	order_total_amount: number
-	payment_method: number
-	user_id: string
 	vouchers: string[]
 }

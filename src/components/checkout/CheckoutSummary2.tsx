@@ -6,18 +6,19 @@ import Typography, { Span } from "../Typography";
 import { CartGetDetailResponse } from "@interfaces/cart";
 import { ItemVoucher } from "@interfaces/promotion";
 import { CostDelivery } from "@interfaces/delivery";
-import { DiscountType } from "@/utils/constants";
+import { VoucherType } from "@/utils/constants";
 
 type CheckoutSummary2Props = {
 	products: CartGetDetailResponse[];
 	vouchers: ItemVoucher[];
-	listDelivery: CostDelivery[];
+	listDeliveries: CostDelivery[];
 };
 
 
 const CheckoutSummary2: React.FC<CheckoutSummary2Props> = ({
 	products,
-	vouchers, listDelivery
+	vouchers,
+	listDeliveries
 }) => {
 	const [priceProduct, setPriceProduct] = useState(0);
 	const [totalPrice, setTotalPrice] = useState(0);
@@ -36,77 +37,34 @@ const CheckoutSummary2: React.FC<CheckoutSummary2Props> = ({
 	}, [vouchers]);
 
 	useEffect(() => {
-		if (listDelivery.length === 0) return;
+		if (listDeliveries.length === 0) return;
 
-		if (listDelivery.some((item) => item.cost === 0)) {
+		if (listDeliveries.some((item) => item.cost === 0)) {
 			return;
 		}
 
 		setFeeDelivery(calcPriceDelivery());
 		setTotalPrice(calcTotalPrice() + calcPriceDelivery() - saleProduct());
-	}, [listDelivery]);
+	}, [listDeliveries]);
 
 	const calcTotalPrice = () => {
 		return products.reduce((acc, item) => acc + item.price * item.quantity, 0);
 	}
 
 	const calcPriceDelivery = () => {
-
-		if (listDelivery.length === 0) return 0;
-
-		if (listDelivery.some((item) => item.cost === 0)) {
-			return 0;
+		const voucherDelivery = vouchers.filter(item => item.voucher_type === VoucherType.DELIVERY);
+		if (voucherDelivery.length === 0) {
+			return listDeliveries.reduce((acc, item) => acc + item.cost, 0);
 		}
 
-		for (const voucher of vouchers) {
-			if (voucher.voucher_type === 1) {
-
-				if (voucher.voucher_require.min_require > calcTotalPrice()) {
-					return listDelivery.reduce((acc, item) => acc + item.cost, 0);
-				}
-				// TODO: confirm with api voucher discount delivery have 2 type ?
-				if (voucher.discount_data.discount_type === DiscountType.FIXED_DISCOUNT) {
-					return listDelivery.reduce((acc, item) => {
-						if (item.cost - voucher.discount_data.discount_value < 0) {
-							return acc + 0;
-						}
-						return acc + item.cost - voucher.discount_data.discount_value;
-					}, 0);
-				} else {
-					return listDelivery.reduce((acc, item) => {
-						const valAfter = acc + item.cost * (1 - voucher.discount_data.discount_percent);
-						return acc + item.cost - valAfter > voucher.discount_data.maximum_value ? item.cost - voucher.discount_data.maximum_value : valAfter;
-					}, 0);
-				}
-			}
-		}
-
-		return listDelivery.reduce((acc, item) => acc + item.cost, 0);
+		return listDeliveries.reduce((acc, item) => acc + item.cost, 0) -
+			voucherDelivery[0].real_discount.totalPrice;
 	}
 
 	const saleProduct = () => {
-		const totalPriceProduct = products.reduce((acc, item) => acc + item.price * item.quantity, 0);
-		for (const voucher of vouchers) {
-			if (voucher.voucher_type === 2) {
-
-				if (voucher.voucher_require.min_require > calcTotalPrice()) {
-					return totalPriceProduct;
-				}
-
-				if (voucher.discount_data.discount_type === DiscountType.FIXED_DISCOUNT) {
-					if (totalPriceProduct - voucher.discount_data.discount_value < 0) {
-						return 0;
-					}
-					return totalPriceProduct - voucher.discount_data.discount_value;
-				} else {
-					const valAfter = totalPriceProduct * (1 - voucher.discount_data.discount_percent);
-					return totalPriceProduct - valAfter > voucher.discount_data.maximum_value
-						? totalPriceProduct - voucher.discount_data.maximum_value : valAfter;
-				}
-			}
-		}
-
-		return 0;
+		const voucherProd = vouchers.filter(item => item.voucher_type === VoucherType.PRODUCT);
+		if (voucherProd.length === 0) return 0;
+		return voucherProd[0].real_discount.totalPrice;
 	}
 
 	return (
@@ -145,12 +103,13 @@ const CheckoutSummary2: React.FC<CheckoutSummary2Props> = ({
 				<Typography color="text.hint">Phí ship:</Typography>
 
 
-				<Typography fontWeight="700">{listDelivery.reduce((acc, item) => acc + item.cost, 0).toLocaleString('vi-VN')}₫</Typography>
+				<Typography fontWeight="700">{listDeliveries.reduce((acc, item) => acc + item.cost, 0).toLocaleString('vi-VN')}₫</Typography>
 			</FlexBox>
 
 			<FlexBox justifyContent="space-between" alignItems="center" mb="0.5rem">
 				<Typography color="text.hint">Giảm giá vận chuyển:</Typography>
-				<Typography fontWeight="700">{(listDelivery.reduce((acc, item) => acc + item.cost, 0) - feeDelivery).toLocaleString('vi-VN')}₫</Typography>
+				<Typography fontWeight="700">{(listDeliveries.reduce((acc, item) => acc + item.cost, 0) -
+					feeDelivery).toLocaleString('vi-VN')}₫</Typography>
 			</FlexBox>
 
 			<FlexBox justifyContent="space-between" alignItems="center" mb="1.5rem">

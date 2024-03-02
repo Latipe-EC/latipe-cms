@@ -10,6 +10,11 @@ import { Card1 } from "../Card1";
 import Grid from "../grid/Grid";
 import Typography, { H5, Paragraph, Tiny } from "../Typography";
 import {
+	AlertDialog,
+	AlertDialogBody,
+	AlertDialogContent,
+	AlertDialogHeader,
+	AlertDialogOverlay,
 	Button as CharkraButton,
 	Flex,
 	Icon,
@@ -27,7 +32,7 @@ import {
 	Text,
 	Tooltip,
 } from "@chakra-ui/react";
-import { FaMoneyBillWave, FaPaypal, FaSync, FaWallet } from "react-icons/fa";
+import { FaSync } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { AppThunkDispatch, RootState, useAppSelector } from "@stores/store";
 import { getMyAddress, getMyProfile } from "@stores/slices/user-slice";
@@ -36,10 +41,13 @@ import './Checkout2.css';
 import { getListDelivery } from "@stores/slices/deliveries-slice";
 import { checkVoucher } from "@stores/slices/promotions-slice";
 import { CloseIcon } from "@chakra-ui/icons";
-import { createOrder } from "@stores/slices/orders-slice";
+import { createOrderV2 } from "@stores/slices/orders-slice";
+import { ContentAlter, DiscountType, ErrorMessage, PaymentMethodName, TitleAlter, VoucherType, paymentMethodList } from "@/utils/constants";
+import { getPaymentMethod } from "@/utils/utils";
+import { RealDiscount } from "@/api/interface/promotion";
 
 
-const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDelivery, listDelivery }) => {
+const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, listDeliveries }) => {
 	const [hasVoucher, setHasVoucher] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch<AppThunkDispatch>();
@@ -52,18 +60,18 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDelivery, listD
 	const [isLoading, setIsLoading] = useState(false);
 	const [showErrorOrder, setShowErrorOrder] = useState(false);
 	const [newProducts, setNewProducts] = useState([]);
-
-	const [methodPayment, setMethodPayment] = useState('COD');
+	const [methodPayment, setMethodPayment] = useState(PaymentMethodName.COD);
 	const [voucher, setVoucher] = useState('');
-
+	const [isAlterOpen, setIsAlterOpen] = useState(false);
+	const [messageAlter, setMessageAlter] = useState('');
 	const users = useAppSelector((state: RootState) => state.user);
 
 	const handleSelectAddress = (address, index) => {
-		const tmp = [...listDelivery];
+		const tmp = [...listDeliveries];
 		tmp[index] = {
 			...address
 		};
-		setListDelivery(tmp);
+		setListDeliveries(tmp);
 	}
 
 	const toggleHasVoucher = () => {
@@ -85,7 +93,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDelivery, listD
 			src_code: products.map(x => x.cityOrProvinceId),
 			dest_code: selectAddress ? selectAddress.cityOrProvinceId : 0,
 		})).unwrap().then((res) => {
-			setDeliveries(res.data)
+			setDeliveries(res.data);
 		});
 	}, [selectAddress]);
 
@@ -103,7 +111,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDelivery, listD
 			}, {})
 			setNewProducts(prods);
 
-			setListDelivery(Object.keys(prods).map(() => {
+			setListDeliveries(Object.keys(prods).map(() => {
 				return {
 					src_code: '',
 					dest_code: '',
@@ -114,9 +122,33 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDelivery, listD
 				}
 			}));
 
+
 		}
 
 	}, [products]);
+
+	useEffect(() => {
+		const tmpVouchers = [...vouchers];
+		for (const voucher of tmpVouchers) {
+			if (voucher.voucher_type === VoucherType.DELIVERY) {
+				voucher.real_discount = renderVoucherPrice(voucher);
+			}
+		}
+		setVouchers(tmpVouchers);
+	}, [listDeliveries]);
+
+	useEffect(() => {
+		const tmpVouchers = [...vouchers];
+		for (const voucher of tmpVouchers) {
+			if (voucher.voucher_require.payment_method
+				&& voucher.voucher_require.payment_method !== getPaymentMethod(methodPayment)) {
+				setIsAlterOpen(true);
+				setMessageAlter(ContentAlter.VOUCHER_CHANGED_BY_CHANGE_METHOD_PAYMENT);
+				tmpVouchers.splice(tmpVouchers.indexOf(voucher), 1);
+			}
+		}
+		setVouchers(tmpVouchers);
+	}, [methodPayment]);
 
 	const loadAddress = () => {
 		dispatch(getMyAddress({})).unwrap().then((res) => {
@@ -137,70 +169,175 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDelivery, listD
 		setErrorVoucher("");
 	}
 
-	const handleAddVoucher = (voucher) => {
-		if (vouchers.map(x => x.voucher_code).includes(voucher)) {
-			setErrorVoucher("Voucher đã được áp dụng");
-			return;
+	// Display voucher price
+	const renderVoucherPrice = (voucher): RealDiscount => {
+
+		const result = {
+			totalPrice: 0,
+			deliveries: []
 		}
-		dispatch(checkVoucher({
-			"order_total_amount": products.reduce((acc, item) => acc + item.promotionalPrice > 0 ?
-				item.promotionalPrice : item.price * item.quantity, 0),
-			"payment_method": methodPayment === "PayPal" ? 2 : 1,
-			vouchers: [...vouchers.map(x => x.voucher_code), voucher]
-		})).unwrap().then((res) => {
-			if (res.status !== 200) {
-				setErrorVoucher("Voucher không hợp lệ");
-				return;
+		let totalPrice = 0;
+
+		// Voucher free ship
+		if (voucher.voucher_type === VoucherType.DELIVERY) {
+			// Get price per shop
+			const prices = Object.keys(newProducts).map((key) => {
+				return {
+					key, price: newProducts[key].reduce((acc, item) => acc +
+						item.promotionalPrice > 0 ? item.promotionalPrice : item.price * item.quantity, 0)
+				}
+			});
+
+			// Mapping price with delivery
+			const objPriceDelivery = {}
+			for (let i = 0; i < prices.length; i++) {
+				// id: cost + delivery_id
+				objPriceDelivery[listDeliveries[i].cost + '-' + prices[i].key] = prices[i].price;
 			}
-			for (const v of res.data.data.items) {
-				if (v.voucher_require && v.voucher_require.min_require > 0) {
-					if (getTotalPrice < v.voucher_require.min_require) {
-						setErrorVoucher("Voucher không hợp lệ");
-						return;
+
+			// Sort price with delivery
+			const sortedObjPriceDelivery = Object.fromEntries(
+				Object.entries(objPriceDelivery).sort((a, b) => a[0].localeCompare(b[0]))
+			);
+
+			// case 1: voucher usable is less than delivery
+			if (prices.length > voucher.count_usable) {
+				for (let i = 0; i < voucher.count_usable; i++) {
+					for (const key in sortedObjPriceDelivery) {
+						if (sortedObjPriceDelivery[key] >= voucher.voucher_require.min_require) {
+							const shippingValue = parseInt(key.split('-')[0]);
+							totalPrice += Math.min(voucher.discount_data.shipping_value, shippingValue);
+							result.deliveries.push(key.split('-')[1]);
+							delete sortedObjPriceDelivery[key];
+							break;
+						}
+						delete sortedObjPriceDelivery[key];
 					}
 				}
 			}
-			setVouchers([...res.data.data.items]);
+			// case 2: voucher usable is greater than delivery
+			else {
+				for (const key in sortedObjPriceDelivery) {
+					if (sortedObjPriceDelivery[key] >= voucher.voucher_require.min_require) {
+						const shippingValue = parseInt(key.split('-')[0]);
+						totalPrice += Math.min(voucher.discount_data.shipping_value, shippingValue);
+						result.deliveries.push(key.split('-')[1]);
+					}
+				}
+			}
+			result.totalPrice = totalPrice;
+			return result;
+		}
+		// Voucher discount product
+		else {
+			const { discount_type, discount_percent, discount_value, maximum_value } = voucher.discount_data;
+			const discount = discount_type === DiscountType.PERCENT_DISCOUNT ?
+				discount_percent * getTotalPrice : discount_value;
+			result.totalPrice = Math.min(discount, maximum_value);
+			return result;
+		}
+
+	}
+
+
+	const handleAddVoucher = (voucher) => {
+
+		if (vouchers.map(x => x.voucher_code).includes(voucher)) {
+			setErrorVoucher(ErrorMessage.VOUCHER_USED);
+			return;
+		}
+
+		dispatch(checkVoucher({
+			vouchers: [...vouchers.map(x => x.voucher_code), voucher]
+		})).unwrap().then((res) => {
+			if (res.status !== 200) {
+				setErrorVoucher(ErrorMessage.INVALID_VOUCHER);
+				return;
+			}
+
+			const vouchers = res.data.data.items;
+			/// Check voucher
+			for (const v of vouchers) {
+				if (v.voucher_require && v.voucher_require.min_require > 0) {
+					if (getTotalPrice < v.voucher_require.min_require) {
+						setErrorVoucher(ErrorMessage.VOUCHER_REQUIRE_NOT_MET);
+						return;
+					}
+				}
+
+				if (v.voucher_require.payment_method && v.voucher_require.payment_method !== getPaymentMethod(methodPayment)) {
+					setErrorVoucher(ErrorMessage.VOUCHER_REQUIRE_NOT_MET);
+					return;
+				}
+
+				if (v.count_usable === 0) {
+					setErrorVoucher(ErrorMessage.VOUCHER_USED);
+					return;
+				}
+				v.real_discount = renderVoucherPrice(v);
+			}
+
+
+			setVouchers([...vouchers]);
 			setErrorVoucher("");
 		});
 	}
 
-	const handleOrder = (values) => {
-		if (methodPayment === "Wallet" && profile && profile.eWallet < getTotalPrice) {
+	const handleOrder = () => {
+		if (methodPayment === PaymentMethodName.Wallet && profile && profile.eWallet < getTotalPrice) {
 			return;
 		}
+
 		setIsLoading(true);
-		let payment_method = 1;
-		if (methodPayment === "PayPal")
-			payment_method = 2;
-		else if (methodPayment === "Wallet")
-			payment_method = 3;
-		dispatch(createOrder({
+
+		const paymentVoucher = vouchers.filter(x => x.voucher_type === VoucherType.PRODUCT)
+		const payment_voucher = {
+			voucher_code: null
+		};
+
+		if (paymentVoucher.length > 0) {
+			payment_voucher.voucher_code = paymentVoucher[0].voucher_code;
+		}
+
+		const storeProducts = Object.keys(newProducts).map((key, ind) => {
+			return {
+				store_id: key,
+				order_items: newProducts[key].map((item) => {
+					return {
+						product_id: item.productId,
+						quantity: item.quantity,
+						product_option_id: item.productOptionId,
+					}
+				}),
+				delivery: {
+					delivery_id: listDeliveries[ind].delivery_id
+				},
+				cart_ids: newProducts[key][0].cart_id ? newProducts[key].map((item) => item.cart_id) : []
+			}
+		});
+
+		dispatch(createOrderV2({
 			address: {
 				address_id: selectAddress.id
 			},
-			delivery: {
-				delivery_id: values.address
+			store_orders: storeProducts,
+			promotion_data: {
+				payment_voucher
 			},
-			payment_method,
-			vouchers: vouchers.map(x => x.voucher_code),
-			order_items: products.map(x => {
-				return {
-					cart_id: x.cart_id,
-					product_id: x.productId,
-					option_id: x.productOptionId,
-					quantity: parseInt(x.quantity),
-				}
-			}),
+			payment_method: getPaymentMethod(methodPayment),
 		})).unwrap().then((res) => {
 			setIsLoading(false);
 			if (res.status === 200) {
-				if (methodPayment === "PayPal") {
+				if (methodPayment === PaymentMethodName.PayPal) {
 					navigate(`/payment-paypal/${res.data.data.order_key}`);
 					return;
 				}
 				navigate('/orders/success')
 			}
+		}).catch(() => {
+			setIsLoading(false);
+			setIsAlterOpen(true);
+			setMessageAlter(ErrorMessage.ORDER_FAILED);
 		});
 
 	}
@@ -247,7 +384,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDelivery, listD
 				</Box>
 			)}
 
-			<form onSubmit={handleOrder}>
+			<Box >
 				<Modal isOpen={openSelectAddress} onClose={() => {
 					setOpenSelectAddress(false)
 				}} isCentered>
@@ -258,7 +395,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDelivery, listD
 						<ModalBody>
 							<RadioGroup value={selectAddress}>
 								{users.dataAddress.map((address, index) => (
-									<Box key={index} my={4}>
+									<Box key={index} my={4} >
 										<Flex align="center" justifyContent="space-between">
 											<Typography fontSize="lg">
 												{`${address.contactName} | ${address.phone} | ${address.detailAddress}`}
@@ -323,7 +460,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDelivery, listD
 				{
 					Object.keys(newProducts).map((key, index) => {
 						return <Card1 mb="1.5rem">
-							<Box>
+							<Box key={`box-prods-${index}`}>
 								<Flex
 									justifyContent="flex-start"
 								> <strong>Giỏ hàng {index + 1}</strong></Flex>
@@ -334,21 +471,18 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDelivery, listD
 							{newProducts[key].map((item) => (
 								<Fragment key={item.id}>
 									<div className="cart-item">
-										<a href={`/products/${item.productId}`}>
-											<Avatar
-												src={item.image || "/assets/images/products/iphone-x.png"}
-												mx="1rem"
-												alt={item.nameOption}
-												size={76}
-											/>
-										</a>
+										<Avatar
+											src={item.image || "/assets/images/products/iphone-x.png"}
+											mx="1rem"
+											alt={item.nameOption}
+											size={76}
+											onClick={() => navigate(`/products/${item.productId}`)}
+										/>
 
 										<div className="product-details">
-											<a href={`/products/${item.productId}`}>
-												<H5 className="title" fontSize="14px">
-													{item.productName}
-												</H5>
-											</a>
+											<H5 className="title" fontSize="14px" onClick={() => navigate(`/products/${item.productId}`)}>
+												{item.productName}
+											</H5>
 											<Tiny color="text.muted">
 												{item.price.toFixed(2)}₫ x {item.quantity}
 											</Tiny>
@@ -375,13 +509,15 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDelivery, listD
 												<Box
 													p="1rem"
 													boxShadow="none"
-													border="1px solid"
+													border={item.delivery_id === listDeliveries[index].delivery_id
+														? "2px solid"
+														: "1px solid"}
 													cursor="pointer"
 													borderRadius="10px"
 													borderColor={
-														item.delivery_id === listDelivery[index].delivery_id
+														item.delivery_id === listDeliveries[index].delivery_id
 															? "primary.main"
-															: "transparent"
+															: "black"
 													}
 													onClick={() => handleSelectAddress(
 														item,
@@ -419,7 +555,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDelivery, listD
 						{paymentMethodList.map((item) => (
 							<Grid item md={4} sm={6} xs={12} key={item.name}>
 								<Tooltip
-									isOpen={item.name === 'Wallet' && profile && profile.eWallet < getTotalPrice}
+									isOpen={item.name === PaymentMethodName.Wallet && methodPayment === PaymentMethodName.Wallet && profile && profile.eWallet < getTotalPrice}
 									label="Không đủ tiền"
 									placement="top"
 								>
@@ -429,7 +565,8 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDelivery, listD
 										boxShadow="none"
 										border="2px solid"
 										cursor="pointer"
-										disabled={item.name === 'Wallet' && profile && profile.eWallet < getTotalPrice}
+										disabled={methodPayment === PaymentMethodName.Wallet
+											&& profile && profile.eWallet < getTotalPrice}
 										borderColor={
 											item.name === methodPayment
 												? "primary.main"
@@ -465,7 +602,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDelivery, listD
 					</Paragraph>
 					{vouchers.length > 0 &&
 						vouchers.map((voucher, index) => (
-							<Flex key={`vou-${index}`} direction="row" alignItems="center">
+							<Flex key={`vou-${index}`} direction="row" alignItems="center" mb={2}>
 								<Box mr={2}>
 									<Text color="primary.main" fontWeight="bold">{voucher.detail}</Text>
 								</Box>
@@ -480,7 +617,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDelivery, listD
 								</Box>
 								<Box mr={2}>
 									<Text
-										color="green.500">₫{voucher.discount_value.toLocaleString('vi-VN')}</Text>
+										color="green.500">{voucher.real_discount.totalPrice.toLocaleString('vi-VN')}₫</Text>
 								</Box>
 								<IconButton
 									aria-label="Delete voucher"
@@ -527,24 +664,40 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDelivery, listD
 						mt="1.5rem"
 						type="submit"
 						fullwidth
-						disabled={methodPayment === "" || listDelivery.some(x => x.delivery_id === '')}
+						disabled={methodPayment === "" || listDeliveries.some(x => x.delivery_id === '')
+							|| (methodPayment
+								&& methodPayment === PaymentMethodName.Wallet
+								&& profile
+								&& profile.eWallet < getTotalPrice)}
 						onClick={handleOrder}
 					>
 						Đặt hàng
 					</Button>
 				</Card1>
-			</form>
+			</Box>
 
+			<AlertDialog
+				isOpen={isAlterOpen}
+				onClose={() => setIsAlterOpen(false)}
+				leastDestructiveRef={undefined}
+				isCentered
+			>
+				<AlertDialogOverlay>
+					<AlertDialogContent style={{ backgroundColor: '#92b55e' }}>
+						<AlertDialogHeader fontSize='lg' fontWeight='bold'>
+							{TitleAlter.WARNING_TITLE}
+						</AlertDialogHeader>
+						<AlertDialogBody style={{ fontSize: '15px', color: '#ffffff' }}>
+							{messageAlter}
+						</AlertDialogBody>
 
+					</AlertDialogContent>
+				</AlertDialogOverlay>
+			</AlertDialog>
 		</Box >
 	);
 };
 
-const paymentMethodList = [
-	{ name: 'COD', icon: FaMoneyBillWave, color: "#a0a832" },
-	{ name: 'PayPal', icon: FaPaypal, color: "#3265a8" },
-	{ name: 'Wallet', icon: FaWallet, color: "#32a86d" },
-];
 
 
 export default CheckoutForm2;

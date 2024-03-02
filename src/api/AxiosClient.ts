@@ -1,5 +1,6 @@
 import {
 	CountAllOrderResponse,
+	CreateOrderV2Request,
 	GetTotalCommissionAdminResponse,
 	UpdateOrderByDeliveryRequest
 } from './interface/order';
@@ -920,6 +921,15 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				body: request
 			}),
 
+		createOrderV2: (request: CreateOrderV2Request) =>
+			this.request<CreateOrderResponse>({
+				baseURL: 'http://localhost:8181/api/v2',
+				path: `/orders/user`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: request
+			}),
+
 		getMyOrder: (query: Record<string, string>) => {
 			const queryParams = new URLSearchParams(query).toString();
 			return this.request<GetMyOrderResponse>({
@@ -1164,7 +1174,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		checkVoucher: (request: CheckingVoucherRequest) =>
 			this.request<CheckVoucherReponse>({
-				path: `/vouchers/checking`,
+				path: `/vouchers/checkout`,
 				method: 'POST',
 				type: ContentType.Json,
 				body: request

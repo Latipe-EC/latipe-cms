@@ -3,6 +3,7 @@ import { Api, QueryParamsType } from '../../api/AxiosClient';
 import {
 	CancelOrderRequest,
 	CreateOrderRequest,
+	CreateOrderV2Request,
 	StatusBodyRequest,
 	UpdateOrderByDeliveryRequest
 } from '@interfaces/order';
@@ -14,6 +15,16 @@ export const
 		'orders/create-order',
 		async (request: CreateOrderRequest) => {
 			const response = await api.order.createOrder(request);
+			return response;
+		}
+	);
+
+
+export const
+	createOrderV2 = createAsyncThunk(
+		'orders/create-order-v2',
+		async (request: CreateOrderV2Request) => {
+			const response = await api.order.createOrderV2(request);
 			return response;
 		}
 	);

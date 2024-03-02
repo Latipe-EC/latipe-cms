@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 const CheckoutAlternative = () => {
 	const [products, setProducts] = useState([]);
 	const [vouchers, setVouchers] = useState([]);
-	const [listDelivery, setListDelivery] = useState([]);
+	const [listDeliveries, setListDeliveries] = useState([]);
 	const navigate = useNavigate();
 
 	const dispatch = useDispatch<AppThunkDispatch>();
@@ -66,15 +66,17 @@ const CheckoutAlternative = () => {
 						products={products}
 						vouchers={vouchers}
 						setVouchers={setVouchers}
-						setListDelivery={setListDelivery}
-						listDelivery={listDelivery}
+						setListDeliveries={setListDeliveries}
+						listDeliveries={listDeliveries}
+						key='checkout-form'
 					/>
 				</Grid>
 				<Grid item lg={4} md={4} xs={12}>
 					<CheckoutSummary2
 						products={products}
 						vouchers={vouchers}
-						listDelivery={listDelivery}
+						listDeliveries={listDeliveries}
+						key='checkout-summary'
 					/>
 				</Grid>
 			</Grid>

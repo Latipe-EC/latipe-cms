@@ -13,10 +13,12 @@ import {
 	Center,
 	Divider,
 	IconButton,
+	Spinner,
 	Text,
 	Tooltip,
 	Wrap,
-	WrapItem
+	WrapItem,
+	useToast
 } from "@chakra-ui/react";
 
 import FlexBox from "../FlexBox";
@@ -32,6 +34,8 @@ import { useDispatch } from "react-redux";
 import { addToCart, incrementCount } from "@stores/slices/carts-slice";
 import { AppThunkDispatch } from "@stores/store";
 import { LoginResponse } from "@interfaces/auth";
+import { handleApiCallWithToast } from "@/utils/utils";
+import { ContentToast, TitleToast } from "@/utils/constants";
 
 export interface ProductIntroProps {
 	product: ProductDetailResponse
@@ -49,6 +53,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 	const [selectOption, setSelectOption] = useState([]);
 	const [selectQuantity, setSelectQuantity] = useState(product.productClassifications[0].quantity);
 	const [quantity, setQuantity] = useState(1);
+	const toast = useToast();
 	const [selectClassification, setSelectClassification] = useState(null);
 	const [avg, setAvg] = useState(0);
 	// const routerId = router.query.id as string;
@@ -64,10 +69,8 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 
 	const handleBuyNow = () => {
 		const REACT_STARTER_AUTH: LoginResponse = JSON.parse(localStorage.getItem("REACT_STARTER_AUTH"));
-		console.log(123123123123, REACT_STARTER_AUTH);
 		if (!REACT_STARTER_AUTH) {
 			window.location.href = "/login";
-
 			return;
 		}
 
@@ -86,23 +89,33 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 	};
 
 	const handleAddToCart = () => {
-		console.log(selectOption);
+
 		if (product.productVariants.length > 0 && (product.productVariants.length
 			!== selectOption.length || selectOption === null)) {
 			return;
 		}
-		dispatch(addToCart(
+
+		handleApiCallWithToast(dispatch,
+			addToCart,
 			{
 				productId: product.id,
 				quantity: quantity,
 				productOptionId: selectClassification
-			}
-		)).unwrap().then((res) => {
-			if (res.status.toString().startsWith("20") && res.data.quantity === quantity) {
-				dispatch(incrementCount());
-			}
-		}).catch(() => {
-		});
+			},
+			null,
+			TitleToast.ADD_TO_CART,
+			TitleToast.SUCCESS,
+			ContentToast.ADD_TO_CART_SUCCESS,
+			TitleToast.ERROR,
+			ContentToast.ADD_TO_CART_ERROR,
+			null,
+			toast,
+			<Spinner />,
+			(res) => {
+				if (res.data.quantity === quantity)
+					dispatch(incrementCount())
+			})
+
 		setIsOpen(true);
 		setTimeout(() => setIsOpen(false), 1000);
 	};

@@ -68,6 +68,7 @@ export enum TitleToast {
 	ADD_COMMISSION = 'Thêm hoa hồng',
 	UPDATE_COMMISSION = 'Cập nhật hoa hồng',
 	DELETE_COMMISSION = 'Xóa hoa hồng',
+	ADD_TO_CART = 'Thêm vào giỏ hàng',
 }
 
 export enum ContentToast {
@@ -89,6 +90,8 @@ export enum ContentToast {
 	UPDATE_COMMISSION_ERROR = 'Cập nhật hoa hồng thất bại',
 	DELETE_COMMISSION_SUCCESS = 'Xóa hoa hồng thành công',
 	DELETE_COMMISSION_ERROR = 'Xóa hoa hồng thất bại',
+	ADD_TO_CART_SUCCESS = 'Thêm vào giỏ hàng thành công',
+	ADD_TO_CART_ERROR = 'Thêm vào giỏ hàng thất bại',
 }
 
 export enum ToastStatus {

@@ -42,7 +42,7 @@ import { AddIcon, ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import FlexBox from '@components/FlexBox';
 import defaultImage from '../../../assets/default.jpg';
 import CategoryForm from './CategoryForm';
-import { Action, ContentToast, TitleToast, Title } from '@/utils/constants';
+import { Action, ContentToast, TitleToast, Title, Content } from '@/utils/constants';
 import { handleApiCallWithToast } from '@/utils/utils';
 
 const CategoriesAdmin = () => {
@@ -75,11 +75,11 @@ const CategoriesAdmin = () => {
 				},
 			},
 			{
-				Header: 'Tên',
+				Header: Content.NAME_CATEGORY,
 				accessor: 'name',
 			},
 			{
-				Header: 'Hình ảnh',
+				Header: Content.IMAGE,
 				accessor: 'image',
 				Cell: ({ value }) => {
 					return (
@@ -96,7 +96,7 @@ const CategoriesAdmin = () => {
 				},
 			},
 			{
-				Header: 'Danh mục cha',
+				Header: Content.PARENT_CATEGORY,
 				accessor: 'parentCategoryId',
 				sortType: 'basic',
 				Cell: ({ value }) => {

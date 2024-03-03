@@ -131,7 +131,7 @@ export const handleApiCallWithToast =
 						position: "top-right",
 					});
 					if (CallbackSuccess)
-						CallbackSuccess();
+						CallbackSuccess(res);
 					setTimeout(() => {
 						if (navigationPath)
 							navigate(navigationPath);
@@ -146,7 +146,7 @@ export const handleApiCallWithToast =
 						position: "top-right",
 					});
 					if (CallbackError)
-						CallbackError();
+						CallbackError(res);
 				}
 			}).catch(() => {
 				toast.close(loadingToastId);

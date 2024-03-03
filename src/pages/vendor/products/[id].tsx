@@ -60,7 +60,8 @@ import { getProductById, updateProduct } from "@stores/slices/products-slice";
 import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { truncateFilename } from "../../../utils/utils";
+import { handleApiCallWithToast, truncateFilename } from "../../../utils/utils";
+import { Path, ContentToast, TitleToast } from "@/utils/constants";
 
 
 const ProductDetailVendor = () => {
@@ -429,43 +430,19 @@ const ProductDetailVendor = () => {
 			originalFiles: fileOriginal
 		}
 
-		console.log(request);
-		const loadingToastId = toast({
-			title: 'Upadting product...',
-			description: <Spinner />,
-			status: 'info',
-			duration: null,
-			isClosable: true,
-			position: "top-right",
-		})
+		handleApiCallWithToast(dispatch,
+			updateProduct,
+			request,
+			Path.VENDOR_PRODUCT,
+			TitleToast.UPDATE_PRODUCT,
+			TitleToast.SUCCESS,
+			ContentToast.UPDATE_PRODUCT_SUCCESS,
+			TitleToast.ERROR,
+			ContentToast.UPDATE_PRODUCT_ERROR,
+			navigate,
+			toast,
+			<Spinner />)
 
-		dispatch(updateProduct(request))
-			.unwrap()
-			.then((res) => {
-				toast.close(loadingToastId)
-				if (res.status.toString().includes("20")) {
-					toast({
-						title: 'Success!',
-						description: "Update product success",
-						status: 'success',
-						duration: 2000,
-						isClosable: true,
-						position: "top-right",
-					})
-					setTimeout(() => {
-						navigate("/vendor/products");
-					}, 2500)
-				} else {
-					toast({
-						title: 'Error!',
-						description: "Update product failed",
-						status: 'error',
-						duration: 2000,
-						isClosable: true,
-						position: "top-right",
-					})
-				}
-			})
 	}
 
 	return (
@@ -868,7 +845,7 @@ const ProductDetailVendor = () => {
 													py="2"
 													textAlign="center"
 												>
-													Promotional Price
+													Giá khuyến mãi
 												</Th>
 												<Th
 													bg="green.200"
@@ -881,7 +858,7 @@ const ProductDetailVendor = () => {
 													py="2"
 													textAlign="center"
 												>
-													Warehouse
+													Kho
 												</Th>
 												<Th
 													bg="green.200"

@@ -22,6 +22,7 @@ import {
 } from "@stores/slices/orders-slice";
 import { Chip } from "@components/Chip";
 import { Tooltip } from "@chakra-ui/react";
+import { Action, Content, Title } from "@/utils/constants";
 
 const OrderDetails = () => {
 	const { id } = useParams();
@@ -125,12 +126,12 @@ const OrderDetails = () => {
 	return (
 		<div>
 			<DashboardPageHeader
-				title="Chi tiết đơn hàng"
+				title={Title.ORDER_DETAIL}
 				iconName="bag_filled"
 				button={
 					<a href="/vendor/orders">
 						<Button color="primary" bg="primary.light" px="2rem">
-							Quay lại
+							{Action.BACK}
 						</Button>
 					</a>
 				}
@@ -164,7 +165,7 @@ const OrderDetails = () => {
 					</FlexBox>}
 					<FlexBox className="pre" m="6px" justifyContent="flex-end">
 						<Typography fontSize="14px" color="text.muted" mr="4px">
-							Đặt hàng lúc:
+							{Content.DATE_PURCHASED}:
 						</Typography>
 						<Typography fontSize="14px">
 							{format(new Date(), "dd MMM, yyyy")}
@@ -208,20 +209,12 @@ const OrderDetails = () => {
 									</FlexBox>)
 							}
 
-							{/* {response.data.status === 1 && item.is_prepared === 1 && (
-								<FlexBox flex="0 0 0 !important" m="6px" alignItems="center">
-									<Typography fontSize="14px" color="text.muted">
-										Thuộc tính: {item.name_option}
-									</Typography>
-								</FlexBox>
-							)} */}
-
 							{response.data.status !== 7 && item.is_prepared === 0 && (
 								<FlexBox flex="0 0 0 !important" m="6px" alignItems="center">
 									<Tooltip label="Confirm Order" fontSize="md">
 										<Button bg="green" color="white"
 											onClick={() => handleConfirmOrder(item)}
-										>Xác nhận</Button>
+										>{Action.CONFIRM}</Button>
 									</Tooltip>
 								</FlexBox>
 							)
@@ -235,7 +228,7 @@ const OrderDetails = () => {
 				<Grid item lg={6} md={6} xs={12}>
 					<Card p="20px 30px" mb="1.5rem">
 						<H5 mt="0px" mb="14px">
-							Địa chỉ giao hàng
+							{Content.ADDRESS_DELIVERY}
 						</H5>
 						<H6 my="0px">{response.data.delivery.shipping_name} | {response.data.delivery.shipping_phone}
 						</H6>
@@ -250,7 +243,7 @@ const OrderDetails = () => {
 						<Grid item lg={6} md={6} xs={12}>
 							<Card p="20px 30px" mb="1.5rem">
 								<H5 mt="0px" mb="14px">
-									Tổng cộng
+									{Content.TOTAL}
 								</H5>
 								<FlexBox
 									justifyContent="space-between"
@@ -258,7 +251,7 @@ const OrderDetails = () => {
 									mb="0.5rem"
 								>
 									<Typography fontSize="14px" color="text.hint">
-										Tiền hàng:
+										{Content.GOODS_MONEY}:
 									</Typography>
 									<H6 my="0px">{
 										response.data.store_order_amount.toLocaleString('vi-VN')}₫
@@ -270,7 +263,7 @@ const OrderDetails = () => {
 									mb="0.5rem"
 								>
 									<Typography fontSize="14px" color="text.hint">
-										Phí ship:
+										{Content.SHIPPING_FEE}:
 									</Typography>
 									<H6 my="0px">{
 										response.data.delivery.cost.toLocaleString("vi-VN")}₫
@@ -283,7 +276,7 @@ const OrderDetails = () => {
 									mb="0.5rem"
 								>
 									<Typography fontSize="14px" color="text.hint">
-										Phí nền tảng:
+										{Content.COMMERCIAL_FLOOR_FEE}:
 									</Typography>
 									<H6 my="0px">{
 										response.data.commission_detail.system_fee.toLocaleString("vi-VN")}₫
@@ -297,7 +290,7 @@ const OrderDetails = () => {
 									mb="0.5rem"
 								>
 									<Typography fontSize="14px" color="text.hint">
-										Tiền shop nhận được:
+										{Content.MONEY_RECEIVED_BY_THE_SHOP}:
 									</Typography>
 									<H6 my="0px">{
 										response.data.commission_detail.amount_received.toLocaleString("vi-VN")}₫
@@ -315,7 +308,7 @@ const OrderDetails = () => {
 								<Button variant="contained" color="primary" ml="auto"
 									onClick={handleCancelOrder}
 								>
-									Hủy đơn
+									{Action.CANCEL_ORDER}
 								</Button>
 							}
 						</Grid>

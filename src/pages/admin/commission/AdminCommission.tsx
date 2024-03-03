@@ -42,6 +42,8 @@ import {
 	updateCommission
 } from '@stores/slices/commissions-slice';
 import { CommissionResponse } from '../../../api/interface/commission';
+import { Action, Content, ContentToast, Title, TitleToast } from '@/utils/constants';
+import { handleApiCallWithToast } from '@/utils/utils';
 
 const CommissionsAdmin = () => {
 
@@ -72,21 +74,21 @@ const CommissionsAdmin = () => {
 				},
 			},
 			{
-				Header: 'Tên hoa hồng',
+				Header: Content.NAME_COMMISSION,
 				accessor: 'name',
 			},
 			{
-				Header: 'Phí',
+				Header: Content.COMMISSION_FEE,
 				accessor: 'feeOrder',
 				width: 100,
 			},
 			{
-				Header: 'Điểm',
+				Header: Content.COMMISSION_POINT,
 				accessor: 'minPoint',
 				width: 100,
 			},
 			{
-				Header: 'Xem',
+				Header: Content.VIEW,
 				Cell: ({ row }) => {
 					const item = row.original;
 					return (
@@ -95,12 +97,12 @@ const CommissionsAdmin = () => {
 								<Button colorScheme="green" onClick={() => {
 									setCommission(item), setShowModalCommission(true)
 								}}>
-									Xem chi tiết
+									{Action.VIEW_DETAIL}
 								</Button>
 								<Button colorScheme="red" onClick={() => {
 									setDeleteCommissionId(item.id)
 								}}>
-									Xóa
+									{Action.DELETE}
 								</Button>
 							</ButtonGroup>
 						</Flex>
@@ -144,30 +146,20 @@ const CommissionsAdmin = () => {
 	};
 
 	const handleCreate = () => {
-		const loadingToastId = toast({
-			title: 'Đang thêm...',
-			description: <Spinner />,
-			status: 'info',
-			duration: null,
-			isClosable: true,
-			position: "top-right",
-		})
-		dispatch(createCommission(commission)).unwrap().then((res) => {
-			toast.close(loadingToastId);
-			if (res.status !== 201) {
-				toast({
-					title: 'Có lỗi xảy ra',
-					status: 'error',
-					duration: 3000,
-					isClosable: true,
-				});
-			} else {
-				toast({
-					title: 'Thêm hoa hồng thành công',
-					status: 'success',
-					duration: 3000,
-					isClosable: true,
-				});
+
+		handleApiCallWithToast(dispatch,
+			createCommission,
+			commission,
+			null,
+			TitleToast.ADD_COMMISSION,
+			TitleToast.SUCCESS,
+			ContentToast.ADD_COMMISSION_SUCCESS,
+			TitleToast.ERROR,
+			ContentToast.ADD_COMMISSION_ERROR,
+			null,
+			toast,
+			<Spinner />,
+			() => {
 				setShowModalCommission(false);
 				setCommission({
 					id: null,
@@ -175,82 +167,59 @@ const CommissionsAdmin = () => {
 					feeOrder: null,
 					minPoint: null
 				});
-			}
+			})
 
-		});
 	}
 
 	const handleUpdate = () => {
-		const loadingToastId = toast({
-			title: 'Đang cập nhật...',
-			description: <Spinner />,
-			status: 'info',
-			duration: null,
-			isClosable: true,
-			position: "top-right",
-		})
-		dispatch(updateCommission({
-			id: commission.id,
-			name: commission.name,
-			feeOrder: commission.feeOrder,
-			minPoint: commission.minPoint
-		})).unwrap().then((res) => {
-			toast.close(loadingToastId);
-			if (res.status !== 200) {
-				toast({
-					title: 'Có lỗi xảy ra',
-					status: 'error',
-					duration: 3000,
-					isClosable: true,
-				});
-			} else {
-				toast({
-					title: 'Cập nhật hoa hồng thành công',
-					status: 'success',
-					duration: 3000,
-					isClosable: true,
-				});
 
-			}
+		handleApiCallWithToast(dispatch,
+			updateCommission,
+			{
+				id: commission.id,
+				name: commission.name,
+				feeOrder: commission.feeOrder,
+				minPoint: commission.minPoint
+			},
+			null,
+			TitleToast.UPDATE_COMMISSION,
+			TitleToast.SUCCESS,
+			ContentToast.UPDATE_COMMISSION_SUCCESS,
+			TitleToast.ERROR,
+			ContentToast.UPDATE_COMMISSION_ERROR,
+			null,
+			toast,
+			<Spinner />,
+			() => {
+				setShowModalCommission(false);
+				setCommission({
+					id: null,
+					name: '',
+					feeOrder: null,
+					minPoint: null
+				});
+			})
 
-		});
-		setShowModalCommission(false);
-		setCommission({
-			id: null,
-			name: '',
-			feeOrder: null,
-			minPoint: null
-		});
 	}
 
 	const handleDelete = () => {
-		const loadingToastId = toast({
-			title: 'Đang xóa...',
-			description: <Spinner />,
-			status: 'info',
-			duration: null,
-			isClosable: true,
-			position: "top-right",
-		})
-		dispatch(deleteCommission(deleteCommissionId)).unwrap().then((res) => {
-			toast.close(loadingToastId);
-			if (res.status !== 200) {
-				toast({
-					title: 'Có lỗi xảy ra',
-					status: 'error',
-					duration: 3000,
-					isClosable: true,
-				});
-			} else {
-				toast({
-					title: 'Xóa hoa hồng thành công',
-					status: 'success',
-					duration: 3000,
-					isClosable: true,
-				});
-			}
-		});
-		setDeleteCommissionId(null);
+
+		handleApiCallWithToast(dispatch,
+			deleteCommission,
+			deleteCommissionId,
+			null,
+			TitleToast.DELETE_COMMISSION,
+			TitleToast.SUCCESS,
+			ContentToast.DELETE_COMMISSION_SUCCESS,
+			TitleToast.ERROR,
+			ContentToast.DELETE_COMMISSION_ERROR,
+			null,
+			toast,
+			<Spinner />,
+			() => {
+				setDeleteCommissionId(null);
+			})
+
 	}
 
 	return (
@@ -277,7 +246,7 @@ const CommissionsAdmin = () => {
 							});
 							setShowModalCommission(true)
 						}
-					}> Thêm hoa hồng</Button>
+					}> {Title.ADD_COMMISSION}</Button>
 				</Box>
 			</Flex>
 			{commissions.data.length === 0 ? (
@@ -289,7 +258,7 @@ const CommissionsAdmin = () => {
 				>
 					<Box>
 						<Text fontSize="xl" fontWeight="bold" textAlign="center" my={10}>
-							Không tìm thấy hoa hồng nào
+							{Content.NOT_FOUND}
 						</Text>
 					</Box>
 				</Flex>
@@ -342,6 +311,8 @@ const CommissionsAdmin = () => {
 						}}
 					/>
 				</FlexBox>
+
+				{/* ADD OR EDIT COMMISSION */}
 				<Modal isOpen={showModalCommission} onClose={() => {
 					setShowModalCommission(false)
 				}} isCentered>
@@ -354,12 +325,12 @@ const CommissionsAdmin = () => {
 							textAlign: "center",
 							marginTop: '20px'
 						}}>
-							Hoa hồng
+							{Title.COMMISSION}
 						</ModalHeader>
 						<ModalCloseButton />
 						<ModalBody>
 							<FormControl my={4}>
-								<FormLabel>Tên</FormLabel>
+								<FormLabel>{Content.NAME_COMMISSION}</FormLabel>
 								<Input
 									value={commission.name}
 									min="100"
@@ -369,7 +340,7 @@ const CommissionsAdmin = () => {
 
 							<FormControl my={4}
 								isInvalid={commission.feeOrder !== null && (commission.feeOrder >= 1 || commission.feeOrder <= 0)}>
-								<FormLabel>Phí hoa hồng</FormLabel>
+								<FormLabel>{Content.COMMISSION_FEE}</FormLabel>
 								<Input
 									value={commission.feeOrder}
 									type='number'
@@ -388,7 +359,7 @@ const CommissionsAdmin = () => {
 							</FormControl>
 
 							<FormControl my={4}>
-								<FormLabel>Điểm tối thiểu</FormLabel>
+								<FormLabel>{Content.COMMISSION_POINT}</FormLabel>
 								<Input
 									type='number'
 									value={commission.minPoint}
@@ -411,22 +382,23 @@ const CommissionsAdmin = () => {
 										minPoint: null
 									});
 								}}>
-									Hủy
+									{Action.CANCEL}
 								</Button>
 								{commission && commission.id ? <Button
 									isDisabled={commission.name === '' || commission.feeOrder === null || commission.minPoint === null || commission.feeOrder > 1 || commission.feeOrder < 0}
 									colorScheme="red" onClick={handleUpdate}>
-									Cập nhật
+									{Action.EDIT}
 								</Button> : <Button colorScheme="red" onClick={handleCreate}
 									isDisabled={commission.name === '' || commission.feeOrder === null || commission.minPoint === null || commission.feeOrder > 1 || commission.feeOrder < 0}
 								>
-									Thêm
+									{Action.ADD}
 								</Button>}
 
 							</Flex>
 						</ModalFooter>
 					</ModalContent>
 				</Modal>
+				{/* DELETE COMMISSION  */}
 				<Modal isOpen={deleteCommissionId !== null} onClose={() => {
 					setDeleteCommissionId(null)
 				}} isCentered>
@@ -439,13 +411,13 @@ const CommissionsAdmin = () => {
 							textAlign: "center",
 							marginTop: '20px'
 						}}>
-							Xóa hoa hồng!
+							{Title.DELETE_COMMISSION}!
 						</ModalHeader>
 						<ModalCloseButton />
 						<ModalBody>
 							<WarningTwoIcon boxSize={6} color="red.500" />
 							<Text fontSize="md" color="gray.600" textAlign="center">
-								Hành vi sau không thể hoàn tác, Bạn có chắc chắn muốn xóa hoa hồng này?
+								{Content.CONFIRM_DELETE_COMMISSION}
 							</Text>
 						</ModalBody>
 						<ModalFooter>
@@ -453,12 +425,11 @@ const CommissionsAdmin = () => {
 								<Button colorScheme="teal" mr={4} onClick={() => {
 									setDeleteCommissionId(null);
 								}}>
-									Hủy
+									{Action.CANCEL}
 								</Button>
 								<Button colorScheme="red" onClick={handleDelete}>
-									Xóa
+									{Action.DELETE}
 								</Button>
-
 							</Flex>
 						</ModalFooter>
 					</ModalContent>

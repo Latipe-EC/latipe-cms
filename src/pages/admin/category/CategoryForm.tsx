@@ -19,6 +19,7 @@ import { EditIcon } from "@chakra-ui/icons";
 import ImageUploader from "@components/upload-image/UploadImage";
 import Dropdown from "@components/dropdown/Dropdown";
 import AttributeForm from "@components/attribute/AttributeForm";
+import { Action, Content, Title } from "@/utils/constants";
 
 interface Category {
 	id: string,
@@ -73,30 +74,31 @@ const CategoryForm: React.FC<Props> = ({
 					textAlign: "center",
 					marginTop: '20px'
 				}}>
-					{selectedCategory.id === null || selectedCategory.id.trim() === "" ? "Add Category" : "Edit Category"}
+					{selectedCategory.id === null || selectedCategory.id.trim() === "" ?
+						Title.ADD_CATEGORY : Title.UPDATE_CATEGORY}
 				</ModalHeader>
 				<ModalCloseButton />
 				<ModalBody>
 					<FormControl isRequired isInvalid={selectedCategory.name === ""}>
-						<FormLabel style={{ fontWeight: 'bold' }}>Name</FormLabel>
+						<FormLabel style={{ fontWeight: 'bold' }}>{Content.NAME_CATEGORY}</FormLabel>
 						<Input value={selectedCategory.name} onChange={(e) => {
 							setSelectedCategory({ ...selectedCategory, name: e.target.value })
 						}} required />
 						<FormErrorMessage>name is required</FormErrorMessage>
 					</FormControl>
 					<FormControl>
-						<FormLabel style={{ fontWeight: 'bold' }}>Image</FormLabel>
+						<FormLabel style={{ fontWeight: 'bold' }}>{Content.IMAGE}</FormLabel>
 						<ImageUploader value={imagePreviewUrl} setValue={setImagePreviewUrl}></ImageUploader>
 					</FormControl>
 					<FormControl>
-						<FormLabel style={{ fontWeight: 'bold' }}>Parent Category</FormLabel>
+						<FormLabel style={{ fontWeight: 'bold' }}>{Content.PARENT_CATEGORY}</FormLabel>
 						<Dropdown
 							value={selectedCategory.parentCategoryId}
 							onChange={handleParentCategoryChange}
 						/>
 					</FormControl>
 					<FormControl>
-						<FormLabel style={{ fontWeight: 'bold' }}>Edit attributes</FormLabel>
+						<FormLabel style={{ fontWeight: 'bold' }}>{Content.EDIT_ATTRIBUTES}</FormLabel>
 						<AttributeForm
 							attributes={attributes}
 							removeAttribute={(index) => {
@@ -122,11 +124,11 @@ const CategoryForm: React.FC<Props> = ({
 				</ModalBody>
 				<ModalFooter>
 					<Button variant='ghost' color="red" mr={3} onClick={handleModalClose}>
-						Close
+						{Action.CLOSE}
 					</Button>
 					<Button variant='ghost' color='green'
 						onClick={handleModalSubmit}
-					>Save</Button>
+					>	{Action.SAVE}</Button>
 				</ModalFooter>
 			</ModalContent>
 		</Modal>

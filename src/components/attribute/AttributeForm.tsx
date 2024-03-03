@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { Attribute } from "@interfaces/product";
 import { AddIcon, SmallCloseIcon } from "@chakra-ui/icons";
+import { Action, Content, Title } from "@/utils/constants";
 
 
 interface Props {
@@ -51,7 +52,7 @@ const AttributeForm: React.FC<Props> = ({
 					textAlign: "center",
 					marginTop: '20px'
 				}}>
-					Add Attribute
+					{Title.ADD_ATTRIBUTES}
 				</ModalHeader>
 				<ModalCloseButton />
 				<ModalBody>
@@ -64,7 +65,7 @@ const AttributeForm: React.FC<Props> = ({
 										<FormLabel alignItems="center" fontWeight="bold" mr={2}
 											mt={2}
 											mb={2}>
-											Attribute {index + 1}
+											{index + 1}
 										</FormLabel>
 										<IconButton icon={<SmallCloseIcon />} size="sm" colorScheme="red"
 											onClick={() => removeAttribute(index)} aria-label={""} />
@@ -72,7 +73,7 @@ const AttributeForm: React.FC<Props> = ({
 									<Box>
 										<Flex alignItems="center" mb="2">
 											<FormLabel htmlFor="name" mr="2">
-												Name
+												{Content.NAME_ATTRIBUTE}
 											</FormLabel>
 											<Input
 												id="name"
@@ -87,15 +88,15 @@ const AttributeForm: React.FC<Props> = ({
 											<Select id="type" value={attribute.type} w="50%" mr="2"
 												onChange={(e) => handleInputChange(index, "type", e.target.value)}
 											>
-												<option value="text">Text</option>
-												<option value="number">Number</option>
-												<option value="selectbox">Selectbox</option>
+												<option value="text">{Content.TEXT}</option>
+												<option value="number">{Content.NUMBER}</option>
+												<option value="selectbox">{Content.SELECT_BOX}</option>
 											</Select>
 											<FormLabel htmlFor="type" mr="2">
-												Type
+												{Content.TYPE_ATTRIBUTE}
 											</FormLabel>
 											<FormLabel htmlFor="prefixUnit" mr="2">
-												Prefix Unit
+												{Content.PREFIX_UNIT_ATTRIBUTE}
 											</FormLabel>
 											<Input
 												id="prefixUnit"
@@ -110,7 +111,7 @@ const AttributeForm: React.FC<Props> = ({
 											<>
 												<Flex alignItems="center" mb="2">
 													<FormLabel htmlFor="options" mr="2">
-														Options
+														{Content.OPTIONS_ATTRIBUTE}
 													</FormLabel>
 													<Input
 														id="options"
@@ -123,7 +124,7 @@ const AttributeForm: React.FC<Props> = ({
 												</Flex>
 												<Flex alignItems="center" mb="2">
 													<FormLabel htmlFor="defaultValue" mr="2">
-														Default Value
+														{Content.DEFAULT_VALUE_ATTRIBUTE}
 													</FormLabel>
 													<Select id="defaultValue" value={attribute.defaultValue} w="100%"
 														mr="2" onChange={
@@ -147,7 +148,7 @@ const AttributeForm: React.FC<Props> = ({
 				</ModalBody>
 				<ModalFooter>
 					<Button variant='ghost' color="red" mr={3} onClick={handleAddClose}>
-						Close
+						{Action.CLOSE}
 					</Button>
 				</ModalFooter>
 			</ModalContent>

@@ -1,4 +1,4 @@
-import { PaymentMethodName } from "@/utils/constants";
+import { PaymentMethodName, ToastStatus } from "@/utils/constants";
 import { themeGet } from "@styled-system/theme-get";
 import { differenceInMinutes } from "date-fns";
 import { ceil } from "lodash";
@@ -88,5 +88,77 @@ export function getMonthDifference(startDate, endDate) {
 
 
 export function getPaymentMethod(method: string): number {
-	return method === PaymentMethodName.COD ? 0 : method === PaymentMethodName.PayPal ? 1 : 2;
+	return method === PaymentMethodName.COD ? 1 : method === PaymentMethodName.PayPal ? 2 : 3;
 }
+
+export const handleApiCallWithToast =
+	(
+		dispatch,
+		apiCall,
+		request,
+		navigationPath,
+		titleProccess,
+		titleSuccess,
+		contentSuccess,
+		titleError,
+		contentError,
+		navigate,
+		toast,
+		Spinner,
+		CallbackSuccess = null,
+		CallbackError = null
+	) => {
+		const loadingToastId = toast({
+			title: titleProccess,
+			description: Spinner,
+			status: ToastStatus.INFO,
+			duration: null,
+			isClosable: true,
+			position: "top-right",
+		});
+
+		dispatch(apiCall(request))
+			.unwrap()
+			.then((res) => {
+				toast.close(loadingToastId);
+				if (res.status.toString().includes("20")) {
+					toast({
+						title: titleSuccess,
+						description: contentSuccess,
+						status: ToastStatus.SUCCESS,
+						duration: 2000,
+						isClosable: true,
+						position: "top-right",
+					});
+					if (CallbackSuccess)
+						CallbackSuccess();
+					setTimeout(() => {
+						if (navigationPath)
+							navigate(navigationPath);
+					}, 2500);
+				} else {
+					toast({
+						title: titleError,
+						description: contentError,
+						status: ToastStatus.ERROR,
+						duration: 2000,
+						isClosable: true,
+						position: "top-right",
+					});
+					if (CallbackError)
+						CallbackError();
+				}
+			}).catch(() => {
+				toast.close(loadingToastId);
+				toast({
+					title: titleError,
+					description: contentError,
+					status: ToastStatus.ERROR,
+					duration: 2000,
+					isClosable: true,
+					position: "top-right",
+				});
+				if (CallbackError)
+					CallbackError();
+			});
+	};

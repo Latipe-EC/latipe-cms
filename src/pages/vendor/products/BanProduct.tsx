@@ -40,7 +40,8 @@ const Products = () => {
 	const stores = useAppSelector((state: RootState) => state.stores);
 
 	useEffect(() => {
-		dispatch(getMyProductBanStore({ skip: currentPage * 10, limit: 10, name: searchText, orderBy }));
+		dispatch(
+			getMyProductBanStore({ skip: currentPage * 10, limit: 10, name: searchText, orderBy }));
 	}, []);
 
 	useEffect(() => {

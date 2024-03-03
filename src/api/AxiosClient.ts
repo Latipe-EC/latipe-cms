@@ -913,6 +913,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			}),
 	}
 	order = {
+
 		createOrder: (request: CreateOrderRequest) =>
 			this.request<CreateOrderResponse>({
 				path: `/orders/user`,
@@ -923,8 +924,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		createOrderV2: (request: CreateOrderV2Request) =>
 			this.request<CreateOrderResponse>({
-				baseURL: 'http://localhost:8181/api/v2',
-				path: `/orders/user`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/user`,
 				method: 'POST',
 				type: ContentType.Json,
 				body: request
@@ -933,7 +934,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 		getMyOrder: (query: Record<string, string>) => {
 			const queryParams = new URLSearchParams(query).toString();
 			return this.request<GetMyOrderResponse>({
-				path: `/orders/user?${queryParams}`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/user?${queryParams}`,
 				method: 'GET',
 				type: ContentType.Json,
 
@@ -942,7 +944,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		cancelOrder: (request: CancelOrderRequest) =>
 			this.request<unknown>({
-				path: `/orders/user/cancel`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/user/cancel`,
 				method: 'PATCH',
 				type: ContentType.Json,
 				body: request
@@ -950,14 +953,16 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getOrderById: (id: string) =>
 			this.request<GetOrderByIdResponse>({
-				path: `/orders/user/${id}`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/user/${id}`,
 				method: 'GET',
 				type: ContentType.Json,
 			}),
 
 		countMyOrder: () =>
 			this.request<CountMyOrderResponse>({
-				path: `/orders/user/total/count`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/user/total/count`,
 				method: 'GET',
 				type: ContentType.Json,
 			}),
@@ -965,7 +970,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 		searchStoreOrder: (params: Record<string, string>) => {
 			const queryParams = new URLSearchParams(params).toString();
 			return this.request<searchStoreOrderResponse>({
-				path: `/orders/store?${queryParams}`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/store?${queryParams}`,
 				method: 'GET',
 				type: ContentType.Json,
 			})
@@ -973,20 +979,23 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		updateOrderItemStatusByStore:
 			(request: StatusBodyRequest) => this.request<UpdateOrderItemStatusByStoreResponse>({
-				path: `/orders/store/${request.id}/items`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/store/${request.id}/items`,
 				method: 'PATCH',
 				type: ContentType.Json,
 				body: request.body
 			}),
 
 		getStoreOrderDetail: (id: string) => this.request<StoreOrderDetailResponse>({
-			path: `/orders/store/${id}`,
+			baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+			path: `/store/${id}`,
 			method: 'GET',
 			type: ContentType.Json,
 		}),
 
 		cancelOrderItem: (request: StatusBodyRequest) => this.request<UpdateOrderItemStatusByStoreResponse>({
-			path: `/orders/store/${request.id}/items`,
+			baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+			path: `/store/${request.id}/items`,
 			method: 'DELETE',
 			type: ContentType.Json,
 			body: request.body
@@ -994,7 +1003,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getTotalOrderInMonth:
 			(params: QueryParamsType) => this.request<GetTotalOrderInMonthResponse>({
-				path: `/orders/statistic/store/total-order/month`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/statistic/store/total-order/month`,
 				method: 'GET',
 				type: ContentType.Json,
 				query: {
@@ -1004,7 +1014,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getTotalOrderInYear:
 			(params: QueryParamsType) => this.request<GetTotalOrderInYear>({
-				path: `/orders/statistic/store/total-order/year`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/statistic/store/total-order/year`,
 				method: 'GET',
 				type: ContentType.Json,
 				query: {
@@ -1014,7 +1025,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getTotalCommission:
 			(params: QueryParamsType) => this.request<GetTotalCommissionResponse>({
-				path: `/orders/statistic/store/total-commission`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/statistic/store/total-commission`,
 				method: 'GET',
 				type: ContentType.Json,
 				query: {
@@ -1024,7 +1036,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getProductBestSeller:
 			(params: QueryParamsType) => this.request<GetProductBestSellerResponse>({
-				path: `/orders/statistic/store/list-of-product`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/statistic/store/list-of-product`,
 				method: 'GET',
 				type: ContentType.Json,
 				query: {
@@ -1035,7 +1048,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 		searchOrderAdmin: (params: Record<string, string>) => {
 			const queryParams = new URLSearchParams(params).toString();
 			return this.request<searchStoreOrderResponse>({
-				path: `/orders/admin?${queryParams}`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/admin?${queryParams}`,
 				method: 'GET',
 				type: ContentType.Json,
 			})
@@ -1044,7 +1058,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 		searchOrderDelivery: (params: Record<string, string>) => {
 			const queryParams = new URLSearchParams(params).toString();
 			return this.request<searchStoreOrderResponse>({
-				path: `/orders/delivery?${queryParams}`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/delivery?${queryParams}`,
 				method: 'GET',
 				type: ContentType.Json,
 			})
@@ -1052,7 +1067,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		updateStatusOrderByDelivery: (request: UpdateOrderByDeliveryRequest) => {
 			return this.request<searchStoreOrderResponse>({
-				path: `/orders/delivery/${request.id}`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/delivery/${request.id}`,
 				method: 'PATCH',
 				type: ContentType.Json,
 				body: {
@@ -1062,14 +1078,16 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 		},
 
 		getAdminOrderDetail: (id: string) => this.request<AdminOrderDetailResponse>({
-			path: `/orders/admin/${id}`,
+			baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+			path: `/admin/${id}`,
 			method: 'GET',
 			type: ContentType.Json,
 		}),
 
 		getTotalOrderInMonthAdmin:
 			(params: QueryParamsType) => this.request<GetTotalOrderInMonthResponse>({
-				path: `/orders/statistic/admin/total-order/month`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/statistic/admin/total-order/month`,
 				method: 'GET',
 				type: ContentType.Json,
 				query: {
@@ -1079,7 +1097,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getTotalOrderInYearAdmin:
 			(params: QueryParamsType) => this.request<GetTotalOrderInYear>({
-				path: `/orders/statistic/admin/total-order/year`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/statistic/admin/total-order/year`,
 				method: 'GET',
 				type: ContentType.Json,
 				query: {
@@ -1089,7 +1108,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getTotalCommissionAdmin:
 			(params: QueryParamsType) => this.request<GetTotalCommissionAdminResponse>({
-				path: `/orders/statistic/admin/total-commission`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/statistic/admin/total-commission`,
 				method: 'GET',
 				type: ContentType.Json,
 				query: {
@@ -1099,7 +1119,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getProductBestSellerAdmin:
 			(params: QueryParamsType) => this.request<GetProductBestSellerResponse>({
-				path: `/orders/statistic/admin/list-of-product`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/statistic/admin/list-of-product`,
 				method: 'GET',
 				type: ContentType.Json,
 				query: {
@@ -1109,7 +1130,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getOrderDaysAdmin:
 			(params: QueryParamsType) => this.request<GetOrderDaysResponse>({
-				path: `/orders/statistic/admin/total-order/day`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/statistic/admin/total-order/day`,
 				method: 'GET',
 				type: ContentType.Json,
 				query: {
@@ -1118,7 +1140,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			}),
 
 		countAllOrder: () => this.request<CountAllOrderResponse>({
-			path: `/orders/admin/total/count`,
+			baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+			path: `/admin/total/count`,
 			method: 'GET',
 			type: ContentType.Json,
 		}),

@@ -54,6 +54,8 @@ import { createProduct } from "@stores/slices/products-slice";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { Path, ContentToast, TitleToast } from "@/utils/constants";
+import { handleApiCallWithToast } from "@/utils/utils";
 
 const AddProduct = () => {
 
@@ -94,7 +96,9 @@ const AddProduct = () => {
 	const isInvalid = name.length > maxLength;
 
 	useEffect(() => {
-		if (name === '' || description === '' || images.length === 0 || selectedCategory.length === 0) {
+		if (name === ''
+			||
+			description === '' || images.length === 0 || selectedCategory.length === 0) {
 			setDisableSaveProduct(true);
 			return;
 		}
@@ -344,42 +348,20 @@ const AddProduct = () => {
 			imagesFile: images,
 		}
 
-		const loadingToastId = toast({
-			title: 'Adding new product...',
-			description: <Spinner />,
-			status: 'info',
-			duration: null,
-			isClosable: true,
-			position: "top-right",
-		})
 
-		dispatch(createProduct(request))
-			.unwrap()
-			.then((res) => {
-				toast.close(loadingToastId)
-				if (res.status.toString().includes("20")) {
-					toast({
-						title: 'Success!',
-						description: "Add product success",
-						status: 'success',
-						duration: 2000,
-						isClosable: true,
-						position: "top-right",
-					})
-					setTimeout(() => {
-						navigate("/vendor/products");
-					}, 2500)
-				} else {
-					toast({
-						title: 'Error!',
-						description: "Add product failed",
-						status: 'error',
-						duration: 2000,
-						isClosable: true,
-						position: "top-right",
-					})
-				}
-			})
+		handleApiCallWithToast(dispatch,
+			createProduct,
+			request,
+			Path.VENDOR_PRODUCT,
+			TitleToast.ADD_PRODUCT,
+			TitleToast.SUCCESS,
+			ContentToast.ADD_PRODUCT_SUCCESS,
+			TitleToast.ERROR,
+			ContentToast.ADD_PRODUCT_ERROR,
+			navigate,
+			toast,
+			<Spinner />)
+
 	}
 
 	return (

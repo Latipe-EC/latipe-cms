@@ -408,9 +408,9 @@ export interface PromotionData {
 
 export interface FreeShippingVoucher {
 	voucher_code: string
+	store_ids: string[]
 }
 
 export interface PaymentVoucher {
 	voucher_code: string
 }
-

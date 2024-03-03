@@ -42,6 +42,8 @@ import { AddIcon, ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import FlexBox from '@components/FlexBox';
 import defaultImage from '../../../assets/default.jpg';
 import CategoryForm from './CategoryForm';
+import { Action, ContentToast, TitleToast, Title } from '@/utils/constants';
+import { handleApiCallWithToast } from '@/utils/utils';
 
 const CategoriesAdmin = () => {
 
@@ -73,11 +75,11 @@ const CategoriesAdmin = () => {
 				},
 			},
 			{
-				Header: 'Name',
+				Header: 'Tên',
 				accessor: 'name',
 			},
 			{
-				Header: 'Image',
+				Header: 'Hình ảnh',
 				accessor: 'image',
 				Cell: ({ value }) => {
 					return (
@@ -94,7 +96,7 @@ const CategoriesAdmin = () => {
 				},
 			},
 			{
-				Header: 'Parrent Category',
+				Header: 'Danh mục cha',
 				accessor: 'parentCategoryId',
 				sortType: 'basic',
 				Cell: ({ value }) => {
@@ -109,10 +111,10 @@ const CategoriesAdmin = () => {
 						<Flex justifyContent={'center'}>
 							<ButtonGroup spacing="4">
 								<Button colorScheme="green" onClick={() => handleEditClick(value)}>
-									Edit
+									{Action.EDIT}
 								</Button>
 								<Button colorScheme="red" onClick={() => handleDeleteClick(value)}>
-									Delete
+									{Action.DELETE}
 								</Button>
 							</ButtonGroup>
 						</Flex>
@@ -183,49 +185,32 @@ const CategoriesAdmin = () => {
 
 	const handleAddSubmit = () => {
 		const image = imagePreviewUrl;
-		const newCategory: CreateCategoryRequest =
+		const request: CreateCategoryRequest =
 		{
 			...selectedCategory,
 			file: image,
 			parentCategoryId: selectedCategory?.parentCategory?.id || null,
 			attributes: attributes
 		};
-		const loadingToastId = toast({
-			title: 'Adding new category...',
-			description: <Spinner />,
-			status: 'info',
-			duration: null,
-			isClosable: true,
-			position: "top-right",
-		})
-		dispatch(addCategory(newCategory))
-			.unwrap()
-			.then((res) => {
-				toast.close(loadingToastId)
-				if (res.status.toString().includes("20")) {
-					toast({
-						title: 'Success!',
-						description: "Add category success",
-						status: 'success',
-						duration: 2000,
-						isClosable: true,
-						position: "top-right",
-					})
-					setShowModal(false);
-					setAttributes([]);
-					setSelectedCategory({
-						id: "", name: "", image: "", parentCategory: null, file: null, parentCategoryId: null
-					})
-				} else {
-					toast({
-						title: 'Error!',
-						description: "Add category failed",
-						status: 'error',
-						duration: 2000,
-						isClosable: true,
-						position: "top-right",
-					})
-				}
+
+		handleApiCallWithToast(dispatch,
+			addCategory,
+			request,
+			null,
+			TitleToast.ADD_CATEGORY,
+			TitleToast.SUCCESS,
+			ContentToast.ADD_CATEGORY_SUCCESS,
+			TitleToast.ERROR,
+			ContentToast.ADD_CATEGORY_ERROR,
+			null,
+			toast,
+			<Spinner />,
+			() => {
+				setShowModal(false);
+				setAttributes([]);
+				setSelectedCategory({
+					id: "", name: "", image: "", parentCategory: null, file: null, parentCategoryId: null
+				})
 			})
 	};
 
@@ -235,7 +220,6 @@ const CategoriesAdmin = () => {
 			setSelectedCategory(category);
 			setImagePreviewUrl(category.image);
 			setShowModal(true);
-
 		},
 		[categories]
 	);
@@ -243,76 +227,40 @@ const CategoriesAdmin = () => {
 	const handleEditSubmit = () => {
 		const image = imagePreviewUrl;
 		const parentCategoryId = parentCategory?.value || null;
-		const updatedCategory: UpdateCategoryRequest =
+		const request: UpdateCategoryRequest =
 			{ id: selectedCategory.id, name: selectedCategory.name, file: image, parentCategoryId };
-		const loadingToastId = toast({
-			title: 'Updating new category...',
-			description: <Spinner />,
-			status: 'info',
-			duration: null,
-			isClosable: true,
-			position: "top-right",
-		})
-		dispatch(updateCategory(updatedCategory))
-			.unwrap()
-			.then((res) => {
-				toast.close(loadingToastId)
-				if (res.status.toString().includes("20")) {
-					toast({
-						title: 'Success!',
-						description: "Update category success",
-						status: 'success',
-						duration: 2000,
-						isClosable: true,
-						position: "top-right",
-					})
-				} else {
-					toast({
-						title: 'Error!',
-						description: "Update category failed",
-						status: 'error',
-						duration: 2000,
-						isClosable: true,
-						position: "top-right",
-					})
-				}
-			});
+
+		handleApiCallWithToast(dispatch,
+			updateCategory,
+			request,
+			null,
+			TitleToast.UPDATE_CATEGORY,
+			TitleToast.SUCCESS,
+			ContentToast.UPDATE_CATEGORY_SUCCESS,
+			TitleToast.ERROR,
+			ContentToast.UPDATE_CATEGORY_ERROR,
+			null,
+			toast,
+			<Spinner />)
+
 		setShowModal(false);
 	};
 
 	const handleDeleteSubmit = () => {
-		const loadingToastId = toast({
-			title: 'Deleting new category...',
-			description: <Spinner />,
-			status: 'info',
-			duration: null,
-			isClosable: true,
-			position: "top-right",
-		})
-		dispatch(deleteCategory(selectedCategory.id))
-			.unwrap()
-			.then((res) => {
-				if (res === selectedCategory.id) {
-					toast.close(loadingToastId)
-					toast({
-						title: 'Success!',
-						description: "Delete category success",
-						status: 'success',
-						duration: 2000,
-						isClosable: true,
-						position: "top-right",
-					})
-				} else {
-					toast({
-						title: 'Error!',
-						description: "Delete category failed",
-						status: 'error',
-						duration: 2000,
-						isClosable: true,
-						position: "top-right",
-					})
-				}
-			});
+
+		handleApiCallWithToast(dispatch,
+			deleteCategory,
+			selectedCategory.id,
+			null,
+			TitleToast.DELETE_CATEGORY,
+			TitleToast.SUCCESS,
+			ContentToast.DELETE_CATEGORY_SUCCESS,
+			TitleToast.ERROR,
+			ContentToast.DELETE_CATEGORY_ERROR,
+			null,
+			toast,
+			<Spinner />)
+
 		setShowDeleteModal(false);
 	};
 
@@ -369,7 +317,7 @@ const CategoriesAdmin = () => {
 				</Box>
 				<Button leftIcon={<AddIcon />} colorScheme='blue' variant='outline'
 					onClick={handleAddClick}>
-					Add Category
+					{Title.ADD_CATEGORY}
 				</Button>
 			</Box>
 			<Table {...getTableProps()} variant="striped" borderWidth="1px" borderRadius="md">
@@ -455,7 +403,7 @@ const CategoriesAdmin = () => {
 						textAlign: "center",
 						marginTop: '20px'
 					}}>
-						Delete Category
+						{Title.DELETE_CATEGORY}
 					</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
@@ -466,10 +414,10 @@ const CategoriesAdmin = () => {
 					<ModalFooter>
 						<Flex justifyContent="center" alignItems="center" mt={4}>
 							<Button colorScheme="teal" mr={4} onClick={handleDeleteClose}>
-								Cancel
+								{Action.CANCEL}
 							</Button>
 							<Button colorScheme="red" onClick={handleDeleteSubmit}>
-								Delete
+								{Action.DELETE}
 							</Button>
 						</Flex>
 					</ModalFooter>

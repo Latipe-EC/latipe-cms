@@ -295,6 +295,17 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 			voucher_code: null
 		};
 
+		const deliveryVoucher = vouchers.filter(x => x.voucher_type === VoucherType.DELIVERY)
+		const free_shipping_voucher = {
+			voucher_code: null,
+			store_ids: []
+		};
+
+		if (deliveryVoucher.length > 0) {
+			free_shipping_voucher.voucher_code = deliveryVoucher[0].voucher_code;
+			free_shipping_voucher.store_ids = deliveryVoucher[0].real_discount.deliveries;
+		}
+
 		if (paymentVoucher.length > 0) {
 			payment_voucher.voucher_code = paymentVoucher[0].voucher_code;
 		}
@@ -306,7 +317,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 					return {
 						product_id: item.productId,
 						quantity: item.quantity,
-						product_option_id: item.productOptionId,
+						option_id: item.productOptionId,
 					}
 				}),
 				delivery: {
@@ -322,7 +333,8 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 			},
 			store_orders: storeProducts,
 			promotion_data: {
-				payment_voucher
+				payment_voucher,
+				free_shipping_voucher
 			},
 			payment_method: getPaymentMethod(methodPayment),
 		})).unwrap().then((res) => {

@@ -1,20 +1,14 @@
 import LazyImage from "../LazyImage";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "../avatar/Avatar";
 import Box from "../Box";
 import Button from "../buttons/Button";
 import {
-	AlertDialog,
-	AlertDialogBody,
-	AlertDialogContent,
-	AlertDialogOverlay,
 	Badge,
 	Button as ButtonCharkra,
-	Center,
 	Divider,
 	IconButton,
 	Spinner,
-	Text,
 	Tooltip,
 	Wrap,
 	WrapItem,
@@ -44,9 +38,6 @@ export interface ProductIntroProps {
 const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 
 	const dispatch = useDispatch<AppThunkDispatch>();
-	const [isOpen, setIsOpen] = useState(false);
-	const onClose = () => setIsOpen(false);
-	const cancelRef = useRef();
 	const [selectedImage, setSelectedImage] = useState({ id: 0, value: product.images[0] });
 	const [selectPrice, setSelectPrice] = useState(product.price);
 	const [selectPromotionPrice, setSelectPromotionPrice] = useState(product.promotionalPrice);
@@ -116,8 +107,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 					dispatch(incrementCount())
 			})
 
-		setIsOpen(true);
-		setTimeout(() => setIsOpen(false), 1000);
 	};
 
 	const handleSelectOption = (index, val) => {
@@ -164,23 +153,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 
 	return (
 		<Box overflow="hidden">
-			<AlertDialog
-				isOpen={isOpen}
-				leastDestructiveRef={cancelRef}
-				onClose={onClose}
-			>
-				<AlertDialogOverlay>
-					<Center>
-						<AlertDialogContent bg="green.500">
-							<AlertDialogBody>
-								<Text textAlign="center" color="white">
-									Thêm vào giỏ hàng thành công !
-								</Text>
-							</AlertDialogBody>
-						</AlertDialogContent>
-					</Center>
-				</AlertDialogOverlay>
-			</AlertDialog>
 			<Grid container justifyContent="center" spacing={16}>
 				<Grid item md={6} xs={12} alignItems="center">
 					<Box>

@@ -403,7 +403,7 @@ export interface StoreOrder {
 
 export interface PromotionData {
 	free_shipping_voucher?: FreeShippingVoucher
-	payment_voucher: PaymentVoucher
+	payment_voucher?: PaymentVoucher
 }
 
 export interface FreeShippingVoucher {

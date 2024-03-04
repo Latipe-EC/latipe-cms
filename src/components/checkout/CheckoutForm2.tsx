@@ -42,9 +42,11 @@ import { getListDelivery } from "@stores/slices/deliveries-slice";
 import { checkVoucher } from "@stores/slices/promotions-slice";
 import { CloseIcon } from "@chakra-ui/icons";
 import { createOrderV2 } from "@stores/slices/orders-slice";
-import { ContentAlter, DiscountType, ErrorMessage, PaymentMethodName, TitleAlter, VoucherType, paymentMethodList } from "@/utils/constants";
+import { ContentAlter, DiscountType, ErrorMessage, PaymentMethodName, TitleAlter, VoucherStatus, VoucherType, paymentMethodList } from "@/utils/constants";
 import { getPaymentMethod } from "@/utils/utils";
 import { RealDiscount } from "@/api/interface/promotion";
+import { PromotionData } from "@/api/interface/order";
+import { removeCartItem } from "@/stores/slices/carts-slice";
 
 
 const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, listDeliveries }) => {
@@ -256,6 +258,15 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 			}
 
 			const vouchers = res.data.data.items;
+			if (vouchers.some(x => x.status === VoucherStatus.INACTIVE)
+				|| vouchers.some(x => x.voucher_counts === 0)
+				|| vouchers.some(x => x.voucher_counts === 0)
+				|| vouchers.some(x => x.count_usable === 0)
+			) {
+				setErrorVoucher(ErrorMessage.INVALID_VOUCHER);
+				return;
+			}
+
 			/// Check voucher
 			for (const v of vouchers) {
 				if (v.voucher_require && v.voucher_require.min_require > 0) {
@@ -290,24 +301,23 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 
 		setIsLoading(true);
 
+		// process promotion_data
+		const promotion_data: PromotionData = {}
 		const paymentVoucher = vouchers.filter(x => x.voucher_type === VoucherType.PRODUCT)
-		const payment_voucher = {
-			voucher_code: null
-		};
 
 		const deliveryVoucher = vouchers.filter(x => x.voucher_type === VoucherType.DELIVERY)
-		const free_shipping_voucher = {
-			voucher_code: null,
-			store_ids: []
-		};
 
 		if (deliveryVoucher.length > 0) {
-			free_shipping_voucher.voucher_code = deliveryVoucher[0].voucher_code;
-			free_shipping_voucher.store_ids = deliveryVoucher[0].real_discount.deliveries;
+			promotion_data.free_shipping_voucher = {
+				voucher_code: deliveryVoucher[0].voucher_code,
+				store_ids: deliveryVoucher[0].real_discount.deliveries
+			}
 		}
 
 		if (paymentVoucher.length > 0) {
-			payment_voucher.voucher_code = paymentVoucher[0].voucher_code;
+			promotion_data.payment_voucher = {
+				voucher_code: paymentVoucher[0].voucher_code,
+			}
 		}
 
 		const storeProducts = Object.keys(newProducts).map((key, ind) => {
@@ -316,7 +326,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 				order_items: newProducts[key].map((item) => {
 					return {
 						product_id: item.productId,
-						quantity: item.quantity,
+						quantity: parseInt(item.quantity),
 						option_id: item.productOptionId,
 					}
 				}),
@@ -332,14 +342,15 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 				address_id: selectAddress.id
 			},
 			store_orders: storeProducts,
-			promotion_data: {
-				payment_voucher,
-				free_shipping_voucher
-			},
+			promotion_data,
 			payment_method: getPaymentMethod(methodPayment),
 		})).unwrap().then((res) => {
 			setIsLoading(false);
 			if (res.status === 200) {
+				// remove cart item if success
+				const cart_ids = storeProducts.map((item) => item.cart_ids).flat();
+				if (cart_ids.length > 0)
+					dispatch(removeCartItem(cart_ids));
 				if (methodPayment === PaymentMethodName.PayPal) {
 					navigate(`/payment-paypal/${res.data.data.order_key}`);
 					return;
@@ -436,7 +447,15 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 						<IconButton
 							aria-label="Reload address"
 							icon={<FaSync />}
-							onClick={() => loadAddress()}
+							onClick={() => {
+								loadAddress()
+								dispatch(getListDelivery({
+									src_code: products.map(x => x.cityOrProvinceId),
+									dest_code: selectAddress ? selectAddress.cityOrProvinceId : 0,
+								})).unwrap().then((res) => {
+									setDeliveries(res.data);
+								});
+							}}
 							ml="1rem"
 						/>
 

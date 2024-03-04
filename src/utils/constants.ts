@@ -162,3 +162,8 @@ export enum Title {
 	DELETE_COMMISSION = 'Xóa hoa hồng',
 	COMMISSION = 'Hoa hồng',
 }
+
+export enum VoucherStatus {
+	ACTIVE = 1,
+	INACTIVE = 0,
+}

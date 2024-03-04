@@ -86,7 +86,6 @@ export function getMonthDifference(startDate, endDate) {
 	);
 }
 
-
 export function getPaymentMethod(method: string): number {
 	return method === PaymentMethodName.COD ? 1 : method === PaymentMethodName.PayPal ? 2 : 3;
 }

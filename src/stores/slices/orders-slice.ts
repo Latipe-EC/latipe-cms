@@ -239,6 +239,7 @@ export const orderSlice = createSlice({
 		loading: false,
 		error: null,
 	},
+
 	extraReducers: (builder) => {
 		builder.addCase(countMyOrder.fulfilled, (state, action) => {
 			if (action.payload.data.error_code) {

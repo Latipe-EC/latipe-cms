@@ -319,7 +319,7 @@ const ProductsAdmin = () => {
 				>
 					<Box>
 						<Text fontSize="xl" fontWeight="bold" textAlign="center" my={10}>
-							Không tìm thấy sản phẩm nào
+							{Content.PRODUCT_NOT_FOUND}
 						</Text>
 					</Box>
 				</Flex>

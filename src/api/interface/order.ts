@@ -8,7 +8,7 @@ export interface CreateOrderRequest {
 
 
 export interface CancelOrderRequest {
-	order_uuid: string
+	order_id: string
 }
 
 
@@ -72,7 +72,8 @@ export interface DataGetOrderById {
 }
 
 export interface Order {
-	order_uuid: string
+	order_id: string
+	store_id: string
 	amount: number
 	item_discount: number
 	shipping_discount: number
@@ -104,7 +105,6 @@ export interface OrderItem {
 	quantity: number
 	product_name: string
 	image: string
-	store_id: string
 	price: number
 	rating_id: string
 	name_option: string
@@ -135,7 +135,7 @@ export interface DataGMO {
 }
 
 export interface DaumGMO {
-	order_uuid: string
+	order_id: string
 	amount: number
 	shipping_discount: number
 	item_discount: number
@@ -174,7 +174,7 @@ export interface DataSearchStoreOrder {
 }
 
 export interface ItemSearchStoreOrder {
-	order_uuid: string
+	order_id: string
 	status: number
 	payment_method: number
 	created_at: string
@@ -191,7 +191,7 @@ export interface StoreOrderDetailResponse {
 }
 
 export interface DataStoreOrderDetail {
-	order_uuid: string
+	order_id: string
 	store_order_amount: number
 	status: number
 	payment_method: number
@@ -360,7 +360,7 @@ export interface DataAdminOrderDetail {
 }
 
 export interface AdminOrderDetail {
-	order_uuid: string
+	order_id: string
 	amount: number
 	shipping_discount: number
 	item_discount: number

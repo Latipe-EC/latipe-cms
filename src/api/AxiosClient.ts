@@ -1157,7 +1157,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		createVoucher: (request: createVoucherRequest) =>
 			this.request<unknown>({
-				path: `/vouchers`,
+				path: `/vouchers/admin`,
 				method: 'POST',
 				type: ContentType.Json,
 				body: request
@@ -1180,11 +1180,12 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 		getAll: (params: Record<string, string>) => {
 			const queryParams = new URLSearchParams(params).toString();
 			return this.request<ListVoucherReponse>({
-				path: `/vouchers?${queryParams}`,
+				path: `/vouchers/admin?${queryParams}`,
 				method: 'GET',
 				type: ContentType.Json,
 			})
 		},
+
 		getVoucherUser: (params: Record<string, string>) => {
 			const queryParams = new URLSearchParams(params).toString();
 			return this.request<ListVoucherReponse>({
@@ -1205,7 +1206,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		updateStatusVoucher: (request: UpdateStatusVoucher) =>
 			this.request<CheckVoucherReponse>({
-				path: `/vouchers/code/${request.code}`,
+				path: `/vouchers/admin/code/${request.code}`,
 				method: 'PATCH',
 				type: ContentType.Json,
 				body: {

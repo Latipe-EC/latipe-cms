@@ -9,6 +9,8 @@ import TableRow from "../TableRow";
 import Typography, { H5, Small } from "../Typography";
 import { DaumGMO } from "@interfaces/order";
 import { useNavigate } from "react-router-dom";
+import { vi } from "date-fns/locale";
+import { OrderStatus } from "@/utils/constants";
 
 export interface OrderRowProps {
 	order: DaumGMO;
@@ -19,47 +21,57 @@ const OrderRow: React.FC<OrderRowProps> = ({ order }) => {
 	const navigate = useNavigate();
 
 	const handleNavigateOrderDetail = () => {
-		navigate(`/orders/${order.order_uuid}`);
+		navigate(`/orders/${order.order_id}`);
 	}
 
 	const handleRenderStaus = (): string => {
 		switch (order.status) {
-			case 0:
-				return "Đang xử lý";
-			case 1:
+			case OrderStatus.ORDER_SYSTEM_PROCESS:
+				return "Đang xử lý đơn hàng";
+			case OrderStatus.ORDER_CREATED:
 				return "Tạo đơn hàng thành công";
-			case 2:
-				return "Đã giao cho ĐVVC";
-			case 3:
+			case OrderStatus.ORDER_PREPARED:
+				return "Đang chuẩn bị đơn hàng";
+			case OrderStatus.ORDER_DELIVERY:
 				return "Đang trên đường vận chuyển";
-			case 4:
+			case OrderStatus.ORDER_SHIPPING_FINISH:
 				return "Vận chuyển thành công";
-			case 5:
+			case OrderStatus.ORDER_COMPLETED:
 				return "Đơn hàng đã hoàn thành";
-			case 6:
+			case OrderStatus.ORDER_REFUND:
 				return "Đang hoàn tiền";
-			case 7:
-				return "Đã hủy";
-			default:
+			case OrderStatus.ORDER_CANCEL_BY_USER:
+				return "Đã hủy bởi khách hàng";
+			case OrderStatus.ORDER_CANCEL_BY_ADMIN:
+				return "Đã hủy bởi admin";
+			case OrderStatus.ORDER_CANCEL_BY_STORE:
+				return "Đã hủy bởi người bán";
+			case OrderStatus.ORDER_CANCEL_BY_DELI:
+				return "Đã hủy bởi người giao hàng";
+			case OrderStatus.ORDER_CANCEL_USER_REJECT:
+				return "Khách hàng từ chối nhận đơn hàng";
+			case OrderStatus.ORDER_FAILED:
 				return "Mua hàng thất bại";
 		}
-
 	}
 
 	const getColor = (status) => {
 		switch (status) {
-			case 0:
-			case 1:
+			case OrderStatus.ORDER_SYSTEM_PROCESS:
+			case OrderStatus.ORDER_PREPARED:
+			case OrderStatus.ORDER_DELIVERY:
+			case OrderStatus.ORDER_REFUND:
 				return "secondary";
-			case 2:
-			case 3:
-				return "secondary";
-			case 4:
-			case 5:
-			case 6:
+			case OrderStatus.ORDER_CREATED:
+			case OrderStatus.ORDER_SHIPPING_FINISH:
+			case OrderStatus.ORDER_COMPLETED:
 				return "success";
-			case 7:
-			case -1:
+			case OrderStatus.ORDER_CANCEL_BY_USER:
+			case OrderStatus.ORDER_CANCEL_BY_ADMIN:
+			case OrderStatus.ORDER_CANCEL_BY_STORE:
+			case OrderStatus.ORDER_CANCEL_BY_DELI:
+			case OrderStatus.ORDER_CANCEL_USER_REJECT:
+			case OrderStatus.ORDER_FAILED:
 				return "error";
 			default:
 				return "";
@@ -74,7 +86,7 @@ const OrderRow: React.FC<OrderRowProps> = ({ order }) => {
 			}}
 		>
 			<H5 m="6px" textAlign="left">
-				{order.order_uuid}
+				{order.order_id}
 			</H5>
 			<Box m="6px">
 				<Chip p="0.25rem 1rem" bg={`${getColor(order.status)}.light`}>
@@ -83,7 +95,7 @@ const OrderRow: React.FC<OrderRowProps> = ({ order }) => {
 				</Chip>
 			</Box>
 			<Typography className="flex-grow pre" m="6px" textAlign="left">
-				{format(new Date(order.created_at), "MMM dd, yyyy")}
+				{format(new Date(order.created_at), "MMM dd, yyyy", { locale: vi })}
 			</Typography>
 			<Typography m="6px" textAlign="left">
 				{order.amount.toLocaleString('vi-VN')}₫

@@ -16,6 +16,8 @@ import { AdminOrderDetailResponse } from "@interfaces/order";
 import { getAdminOrderDetail, updateStatusOrderByDelivery } from "@stores/slices/orders-slice";
 import { Chip } from "@components/Chip";
 import { Button, Flex } from "@chakra-ui/react";
+import { vi } from "date-fns/locale";
+import { OrderStatus } from "@/utils/constants";
 
 const OrderDetailDelivery = () => {
 
@@ -59,18 +61,21 @@ const OrderDetailDelivery = () => {
 
 	const getColor = (status) => {
 		switch (status) {
-			case 0:
-			case 1:
+			case OrderStatus.ORDER_SYSTEM_PROCESS:
+			case OrderStatus.ORDER_PREPARED:
+			case OrderStatus.ORDER_DELIVERY:
+			case OrderStatus.ORDER_REFUND:
 				return "secondary";
-			case 2:
-			case 3:
-				return "secondary";
-			case 4:
-			case 5:
-			case 6:
+			case OrderStatus.ORDER_CREATED:
+			case OrderStatus.ORDER_SHIPPING_FINISH:
+			case OrderStatus.ORDER_COMPLETED:
 				return "success";
-			case 7:
-			case -1:
+			case OrderStatus.ORDER_CANCEL_BY_USER:
+			case OrderStatus.ORDER_CANCEL_BY_ADMIN:
+			case OrderStatus.ORDER_CANCEL_BY_STORE:
+			case OrderStatus.ORDER_CANCEL_BY_DELI:
+			case OrderStatus.ORDER_CANCEL_USER_REJECT:
+			case OrderStatus.ORDER_FAILED:
 				return "error";
 			default:
 				return "";
@@ -80,7 +85,7 @@ const OrderDetailDelivery = () => {
 	const handleUpdateStatus = (status) => {
 		if (response.data.order.status === 3) {
 			dispatch(updateStatusOrderByDelivery({
-				id: response.data.order.order_uuid,
+				id: response.data.order.order_id,
 				status: status
 			})).unwrap().then((res) => {
 				if (res.data.error_code) {
@@ -147,7 +152,7 @@ const OrderDetailDelivery = () => {
 							Đặt hàng lúc:
 						</Typography>
 						<Typography fontSize="14px">
-							{format(new Date(), "dd MMM, yyyy")}
+							{format(new Date(), "dd MMM, yyyy", { locale: vi })}
 						</Typography>
 					</FlexBox>
 				</TableRow>

@@ -16,6 +16,8 @@ import { useEffect, useState } from "react";
 import { AdminOrderDetailResponse } from "@interfaces/order";
 import { getAdminOrderDetail } from "@stores/slices/orders-slice";
 import { Chip } from "@components/Chip";
+import { vi } from "date-fns/locale";
+import { OrderStatus } from "@/utils/constants";
 
 const OrderDetailAdmin = () => {
 
@@ -59,18 +61,21 @@ const OrderDetailAdmin = () => {
 
 	const getColor = (status) => {
 		switch (status) {
-			case 0:
-			case 1:
+			case OrderStatus.ORDER_SYSTEM_PROCESS:
+			case OrderStatus.ORDER_PREPARED:
+			case OrderStatus.ORDER_DELIVERY:
+			case OrderStatus.ORDER_REFUND:
 				return "secondary";
-			case 2:
-			case 3:
-				return "secondary";
-			case 4:
-			case 5:
-			case 6:
+			case OrderStatus.ORDER_CREATED:
+			case OrderStatus.ORDER_SHIPPING_FINISH:
+			case OrderStatus.ORDER_COMPLETED:
 				return "success";
-			case 7:
-			case -1:
+			case OrderStatus.ORDER_CANCEL_BY_USER:
+			case OrderStatus.ORDER_CANCEL_BY_ADMIN:
+			case OrderStatus.ORDER_CANCEL_BY_STORE:
+			case OrderStatus.ORDER_CANCEL_BY_DELI:
+			case OrderStatus.ORDER_CANCEL_USER_REJECT:
+			case OrderStatus.ORDER_FAILED:
 				return "error";
 			default:
 				return "";
@@ -120,7 +125,7 @@ const OrderDetailAdmin = () => {
 							Đặt hàng lúc:
 						</Typography>
 						<Typography fontSize="14px">
-							{format(new Date(), "dd MMM, yyyy")}
+							{format(new Date(), "dd MMM, yyyy", { locale: vi })}
 						</Typography>
 					</FlexBox>
 				</TableRow>
@@ -188,7 +193,7 @@ const OrderDetailAdmin = () => {
 				<Grid item lg={6} md={6} xs={12} style={{ display: 'flex' }}>
 					<Card p="20px 30px" mb="1.5rem" style={{ flexGrow: 1 }}>
 						{response.data.order.order_status.map((item) => (
-							<H6 my="0px">{format(new Date(item.created_at), "HH:mm dd-MM-yyyy")} | {item.message}
+							<H6 my="0px">{format(new Date(item.created_at), "HH:mm dd-MM-yyyy", { locale: vi })} | {item.message}
 							</H6>
 						))}
 					</Card>

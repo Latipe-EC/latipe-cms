@@ -22,7 +22,8 @@ import {
 } from "@stores/slices/orders-slice";
 import { Chip } from "@components/Chip";
 import { Tooltip } from "@chakra-ui/react";
-import { Action, Content, Title } from "@/utils/constants";
+import { Action, Content, OrderStatus, Title } from "@/utils/constants";
+import { vi } from "date-fns/locale";
 
 const OrderDetails = () => {
 	const { id } = useParams();
@@ -42,41 +43,52 @@ const OrderDetails = () => {
 
 	const handleRenderStaus = (): string => {
 		switch (response.data.status) {
-			case 0:
-				return "Đang xử lý";
-			case 1:
+			case OrderStatus.ORDER_SYSTEM_PROCESS:
+				return "Đang xử lý đơn hàng";
+			case OrderStatus.ORDER_CREATED:
 				return "Tạo đơn hàng thành công";
-			case 2:
-				return "Đã giao cho ĐVVC";
-			case 3:
-				return "Đang trên đường vận chuyển";
-			case 4:
+			case OrderStatus.ORDER_PREPARED:
+				return "Đang chuẩn bị đơn hàng";
+			case OrderStatus.ORDER_DELIVERY:
+				return "Đang trên đường vận chu1yển";
+			case OrderStatus.ORDER_SHIPPING_FINISH:
 				return "Vận chuyển thành công";
-			case 5:
+			case OrderStatus.ORDER_COMPLETED:
 				return "Đơn hàng đã hoàn thành";
-			case 6:
+			case OrderStatus.ORDER_REFUND:
 				return "Đang hoàn tiền";
-			case 7:
-				return "Đã hủy";
-			default:
+			case OrderStatus.ORDER_CANCEL_BY_USER:
+				return "Đã hủy bởi khách hàng";
+			case OrderStatus.ORDER_CANCEL_BY_ADMIN:
+				return "Đã hủy bởi admin";
+			case OrderStatus.ORDER_CANCEL_BY_STORE:
+				return "Đã hủy bởi người bán";
+			case OrderStatus.ORDER_CANCEL_BY_DELI:
+				return "Đã hủy bởi người giao hàng";
+			case OrderStatus.ORDER_CANCEL_USER_REJECT:
+				return "Khách hàng từ chối nhận đơn hàng";
+			case OrderStatus.ORDER_FAILED:
 				return "Mua hàng thất bại";
 		}
 	}
 
 	const getColor = (status) => {
 		switch (status) {
-			case 0:
-			case 1:
+			case OrderStatus.ORDER_SYSTEM_PROCESS:
+			case OrderStatus.ORDER_PREPARED:
+			case OrderStatus.ORDER_DELIVERY:
+			case OrderStatus.ORDER_REFUND:
 				return "secondary";
-			case 2:
-			case 3:
-				return "secondary";
-			case 4:
-			case 5:
-			case 6:
+			case OrderStatus.ORDER_CREATED:
+			case OrderStatus.ORDER_SHIPPING_FINISH:
+			case OrderStatus.ORDER_COMPLETED:
 				return "success";
-			case 7:
-			case -1:
+			case OrderStatus.ORDER_CANCEL_BY_USER:
+			case OrderStatus.ORDER_CANCEL_BY_ADMIN:
+			case OrderStatus.ORDER_CANCEL_BY_STORE:
+			case OrderStatus.ORDER_CANCEL_BY_DELI:
+			case OrderStatus.ORDER_CANCEL_USER_REJECT:
+			case OrderStatus.ORDER_FAILED:
 				return "error";
 			default:
 				return "";
@@ -85,7 +97,7 @@ const OrderDetails = () => {
 
 	const handleCancelOrder = () => {
 		dispatch(cancelOrderItem({
-			id: response.data.order_uuid,
+			id: response.data.order_id,
 			body: {
 				item_id: response.data.order_items[0].item_id,
 			}
@@ -102,7 +114,7 @@ const OrderDetails = () => {
 
 	const handleConfirmOrder = (item: OrderItem) => {
 		dispatch(updateOrderItemStatusByStore({
-			id: response.data.order_uuid,
+			id: response.data.order_id,
 			body: {
 				item_id: item.item_id,
 			}
@@ -146,7 +158,7 @@ const OrderDetails = () => {
 						alignItems="center"
 					>
 						<Typography fontSize="14px" color="text.muted" mr="4px">
-							Order ID:
+							{Title.ORDER_CODE}:
 						</Typography>
 						<Typography fontSize="14px" fontWeight={"bold"}>{id.toUpperCase()}</Typography>
 					</FlexBox>
@@ -168,7 +180,7 @@ const OrderDetails = () => {
 							{Content.DATE_PURCHASED}:
 						</Typography>
 						<Typography fontSize="14px">
-							{format(new Date(), "dd MMM, yyyy")}
+							{format(new Date(), "dd MMM, yyyy", { locale: vi })}
 						</Typography>
 					</FlexBox>
 				</TableRow>
@@ -235,7 +247,6 @@ const OrderDetails = () => {
 						<H6 my="0px">{response.data.delivery.shipping_address}
 						</H6>
 					</Card>
-
 
 				</Grid>
 				{response &&

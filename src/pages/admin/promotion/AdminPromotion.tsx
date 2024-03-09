@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { usePagination, useSortBy, useTable } from 'react-table';
 import { useDispatch } from 'react-redux';
 import {
+	Accordion,
+	AccordionItem,
 	Box,
 	Button,
 	ButtonGroup,
@@ -37,11 +39,36 @@ import FlexBox from '@components/FlexBox';
 
 import { ItemVoucher } from '../../../api/interface/promotion';
 import { createVoucher, getAllPromotion, updateStatusVoucher } from '@stores/slices/promotions-slice';
-import { convertDateTimeYYYYMMDD } from "../../../utils/utils";
+import { convertDateTimeYYYYMMDD, handleApiCallWithToast } from "../../../utils/utils";
 import { Chip } from '@components/Chip';
 import { Small } from '@components/Typography';
+import { Action, ContentToast, DiscountType, PaymentMethodName, TitleToast, VoucherType } from '@/utils/constants';
 
 const PromotionsAdmin = () => {
+
+	const templateVoucher: ItemVoucher = {
+		id: null,
+		voucher_code: '',
+		voucher_type: 1,
+		voucher_counts: 0,
+		detail: '',
+		discount_data: {
+			discount_type: 0,
+			shipping_value: 0
+		},
+		voucher_require: {
+			min_require: 0,
+			payment_method: 0,
+			max_voucher_per_user: 1,
+		},
+		created_at: null,
+		updated_at: null,
+		stated_time: new Date().toISOString().slice(0, 10),
+		ended_time: new Date().toISOString().slice(0, 10),
+		status: 0,
+	}
+
+
 
 	const promotions = useAppSelector((state: RootState) => state.promotions);
 	const [currentPage, setCurrentPage] = useState(1);
@@ -54,23 +81,7 @@ const PromotionsAdmin = () => {
 	const [endDateError, setEndDateError] = useState('');
 
 
-	const [promotion, setPromotion] = useState<ItemVoucher>({
-		_id: null,
-		voucher_code: null,
-		voucher_type: 1,
-		voucher_counts: 0,
-		discount_percent: 0,
-		detail: null,
-		discount_value: 0,
-		voucher_require: {
-			min_require: 0,
-		},
-		created_at: null,
-		updated_at: null,
-		stated_time: new Date().toISOString().slice(0, 10),
-		ended_time: new Date().toISOString().slice(0, 10),
-		status: 0,
-	});
+	const [promotion, setPromotion] = useState<ItemVoucher>(templateVoucher);
 
 	const [filters, setFilters] = useState(0);
 	const [expired, setExpired] = useState(0);
@@ -81,7 +92,7 @@ const PromotionsAdmin = () => {
 		() => [
 			{
 				Header: 'ID',
-				accessor: '_id',
+				accessor: 'id',
 				Cell: ({ row }) => {
 					const rowIndex = row.index + 1 + (currentPage - 1) * size;
 					return <div>{rowIndex}</div>;
@@ -99,8 +110,17 @@ const PromotionsAdmin = () => {
 			{
 				Header: 'Giảm giá',
 				accessor: 'discount_value',
-				Cell: ({ value }) => {
-					return <div>{value.toLocaleString('vi-VN')}₫</div>;
+				Cell: ({ row }) => {
+					const item = row.original;
+					if (item.voucher_type === VoucherType.DELIVERY) {
+						return <div>{item.discount_data.shipping_value.toLocaleString('vi-VN')}₫</div>;
+					}
+					else {
+						if (item.discount_data.discount_type === DiscountType.FIXED_DISCOUNT)
+							return <div>{item.discount_data.discount_value.toLocaleString('vi-VN')}₫</div>;
+						else
+							return <div>{item.discount_data.discount_percent}%</div>;
+					}
 				},
 				width: 100,
 			},
@@ -159,7 +179,7 @@ const PromotionsAdmin = () => {
 								<Button colorScheme="green" onClick={() => {
 									setPromotion(item), setShowModalPromotion(true)
 								}}>
-									Xem
+									{Action.VIEW}
 								</Button>
 							</ButtonGroup>
 						</Flex>
@@ -194,106 +214,81 @@ const PromotionsAdmin = () => {
 	);
 
 	const handleCreate = () => {
-		const loadingToastId = toast({
-			title: 'Đang thêm...',
-			description: <Spinner />,
-			status: 'info',
-			duration: null,
-			isClosable: true,
-			position: "top-right",
-		})
-		dispatch(createVoucher(promotion)).unwrap().then((res) => {
-			toast.close(loadingToastId);
-			if (res.status !== 200) {
-				toast({
-					title: 'Có lỗi xảy ra',
-					status: 'error',
-					duration: 3000,
-					isClosable: true,
-				});
-			} else {
-				setModalAfterAdd(promotion.voucher_code)
-				toast({
-					title: 'Thêm voucher thành công',
-					status: 'success',
-					duration: 3000,
-					isClosable: true,
-				});
-				setShowModalPromotion(false);
-				setPromotion({
-					_id: null,
-					voucher_code: null,
-					voucher_type: 1,
-					voucher_counts: 0,
-					discount_percent: 0,
-					detail: null,
-					discount_value: 0,
-					voucher_require: {
-						min_require: 0,
-					},
-					created_at: null,
-					updated_at: null,
-					stated_time: new Date().toISOString().slice(0, 10),
-					ended_time: new Date().toISOString().slice(0, 10),
-					status: 0,
-				});
+		const req = { ...promotion }
+		if (req.voucher_require.payment_method === 0) {
+			req.voucher_require = {
+				...req.voucher_require,
+				payment_method: null
 			}
+		}
 
-		});
+		handleApiCallWithToast(dispatch,
+			createVoucher,
+			req,
+			null,
+			TitleToast.ADD_VOUCHER,
+			TitleToast.SUCCESS,
+			ContentToast.ADD_VOUCHER_SUCCESS,
+			TitleToast.ERROR,
+			ContentToast.ADD_VOUCHER_ERROR,
+			null,
+			toast,
+			<Spinner />,
+			() => {
+				setModalAfterAdd(promotion.voucher_code)
+				setShowModalPromotion(false);
+				setPromotion(templateVoucher);
+			})
 
 	}
 
 	const handleUpdate = (code: string, status: number) => {
-		const loadingToastId = toast({
-			title: 'Đang cập nhật...',
-			description: <Spinner />,
-			status: 'info',
-			duration: null,
-			isClosable: true,
-			position: "top-right",
-		})
-		dispatch(updateStatusVoucher({
-			code,
-			status
-		})).unwrap().then((res) => {
-			toast.close(loadingToastId);
-			if (res.status !== 200) {
-				toast({
-					title: 'Có lỗi xảy ra',
-					status: 'error',
-					duration: 3000,
-					isClosable: true,
-				});
-			} else {
-				toast({
-					title: 'Cập nhật voucher thành công',
-					status: 'success',
-					duration: 3000,
-					isClosable: true,
-				});
-				setModalAfterAdd(null);
-			}
 
-		});
-		setShowModalPromotion(false);
-		setPromotion({
-			_id: null,
-			voucher_code: null,
-			voucher_type: 1,
-			voucher_counts: 0,
-			discount_percent: 0,
-			detail: null,
-			discount_value: 0,
-			voucher_require: {
-				min_require: 0,
+		handleApiCallWithToast(dispatch,
+			updateStatusVoucher,
+			{
+				code,
+				status
 			},
-			created_at: null,
-			updated_at: null,
-			stated_time: new Date().toISOString().slice(0, 10),
-			ended_time: new Date().toISOString().slice(0, 10),
-			status: 0,
-		});
+			null,
+			TitleToast.ADD_VOUCHER,
+			TitleToast.SUCCESS,
+			ContentToast.ADD_VOUCHER_SUCCESS,
+			TitleToast.ERROR,
+			ContentToast.ADD_VOUCHER_ERROR,
+			null,
+			toast,
+			<Spinner />,
+			() => {
+				setModalAfterAdd(null);
+			})
+
+		setShowModalPromotion(false);
+		setPromotion(templateVoucher);
 		setModalConfirm(null);
+	}
+
+	const checkAddVoucher = (): boolean => {
+		return (promotion.voucher_code.trim() === '' ||
+			promotion.voucher_counts <= 0 ||
+			promotion.detail.trim() === '' ||
+			!promotion.voucher_require.min_require ||
+			promotion.voucher_require.min_require <= 0 ||
+			!promotion.voucher_require.max_voucher_per_user ||
+			promotion.voucher_require.max_voucher_per_user <= 0 ||
+			promotion.stated_time === null ||
+			promotion.ended_time === null ||
+			(promotion.voucher_type ===
+				VoucherType.DELIVERY ?
+				promotion.discount_data.shipping_value <= 0 :
+				(promotion.discount_data.discount_type ===
+					DiscountType.FIXED_DISCOUNT ?
+					promotion.discount_data.discount_value < 0 :
+					(promotion.discount_data.discount_percent <= 0 ||
+						promotion.discount_data.discount_percent > 1 ||
+						promotion.discount_data.maximum_value < 0
+					)
+				)))
 	}
 
 	return (
@@ -306,23 +301,7 @@ const PromotionsAdmin = () => {
 				<Box>
 					<Button colorScheme="teal" onClick={
 						() => {
-							setPromotion({
-								_id: null,
-								voucher_code: null,
-								voucher_type: 1,
-								voucher_counts: 0,
-								discount_percent: 0,
-								detail: null,
-								discount_value: 0,
-								voucher_require: {
-									min_require: 0,
-								},
-								created_at: null,
-								updated_at: null,
-								stated_time: new Date().toISOString().slice(0, 10),
-								ended_time: new Date().toISOString().slice(0, 10),
-								status: 0,
-							});
+							setPromotion(templateVoucher);
 							setShowModalPromotion(true)
 						}
 					}> Thêm voucher</Button>
@@ -463,30 +442,147 @@ const PromotionsAdmin = () => {
 								/>
 							</FormControl>
 
-							<FormControl my={4}>
-								<FormLabel>Giảm giá</FormLabel>
-								<Input
-									type='number'
-									value={promotion.discount_value}
-									min="1"
-									onChange={(e) => setPromotion({
-										...promotion,
-										discount_value: parseInt(e.target.value)
-									})}
-								/>
-							</FormControl>
-							<FormControl my={4}>
-								<FormLabel>Giá tối thiểu</FormLabel>
-								<Input
-									type='number'
-									value={promotion.voucher_require.min_require}
-									min="1"
-									onChange={(e) => setPromotion({
-										...promotion,
-										voucher_require: { min_require: parseInt(e.target.value) }
-									})}
-								/>
-							</FormControl>
+							<Accordion allowMultiple index={1}>
+								<AccordionItem mt={2}>
+									{promotion.voucher_type === VoucherType.DELIVERY && <>
+										<Box flex="1" textAlign="left" fontWeight="bold" fontSize="xl">
+											Giảm giá
+										</Box>
+										<FormControl my={2}>
+											<FormLabel>Giảm</FormLabel>
+											<Input
+												type='number'
+												value={promotion.discount_data.shipping_value}
+												min="1"
+												onChange={(e) => setPromotion({
+													...promotion,
+													discount_data: {
+														...promotion.discount_data,
+														shipping_value: parseInt(e.target.value)
+													}
+												})}
+											/>
+										</FormControl>
+									</>}
+
+									{promotion.voucher_type === VoucherType.PRODUCT && <>
+										<Box flex="1" textAlign="left" fontWeight="bold" fontSize="xl">
+											Giảm giá
+										</Box>
+										<FormControl my={2}>
+											<FormLabel>Loại thanh toán</FormLabel>
+											<Select defaultValue="0"
+												value={promotion.discount_data.discount_type}
+												onChange={(e) => setPromotion({
+													...promotion, discount_data: {
+														discount_type: parseInt(e.target.value)
+													}
+												})}>
+												<option value="0">Cố định</option>
+												<option value="1">%</option>
+											</Select>
+										</FormControl>
+
+										{promotion.discount_data.discount_type === DiscountType.FIXED_DISCOUNT ?
+											<FormControl my={4}>
+												<FormLabel>Giảm giá trực tiếp</FormLabel>
+												<Input
+													type='number'
+													value={promotion.discount_data.discount_value}
+													min={promotion.discount_data.discount_type
+														=== DiscountType.FIXED_DISCOUNT ? "1" : "0.01"}
+													max={promotion.discount_data.discount_type
+														=== DiscountType.FIXED_DISCOUNT ? "1000000000" : "1"}
+													onChange={(e) => setPromotion({
+														...promotion, discount_data: {
+															...promotion.discount_data,
+															discount_value: parseInt(e.target.value)
+														}
+													})}
+												/>
+											</FormControl> : <>
+												<FormControl my={4}>
+													<FormLabel>Giảm giá %</FormLabel>
+													<Input
+														type='number'
+														value={promotion.discount_data.discount_percent}
+														min="0.01"
+														max="1"
+														onChange={(e) => setPromotion({
+															...promotion, discount_data: {
+																...promotion.discount_data,
+																discount_percent: parseInt(e.target.value)
+															}
+														})}
+													/>
+												</FormControl>
+												<FormControl my={4}>
+													<FormLabel>Giảm tối đa</FormLabel>
+													<Input
+														type='number'
+														value={promotion.discount_data.maximum_value}
+														min="1"
+														onChange={(e) => setPromotion({
+															...promotion,
+															discount_data: {
+																...promotion.discount_data,
+																maximum_value: parseInt(e.target.value)
+															}
+														})}
+													/>
+												</FormControl>
+											</>}
+
+
+
+									</>}
+								</AccordionItem>
+								<AccordionItem mt={2}>
+									<Box flex="1" textAlign="left" fontWeight="bold" fontSize="xl">
+										Yêu cầu
+									</Box>
+									<FormControl my={2}>
+										<FormLabel>Giá tối thiểu</FormLabel>
+										<Input
+											type='number'
+											value={promotion.voucher_require.min_require}
+											min="1"
+											onChange={(e) => setPromotion({
+												...promotion,
+												voucher_require: { ...promotion.voucher_require, min_require: parseInt(e.target.value) }
+											})}
+										/>
+									</FormControl>
+									<FormControl my={4}>
+										<FormLabel>Số luợng voucher cho mỗi khách hàng</FormLabel>
+										<Input
+											type='number'
+											value={promotion.voucher_require.max_voucher_per_user}
+											min="1"
+											onChange={(e) => setPromotion({
+												...promotion,
+												voucher_require: { ...promotion.voucher_require, max_voucher_per_user: parseInt(e.target.value) }
+											})}
+										/>
+									</FormControl>
+									<FormControl my={4}>
+										<FormLabel>Loại thanh toán</FormLabel>
+										<Select defaultValue="0"
+											value={promotion.voucher_type}
+											onChange={(e) => setPromotion({
+												...promotion,
+												voucher_require: {
+													...promotion.voucher_require, payment_method: parseInt(e.target.value)
+												}
+											})}>
+											<option value="0">Không</option>
+											<option value="2">{PaymentMethodName.PayPal}</option>
+											<option value="3">{PaymentMethodName.Wallet}</option>
+										</Select>
+									</FormControl>
+								</AccordionItem>
+							</Accordion>
+
 							<FormControl my={4}>
 								<FormLabel>Số lượng</FormLabel>
 								<Input
@@ -513,7 +609,7 @@ const PromotionsAdmin = () => {
 											setEndDateError('');
 											setStartDateError('');
 										} else {
-											setStartDateError('Start date must be smaller than end date');
+											setStartDateError('Ngày bắt đầu phải nhỏ hơn ngày kết thúc');
 										}
 									}}
 								/>
@@ -550,39 +646,14 @@ const PromotionsAdmin = () => {
 									setShowModalPromotion(false);
 									setEndDateError('');
 									setStartDateError('');
-									setPromotion({
-										_id: null,
-										voucher_code: null,
-										voucher_type: 1,
-										voucher_counts: 0,
-										discount_percent: 0,
-										detail: null,
-										discount_value: 0,
-										voucher_require: {
-											min_require: 0,
-										},
-										created_at: null,
-										updated_at: null,
-										stated_time: new Date().toISOString().slice(0, 10),
-										ended_time: new Date().toISOString().slice(0, 10),
-										status: 0,
-									});
+									setPromotion(templateVoucher);
 								}}>
-									Hủy
+									{Action.CANCEL}
 								</Button>
-								{!promotion._id && < Button colorScheme="red" onClick={handleCreate}
-									isDisabled={
-										promotion.voucher_code === '' ||
-										promotion.voucher_type === null ||
-										promotion.voucher_counts === null ||
-										promotion.detail === null ||
-										promotion.discount_value <= 0 ||
-										promotion.voucher_require.min_require < 0 ||
-										promotion.stated_time === null ||
-										promotion.ended_time === null
-									}
+								{!promotion.id && < Button colorScheme="red" onClick={handleCreate}
+									isDisabled={checkAddVoucher()}
 								>
-									Thêm
+									{Action.ADD}
 								</Button>}
 							</Flex>
 						</ModalFooter>
@@ -648,11 +719,11 @@ const PromotionsAdmin = () => {
 									<Button colorScheme="red" mr={4} onClick={() => {
 										setModalAfterAdd(null)
 									}}>
-										Hủy
+										{Action.CANCEL}
 									</Button>
 									<Button colorScheme="green"
 										onClick={() => handleUpdate(modalAfterAdd, 1)}>
-										Xác nhận
+										{Action.CONFIRM}
 									</Button>
 								</Flex>
 							</ModalFooter>
@@ -663,5 +734,6 @@ const PromotionsAdmin = () => {
 		</div >
 	);
 }
+
 
 export default PromotionsAdmin;

@@ -50,6 +50,9 @@ import {
 	updateRating
 } from "@stores/slices/ratings-slice";
 import { RatingResponse } from "@interfaces/rating";
+import { Action, Content, Order, OrderStatus, PaymentMethodName, Title } from "@/utils/constants";
+import { vi } from "date-fns/locale";
+import { getPaymentMethod } from "@/utils/utils";
 
 const OrderDetails = () => {
 	const stepIconList = ["package-box", "payment_success", "truck-1", "receive_package", "rating"];
@@ -90,9 +93,8 @@ const OrderDetails = () => {
 		});
 	}, []);
 
-
 	const handleCancleOrder = () => {
-		dispatch(cancelOrder({ order_uuid: selectedOrder })).unwrap().then((res) => {
+		dispatch(cancelOrder({ order_id: selectedOrder })).unwrap().then((res) => {
 			if (res.status === 200) {
 				const newOrder = { ...orderDetail };
 				newOrder.order.status = 0;
@@ -131,11 +133,10 @@ const OrderDetails = () => {
 	}
 
 	const handleUploadRating = () => {
-		console.log(displayRating);
 		dispatch(createRating({
 			content: ratingComment,
 			rating: ratingStar,
-			storeId: displayRating.store_id,
+			storeId: orderDetail.order.store_id,
 			productId: displayRating.product_id,
 			orderItemId: displayRating.item_id,
 		})).unwrap().then((res) => {
@@ -221,13 +222,11 @@ const OrderDetails = () => {
 	}
 
 	const isOlderThanSevenDays = () => {
-		const date = orderDetail.order.order_status.find(x => x.message.includes("Đơn hàng được giao thành công"))
+		const date = orderDetail.order.order_status.find(x => x.message.includes(Order.OrderDeliverySuccess))
 		if (!date)
 			return true;
 		const sevenDaysAgo = new Date();
 		sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-		console.log(new Date(date.created_at) < sevenDaysAgo);
-
 		return new Date(date.created_at) < sevenDaysAgo;
 	}
 
@@ -235,25 +234,16 @@ const OrderDetails = () => {
 		if (index === 0) {
 			return true
 		} else if (index === 1) {
-			if (orderDetail.order.status >= 1 && (orderDetail.order.payment_method === 1 || statusPaymentOrder.paymentStatus === EPaymentStatus.COMPLETED))
+			if (orderDetail.order.status >= 1 &&
+				(orderDetail.order.payment_method === getPaymentMethod(PaymentMethodName.COD)
+					|| statusPaymentOrder.paymentStatus === EPaymentStatus.COMPLETED))
 				return true;
 			else
 				return false;
 		} else if (index === 2) {
-			if (orderDetail.order.status >= 3)
-				return true;
-			else
-				return false;
-		} else if (index === 3) {
-			if (orderDetail.order.status >= 4)
-				return true;
-			else
-				return false;
-		} else if (index === 4) {
-			if (orderDetail.order.status >= 5)
-				return true;
-			else
-				return false;
+			return orderDetail.order.status >= 3;
+		} else if (index === 3 || index === 4) {
+			return orderDetail.order.status >= 5;
 		}
 	}
 
@@ -280,28 +270,37 @@ const OrderDetails = () => {
 
 	const handleStatusDone = (index: number) => {
 		if (index === 0) {
-			return true
+			return orderDetail.order.status > 0;
 		} else if (index === 1) {
-			if (orderDetail.order.status >= 1 && (orderDetail.order.payment_method === 1 || statusPaymentOrder.paymentStatus === EPaymentStatus.COMPLETED))
+			if (orderDetail.order.status >= 1
+				&&
+				(orderDetail.order.payment_method === 1 || statusPaymentOrder.paymentStatus === EPaymentStatus.COMPLETED))
 				return true;
 			else
 				return false;
 		} else if (index === 2) {
-			if (orderDetail.order.status >= 3)
-				return true;
-			else
-				return false;
+			return orderDetail.order.status >= 3;
 		} else if (index === 3) {
-			if (orderDetail.order.status >= 4)
-				return true;
-			else
-				return false;
+			return orderDetail.order.status >= 4;
 		} else if (index === 4) {
-			if (orderDetail.order.status >= 5 && orderDetail.order.order_items.some(x => x.rating_id) && (isOlderThanSevenDays() || orderDetail.order.order_items.every(item => item.rating_id)))
-				return true;
-			else
-				return false;
+			return (orderDetail.order.status >= 5 && orderDetail.order.order_items.some(x => x.rating_id) && (isOlderThanSevenDays() || orderDetail.order.order_items.every(item => item.rating_id)));
 		}
+	}
+
+	const handleMessageOrderCancel = (status: number): string => {
+		switch (status) {
+			case OrderStatus.ORDER_CANCEL_BY_USER:
+				return "Đã hủy bởi khách hàng";
+			case OrderStatus.ORDER_CANCEL_BY_ADMIN:
+				return "Đã hủy bởi admin";
+			case OrderStatus.ORDER_CANCEL_BY_STORE:
+				return "Đã hủy bởi người bán";
+			case OrderStatus.ORDER_CANCEL_BY_DELI:
+				return "Đã hủy bởi người giao hàng";
+			case OrderStatus.ORDER_CANCEL_USER_REJECT:
+				return "Khách hàng từ chối nhận đơn hàng";
+		}
+
 	}
 
 	return (
@@ -313,7 +312,7 @@ const OrderDetails = () => {
 					button={
 						<Button color="primary" bg="primary.light" px="2rem"
 							onClick={() => navigate("/orders")}>
-							Quay trở lại đơn hàng
+							{Action.RETURN_ORDER_PAGE}
 						</Button>
 					}
 				/>
@@ -323,7 +322,7 @@ const OrderDetails = () => {
 						size={"xl"}>
 						<ModalOverlay />
 						<ModalContent>
-							<ModalHeader>Đánh giá sản phẩm</ModalHeader>
+							<ModalHeader>{Title.RATING_PRODUCT}</ModalHeader>
 							<ModalCloseButton />
 							<ModalBody>
 								<Box mb={4}>
@@ -353,11 +352,11 @@ const OrderDetails = () => {
 							</ModalBody>
 							<ModalFooter>
 								<ButtonChakra colorScheme="red" variant="ghost" onClick={handleDeleteRating}
-									mr={2}>Xóa đánh giá</ButtonChakra>
+									mr={2}>{Action.DELETE}</ButtonChakra>
 								<ButtonChakra
 									isDisabled={detailRating.content === "" || detailRating.rating === 0 || detailRating.isChange}
 									colorScheme="green" mr={3} onClick={handleUpdateRating}>
-									Cập nhật
+									{Action.EDIT}
 								</ButtonChakra>
 							</ModalFooter>
 						</ModalContent>
@@ -369,7 +368,7 @@ const OrderDetails = () => {
 						size={"xl"}>
 						<ModalOverlay />
 						<ModalContent>
-							<ModalHeader>Đánh giá sản phẩm</ModalHeader>
+							<ModalHeader>{Title.RATING_PRODUCT}</ModalHeader>
 							<ModalCloseButton />
 							<ModalBody>
 								<Box mb={4}>
@@ -388,18 +387,18 @@ const OrderDetails = () => {
 										/>
 									))}
 								</Box>
-								<Textarea placeholder="Viết đánh giá" value={ratingComment}
+								<Textarea placeholder={Action.WRITE_RATING} value={ratingComment}
 									maxLength={200}
 									resize="none"
 									onChange={(e) => setRatingComment(e.target.value)} />
 							</ModalBody>
 							<ModalFooter>
 								<ButtonChakra colorScheme="red" variant="ghost"
-									onClick={() => setDisplayRating(null)} mr={2}>Hủy</ButtonChakra>
+									onClick={() => setDisplayRating(null)} mr={2}>{Action.CANCEL}</ButtonChakra>
 								<ButtonChakra
 									isDisabled={ratingComment === "" || ratingStar === 0}
 									colorScheme="green" mr={3} onClick={handleUploadRating}>
-									Đánh giá ngay
+									{Action.RATING_NOW}
 								</ButtonChakra>
 							</ModalFooter>
 						</ModalContent>
@@ -412,29 +411,31 @@ const OrderDetails = () => {
 						<ModalContent>
 							<ModalHeader>
 								<Center>
-									Huỷ đặt hàng
+									{Title.CANCEL_ORDER}
 								</Center>
 							</ModalHeader>
 							<ModalCloseButton />
 							<ModalBody>
 								<FlexCharkra>
 									<WarningIcon boxSize="20px" mr="15px" color="red.500" />
-									<Text>Bạn có chắc chắn hủy đặt đơn hàng này</Text>
+									<Text>{Content.CONFIRM_CANCEL_ORDER}</Text>
 								</FlexCharkra>
 							</ModalBody>
 							<ModalFooter>
 								<Button colorScheme="red" onClick={handleCancleOrder}>
-									xác nhận
+									{Action.CONFIRM}
 								</Button>
 								<Button colorScheme="blue" variant="ghost"
 									onClick={() => setDisplayModalCancelOrder(false)}>
-									hủy
+									{Action.CANCEL}
 								</Button>
 							</ModalFooter>
 						</ModalContent>
 					</Modal>
 				}
-				{orderDetail && orderDetail.order.status !== -1 && <Card p="2rem 1.5rem" mb="30px">
+
+				{/* Render status order */}
+				{orderDetail && orderDetail.order.status !== OrderStatus.ORDER_FAILED && <Card p="2rem 1.5rem" mb="30px">
 					<FlexBox
 						flexDirection={size.width < breakpoint ? "column" : "row"}
 						justifyContent="space-between"
@@ -485,8 +486,7 @@ const OrderDetails = () => {
 							color="primary.main"
 							textAlign="center"
 						>
-							Dự kiến lấy
-							hàng <b>  {format(new Date(orderDetail.order.delivery.receiving_date), "dd MMM, yyyy")}</b>
+							{Content.EXPECTED_PICKUP_DATE} <b>  {format(new Date(orderDetail.order.delivery.receiving_date), "dd MMM, yyyy", { locale: vi })}</b>
 						</Typography>
 					</FlexBox>
 					<FlexCharkra justifyContent={size.width < breakpoint ? "center" : "flex-end"} mt={2}>
@@ -495,7 +495,7 @@ const OrderDetails = () => {
 							onClick={() => {
 								navigate(`/products/${orderDetail.order.order_items[0].product_id}`)
 							}}
-						> Mua lại</ButtonChakra>
+						>{Content.BUY_AGAIN}</ButtonChakra>
 					</FlexCharkra>
 					{statusPaymentOrder &&
 
@@ -503,12 +503,12 @@ const OrderDetails = () => {
 							<FlexCharkra justifyContent={size.width < breakpoint ? "center" : "flex-end"}
 								mt={2}
 								onClick={() => {
-									setSelectedOrder(orderDetail.order.order_uuid);
+									setSelectedOrder(orderDetail.order.order_id);
 									setDisplayModalCancelOrder(true)
 								}}
 							>
 								<ButtonChakra width="30%" bg="white" color="black" borderRadius="0"
-									border="1px solid gray">Hủy đơn hàng</ButtonChakra>
+									border="1px solid gray">{Action.CANCEL_ORDER}</ButtonChakra>
 							</FlexCharkra>
 						)
 					}
@@ -518,7 +518,7 @@ const OrderDetails = () => {
 							<FlexCharkra justifyContent={size.width < breakpoint ? "center" : "flex-end"}
 								mt={2}
 								onClick={() => {
-									setSelectedOrder(orderDetail.order.order_uuid);
+									setSelectedOrder(orderDetail.order.order_id);
 									setDisplayModalCancelOrder(true);
 								}}
 							>
@@ -528,28 +528,29 @@ const OrderDetails = () => {
 									width="30%" bg="white" color="black" borderRadius="0"
 									border="1px solid gray"
 									onClick={handleOrderNow}
-								>Thanh toán ngay</ButtonChakra>
+								>{Action.PAY_NOW}</ButtonChakra>
 							</FlexCharkra>
 						)}
 					<FlexCharkra justifyContent={size.width < breakpoint ? "center" : "flex-end"} mt={2}
 						onClick={() => {
-							navigate(`/customer-service?store_id=${orderDetail.order.order_items[0].store_id}`)
+							navigate(`/customer-service?store_id=${orderDetail.order.store_id}`)
 						}}
 					>
 						<ButtonChakra width="30%" bg="white" color="black" borderRadius="0"
-							border="1px solid gray">Liên hệ người bán</ButtonChakra>
+							border="1px solid gray">{Action.CONTACT_SELLER}</ButtonChakra>
 					</FlexCharkra>
 				</Card>}
 
-				{orderDetail && orderDetail.order.status === 7 && (
+				{/* Order cancel start from -1  */}
+				{orderDetail && (orderDetail.order.status <= -1) && (
 					<Center mt={4} mb={4}>
-						<Text fontSize="xl">Đơn hàng của bạn đã bị hủy</Text>
+						<Text fontSize="xl">{handleMessageOrderCancel(orderDetail.order.status)}</Text>
 					</Center>
 				)}
 
-				{orderDetail && orderDetail.order.status === -1 && (
+				{orderDetail && orderDetail.order.status === OrderStatus.ORDER_FAILED && (
 					<Center mt={4} mb={4}>
-						<Text fontSize="xl">Đơn hàng của bạn đã bị lỗi</Text>
+						<Text fontSize="xl">{Content.YOUR_ORDER_HAS_BEEN_ERROR}</Text>
 					</Center>
 				)}
 
@@ -557,25 +558,25 @@ const OrderDetails = () => {
 					<TableRow bg="gray.200" p="12px" boxShadow="none" borderRadius={0}>
 						<FlexBox className="pre" m="6px" alignItems="center">
 							<Typography fontSize="14px" color="text.muted" mr="4px">
-								Mã đơn hàng:
+								{Title.ORDER_CODE}:
 							</Typography>
-							<Typography fontSize="14px">{orderDetail.order.order_uuid}</Typography>
+							<Typography fontSize="14px">{orderDetail.order.order_id}</Typography>
 						</FlexBox>
 						<FlexBox className="pre" m="6px" alignItems="center">
 							<Typography fontSize="14px" color="text.muted" mr="4px">
-								Đặt ngày:
+								{Title.ORDER_DATE}:
 							</Typography>
 							<Typography fontSize="14px">
-								{format(new Date(orderDetail.order.created_at), "dd MMM, yyyy")}
+								{format(new Date(orderDetail.order.created_at), "dd MMM, yyyy", { locale: vi })}
 							</Typography>
 						</FlexBox>
 						{orderDetail.order.status === 4 && (
 							<FlexBox className="pre" m="6px" alignItems="center">
 								<Typography fontSize="14px" color="text.muted" mr="4px">
-									Vận chuyển:
+									{Title.ORDER_DELIVERY}:
 								</Typography>
 								<Typography fontSize="14px">
-									{format(new Date(orderDetail.order.delivery.receiving_date), "dd MMM, yyyy")}
+									{format(new Date(orderDetail.order.delivery.receiving_date), "dd MMM, yyyy", { locale: vi })}
 								</Typography>
 							</FlexBox>)}
 
@@ -602,7 +603,7 @@ const OrderDetails = () => {
 								{item.name_option && (
 									<FlexBox flex="1 1 260px" m="6px" alignItems="center">
 										<Typography fontSize="14px" color="text.muted">
-											Thuộc tính: {item.name_option}
+											{Title.ORDER_ITEM_PRODUCT_ATTRIBUTE}: {item.name_option}
 										</Typography>
 									</FlexBox>
 								)}
@@ -617,7 +618,7 @@ const OrderDetails = () => {
 												}}
 												marginLeft="auto"
 												variant="text" color="primary">
-												<Typography fontSize="14px">Xem đánh giá</Typography>
+												<Typography fontSize="14px">{Action.VIEW_RATING}</Typography>
 											</Button>
 										) : (
 											<Button
@@ -627,7 +628,7 @@ const OrderDetails = () => {
 												_hover={{ variant: "text" }}
 												marginLeft="auto"
 											>
-												<Typography fontSize="14px">Viết đánh giá</Typography>
+												<Typography fontSize="14px">{Action.WRITE_RATING}</Typography>
 											</Button>
 										)
 									}
@@ -642,7 +643,7 @@ const OrderDetails = () => {
 					<Grid item lg={6} md={6} xs={12} style={{ display: 'flex' }}>
 						<Card p="20px 30px" style={{ flex: 1 }}>
 							<Heading as="h5" size="md" mt="0px" mb={2}>
-								Địa Chỉ Nhận Hàng
+								{Title.ORDER_DELIVERY_RECIEVE}
 							</Heading>
 							<Text fontSize="14px" my="0px" fontWeight={"bold"}>
 								{orderDetail.order.delivery.shipping_name}
@@ -676,7 +677,7 @@ const OrderDetails = () => {
 				<Box container spacing={6} mt={12}>
 					<Card p="20px 30px">
 						<H5 mt="0px" mb="14px">
-							Tổng cộng
+							{Title.TOTAL}
 						</H5>
 						<FlexBox
 							justifyContent="space-between"
@@ -684,7 +685,7 @@ const OrderDetails = () => {
 							mb="0.5rem"
 						>
 							<Typography fontSize="14px" color="text.hint">
-								Tiền hàng:
+								{Title.ORDER_MONEY}:
 							</Typography>
 							<H6 my="0px">{(orderDetail.order.sub_total -
 								orderDetail.order.delivery.cost).toLocaleString('vi-VN')}₫</H6>
@@ -695,7 +696,7 @@ const OrderDetails = () => {
 							mb="0.5rem"
 						>
 							<Typography fontSize="14px" color="text.hint">
-								Phí ship:
+								{Title.ORDER_FEE_SHIPPING}:
 							</Typography>
 							<H6 my="0px">{orderDetail.order.delivery.cost.toLocaleString('vi-VN')}₫</H6>
 						</FlexBox>
@@ -705,7 +706,7 @@ const OrderDetails = () => {
 							mb="0.5rem"
 						>
 							<Typography fontSize="14px" color="text.hint">
-								Giảm giá sản phẩm :
+								{Title.ORDER_DISCOUNT_PRODUCT}:
 							</Typography>
 							<H6 my="0px">{orderDetail.order.item_discount.toLocaleString('vi-VN')}₫</H6>
 						</FlexBox>
@@ -715,7 +716,7 @@ const OrderDetails = () => {
 							mb="0.5rem"
 						>
 							<Typography fontSize="14px" color="text.hint">
-								Giảm giá ship:
+								{Title.ORDER_DISCOUNT_FEE_SHIPPING}:
 							</Typography>
 							<H6 my="0px">{orderDetail.order.shipping_discount.toLocaleString('vi-VN')}₫</H6>
 						</FlexBox>
@@ -727,14 +728,14 @@ const OrderDetails = () => {
 							alignItems="center"
 							mb="1rem"
 						>
-							<H6 my="0px">Tổng cộng</H6>
+							<H6 my="0px">{Title.TOTAL}</H6>
 							<H6 my="0px">{orderDetail.order.amount.toLocaleString('vi-VN')}₫</H6>
 						</FlexBox>
 						<FlexBox justifyContent="space-between" alignItems="center">
-							<Typography fontSize="14px" fontWeight="bold">Phương thức Thanh toán:</Typography>
+							<Typography fontSize="14px" fontWeight="bold">{Title.ORDER_PAYMENT_METHOD}:</Typography>
 							<Typography fontSize="14px">
-								{orderDetail.order.payment_method === 1 ? " Thanh toán khi nhận hàng" : orderDetail.order.payment_method === 2 ?
-									" Thanh toán bằng paypal" : " Thanh toán bằng ví Latipe"}
+								{orderDetail.order.payment_method === 1 ? Content.PAYMENT_ON_COD : orderDetail.order.payment_method === 2 ?
+									Content.PAYMENT_ON_PAYPAL : Content.PAYMENT_ON_WALLET}
 							</Typography>
 						</FlexBox>
 					</Card>

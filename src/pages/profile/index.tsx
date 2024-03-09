@@ -26,6 +26,7 @@ import {
 } from "@chakra-ui/react";
 import Icon from "@components/icon/Icon";
 import Hidden from "@components/hidden/Hidden";
+import { vi } from "date-fns/locale";
 
 const Profile = () => {
 
@@ -274,7 +275,7 @@ const Profile = () => {
 											<FormLabel mb="0" textAlign="right">Năm sinh:</FormLabel>
 										</Box>
 										<Input type="date" id="birth-date" defaultValue={
-											profile.birthday ? format(new Date(profile.birthday), "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd")
+											profile.birthday ? format(new Date(profile.birthday), "yyyy-MM-dd", { locale: vi }) : format(new Date(), "yyyy-MM-dd", { locale: vi })
 										} width="80%"
 											onChange={(e) => {
 												setProfile({ ...profile, birthday: new Date(e.target.value) })

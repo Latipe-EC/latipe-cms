@@ -9,6 +9,7 @@ import Pagination from "@components/pagination/Pagination";
 import TableRow from "@components/TableRow";
 import Typography, { SemiSpan, Small } from "@components/Typography";
 import { format } from "date-fns";
+import { vi } from "date-fns/locale";
 
 const TicketList = () => {
 	return (
@@ -33,7 +34,7 @@ const TicketList = () => {
 									<Small color="success.main">Open</Small>
 								</Chip>
 								<SemiSpan className="pre" m="6px">
-									{format(new Date("2020/10/12"), "MMM dd, yyyy")}
+									{format(new Date("2020/10/12"), "MMM dd, yyyy", { locale: vi })}
 								</SemiSpan>
 								<SemiSpan m="6px">Website Problem</SemiSpan>
 							</FlexBox>

@@ -17,7 +17,7 @@ const ProductCard9List: React.FC<ProductCard9ListProps> = ({ data, onChange }) =
 			{data.products.length === 0 ? (
 				<Box>
 					<Text fontSize="xl" fontWeight="bold" textAlign="center" my={5}>
-						Không tìm thấy sản phẩm nào
+						{Content.PRODUCT_NOT_FOUND}
 					</Text>
 				</Box>
 			) : (

@@ -7,8 +7,7 @@ export interface createVoucherRequest {
 	voucher_type: number
 	voucher_counts: number
 	detail: string
-	discount_percent: number
-	discount_value: number
+	discount_data: DiscountData
 	voucher_require: VoucherRequire
 	stated_time: string
 	ended_time: string
@@ -52,7 +51,7 @@ export interface ItemVoucher {
 	voucher_type: number
 	voucher_counts: number
 	detail: string
-	owner_voucher: string
+	owner_voucher?: string
 	status: number
 	discount_data: DiscountData
 	voucher_require: VoucherRequire
@@ -60,8 +59,8 @@ export interface ItemVoucher {
 	ended_time: string
 	created_at: string
 	updated_at: string
-	count_usable: number
-	real_discount: RealDiscount
+	count_usable?: number
+	real_discount?: RealDiscount
 }
 
 export interface RealDiscount {
@@ -70,10 +69,10 @@ export interface RealDiscount {
 }
 export interface DiscountData {
 	discount_type: number
-	discount_percent: number
-	maximum_value: number
-	discount_value: number
-	shipping_value: number
+	discount_percent?: number
+	maximum_value?: number
+	discount_value?: number
+	shipping_value?: number
 }
 
 export interface ListVoucherReponse {
@@ -92,7 +91,7 @@ export interface ListVoucherData {
 
 export interface VoucherRequire {
 	min_require: number
-	payment_method: number
+	payment_method?: number
 	max_voucher_per_user: number
 }
 

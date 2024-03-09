@@ -8,6 +8,7 @@ import DashboardPageHeader from "@components/layout/DashboardPageHeader";
 import TextArea from "@components/textarea/TextArea";
 import { H5, SemiSpan } from "@components/Typography";
 import { format } from "date-fns";
+import { vi } from "date-fns/locale";
 
 const PaymentMethodEditor = () => {
 	const handleFormSubmit = async (values) => {
@@ -36,7 +37,7 @@ const PaymentMethodEditor = () => {
 							{item.name}
 						</H5>
 						<SemiSpan>
-							{format(new Date(item.date), "hh:mm:a | dd MMM yyyy")}
+							{format(new Date(item.date), "hh:mm:a | dd MMM yyyy", { locale: vi })}
 						</SemiSpan>
 						<Box borderRadius="10px" bg="gray.200" p="1rem" mt="1rem">
 							{item.text}

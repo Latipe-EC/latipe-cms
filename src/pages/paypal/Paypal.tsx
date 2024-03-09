@@ -79,7 +79,7 @@ export default function Paypal() {
 		actions.order.capture().then((response: CapturePayment) => {
 			if (response.status === "COMPLETED") {
 				dispatch(payByPaypal({
-					orderId: orderDetail.order.order_uuid,
+					orderId: orderDetail.order.order_id,
 					id: response.id,
 					status: response.status,
 					email: response.payer.email_address,

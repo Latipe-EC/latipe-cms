@@ -94,7 +94,7 @@ const OrdersAdmin = () => {
 		dispatch(searchOrderAdmin({
 			"size": "7",
 			"page": currentPage,
-			"filters[order_uuid][$search]": search,
+			"filters[order_id][$search]": search,
 			...paramFilter
 		})).unwrap().then((res) => {
 			setOrderList(res.data);

@@ -69,6 +69,7 @@ export enum TitleToast {
 	UPDATE_COMMISSION = 'Cập nhật hoa hồng',
 	DELETE_COMMISSION = 'Xóa hoa hồng',
 	ADD_TO_CART = 'Thêm vào giỏ hàng',
+	ADD_VOUCHER = 'Thêm voucher',
 }
 
 export enum ContentToast {
@@ -92,6 +93,8 @@ export enum ContentToast {
 	DELETE_COMMISSION_ERROR = 'Xóa hoa hồng thất bại',
 	ADD_TO_CART_SUCCESS = 'Thêm vào giỏ hàng thành công',
 	ADD_TO_CART_ERROR = 'Thêm vào giỏ hàng thất bại',
+	ADD_VOUCHER_SUCCESS = 'Thêm voucher thành công',
+	ADD_VOUCHER_ERROR = 'Thêm voucher thất bại',
 }
 
 export enum ToastStatus {
@@ -116,7 +119,14 @@ export enum Action {
 	CANCEL = 'Hủy',
 	CLOSE = 'Đóng',
 	SAVE = 'Lưu',
-	VIEW_DETAIL = 'Xem chi tiết'
+	VIEW_DETAIL = 'Xem chi tiết',
+	VIEW = 'Xem',
+	RETURN_ORDER_PAGE = 'Quay trở lại đơn hàng',
+	RATING_NOW = 'Đánh giá ngay',
+	PAY_NOW = 'Thanh toán ngay',
+	CONTACT_SELLER = 'Liên hệ người bán',
+	VIEW_RATING = 'Xem đánh giá',
+	WRITE_RATING = 'Viết đánh giá',
 }
 
 export enum Content {
@@ -145,6 +155,16 @@ export enum Content {
 	COMMISSION_POINT = 'Điểm',
 	NOT_FOUND = 'Không tìm thấy',
 	CONFIRM_DELETE_COMMISSION = 'Hành vi sau không thể hoàn tác, Bạn có chắc chắn muốn xóa hoa hồng này?',
+	CONFIRM_CANCEL_ORDER = 'Bạn có chắc chắn hủy đặt đơn hàng này',
+	EXPECTED_PICKUP_DATE = 'Dự kiến lấy hàng',
+	BUY_AGAIN = 'Mua lại',
+	YOUR_ORDER_HAS_BEEN_CANCEL = 'Đơn hàng của bạn đã bị hủy',
+	YOUR_ORDER_HAS_BEEN_ERROR = 'Đơn hàng của bạn đã bị lỗi',
+	PAYMENT_ON_COD = 'Thanh toán khi nhận hàng',
+	PAYMENT_ON_PAYPAL = 'Thanh toán bằng paypal',
+	PAYMENT_ON_WALLET = 'Thanh toán bằng ví Latipe',
+	PRODUCT_NOT_FOUND = 'Không tìm thấy sản phẩm nào',
+
 
 }
 
@@ -161,9 +181,51 @@ export enum Title {
 	UPDATE_COMMISSION = 'Cập nhật hoa hồng',
 	DELETE_COMMISSION = 'Xóa hoa hồng',
 	COMMISSION = 'Hoa hồng',
+	CANCEL_ORDER = 'Hủy đơn hàng',
+	RATING_PRODUCT = 'Đánh giá sản phẩm',
+	ORDER_CODE = 'Mã đơn hàng',
+	ORDER_DATE = 'Đặt ngày',
+	ORDER_DELIVERY = 'Vận chuyển',
+	ORDER_ITEM_PRODUCT_ATTRIBUTE = 'Thuộc tính',
+	ORDER_DELIVERY_RECIEVE = 'Địa Chỉ Nhận Hàng',
+	TOTAL = 'Tổng cộng',
+	ORDER_MONEY = 'Tiền hàng',
+	ORDER_FEE_SHIPPING = 'Phí ship',
+	ORDER_DISCOUNT_PRODUCT = 'Giảm giá sản phẩm',
+	ORDER_DISCOUNT_FEE_SHIPPING = 'Giảm giá ship',
+	ORDER_PAYMENT_METHOD = 'Phương thức Thanh toán',
+
 }
 
 export enum VoucherStatus {
 	ACTIVE = 1,
 	INACTIVE = 0,
 }
+
+export enum Page {
+	currentPage = 1,
+	pageSize = 10,
+}
+
+export enum Order {
+	OrderDeliverySuccess = "Đơn hàng được giao thành công",
+}
+
+export class OrderStatus {
+	public static readonly ORDER_SYSTEM_PROCESS: number = 0;
+	public static readonly ORDER_CREATED: number = 1;
+	public static readonly ORDER_PREPARED: number = 2;
+	public static readonly ORDER_DELIVERY: number = 3;
+	public static readonly ORDER_SHIPPING_FINISH: number = 4;
+	public static readonly ORDER_COMPLETED: number = 5;
+	public static readonly ORDER_REFUND: number = 6;
+	public static readonly ORDER_CANCEL_BY_USER: number = -2;
+	public static readonly ORDER_CANCEL_BY_STORE: number = -3;
+	public static readonly ORDER_CANCEL_BY_ADMIN: number = -4;
+	public static readonly ORDER_CANCEL_BY_DELI: number = -5;
+	public static readonly ORDER_CANCEL_USER_REJECT: number = -7;
+	public static readonly ORDER_FAILED: number = -1;
+}
+
+
+

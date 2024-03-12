@@ -15,6 +15,8 @@ import { createAuthenticationToken } from "@stores/slices/auth-slice";
 import { AppThunkDispatch } from "@stores/store";
 import { Spinner, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { handleApiCallWithToast } from "@/utils/utils";
+import { ContentToast, TitleToast } from "@/utils/constants";
 
 const Login: React.FC = () => {
 	const [passwordVisibility, setPasswordVisibility] = useState(false);
@@ -26,66 +28,39 @@ const Login: React.FC = () => {
 	const navigate = useNavigate();
 
 	const handleFormSubmit = async (values) => {
-		const loadingToastId = toast({
-			title: 'Logging',
-			status: 'info',
-			description: <Spinner size="sm" />,
-			duration: null,
-			isClosable: true,
-		})
 
-		dispatch(createAuthenticationToken({
-			username: values.email,
-			password: values.password
-		}))
-			.unwrap()
-			.then((res) => {
-				toast.close(loadingToastId)
-				if (res.status === 200) {
-					toast({
-						title: 'Success Login !',
-						status: 'success',
-						duration: 1500,
-						isClosable: true,
-						position: 'top-right',
-					})
-					setTimeout(() => {
-						if (res.data.role === "ADMIN") {
-							navigate("/admin");
-							return;
-						} else if (res.data.role === "DELIVERY") {
-							navigate("/delivery");
-							return;
-						}
-						navigate("/");
-					}, 2000);
-				} else {
-					toast({
-						title: 'Error !',
-						status: 'error',
-						description: res.data.detail,
-						duration: 1500,
-						isClosable: true,
-						position: 'top-right',
-					})
-					if (res.data.detail.includes("verified")) {
-						navigate("/auth/verify-account")
+		handleApiCallWithToast(dispatch,
+			createAuthenticationToken,
+			{
+				username: values.email,
+				password: values.password
+			},
+			null,
+			TitleToast.LOGIN,
+			TitleToast.SUCCESS,
+			ContentToast.LOGIN_SUCCESS,
+			TitleToast.ERROR,
+			ContentToast.LOGIN_ERROR,
+			null,
+			toast,
+			<Spinner />,
+			(res) => {
+				setTimeout(() => {
+					if (res.data.role === "ADMIN") {
+						navigate("/admin");
+						return;
+					} else if (res.data.role === "DELIVERY") {
+						navigate("/delivery");
+						return;
 					}
+					navigate("/");
+				}, 2000);
+			},
+			(res) => {
+				if (res.data.detail.includes("verified")) {
+					navigate("/auth/verify-account")
 				}
-
-			}).catch((err) => {
-				toast.close(loadingToastId)
-				const error = err.message.includes('404') ? 'Wrong Email or Điện thoại Number!' : 'Wrong password!';
-				toast({
-					title: 'Error !',
-					status: 'error',
-					description: error,
-					duration: 1500,
-					isClosable: true,
-					position: 'top-right',
-				})
 			})
-
 
 	}
 

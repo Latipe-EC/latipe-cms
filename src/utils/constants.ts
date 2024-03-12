@@ -70,6 +70,8 @@ export enum TitleToast {
 	DELETE_COMMISSION = 'Xóa hoa hồng',
 	ADD_TO_CART = 'Thêm vào giỏ hàng',
 	ADD_VOUCHER = 'Thêm voucher',
+	LOGIN = 'Đăng nhập',
+
 }
 
 export enum ContentToast {
@@ -95,6 +97,8 @@ export enum ContentToast {
 	ADD_TO_CART_ERROR = 'Thêm vào giỏ hàng thất bại',
 	ADD_VOUCHER_SUCCESS = 'Thêm voucher thành công',
 	ADD_VOUCHER_ERROR = 'Thêm voucher thất bại',
+	LOGIN_SUCCESS = 'Đăng nhập thành công',
+	LOGIN_ERROR = 'Đăng nhập thất bại',
 }
 
 export enum ToastStatus {
@@ -127,6 +131,7 @@ export enum Action {
 	CONTACT_SELLER = 'Liên hệ người bán',
 	VIEW_RATING = 'Xem đánh giá',
 	WRITE_RATING = 'Viết đánh giá',
+	GO_TO_HOME = 'Quay về trang chủ',
 }
 
 export enum Content {
@@ -164,8 +169,6 @@ export enum Content {
 	PAYMENT_ON_PAYPAL = 'Thanh toán bằng paypal',
 	PAYMENT_ON_WALLET = 'Thanh toán bằng ví Latipe',
 	PRODUCT_NOT_FOUND = 'Không tìm thấy sản phẩm nào',
-
-
 }
 
 export enum Title {
@@ -194,6 +197,7 @@ export enum Title {
 	ORDER_DISCOUNT_PRODUCT = 'Giảm giá sản phẩm',
 	ORDER_DISCOUNT_FEE_SHIPPING = 'Giảm giá ship',
 	ORDER_PAYMENT_METHOD = 'Phương thức Thanh toán',
+	PRODUCT = 'Sản phẩm'
 
 }
 
@@ -226,6 +230,5 @@ export class OrderStatus {
 	public static readonly ORDER_CANCEL_USER_REJECT: number = -7;
 	public static readonly ORDER_FAILED: number = -1;
 }
-
 
 

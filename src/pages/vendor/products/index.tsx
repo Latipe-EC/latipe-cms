@@ -14,6 +14,7 @@ import { getMyProductStore } from "@stores/slices/stores-slice";
 import { Box, Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
 import { ChevronDownIcon, ChevronUpIcon, Search2Icon } from "@chakra-ui/icons";
 import { debounce } from "lodash";
+import { Title } from "@/utils/constants";
 
 const Products = () => {
 	const [currentPage, setCurrentPage] = useState(0);
@@ -36,7 +37,7 @@ const Products = () => {
 
 	return (
 		<Box>
-			<DashboardPageHeader title="Products" iconName="delivery-box" />
+			<DashboardPageHeader title={Title.PRODUCT} iconName="delivery-box" />
 			<FlexBox alignItems="center" mb="1rem">
 				<InputGroup width={'xl'}>
 					<InputLeftElement pointerEvents="none">

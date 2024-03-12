@@ -199,7 +199,7 @@ export interface DataStoreOrderDetail {
 	updated_at: string
 	delivery: DeliveryGetOrderById
 	commission_detail: CommissionDetail
-	order_items: OrderItem[]
+	order_items: OrderItemStore[]
 }
 
 export interface GetTotalOrderInMonthResponse {
@@ -335,7 +335,6 @@ export interface StatusParamRequest {
 	id: string
 }
 
-
 export interface StatusBodyRequest {
 	body: {
 		item_id: string
@@ -413,4 +412,18 @@ export interface FreeShippingVoucher {
 
 export interface PaymentVoucher {
 	voucher_code: string
+}
+
+export interface OrderItemStore {
+	item_id: string
+	product_id: string
+	option_id: string
+	quantity: number
+	price: number
+	net_price: number
+	is_prepared: number
+	sub_total: number
+	product_name: string
+	image: string
+	name_option: string
 }

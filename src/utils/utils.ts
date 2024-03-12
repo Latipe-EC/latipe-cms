@@ -1,4 +1,4 @@
-import { PaymentMethodName, ToastStatus } from "@/utils/constants";
+import { OrderStatus, PaymentMethodName, ToastStatus } from "@/utils/constants";
 import { themeGet } from "@styled-system/theme-get";
 import { differenceInMinutes } from "date-fns";
 import { ceil } from "lodash";
@@ -161,3 +161,62 @@ export const handleApiCallWithToast =
 					CallbackError();
 			});
 	};
+
+export const getStrStatusOrder = (status: number): string => {
+	switch (status) {
+		case OrderStatus.ORDER_SYSTEM_PROCESS:
+			return "Đang xử lý đơn hàng";
+		case OrderStatus.ORDER_CREATED:
+			return "Tạo đơn hàng thành công";
+		case OrderStatus.ORDER_PREPARED:
+			return "Đang chuẩn bị đơn hàng";
+		case OrderStatus.ORDER_DELIVERY:
+			return "Đang trên đường vận chu1yển";
+		case OrderStatus.ORDER_SHIPPING_FINISH:
+			return "Vận chuyển thành công";
+		case OrderStatus.ORDER_COMPLETED:
+			return "Đơn hàng đã hoàn thành";
+		case OrderStatus.ORDER_REFUND:
+			return "Đang hoàn tiền";
+		case OrderStatus.ORDER_CANCEL_BY_USER:
+			return "Đã hủy bởi khách hàng";
+		case OrderStatus.ORDER_CANCEL_BY_ADMIN:
+			return "Đã hủy bởi admin";
+		case OrderStatus.ORDER_CANCEL_BY_STORE:
+			return "Đã hủy bởi người bán";
+		case OrderStatus.ORDER_CANCEL_BY_DELI:
+			return "Đã hủy bởi người giao hàng";
+		case OrderStatus.ORDER_CANCEL_USER_REJECT:
+			return "Khách hàng từ chối nhận đơn hàng";
+		case OrderStatus.ORDER_FAILED:
+			return "Mua hàng thất bại";
+	}
+}
+
+export const getColorStatusOrder = (status) => {
+	switch (status) {
+		case OrderStatus.ORDER_SYSTEM_PROCESS:
+		case OrderStatus.ORDER_PREPARED:
+		case OrderStatus.ORDER_DELIVERY:
+		case OrderStatus.ORDER_REFUND:
+			return "secondary";
+		case OrderStatus.ORDER_CREATED:
+		case OrderStatus.ORDER_SHIPPING_FINISH:
+		case OrderStatus.ORDER_COMPLETED:
+			return "success";
+		case OrderStatus.ORDER_CANCEL_BY_USER:
+		case OrderStatus.ORDER_CANCEL_BY_ADMIN:
+		case OrderStatus.ORDER_CANCEL_BY_STORE:
+		case OrderStatus.ORDER_CANCEL_BY_DELI:
+		case OrderStatus.ORDER_CANCEL_USER_REJECT:
+		case OrderStatus.ORDER_FAILED:
+			return "error";
+		default:
+			return "";
+	}
+};
+
+export const getStrPaymentMethod = (payment: number): string => {
+	return payment === 1 ? " Thanh toán khi nhận hàng" : payment === 2 ?
+		" Thanh toán bằng paypal" : " Thanh toán bằng ví Latipe"
+};

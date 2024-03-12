@@ -1,3 +1,4 @@
+import { Action } from "@/utils/constants";
 import Button from "@components/buttons/Button";
 import FlexBox from "@components/FlexBox";
 import Image from "@components/Image";
@@ -31,11 +32,11 @@ const Error404 = () => {
 					m="0.5rem"
 					onClick={handleGoBack}
 				>
-					Go Back
+					{Action.BACK}
 				</Button>
 				<a href="/">
 					<Button variant="contained" color="primary" m="0.5rem">
-						Go to Home
+						{Action.GO_TO_HOME}
 					</Button>
 				</a>
 			</FlexBox>

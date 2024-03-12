@@ -14,7 +14,9 @@ import { format } from "date-fns";
 import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "@stores/store";
 import { useEffect, useState } from "react";
-import { OrderItem, StoreOrderDetailResponse } from "@interfaces/order";
+import {
+	OrderItemStore, StoreOrderDetailResponse
+} from "@interfaces/order";
 import {
 	cancelOrderItem,
 	getStoreOrderDetail,
@@ -22,8 +24,9 @@ import {
 } from "@stores/slices/orders-slice";
 import { Chip } from "@components/Chip";
 import { Tooltip } from "@chakra-ui/react";
-import { Action, Content, OrderStatus, Title } from "@/utils/constants";
+import { Action, Content, Title } from "@/utils/constants";
 import { vi } from "date-fns/locale";
+import { getColorStatusOrder, getStrStatusOrder } from "@/utils/utils";
 
 const OrderDetails = () => {
 	const { id } = useParams();
@@ -40,60 +43,6 @@ const OrderDetails = () => {
 			setResponse(res.data);
 		});
 	}, []);
-
-	const handleRenderStaus = (): string => {
-		switch (response.data.status) {
-			case OrderStatus.ORDER_SYSTEM_PROCESS:
-				return "Đang xử lý đơn hàng";
-			case OrderStatus.ORDER_CREATED:
-				return "Tạo đơn hàng thành công";
-			case OrderStatus.ORDER_PREPARED:
-				return "Đang chuẩn bị đơn hàng";
-			case OrderStatus.ORDER_DELIVERY:
-				return "Đang trên đường vận chu1yển";
-			case OrderStatus.ORDER_SHIPPING_FINISH:
-				return "Vận chuyển thành công";
-			case OrderStatus.ORDER_COMPLETED:
-				return "Đơn hàng đã hoàn thành";
-			case OrderStatus.ORDER_REFUND:
-				return "Đang hoàn tiền";
-			case OrderStatus.ORDER_CANCEL_BY_USER:
-				return "Đã hủy bởi khách hàng";
-			case OrderStatus.ORDER_CANCEL_BY_ADMIN:
-				return "Đã hủy bởi admin";
-			case OrderStatus.ORDER_CANCEL_BY_STORE:
-				return "Đã hủy bởi người bán";
-			case OrderStatus.ORDER_CANCEL_BY_DELI:
-				return "Đã hủy bởi người giao hàng";
-			case OrderStatus.ORDER_CANCEL_USER_REJECT:
-				return "Khách hàng từ chối nhận đơn hàng";
-			case OrderStatus.ORDER_FAILED:
-				return "Mua hàng thất bại";
-		}
-	}
-
-	const getColor = (status) => {
-		switch (status) {
-			case OrderStatus.ORDER_SYSTEM_PROCESS:
-			case OrderStatus.ORDER_PREPARED:
-			case OrderStatus.ORDER_DELIVERY:
-			case OrderStatus.ORDER_REFUND:
-				return "secondary";
-			case OrderStatus.ORDER_CREATED:
-			case OrderStatus.ORDER_SHIPPING_FINISH:
-			case OrderStatus.ORDER_COMPLETED:
-				return "success";
-			case OrderStatus.ORDER_CANCEL_BY_USER:
-			case OrderStatus.ORDER_CANCEL_BY_ADMIN:
-			case OrderStatus.ORDER_CANCEL_BY_STORE:
-			case OrderStatus.ORDER_CANCEL_BY_DELI:
-			case OrderStatus.ORDER_CANCEL_USER_REJECT:
-			case OrderStatus.ORDER_FAILED:
-				return "error";
-			default:
-				return "";
-		}
-	};
 
 	const handleCancelOrder = () => {
 		dispatch(cancelOrderItem({
@@ -112,7 +61,7 @@ const OrderDetails = () => {
 		});
 	}
 
-	const handleConfirmOrder = (item: OrderItem) => {
+	const handleConfirmOrder = (item: OrderItemStore) => {
 		dispatch(updateOrderItemStatusByStore({
 			id: response.data.order_id,
 			body: {
@@ -169,9 +118,9 @@ const OrderDetails = () => {
 						alignItems="center"
 					>
 						<Box m="6px">
-							<Chip p="0.25rem 1rem" bg={`${getColor(response.data.status)}.light`}>
+							<Chip p="0.25rem 1rem" bg={`${getColorStatusOrder(response.data.status)}.light`}>
 								<Small textAlign="center"
-									color={`${getColor(response.data.status)}.main`}>{handleRenderStaus()}</Small>
+									color={`${getColorStatusOrder(response.data.status)}.main`}>{getStrStatusOrder(response.data.status)}</Small>
 							</Chip>
 						</Box>
 					</FlexBox>}
@@ -289,6 +238,7 @@ const OrderDetails = () => {
 									<Typography fontSize="14px" color="text.hint">
 										{Content.COMMERCIAL_FLOOR_FEE}:
 									</Typography>
+									{/* TODO: remove comment */}
 									<H6 my="0px">{
 										response.data.commission_detail.system_fee.toLocaleString("vi-VN")}₫
 										({Math.ceil(response.data.commission_detail.system_fee / response.data.store_order_amount * 100)}%)
@@ -303,6 +253,7 @@ const OrderDetails = () => {
 									<Typography fontSize="14px" color="text.hint">
 										{Content.MONEY_RECEIVED_BY_THE_SHOP}:
 									</Typography>
+									{/* TODO: remove comment */}
 									<H6 my="0px">{
 										response.data.commission_detail.amount_received.toLocaleString("vi-VN")}₫
 									</H6>

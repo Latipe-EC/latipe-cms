@@ -17,7 +17,7 @@ import { AdminOrderDetailResponse } from "@interfaces/order";
 import { getAdminOrderDetail } from "@stores/slices/orders-slice";
 import { Chip } from "@components/Chip";
 import { vi } from "date-fns/locale";
-import { OrderStatus } from "@/utils/constants";
+import { getColorStatusOrder, getStrStatusOrder } from "@/utils/utils";
 
 const OrderDetailAdmin = () => {
 
@@ -36,51 +36,6 @@ const OrderDetailAdmin = () => {
 		});
 	}, []);
 
-	const handleRenderStaus = (): string => {
-		switch (response.data.order.status) {
-			case 0:
-				return "Đang xử lý";
-			case 1:
-				return "Tạo đơn hàng thành công";
-			case 2:
-				return "Đã giao cho ĐVVC";
-			case 3:
-				return "Đang trên đường vận chuyển";
-			case 4:
-				return "Vận chuyển thành công";
-			case 5:
-				return "Đơn hàng đã hoàn thành";
-			case 6:
-				return "Đang hoàn tiền";
-			case 7:
-				return "Đã hủy";
-			default:
-				return "Mua hàng thất bại";
-		}
-	}
-
-	const getColor = (status) => {
-		switch (status) {
-			case OrderStatus.ORDER_SYSTEM_PROCESS:
-			case OrderStatus.ORDER_PREPARED:
-			case OrderStatus.ORDER_DELIVERY:
-			case OrderStatus.ORDER_REFUND:
-				return "secondary";
-			case OrderStatus.ORDER_CREATED:
-			case OrderStatus.ORDER_SHIPPING_FINISH:
-			case OrderStatus.ORDER_COMPLETED:
-				return "success";
-			case OrderStatus.ORDER_CANCEL_BY_USER:
-			case OrderStatus.ORDER_CANCEL_BY_ADMIN:
-			case OrderStatus.ORDER_CANCEL_BY_STORE:
-			case OrderStatus.ORDER_CANCEL_BY_DELI:
-			case OrderStatus.ORDER_CANCEL_USER_REJECT:
-			case OrderStatus.ORDER_FAILED:
-				return "error";
-			default:
-				return "";
-		}
-	};
 
 	return (
 		<div>
@@ -114,9 +69,9 @@ const OrderDetailAdmin = () => {
 							alignItems="center"
 						>
 							<Box m="6px">
-								<Chip p="0.25rem 1rem" bg={`${getColor(response.data.order.status)}.light`}>
+								<Chip p="0.25rem 1rem" bg={`${getColorStatusOrder(response.data.order.status)}.light`}>
 									<Small textAlign="center"
-										color={`${getColor(response.data.order.status)}.main`}>{handleRenderStaus()}</Small>
+										color={`${getColorStatusOrder(response.data.order.status)}.main`}>{getStrStatusOrder(response.data.order.status)}</Small>
 								</Chip>
 							</Box>
 						</FlexBox>}

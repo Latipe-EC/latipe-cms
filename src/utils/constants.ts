@@ -169,6 +169,13 @@ export enum Content {
 	PAYMENT_ON_PAYPAL = 'Thanh toán bằng paypal',
 	PAYMENT_ON_WALLET = 'Thanh toán bằng ví Latipe',
 	PRODUCT_NOT_FOUND = 'Không tìm thấy sản phẩm nào',
+	ALL = 'Tất cả',
+	WAIT_FOR_PAY = 'Chờ thanh toán',
+	SHIPPING = 'Vận chuyển',
+	WAIT_FOR_DELIVERY = 'Chờ giao hàng',
+	COMPLETE = 'Hoàn thành',
+	CANCLED = 'Đã hủy',
+	REFUND = 'Trả hàng/hoàn tiền',
 }
 
 export enum Title {
@@ -197,7 +204,7 @@ export enum Title {
 	ORDER_DISCOUNT_PRODUCT = 'Giảm giá sản phẩm',
 	ORDER_DISCOUNT_FEE_SHIPPING = 'Giảm giá ship',
 	ORDER_PAYMENT_METHOD = 'Phương thức Thanh toán',
-	PRODUCT = 'Sản phẩm'
+	PRODUCT = 'Sản phẩm',
 
 }
 

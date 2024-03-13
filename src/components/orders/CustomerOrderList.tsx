@@ -10,6 +10,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import FlexBox from '@components/FlexBox';
 import Pagination from '@components/pagination/Pagination';
 import { getParamStatusOrder } from '@/utils/utils';
+import { Content } from '@/utils/constants';
 
 export interface CustomerOrderListProps {
 }
@@ -59,13 +60,13 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
 				<DashboardPageHeader title="Đơn hàng của tôi" iconName="bag_filled" />
 				<Tabs onChange={(index) => setTabIndex(index)} position="relative" variant="unstyled">
 					<TabList display="flex">
-						<Tab flex="1">Tất cả</Tab>
-						<Tab flex="1">Chờ thanh toán</Tab>
-						<Tab flex="1">Vận chuyển</Tab>
-						<Tab flex="1">Chờ giao hàng</Tab>
-						<Tab flex="1">Hoàn thành</Tab>
-						<Tab flex="1">Đã hủy</Tab>
-						<Tab flex="1">Trả hàng/hoàn tiền</Tab>
+						<Tab flex="1">{Content.ALL}</Tab>
+						<Tab flex="1">{Content.WAIT_FOR_PAY}</Tab>
+						<Tab flex="1">{Content.SHIPPING}</Tab>
+						<Tab flex="1">{Content.WAIT_FOR_DELIVERY}</Tab>
+						<Tab flex="1">{Content.COMPLETE}</Tab>
+						<Tab flex="1">{Content.CANCLED}</Tab>
+						<Tab flex="1">{Content.REFUND}</Tab>
 					</TabList>
 					<TabIndicator
 						mt="-1.5px"

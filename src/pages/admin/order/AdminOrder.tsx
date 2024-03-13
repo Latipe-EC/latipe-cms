@@ -21,6 +21,7 @@ import Pagination from '@components/pagination/Pagination';
 import { SearchIcon } from "@chakra-ui/icons";
 import { debounce } from 'lodash';
 import OrderRowAdmin from '@components/orders/OrderRowAdmin';
+import { getParamStatusOrder } from '@/utils/utils';
 
 const OrdersAdmin = () => {
 
@@ -68,29 +69,8 @@ const OrdersAdmin = () => {
 	}, [search]);
 
 	const handleGetListOrder = () => {
-		const paramFilter = {}
-		switch (indexTab) {
-			case 1:
-				paramFilter["filters[status][$eq]"] = 1;
-				break;
-			case 2:
-				paramFilter["filters[status][$eq]"] = 2;
-				break;
-			case 3:
-				paramFilter["filters[status][$eq]"] = 3;
-				break;
-			case 4:
-				paramFilter["filters[status][$in][0]"] = 4;
-				paramFilter["filters[status][$in][1]"] = 5;
-				break;
-			case 5:
-				paramFilter["filters[status][$in][0]"] = 7;
-				paramFilter["filters[status][$in][1]"] = -1;
-				break;
-			case 6:
-				paramFilter["filters[status][$eq]"] = 6;
-				break;
-		}
+		const paramFilter = getParamStatusOrder(indexTab);
+
 		dispatch(searchOrderAdmin({
 			"size": "7",
 			"page": currentPage,

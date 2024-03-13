@@ -220,3 +220,39 @@ export const getStrPaymentMethod = (payment: number): string => {
 	return payment === 1 ? " Thanh toán khi nhận hàng" : payment === 2 ?
 		" Thanh toán bằng paypal" : " Thanh toán bằng ví Latipe"
 };
+
+export const getParamStatusOrder = (indexTab: number) => {
+	const paramFilter = {};
+
+	switch (indexTab) {
+		case 1:
+			paramFilter["filters[status][$in][0]"] = OrderStatus.ORDER_CREATED;
+			paramFilter["filters[status][$in][1]"] = OrderStatus.ORDER_SYSTEM_PROCESS;
+			break;
+		case 2:
+			paramFilter["filters[status][$eq]"] = OrderStatus.ORDER_PREPARED;
+
+			break;
+		case 3:
+			paramFilter["filters[status][$in][0]"] = OrderStatus.ORDER_DELIVERY;
+			paramFilter["filters[status][$in][1]"] = OrderStatus.ORDER_SHIPPING_FINISH;
+			break;
+		case 4:
+			paramFilter["filters[status][$eq]"] = OrderStatus.ORDER_COMPLETED;
+			break;
+		case 5:
+			paramFilter["filters[status][$in][0]"] = OrderStatus.ORDER_CANCEL_BY_USER;
+			paramFilter["filters[status][$in][1]"] = OrderStatus.ORDER_CANCEL_BY_STORE;
+			paramFilter["filters[status][$in][2]"] = OrderStatus.ORDER_CANCEL_BY_ADMIN;
+			paramFilter["filters[status][$in][3]"] = OrderStatus.ORDER_CANCEL_BY_DELI;
+			paramFilter["filters[status][$in][4]"] = OrderStatus.ORDER_CANCEL_USER_REJECT;
+			paramFilter["filters[status][$in][5]"] = OrderStatus.ORDER_FAILED;
+			break;
+		case 6:
+			paramFilter["filters[status][$eq]"] = OrderStatus.ORDER_REFUND;
+			break;
+	}
+
+	return paramFilter;
+};
+

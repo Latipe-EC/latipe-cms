@@ -40,7 +40,7 @@ const OrderRowDelivery: React.FC<OrderRowDeliveryProps> = ({ order }) => {
 				</Chip>
 			</Box>
 			<Typography className="flex-grow pre" m="6px" textAlign="left">
-				{format(new Date(order.created_at), "MMM dd, yyyy", { locale: vi })}
+				{format(new Date(order.created_at), "dd, MMM yyyy", { locale: vi })}
 			</Typography>
 			<Hidden flex="0 0 0 !important" down={769}>
 				<Typography textAlign="center" color="text.muted">

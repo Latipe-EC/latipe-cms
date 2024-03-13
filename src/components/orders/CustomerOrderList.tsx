@@ -9,6 +9,7 @@ import { GetMyOrderResponse } from '@interfaces/order';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FlexBox from '@components/FlexBox';
 import Pagination from '@components/pagination/Pagination';
+import { getParamStatusOrder } from '@/utils/utils';
 
 export interface CustomerOrderListProps {
 }
@@ -39,29 +40,8 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
 
 
 	const handleGetListOrder = () => {
-		const paramFilter = {}
-		switch (indexTab) {
-			case 1:
-				paramFilter["filters[status][$eq]"] = 1;
-				break;
-			case 2:
-				paramFilter["filters[status][$eq]"] = 2;
-				break;
-			case 3:
-				paramFilter["filters[status][$eq]"] = 3;
-				break;
-			case 4:
-				paramFilter["filters[status][$in][0]"] = 4;
-				paramFilter["filters[status][$in][1]"] = 5;
-				break;
-			case 5:
-				paramFilter["filters[status][$in][0]"] = 7;
-				paramFilter["filters[status][$in][1]"] = -1;
-				break;
-			case 6:
-				paramFilter["filters[status][$eq]"] = 6;
-				break;
-		}
+		const paramFilter = getParamStatusOrder(indexTab);
+
 		dispatch(getMyOrder({
 			"size": "5",
 			"page": currentPage,

@@ -21,6 +21,7 @@ import Pagination from '@components/pagination/Pagination';
 import OrderRowVendor from '@components/orders/OrderRowVendor';
 import { SearchIcon } from "@chakra-ui/icons";
 import { debounce } from 'lodash';
+import { getParamStatusOrder } from '@/utils/utils';
 
 export interface VendorOrderListProps {
 }
@@ -71,29 +72,8 @@ const VendorOrderList: React.FC<VendorOrderListProps> = () => {
 	}, [search]);
 
 	const handleGetListOrder = () => {
-		const paramFilter = {}
-		switch (indexTab) {
-			case 1:
-				paramFilter["filters[status][$eq]"] = 1;
-				break;
-			case 2:
-				paramFilter["filters[status][$eq]"] = 2;
-				break;
-			case 3:
-				paramFilter["filters[status][$eq]"] = 3;
-				break;
-			case 4:
-				paramFilter["filters[status][$in][0]"] = 4;
-				paramFilter["filters[status][$in][1]"] = 5;
-				break;
-			case 5:
-				paramFilter["filters[status][$in][0]"] = 7;
-				paramFilter["filters[status][$in][1]"] = -1;
-				break;
-			case 6:
-				paramFilter["filters[status][$eq]"] = 6;
-				break;
-		}
+		const paramFilter = getParamStatusOrder(indexTab);
+
 		dispatch(searchStoreOrder({
 			"size": "5",
 			"page": currentPage,
@@ -118,7 +98,6 @@ const VendorOrderList: React.FC<VendorOrderListProps> = () => {
 						maxLength={30}
 						value={search}
 						onChange={(e) => {
-							console.log(e.target.value);
 							setSearch(e.target.value)
 						}} />
 				</InputGroup>
@@ -140,7 +119,6 @@ const VendorOrderList: React.FC<VendorOrderListProps> = () => {
 						bg="blue.500"
 						borderRadius="1px"
 					/>
-
 
 					<TabPanels>
 						{Array.from({ length: 7 }).map((_, index) => (

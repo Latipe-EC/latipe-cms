@@ -10,6 +10,7 @@ import Typography, { H5, Small } from "../Typography";
 import { ItemSearchStoreOrder } from "@interfaces/order";
 import { useNavigate } from "react-router-dom";
 import { getColorStatusOrder, getStrStatusOrder } from "@/utils/utils";
+import { vi } from "date-fns/locale";
 
 export interface OrderRowVendorProps {
 	order: ItemSearchStoreOrder;
@@ -39,7 +40,7 @@ const OrderRowVendor: React.FC<OrderRowVendorProps> = ({ order }) => {
 				</Chip>
 			</Box>
 			<Typography className="flex-grow pre" m="6px" textAlign="left">
-				{format(new Date(order.created_at), "MMM dd, yyyy")}
+				{format(new Date(order.created_at), "dd, MMM yyyy", { locale: vi })}
 			</Typography>
 
 			<Hidden flex="0 0 0 !important" down={769}>

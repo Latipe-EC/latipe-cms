@@ -26,6 +26,7 @@ import { debounce } from 'lodash';
 import OrderRowDelivery from '@components/orders/OrderRowDelivery';
 import { useEffect, useState } from 'react';
 import DashboardPageHeader from '@components/layout/DashboardPageHeader';
+import { getParamStatusOrder } from '@/utils/utils';
 
 export default function DeliveryPage() {
 	// states and functions
@@ -74,29 +75,8 @@ export default function DeliveryPage() {
 	}, [search]);
 
 	const handleGetListOrder = () => {
-		const paramFilter = {}
-		switch (indexTab) {
-			case 1:
-				paramFilter["filters[status][$eq]"] = 1;
-				break;
-			case 2:
-				paramFilter["filters[status][$eq]"] = 2;
-				break;
-			case 3:
-				paramFilter["filters[status][$eq]"] = 3;
-				break;
-			case 4:
-				paramFilter["filters[status][$in][0]"] = 4;
-				paramFilter["filters[status][$in][1]"] = 5;
-				break;
-			case 5:
-				paramFilter["filters[status][$in][0]"] = 7;
-				paramFilter["filters[status][$in][1]"] = -1;
-				break;
-			case 6:
-				paramFilter["filters[status][$eq]"] = 6;
-				break;
-		}
+		const paramFilter = getParamStatusOrder(indexTab);
+
 		dispatch(searchOrderDelivery({
 			"size": "7",
 			"page": currentPage,

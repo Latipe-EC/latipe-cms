@@ -43,7 +43,7 @@ const Section2: React.FC = () => {
 		>
 			<Box mt="-0.25rem" mb="-0.25rem">
 				<Carousel totalSlides={10} visibleSlides={visibleSlides}>
-					{resultList.length > 0 && resultList.map((item, ind) => (
+					{resultList && resultList.length > 0 && resultList.map((item, ind) => (
 						<Box py="0.25rem" key={ind}
 							height="100%"
 						>

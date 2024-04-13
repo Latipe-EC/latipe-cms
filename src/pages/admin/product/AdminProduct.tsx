@@ -39,6 +39,7 @@ import defaultImage from '../../../assets/default.jpg';
 import { getAdminProduct, updateBanProduct } from '@stores/slices/products-slice';
 import { Chip } from '@components/Chip';
 import { Small } from '@components/Typography';
+import { Content } from '@/utils/constants';
 
 const ProductsAdmin = () => {
 

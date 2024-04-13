@@ -91,10 +91,12 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 	useEffect(() => {
 		if (!selectAddress || products.length === 0)
 			return
+
 		dispatch(getListDelivery({
 			src_code: products.map(x => x.cityOrProvinceId),
 			dest_code: selectAddress ? selectAddress.cityOrProvinceId : 0,
 		})).unwrap().then((res) => {
+			console.log(res.data);
 			setDeliveries(res.data);
 		});
 	}, [selectAddress]);
@@ -532,12 +534,13 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 							))}
 							{!deliveries || deliveries.length === 0 && <Box mt={2} color="red">Vui lòng chọn địa chỉ nhận hàng</Box>}
 							{deliveries && deliveries.length > 0 &&
-								<Box my={2}>
+								<Box my={2} key="k-b-del">
 									<Box>Hình thức giao hàng</Box>
 									<Grid container spacing={6} key="container-delivery">
 										{deliveries.map((item, ind) => (
-											<Grid item md={4} sm={6} xs={12} key={`del-${ind}`}>
+											<Grid item md={4} sm={6} xs={12} key={`del-grid-${ind}`}>
 												<Box
+													key={`del-box-${ind}`}
 													p="1rem"
 													boxShadow="none"
 													border={item.delivery_id === listDeliveries[index].delivery_id

@@ -7,6 +7,7 @@ import { SemiSpan } from "../Typography";
 import { Box, Text } from "@chakra-ui/react";
 import { ProductStoreResponse } from "@interfaces/store";
 import { PagedResultResponse } from "@interfaces/PagedResultResponse";
+import { Content } from "@/utils/constants";
 
 export interface StoreProductListCardProps {
 	data?: PagedResultResponse<ProductStoreResponse>;

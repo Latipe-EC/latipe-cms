@@ -20,7 +20,12 @@ const Section5: React.FC = () => {
 		})).unwrap().then((res) => {
 			return setResultList(res.data.products);
 		});
+		return () => {
+			resultList
+		};
 	}, []);
+
+
 	return (
 		<CategorySectionCreator
 			iconName="new-product-1"
@@ -29,7 +34,7 @@ const Section5: React.FC = () => {
 		>
 			<Card p="1rem">
 				<Grid container spacing={6}>
-					{resultList.map((item) => (
+					{resultList && resultList.map((item) => (
 						<Grid item lg={2} md={3} sm={4} xs={6} key={item.id}>
 							<ProductCard2 {...item} />
 						</Grid>

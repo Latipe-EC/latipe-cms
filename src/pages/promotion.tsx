@@ -54,7 +54,7 @@ const Promotion = () => {
 								marginLeft="2"
 							/>
 						</Flex>
-						<Text marginBottom="2">Giảm giá : {item.discount_value.toLocaleString('vi-VN')}₫</Text>
+						<Text marginBottom="2">Giảm giá : {item.discount_data.discount_value.toLocaleString('vi-VN')}₫</Text>
 						<Text>Giá tối thiểu để giảm: {item.voucher_require.min_require.toLocaleString('vi-VN')}₫</Text>
 						<Text>Chi tiết:</Text>
 						<Text>{item.detail}</Text>
@@ -87,7 +87,7 @@ const Promotion = () => {
 								marginLeft="2"
 							/>
 						</Flex>
-						<Text marginBottom="2">Giảm giá : {item.discount_value.toLocaleString('vi-VN')}₫</Text>
+						<Text marginBottom="2">Giảm giá : {item.discount_data.discount_value.toLocaleString('vi-VN')}₫</Text>
 						<Text>Giá tối thiểu để giảm: {item.voucher_require.min_require.toLocaleString('vi-VN')}₫</Text>
 						<Text>Chi tiết:</Text>
 						<Text>{item.detail}</Text>

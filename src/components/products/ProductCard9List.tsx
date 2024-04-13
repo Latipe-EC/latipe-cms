@@ -5,6 +5,7 @@ import ProductCard9 from "../product-cards/ProductCard9";
 import { SemiSpan } from "../Typography";
 import { ProductListGetVm } from "../../api/interface/search";
 import { Box, Text } from "@chakra-ui/react";
+import { Content } from "@/utils/constants";
 
 export interface ProductCard9ListProps {
 	data?: ProductListGetVm;

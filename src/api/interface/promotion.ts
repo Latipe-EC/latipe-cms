@@ -28,6 +28,11 @@ export interface CheckVoucherReponse {
 	data: CheckVoucherData
 }
 
+export interface TotalAmountReponse {
+	amount: number,
+}
+
+
 export interface ApplyVoucherRequest {
 	order_total_amount: number
 	payment_method: number

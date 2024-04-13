@@ -3,6 +3,7 @@ import { Api, QueryParamsType } from '../../api/AxiosClient';
 import {
 	PayByPaypalRequest,
 	PayOrderRequest,
+	TotalAmountRequest,
 	validWithdrawPayPalRequest,
 	withdrawPayPalRequest
 } from '@interfaces/payment';
@@ -50,6 +51,15 @@ export const
 		'payments/validWithdrawPayPal',
 		async (request: validWithdrawPayPalRequest) => {
 			const response = await api.payment.validWithdrawPayPal(request);
+			return response;
+		}
+	);
+
+export const
+	totalAmount = createAsyncThunk(
+		'payments/totalAmount',
+		async (request: TotalAmountRequest) => {
+			const response = await api.payment.totalAmount(request);
 			return response;
 		}
 	);

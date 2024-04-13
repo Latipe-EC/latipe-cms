@@ -22,8 +22,12 @@ export interface PayOrderRequest {
 	orderId: string
 }
 
+export interface TotalAmountRequest {
+	orderIds: string[]
+}
+
 export interface PayByPaypalRequest {
-	orderId: string,
+	orderIds: string[],
 	id: string,
 	status: string,
 	email: string,

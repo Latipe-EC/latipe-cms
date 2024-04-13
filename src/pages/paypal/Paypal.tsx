@@ -1,24 +1,25 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import { getOrderById } from "@stores/slices/orders-slice";
+import { useNavigate } from "react-router-dom";
 import { AppThunkDispatch } from "@stores/store";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
-import { DataGetOrderById } from "../../api/interface/order";
 import { CapturePayment } from "../../api/interface/payment";
-import { payByPaypal } from "@stores/slices/payment-slice";
+import { payByPaypal, totalAmount } from "@stores/slices/payment-slice";
 
 export default function Paypal() {
-	const { id } = useParams();
 	const dispatch = useDispatch<AppThunkDispatch>();
 	const navigate = useNavigate();
-	const [orderDetail, setOrderDetail] = useState<DataGetOrderById>();
-
-
+	const [total, setTotal] = useState<number>();
+	const params = new URLSearchParams(location.search);
+	const ids: string = params.get('ids');
 	useEffect(() => {
-		dispatch(getOrderById(id)).unwrap().then((res) => {
-			if (!res.data.error_code) {
-				setOrderDetail(res.data.data)
+
+		params
+		dispatch(totalAmount({
+			orderIds: ids.split(',')
+		})).unwrap().then((res) => {
+			if (res.status !== 200) {
+				setTotal(res.data.amount)
 			} else
 				navigate('/404');
 		});
@@ -28,49 +29,15 @@ export default function Paypal() {
 		purchase_units: [
 			{
 				amount: {
-					value: (orderDetail.order.amount / 25000).toFixed(2),
+					value: (total / 25000).toFixed(2),
 					currency: "USD",
 					breakdown: {
 						item_total: {
 							currency_code: "USD",
-							value: (orderDetail.order.amount / 25000).toFixed(2), // This should be the total cost of all items
+							value: (total / 25000).toFixed(2), // This should be the total cost of all items
 						},
 					},
 				},
-				shipping: {
-					name: {
-						full_name: orderDetail.order.delivery.shipping_name,
-					},
-					address: {
-						address_line_1: orderDetail.order.delivery.shipping_address,
-						country_code: "VN",
-						admin_area_2: 'City',
-						admin_area_1: 'State',
-						postal_code: '12345',
-					},
-				},
-				// items: [
-				// 	...orderDetail.order.order_items.map((item) => {
-				// 		return {
-				// 			name: item.product_name,
-				// 			quantity: item.quantity,
-				// 			unit_amount: {
-				// 				currency_code: 'USD',
-				// 				value: (item.price / 25000).toFixed(2),
-				// 			},
-				// 		}
-				// 	}),
-				// 	{
-				// 		name: "shipping fee",
-				// 		quantity: 1,
-				// 		unit_amount: {
-				// 			currency_code: 'USD',
-				// 			value: ((orderDetail.order.amount -
-				// 				orderDetail.order.order_items.reduce((total, item) => total + (item.price * item.quantity), 0)
-				// 			) / 25000).toFixed(2),
-				// 		},
-				// 	}
-				// ]
 			},
 		],
 	});
@@ -79,7 +46,7 @@ export default function Paypal() {
 		actions.order.capture().then((response: CapturePayment) => {
 			if (response.status === "COMPLETED") {
 				dispatch(payByPaypal({
-					orderId: orderDetail.order.order_id,
+					orderIds: ids.split(','),
 					id: response.id,
 					status: response.status,
 					email: response.payer.email_address,

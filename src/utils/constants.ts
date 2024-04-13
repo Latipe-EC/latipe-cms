@@ -132,6 +132,9 @@ export enum Action {
 	VIEW_RATING = 'Xem đánh giá',
 	WRITE_RATING = 'Viết đánh giá',
 	GO_TO_HOME = 'Quay về trang chủ',
+	APPLY = 'Áp dụng',
+	ORDER = 'Đặt hàng',
+
 }
 
 export enum Content {

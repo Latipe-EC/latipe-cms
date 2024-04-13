@@ -37,12 +37,18 @@ export interface CreateOrderResponse {
 
 export interface Data {
 	user_order: UserOrder
-	order_key: string
-	amount: number
-	discount: number
-	sub_total: number
+	checkout_id: string
+	user_id: string
+	total_amount: number
 	payment_method: number
+	order_data: OrderData[]
 }
+
+export interface OrderData {
+	order_id: string
+	amount: number
+}
+
 
 export interface UserOrder {
 	user_id: string

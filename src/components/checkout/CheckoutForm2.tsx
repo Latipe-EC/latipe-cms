@@ -42,7 +42,7 @@ import { getListDelivery } from "@stores/slices/deliveries-slice";
 import { checkVoucher } from "@stores/slices/promotions-slice";
 import { CloseIcon } from "@chakra-ui/icons";
 import { createOrderV2 } from "@stores/slices/orders-slice";
-import { ContentAlter, DiscountType, ErrorMessage, PaymentMethodName, TitleAlter, VoucherStatus, VoucherType, paymentMethodList } from "@/utils/constants";
+import { Action, Content, ContentAlter, DiscountType, ErrorMessage, PaymentMethodName, TitleAlter, VoucherStatus, VoucherType, paymentMethodList } from "@/utils/constants";
 import { getPaymentMethod } from "@/utils/utils";
 import { RealDiscount } from "@/api/interface/promotion";
 import { PromotionData } from "@/api/interface/order";
@@ -354,7 +354,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 				if (cart_ids.length > 0)
 					dispatch(removeCartItem(cart_ids));
 				if (methodPayment === PaymentMethodName.PayPal) {
-					navigate(`/payment-paypal/${res.data.data.order_key}`);
+					navigate(`/payment-paypal?ids=${res.data.data.order_data.map(x => x.order_id).join(",")},amount=${res.data.data.total_amount}`);
 					return;
 				}
 				navigate('/orders/success')
@@ -687,7 +687,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 									}}
 									disabled={voucher === ""}
 								>
-									Áp dụng
+									{Action.APPLY}
 								</Button>
 							</FlexBox></>
 					)}
@@ -705,7 +705,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 								&& profile.eWallet < getTotalPrice)}
 						onClick={handleOrder}
 					>
-						Đặt hàng
+						{Action.ORDER}
 					</Button>
 				</Card1>
 			</Box>

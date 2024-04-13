@@ -94,6 +94,7 @@ import {
 	CheckVoucherReponse,
 	CheckingVoucherRequest,
 	ListVoucherReponse,
+	TotalAmountReponse,
 	UpdateStatusVoucher,
 	createVoucherRequest
 } from '@interfaces/promotion';
@@ -102,6 +103,7 @@ import {
 	PayByPaypalRequest,
 	PaymentResponse,
 	PayOrderRequest,
+	TotalAmountRequest,
 	validWithdrawPayPalRequest,
 	withdrawPayPalRequest
 } from '@interfaces/payment';
@@ -1226,6 +1228,14 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 		validPayment: (request: PayOrderRequest) =>
 			this.request<void>({
 				path: `/payment/pay`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: request
+			}),
+
+		totalAmount: (request: TotalAmountRequest) =>
+			this.request<TotalAmountReponse>({
+				path: `/payment/total-amount`,
 				method: 'POST',
 				type: ContentType.Json,
 				body: request

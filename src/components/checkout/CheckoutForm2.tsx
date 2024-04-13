@@ -42,7 +42,7 @@ import { getListDelivery } from "@stores/slices/deliveries-slice";
 import { checkVoucher } from "@stores/slices/promotions-slice";
 import { CloseIcon } from "@chakra-ui/icons";
 import { createOrderV2 } from "@stores/slices/orders-slice";
-import { Action, Content, ContentAlter, DiscountType, ErrorMessage, PaymentMethodName, TitleAlter, VoucherStatus, VoucherType, paymentMethodList } from "@/utils/constants";
+import { Action, ContentAlter, DiscountType, ErrorMessage, PaymentMethodName, TitleAlter, VoucherStatus, VoucherType, paymentMethodList } from "@/utils/constants";
 import { getPaymentMethod } from "@/utils/utils";
 import { RealDiscount } from "@/api/interface/promotion";
 import { PromotionData } from "@/api/interface/order";

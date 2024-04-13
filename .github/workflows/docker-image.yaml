@@ -1,0 +1,32 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches:
+      - main  # Trigger the workflow on push events to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set env
+        run: echo "RELEASE_VERSION=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
+      - name: Build the Docker image
+        id: build-image
+        env:
+          REGISTRY_USER: ${{ secrets.REGISTRY_USER }}
+          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+          IMAGE_REPOSITORY: ${{ secrets.IMAGE_REPOSITORY }}
+          VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
+        run: |
+          # Build a docker container and
+          # push it to ECR so that it can
+          # be deployed to ECS.
+          echo $RELEASE_VERSION
+          echo "$REGISTRY_PASSWORD" | docker login -u $REGISTRY_USER --password-stdin
+          docker build --build-arg VITE_BASE_URL=$VITE_BASE_URL --pull --rm -f "Dockerfile" -t $IMAGE_REPOSITORY:$RELEASE_VERSION "."
+          docker tag $IMAGE_REPOSITORY:$RELEASE_VERSION $IMAGE_REPOSITORY:latest
+          docker push $IMAGE_REPOSITORY:$RELEASE_VERSION
+          docker push $IMAGE_REPOSITORY:latest

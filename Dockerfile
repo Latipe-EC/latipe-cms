@@ -1,12 +1,33 @@
-FROM node:21 as build
+FROM node:18 as builder
+
+ARG VITE_BASE_URL
+
 WORKDIR /usr/src/app
+
+COPY ./package.json .
+COPY ./package-lock.json ./
+
+RUN npm install
+
 COPY . .
-ARG env=dev
-RUN npm install 
+
+ENV VITE_BASE_URL=$VITE_BASE_URL
+
 RUN npm run build
 
-FROM nginx:stable-alpine
-COPY --from=build /usr/src/app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+
+FROM node:18-alpine
+
+WORKDIR /usr/src/app
+
+RUN npm install express dotenv http-proxy-middleware compression morgan cors http-status-codes serve-favicon
+RUN npm install -g pm2
+
+COPY --from=builder /usr/src/app/dist ./dist
+COPY --from=builder /usr/src/app/server ./server
+COPY --from=builder /usr/src/app/proccesses.json .
+COPY --from=builder /usr/src/app/public ./public
+
+EXPOSE 8000
+
+CMD ["pm2", "startOrReload", "proccesses.json", "--no-daemon"]

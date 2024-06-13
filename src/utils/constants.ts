@@ -179,6 +179,7 @@ export enum Content {
 	COMPLETE = 'Hoàn thành',
 	CANCLED = 'Đã hủy',
 	REFUND = 'Trả hàng/hoàn tiền',
+	SEARCH_NOW = 'Tìm kiếm ngay',
 }
 
 export enum Title {

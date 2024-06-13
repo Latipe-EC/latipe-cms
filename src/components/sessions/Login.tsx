@@ -46,6 +46,7 @@ const Login: React.FC = () => {
 			<Spinner />,
 			(res) => {
 				setTimeout(() => {
+					localStorage.setItem("Sid", res.data.sid);
 					if (res.data.role === "ADMIN") {
 						navigate("/admin");
 						return;

@@ -25,3 +25,15 @@ If you are developing a production application, we recommend updating the config
 - Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
 - Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
 - Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+
+
+
+cd handleData/
+node giay_nam/giay_nam.js
+node giay_nu/giay_nu.js
+node thoi_trang_nam/thoi_trang_nam.js
+node thoi_trang_nu/thoi_trang_nu.js
+node phone_tablet/product_phone_tablet.js 
+
+
+node giay_nam/giay_nam.js giay_nu/giay_nu.js thoi_trang_nam/thoi_trang_nam.js thoi_trang_nu/thoi_trang_nu.js node phone_tablet/product_phone_tablet.js 

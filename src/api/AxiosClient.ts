@@ -112,6 +112,8 @@ import {
 	CreateCommissionRequest,
 	UpdateCommissionRequest
 } from '@interfaces/commission';
+import { NewDeviceRequest, NewDeviceResponse } from '@/api/interface/notification';
+import { isMobile } from 'react-device-detect';
 
 export type QueryParamsType = Record<string | number, unknown>;
 
@@ -160,7 +162,7 @@ export class HttpClient<SecurityDataType = unknown> {
 	constructor({ securityWorker, secure, format, ...axiosConfig }: ApiConfig<SecurityDataType> = {}) {
 		this.instance = axios.create({
 			...axiosConfig,
-			baseURL: 'http://localhost:8181/api/v1/',
+			baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_BASE_VERSION}`,
 		});
 		this.secure = secure;
 		this.format = format;
@@ -170,6 +172,8 @@ export class HttpClient<SecurityDataType = unknown> {
 				const accessToken = this.getLocalAccessToken();
 				if (accessToken) {
 					config.headers['Authorization'] = `Bearer ${accessToken}`;
+					config.headers['Device-Type'] = isMobile ? '0' : '1';
+					config.headers['Sid'] = localStorage.getItem('Sid') || '';
 				}
 				return config;
 			},
@@ -202,9 +206,19 @@ export class HttpClient<SecurityDataType = unknown> {
 									accessToken: response.data.accessToken,
 									isAuthenticated: true,
 								}));
+
+								if (response.headers['Sid']) {
+									localStorage.setItem('Sid', response.headers['Sid']);
+								}
+
 								this.instance.defaults.headers.common[
 									'Authorization'
 								] = `Bearer ${response.data.accessToken}`;
+
+								this.instance.defaults.headers.common[
+									'Sid'
+								] = response.headers['Sid'];
+
 								originalRequest.headers.Authorization = `Bearer ${response.data.accessToken}`;
 								return this.instance(originalRequest);
 							}
@@ -1282,6 +1296,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				}
 			}),
 	}
+
 	commission = {
 		createCommission: (request: CreateCommissionRequest) =>
 			this.request<CommissionResponse>({
@@ -1312,6 +1327,19 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				method: 'GET',
 				type: ContentType.Json,
 				query: {
+					...params
+				}
+			}),
+	}
+
+	notification = {
+		registerNewDevice: (params: NewDeviceRequest) =>
+			this.request<NewDeviceResponse>({
+				baseURL: `http://127.0.0.1:5050/api/v1`,
+				path: `/notifications/user/register-device`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: {
 					...params
 				}
 			}),

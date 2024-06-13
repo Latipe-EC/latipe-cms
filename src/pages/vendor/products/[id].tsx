@@ -643,7 +643,7 @@ const ProductDetailVendor = () => {
 							</Box>
 						</AccordionButton>
 						<AccordionPanel ml={2}>
-							{attributeValues.length > 0 && (
+							{attributeValuesController.length > 0 && (
 								<AttributeRenderForm attributes={attributeValues}
 									onChange={handleAttributeChange}></AttributeRenderForm>
 							)}
@@ -656,7 +656,7 @@ const ProductDetailVendor = () => {
 							</Box>
 						</AccordionButton>
 						<AccordionPanel ml={2}>
-							<div>
+							<Box>
 								<Button
 									leftIcon={<AddIcon />}
 									colorScheme="red"
@@ -1189,7 +1189,7 @@ const ProductDetailVendor = () => {
 										</Tbody>
 									</Table>
 								)}
-							</div>
+							</Box>
 						</AccordionPanel>
 					</AccordionItem>
 					<Flex justifyContent="flex-end" mt={2}>

@@ -18,6 +18,7 @@ const firebaseConfig = {
 	appId: import.meta.env.VITE_FIREBASE_APP_ID
 }
 
+console.log(firebaseConfig);
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const messaging = getMessaging(app);

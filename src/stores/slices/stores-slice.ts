@@ -185,7 +185,6 @@ export const storesSlice = createSlice({
 				const index = state.stores.findIndex(x => x.id === JSON.parse(action.payload.config.data).id);
 				const isBanned = JSON.parse(action.payload.config.data).isBanned;
 				state.stores[index].isBan = isBanned;
-				console.log(action.payload.config.data);
 				if (isBanned)
 					state.stores[index].reasonBan = JSON.parse(action.payload.config.data).reason;
 				else

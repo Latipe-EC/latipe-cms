@@ -256,3 +256,8 @@ export const getParamStatusOrder = (indexTab: number) => {
 	return paramFilter;
 };
 
+
+export const isBlank = (str: string) => !str || /^\s*$/.test(str);
+
+export const isNotBlank = (str: string) => str && !/^\s*$/.test(str);
+

@@ -63,6 +63,7 @@ const StatisticAdmin = lazy(() => import('@pages/admin/statistic/AdminStatistic'
 const HomeAdmin = lazy(() => import('@pages/admin/home/AdminHome'));
 const DeliveryAdmin = lazy(() => import('@pages/admin/delivery/AdminDelivery'));
 const PromotionsAdmin = lazy(() => import('@pages/admin/promotion/AdminPromotion'));
+const CampaignsAdmin = lazy(() => import('@pages/admin/campaigns/AdminCampaigns'));
 
 // Delivery Page
 const DeliveryPage = lazy(() => import('@pages/delivery'));
@@ -229,6 +230,7 @@ function App() {
 									<Route path="statistics" element={<StatisticAdmin />} />
 									<Route path="deliveries" element={<DeliveryAdmin />} />
 									<Route path="promotions" element={<PromotionsAdmin />} />
+									<Route path="campaigns" element={<CampaignsAdmin />} />
 								</Route>
 
 								<Route path="/delivery" element={<DeliveryPage />} />

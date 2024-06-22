@@ -33,7 +33,7 @@ const SalePage1 = () => {
 	}, []);
 
 	const handlePageChange = (page) => {
-		console.log(page);
+		window.scrollTo(0, 0);
 		setPage(page);
 	};
 

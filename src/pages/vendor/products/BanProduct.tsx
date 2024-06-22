@@ -141,6 +141,7 @@ const Products = () => {
 				<Pagination
 					pageCount={Math.ceil(stores.paginationBan.total / 10)}
 					onChange={(data) => {
+						window.scrollTo(0, 0);
 						setCurrentPage(+data);
 					}}
 				/>

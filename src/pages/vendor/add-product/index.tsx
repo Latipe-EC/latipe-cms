@@ -55,7 +55,7 @@ import { useNavigate } from "react-router-dom";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Path, ContentToast, TitleToast } from "@/utils/constants";
-import { handleApiCallWithToast } from "@/utils/utils";
+import { handleApiCallWithToast, isBlank } from "@/utils/utils";
 
 const AddProduct = () => {
 
@@ -80,11 +80,11 @@ const AddProduct = () => {
 	const toast = useToast();
 	const navigate = useNavigate();
 
-	const handleDrop = (acceptedFiles) => {
+	const handleDrop = (acceptedFiles: unknown) => {
 		setImages((prevFiles) => [...prevFiles, ...acceptedFiles]);
 	};
 
-	const handleRemove = (index) => {
+	const handleRemove = (index: number) => {
 		setImages((prevFiles) => prevFiles.filter((_, i) => i !== index));
 	};
 
@@ -96,9 +96,10 @@ const AddProduct = () => {
 	const isInvalid = name.length > maxLength;
 
 	useEffect(() => {
-		if (name === ''
-			||
-			description === '' || images.length === 0 || selectedCategory.length === 0) {
+		if (isBlank(name)
+			|| isBlank(description)
+			|| images.length === 0
+			|| selectedCategory.length === 0) {
 			setDisableSaveProduct(true);
 			return;
 		}
@@ -108,7 +109,6 @@ const AddProduct = () => {
 				return;
 			}
 			setDisableSaveProduct(false);
-			return;
 		} else {
 			if (productClassifications.length >= 0) {
 				for (let i = 0; i < productClassifications.length; i++) {
@@ -140,7 +140,7 @@ const AddProduct = () => {
 
 	const handleSearch = debounce(() => {
 		if (isModalCateOpen) {
-			if (searchText && searchText.length > 0) {
+			if (!isBlank(searchText)) {
 				dispatch(searchCategory({ name: searchText })).unwrap().then((payload) => {
 					setCategories([{ categories: [...payload.data.data], order: 1 }]);
 				});
@@ -173,7 +173,6 @@ const AddProduct = () => {
 	const handleCategorySelect = (category, order) => {
 		const newSelectedListCategory = [...selectedCategory];
 		newSelectedListCategory.splice(order, newSelectedListCategory.length - order);
-		console.log([...newSelectedListCategory.map(x => x.id), category.id]);
 		setSelectedCategory([...newSelectedListCategory, {
 			id: category.id,
 			name: category.name,
@@ -191,30 +190,36 @@ const AddProduct = () => {
 			}
 		});
 	}
-
 	const handleAddProductVariant = () => {
 		if (productVariants.length >= 2) {
 			return;
 		}
-		if (productVariants.length === 0) {
-			setProductClassifications([{ name: '0', quantity: 0, price: 0, promotionalPrice: 0, sku: '' }]);
-		} else {
-			console.log(123);
-			const newProductClassification = [...productClassifications];
-			newProductClassification.flatMap((item, index) => [item, {
-				name:
-					(index + 2).toString(),
-				quantity: 0, price: 0, sku: ''
-			}])
-			setProductClassifications(newProductClassification);
 
+		let newProductClassifications = [...productClassifications];
+
+		if (productVariants.length === 0) {
+			newProductClassifications = [{ quantity: 0, price: 0, promotionalPrice: 0, sku: '' }];
+		} else {
+			newProductClassifications = newProductClassifications.flatMap((item, index) => [
+				item,
+				{
+					name: (index + 2).toString(),
+					quantity: 0,
+					price: 0,
+					sku: ''
+				}
+			]);
 		}
-		setProductVariants([...productVariants, {
+
+		setProductClassifications(newProductClassifications);
+
+		const newProductVariant = {
 			name: '',
 			options: [{ value: '', file: new File([new Blob()], 'Upload', { type: 'image/png' }) }]
-		}]);
-	}
+		};
 
+		setProductVariants([...productVariants, newProductVariant]);
+	}
 	const handleProductVariantNameChange = (index: number, name: string) => {
 		const newProductVariants = [...productVariants];
 		newProductVariants[index].name = name;
@@ -225,40 +230,38 @@ const AddProduct = () => {
 		const newProductVariants = [...productVariants];
 		const newProductClassification = [...productClassifications];
 
-		newProductVariants[index].options.push({
+		const newOption = {
 			value: '',
 			file: new File([new Blob()], 'Upload', { type: 'image/png' })
-		});
+		};
+
+		newProductVariants[index].options.push(newOption);
+
+		const newClassification = {
+			quantity: 0,
+			price: 0,
+			sku: '',
+			promotionalPrice: 0
+		};
+
 		if (index === 0) {
 			if (newProductVariants.length === 1) {
-				newProductClassification.push({
-					name:
-						(index * newProductVariants[index].options.length + 1).toString(),
-					quantity: 0, price: 0, sku: '', promotionalPrice: 0
-				});
+				newProductClassification.push(newClassification);
 			} else {
-				const newClassification = newProductVariants[1]
-					.options.map(() => {
-						return {
-							name: '',
-							quantity: 0, price: 0, sku: '', promotionalPrice: 0
-						}
-					});
-				newProductClassification.push(...newClassification);
+				const classifications = newProductVariants[1].options.map(() => newClassification);
+				newProductClassification.push(...classifications);
 			}
 		}
+
 		if (index === 1) {
-			for (let i = 0; i < newProductVariants[0].options.length; i++) {
-				newProductClassification.splice(i * newProductVariants[0].options.length + i, 0, {
-					name:
-						'',
-					quantity: 0, price: 0, sku: '', promotionalPrice: 0
-				});
+			const insertPositions = Array.from({ length: newProductVariants[0].options.length }, (_, i) => i * newProductVariants[0].options.length + i);
+			for (const position of insertPositions) {
+				newProductClassification.splice(position, 0, newClassification);
 			}
 		}
+
 		setProductVariants(newProductVariants);
 		setProductClassifications(newProductClassification);
-
 	}
 
 	const handleProductVariantValueChange = (index: number, valueIndex: number, value: string) => {
@@ -490,7 +493,7 @@ const AddProduct = () => {
 								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Mô tả</FormLabel>
 								<CKEditor
 									editor={ClassicEditor}
-									data="<p>Hello from CKEditor&nbsp;5!</p>"
+									data={description}
 									onReady={editor => {
 										console.log('Editor is ready to use!', editor);
 									}}
@@ -1128,8 +1131,6 @@ const AddProduct = () => {
 
 												</Tr>
 											))}
-
-
 										</Tbody>
 									</Table>
 								)}

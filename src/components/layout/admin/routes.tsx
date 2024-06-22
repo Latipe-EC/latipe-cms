@@ -1,6 +1,7 @@
 import { Icon } from '@chakra-ui/react';
 import CategoriesAdmin from '../../../pages/admin/category/AdminCategories';
 import {
+	MdCampaign,
 	MdCategory,
 	MdDeliveryDining,
 	MdHome,
@@ -91,6 +92,13 @@ const routes = [
 		layout: '/admin',
 		path: '/statistics',
 		icon: <Icon as={MdStarRate} width='20px' height='20px' color='inherit' />,
+		component: ''
+	},
+	{
+		name: 'Chiến dịch',
+		layout: '/admin',
+		path: '/campaigns',
+		icon: <Icon as={MdCampaign} width='20px' height='20px' color='inherit' />,
 		component: ''
 	}
 	,

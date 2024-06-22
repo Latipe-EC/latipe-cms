@@ -71,7 +71,7 @@ export enum TitleToast {
 	ADD_TO_CART = 'Thêm vào giỏ hàng',
 	ADD_VOUCHER = 'Thêm voucher',
 	LOGIN = 'Đăng nhập',
-
+	ADD_CAMPAIGN = 'Thêm chiến dịch',
 }
 
 export enum ContentToast {
@@ -99,6 +99,8 @@ export enum ContentToast {
 	ADD_VOUCHER_ERROR = 'Thêm voucher thất bại',
 	LOGIN_SUCCESS = 'Đăng nhập thành công',
 	LOGIN_ERROR = 'Đăng nhập thất bại',
+	ADD_CAMPAIGN_SUCCESS = 'Thêm chiến dịch thành công',
+	ADD_CAMPAIGN_ERROR = 'Thêm chiến dịch thất bại',
 }
 
 export enum ToastStatus {
@@ -134,7 +136,8 @@ export enum Action {
 	GO_TO_HOME = 'Quay về trang chủ',
 	APPLY = 'Áp dụng',
 	ORDER = 'Đặt hàng',
-
+	RECALL = 'Thu hồi',
+	RECALLED = 'Đã thu hồi',
 }
 
 export enum Content {

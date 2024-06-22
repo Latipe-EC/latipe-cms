@@ -62,9 +62,8 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
 
 	const handleCartAmountChange = useCallback(
 		(amount) => () => {
-			console.log(amount);
-
-			if (amount >= 0) setCartAmount(amount);
+			if (amount >= 0)
+				setCartAmount(amount);
 		},
 		[]
 	);
@@ -137,7 +136,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
 
 						<FlexBox mt="0.5rem" mb="1rem" alignItems="center">
 							<H5 fontWeight={600} color="primary.main" mr="0.5rem">
-								${price?.toFixed(2)}
+								₫{(price).toLocaleString('vi-VN')}
 							</H5>
 							{off && (
 								<SemiSpan fontWeight="600">
@@ -268,29 +267,6 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
 			</Modal>
 		</StyledProductCard9>
 	);
-};
-
-ProductCard9.defaultProps = {
-	title:
-		"Apple iĐiện thoại 5 Unlocked 16GB 8MP Used Cell-Điện thoại-16gbIOS Used Refurbished 100%Factory Used",
-	imgUrl: "/assets/images/products/macbook.png",
-	off: 50,
-	price: 450,
-	rating: 0,
-	subcategories: [
-		{
-			title: "Bike",
-			url: "/#",
-		},
-		{
-			title: "Ducati",
-			url: "/#",
-		},
-		{
-			title: "Motors",
-			url: "/#",
-		},
-	],
 };
 
 export default ProductCard9;

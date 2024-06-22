@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {getTheme} from "../../utils/utils";
+import { getTheme } from "../../utils/utils";
 
 const StyledSearchBox = styled.div`
   position: relative;
@@ -16,7 +16,7 @@ const StyledSearchBox = styled.div`
   .search-field {
     flex: 1 1 0;
     padding-left: 3rem;
-    padding-right: 11.5rem;
+		padding-right: 3rem; /* Adjusted padding-right to make room for the camera icon */
     height: 44px;
     border-radius: 300px;
   }
@@ -32,6 +32,12 @@ const StyledSearchBox = styled.div`
     position: absolute;
     right: 0px;
     color: ${getTheme("colors.text.hint")};
+  }
+	.camera {
+    position: absolute;
+    right: 1rem; /* Positioned the camera icon on the right */
+    z-index: 1;
+		cursor: pointer;
   }
   .dropdown-handler {
     height: 40px;

@@ -308,6 +308,7 @@ const CommissionsAdmin = () => {
 						onChange={(data) => {
 							dispatch(getPaginateCommission({ skip: +data * size, size, name: searchText }));
 							setCurrentPage(+data);
+							window.scrollTo(0, 0);
 						}}
 					/>
 				</FlexBox>

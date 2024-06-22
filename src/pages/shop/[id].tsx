@@ -45,6 +45,7 @@ const Shop = () => {
 
 	const handlePageChange = (data: number) => {
 		setCurrentPage(data);
+		window.scrollTo(0, 0);
 	};
 
 	return (

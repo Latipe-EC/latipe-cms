@@ -148,6 +148,7 @@ const VendorOrderList: React.FC<VendorOrderListProps> = () => {
 						pageCount={Math.ceil(orderList.data.total)}
 						onChange={(data) => {
 							setCurrentPage((data + 1).toString());
+							window.scrollTo(0, 0);
 						}}
 					/>
 				</FlexBox>}

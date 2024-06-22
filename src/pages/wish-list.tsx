@@ -32,6 +32,7 @@ const WishList = () => {
 				<Pagination
 					pageCount={5}
 					onChange={(data) => {
+						window.scrollTo(0, 0);
 						console.log(data);
 					}}
 				/>

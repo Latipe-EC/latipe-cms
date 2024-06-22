@@ -343,6 +343,7 @@ const StoresAdmin = () => {
 					<Pagination
 						pageCount={stores.pagination ? Math.ceil(stores.pagination.total / 10) : 0}
 						onChange={(data) => {
+							window.scrollTo(0, 0);
 							dispatch(getAdminStore({
 								skip: +data * size,
 								size,

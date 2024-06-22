@@ -20,6 +20,7 @@ import ImageUploader from "@components/upload-image/UploadImage";
 import Dropdown from "@components/dropdown/Dropdown";
 import AttributeForm from "@components/attribute/AttributeForm";
 import { Action, Content, Title } from "@/utils/constants";
+import { isBlank } from "@/utils/utils";
 
 interface Category {
 	id: string,
@@ -79,12 +80,12 @@ const CategoryForm: React.FC<Props> = ({
 				</ModalHeader>
 				<ModalCloseButton />
 				<ModalBody>
-					<FormControl isRequired isInvalid={selectedCategory.name === ""}>
+					<FormControl isRequired isInvalid={isBlank(selectedCategory.name)}>
 						<FormLabel style={{ fontWeight: 'bold' }}>{Content.NAME_CATEGORY}</FormLabel>
 						<Input value={selectedCategory.name} onChange={(e) => {
 							setSelectedCategory({ ...selectedCategory, name: e.target.value })
 						}} required />
-						<FormErrorMessage>name is required</FormErrorMessage>
+						<FormErrorMessage>Tên không được để trống</FormErrorMessage>
 					</FormControl>
 					<FormControl>
 						<FormLabel style={{ fontWeight: 'bold' }}>{Content.IMAGE}</FormLabel>
@@ -127,6 +128,7 @@ const CategoryForm: React.FC<Props> = ({
 						{Action.CLOSE}
 					</Button>
 					<Button variant='ghost' color='green'
+						disabled={isBlank(selectedCategory.name)}
 						onClick={handleModalSubmit}
 					>	{Action.SAVE}</Button>
 				</ModalFooter>

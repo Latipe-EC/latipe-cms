@@ -259,6 +259,7 @@ const TransactionsAdmin = () => {
 					<Pagination
 						pageCount={transactions.pagination ? Math.ceil(transactions.pagination.total / 10) : 0}
 						onChange={(data) => {
+							window.scrollTo(0, 0);
 							dispatch(getPaginatePayment({
 								skip: +data * size,
 								size,

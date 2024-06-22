@@ -1,5 +1,5 @@
 import LazyImage from '../LazyImage';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { CSSProperties } from 'styled-components';
 import Box from '../Box';
 import Card, { CardProps } from '../Card';
@@ -25,7 +25,6 @@ export interface ProductCard1Props extends CardProps {
 	price?: number;
 	ratings?: number;
 	id?: string;
-
 }
 
 const ProductCard1: React.FC<ProductCard1Props> = ({
@@ -44,7 +43,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 	const [open, setOpen] = useState(false);
 	const [loadingProduct, setLoadingProduct] = useState(false);
 
-	const toggleDialog = useCallback(() => {
+	const toggleDialog = () => {
 		setLoadingProduct(true);
 		dispatch(getProductById(id)).unwrap().then((res) => {
 			setProduct(res.data);
@@ -52,7 +51,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 			setLoadingProduct(false);
 			return res.data;
 		});
-	}, []);
+	};
 
 
 	return (
@@ -63,7 +62,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 						color="secondary"
 						variant="small"
 						mb="0.5rem"
-						onClick={toggleDialog}
+						onClick={() => toggleDialog()}
 					>
 						eye-alt
 					</Icon>
@@ -80,7 +79,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 					<LazyImage
 						src={images[0]}
 						width="100%"
-						height="auto"
+						height="250px"
 						layout="responsive"
 						alt={name}
 					/>

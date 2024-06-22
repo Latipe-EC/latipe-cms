@@ -52,6 +52,7 @@ const Section10: React.FC = () => {
 												display: 'flex',
 												justifyContent: 'center',
 												alignItems: 'center',
+												cursor: 'pointer'
 											}}
 										>
 												<LazyImage
@@ -80,6 +81,7 @@ const Section10: React.FC = () => {
 													display: 'flex',
 													justifyContent: 'center',
 													alignItems: 'center',
+													cursor: 'pointer'
 												}}>
 												<LazyImage
 													src={category.image ? category.image : '/assets/images/products/apple-watch-0.png'}

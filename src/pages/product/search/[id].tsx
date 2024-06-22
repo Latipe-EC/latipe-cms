@@ -18,7 +18,8 @@ import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "@stores/store";
 import { searchProduct } from "@stores/slices/search-slice";
 import { ProductListGetVm } from "../../../api/interface/search";
-import { Center, Spinner } from "@chakra-ui/react";
+import { Center, Spinner, Text } from "@chakra-ui/react";
+import { Content } from "@/utils/constants";
 
 const ProductSearchResult = () => {
 	const dispatch = useDispatch<AppThunkDispatch>();
@@ -36,7 +37,7 @@ const ProductSearchResult = () => {
 
 	const [view, setView] = useState("grid");
 	const [result, setResult] = useState<ProductListGetVm>();
-	const [currentPage, setCurrentPage] = useState(parseInt(page ? page : "0"));
+	const [currentPage, setCurrentPage] = useState(parseInt(page ? (parseInt(page) - 1).toString() : "0"));
 	const [sortTypeState, setSortTypeState] = useState(sortType);
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -57,7 +58,10 @@ const ProductSearchResult = () => {
 				minPrice,
 				maxPrice
 			})).unwrap().then((res) => {
-				setResult(res.data);
+				console.log(!res.data.error);
+				if (!res.data.error) {
+					setResult(res.data);
+				}
 				setIsLoading(false);
 				return;
 			});
@@ -93,6 +97,7 @@ const ProductSearchResult = () => {
 
 	const handlePageChange = (data: number) => {
 		setCurrentPage(data);
+		window.scrollTo(0, 0);
 	};
 
 	const handleFilterChange = (data) => {
@@ -129,12 +134,12 @@ const ProductSearchResult = () => {
 					as={Card}
 				>
 					{keyword && (<div>
-						<H5>Searching for “ {keyword} ”</H5>
+						<H5>Tìm kiếm cho “ {keyword} ”</H5>
 						<Paragraph color="text.muted">{result.totalElements} kết quả tìm thấy</Paragraph>
 					</div>)}
 					<FlexBox alignItems="center" flexWrap="wrap">
 						<Paragraph color="text.muted" mr="1rem">
-							Short by:
+							Sắp xếp:
 						</Paragraph>
 						<Box flex="1 1 0" mr="1.75rem" minWidth="150px">
 							<Select
@@ -148,7 +153,7 @@ const ProductSearchResult = () => {
 						</Box>
 
 						<Paragraph color="text.muted" mr="0.5rem">
-							View:
+							Chế độ xem:
 						</Paragraph>
 						<IconButton size="small" onClick={toggleView("grid")}>
 							<Icon
@@ -191,15 +196,24 @@ const ProductSearchResult = () => {
 						<ProductFilterCard />
 					</Hidden>
 
-					{result && !isLoading ? (<Grid item lg={9} xs={12}>
-						{view === "grid" ? <ProductCard1List
-							data={result} onChange={handlePageChange} /> :
-							<ProductCard9List data={result}
-								onChange={handlePageChange} />}
-					</Grid>) : (
+					{result && result.products && result.products.length > 0 && !isLoading ? (
+						<Grid item lg={9} xs={12}>
+							{view === "grid" ?
+								<ProductCard1List forgePage={currentPage} data={result} onChange={handlePageChange} /> :
+								<ProductCard9List forgePage={currentPage} data={result} onChange={handlePageChange} />
+							}
+						</Grid>
+					) : result && (!result.products || result.products.length === 0) ? (
+						<Box display="flex" justifyContent="center" alignItems="center" height="100%">
+							<Text fontSize="xl" fontWeight="bold" textAlign="center" my={5}>
+								{Content.PRODUCT_NOT_FOUND}
+							</Text>
+						</Box>
+					) : (
 						<Center position="fixed" top="0" right="0" bottom="0" left="0" zIndex="9999">
 							<Spinner size="xl" />
-						</Center>)}
+						</Center>
+					)}
 				</Grid>
 			</Box>}
 		</>

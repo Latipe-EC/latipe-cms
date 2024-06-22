@@ -368,6 +368,7 @@ const ProductsAdmin = () => {
 					<Pagination
 						pageCount={products.pagination ? Math.ceil(products.pagination.total / 10) : 0}
 						onChange={(data) => {
+							window.scrollTo(0, 0);
 							dispatch(getAdminProduct({
 								skip: currentPage * size,
 								size,

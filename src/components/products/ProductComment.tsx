@@ -83,6 +83,7 @@ const ProductComment: React.FC<ProductCommentProps> = ({ star, isStore, storeId 
 					<Pagination
 						pageCount={Math.ceil(rating.paginationProduct.total / 10)}
 						onChange={(data) => {
+							window.scrollTo(0, 0);
 							if (isStore) {
 								dispatch(
 									getRatingStore({

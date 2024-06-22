@@ -286,7 +286,7 @@ export interface ProductClassification {
 	 * @type {string}
 	 * @memberof ProductClassification
 	 */
-	'name'?: string;
+	'`name`'?: string;
 	/**
 	 *
 	 * @type {number}

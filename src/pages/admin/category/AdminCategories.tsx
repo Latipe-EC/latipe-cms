@@ -165,7 +165,6 @@ const CategoriesAdmin = () => {
 	}, [showModal]);
 
 	const debouncedFetchCategories = debounce((searchText) => {
-		console.log(123);
 		dispatch(fetchCategories({ skip: currentPage * size, limit: size, name: searchText }));
 	}, 500);
 
@@ -367,6 +366,7 @@ const CategoriesAdmin = () => {
 							fetchCategories({ limit: size, skip: (+data) * size, name: searchText })
 						);
 						setCurrentPage(+data);
+						window.scrollTo(0, 0);
 					}}
 				/>
 			</FlexBox>

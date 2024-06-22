@@ -384,6 +384,7 @@ const PromotionsAdmin = () => {
 					<Pagination
 						pageCount={promotions.pagination.total}
 						onChange={(data) => {
+							window.scrollTo(0, 0);
 							dispatch(getAllPromotion({
 								page: (+data + 1).toString(),
 								size: size.toString(),

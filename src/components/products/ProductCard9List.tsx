@@ -8,11 +8,13 @@ import { Box, Text } from "@chakra-ui/react";
 import { Content } from "@/utils/constants";
 
 export interface ProductCard9ListProps {
+	forgePage?: number;
 	data?: ProductListGetVm;
 	onChange?: (data: number) => void;
 }
 
-const ProductCard9List: React.FC<ProductCard9ListProps> = ({ data, onChange }) => {
+const ProductCard9List: React.FC<ProductCard9ListProps> = ({ forgePage, data, onChange }) => {
+	console.log(1232);
 	return (
 		<div>
 			{data.products.length === 0 ? (
@@ -37,7 +39,7 @@ const ProductCard9List: React.FC<ProductCard9ListProps> = ({ data, onChange }) =
 							Đang
 							xem {`${data.pageNo * data.pageSize + 1} - ${data.pageNo * data.pageSize + data.products.length}`} sản
 							phẩm</SemiSpan>
-						<Pagination pageCount={data.totalPages} onChange={onChange} />
+						<Pagination currentPage={forgePage} pageCount={data.totalPages} onChange={onChange} />
 					</FlexBox>
 				</Box>
 			)}

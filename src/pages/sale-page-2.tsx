@@ -14,7 +14,7 @@ const SalePage2 = () => {
 	const [page, setPage] = useState(0);
 
 	const handlePageChange = (page) => {
-		console.log(page);
+		window.scrollTo(0, 0);
 		setPage(page);
 	};
 
@@ -53,6 +53,7 @@ const SalePage2 = () => {
 			>
 				<SemiSpan>{renderProductCount()}</SemiSpan>
 				<Pagination
+					currentPage={page}
 					pageCount={Math.ceil(productDatabase.length / productPerPage)}
 					onChange={handlePageChange}
 				/>

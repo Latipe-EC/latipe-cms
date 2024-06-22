@@ -10,6 +10,7 @@ export interface PaginationProps extends SpaceProps {
 	marginPagesDisplayed?: number;
 	pageRangeDisplayed?: number;
 	onChange?: (data: number) => void;
+	currentPage?: number;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
@@ -17,15 +18,18 @@ const Pagination: React.FC<PaginationProps> = ({
 	marginPagesDisplayed,
 	pageRangeDisplayed,
 	onChange,
+	currentPage,
 	...props
 }) => {
 	const handlePageChange = async (page) => {
 		if (onChange) onChange(page.selected);
 	};
+	console.log(currentPage);
 
 	return (
 		<StyledPagination {...props}>
 			<ReactPaginate
+				forcePage={currentPage ? currentPage - 1 : 0}
 				previousLabel={
 					<Button
 						className="control-button"

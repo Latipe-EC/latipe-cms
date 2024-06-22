@@ -112,7 +112,7 @@ import {
 	CreateCommissionRequest,
 	UpdateCommissionRequest
 } from '@interfaces/commission';
-import { NewDeviceRequest, NewDeviceResponse } from '@/api/interface/notification';
+import { CampaignDetail, CreateCampaignRequest, GeneralCampaignAdminResponse, ListCampaignDetail, NewDeviceRequest, NewDeviceResponse, RecallCampaignRequest } from '@/api/interface/notification';
 import { isMobile } from 'react-device-detect';
 
 export type QueryParamsType = Record<string | number, unknown>;
@@ -173,7 +173,7 @@ export class HttpClient<SecurityDataType = unknown> {
 				if (accessToken) {
 					config.headers['Authorization'] = `Bearer ${accessToken}`;
 					config.headers['Device-Type'] = isMobile ? '0' : '1';
-					config.headers['Sid'] = localStorage.getItem('Sid') || '';
+					config.headers['Sid'] = localStorage.getItem('sid') || '';
 				}
 				return config;
 			},
@@ -1342,6 +1342,70 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				body: {
 					...params
 				}
+			}),
+
+		createCampaign: (body: CreateCampaignRequest) =>
+			this.request<GeneralCampaignAdminResponse>({
+				baseURL: `http://127.0.0.1:5050/api/v1`,
+				path: `/notifications/admin/notify-campaign`,
+				method: 'POST',
+				type: ContentType.Json,
+				body
+			}),
+
+		recallCampaign: (body: RecallCampaignRequest) =>
+			this.request<GeneralCampaignAdminResponse>({
+				baseURL: `http://127.0.0.1:5050/api/v1`,
+				path: `/notifications/admin/notify-campaign`,
+				method: 'DELETE',
+				type: ContentType.Json,
+				body
+			}),
+
+		getCampaignAdmin: (params: QueryParamsType) =>
+			this.request<GeneralCampaignAdminResponse<ListCampaignDetail>>({
+				baseURL: `http://127.0.0.1:5050/api/v1`,
+				path: `/notifications/admin/notify-campaign`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+
+		getNotificationCount: () =>
+			this.request<NewDeviceResponse>({
+				baseURL: `http://127.0.0.1:5050/api/v1`,
+				path: `/notifications/user/total/unread`,
+				method: 'GET',
+				type: ContentType.Json
+			}),
+
+		markAllRead: () =>
+			this.request<GeneralCampaignAdminResponse>({
+				baseURL: `http://127.0.0.1:5050/api/v1`,
+				path: `/notifications/user/markAsRead`,
+				method: 'PATCH',
+				type: ContentType.Json
+			}),
+
+		getNotifications: (params: QueryParamsType) =>
+			this.request<GeneralCampaignAdminResponse<ListCampaignDetail>>({
+				baseURL: `http://127.0.0.1:5050/api/v1`,
+				path: `/notifications/user`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+
+		getNotificationDetail: (id: string) =>
+			this.request<GeneralCampaignAdminResponse<CampaignDetail>>({
+				baseURL: `http://127.0.0.1:5050/api/v1`,
+				path: `/notifications/user/${id}`,
+				method: 'GET',
+				type: ContentType.Json
 			}),
 	}
 }

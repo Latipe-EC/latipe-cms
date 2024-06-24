@@ -21,7 +21,7 @@ export const createCampaign = createAsyncThunk(
 	}
 );
 
-export const recallCampaign = createAsyncThunk(
+export const recallCampaignAdmin = createAsyncThunk(
 	'notifications/recallCampaign',
 	async (request: RecallCampaignRequest) => {
 		const response = await api.notification.recallCampaign(request);
@@ -73,19 +73,20 @@ export const notificationsSlice = createSlice({
 	name: 'notifications',
 	initialState: {
 		notification: null,
-		notifications: [],
+		items: [],
 		total: 0,
 		page: 0,
 		size: 0,
 		has_more: false,
 		isLoading: false,
+		count: 0,
 		error: null,
 	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(getCampaignAdmin.fulfilled, (state, action) => {
 				if (action.payload.data.code !== 200) {
-					state.notifications = [];
+					state.items = [];
 					state.total = 0;
 					state.page = 0;
 					state.size = 0;
@@ -93,7 +94,7 @@ export const notificationsSlice = createSlice({
 					return;
 				}
 				state.isLoading = false;
-				state.notifications = action.payload.data.data.items;
+				state.items = action.payload.data.data.items;
 				state.total = action.payload.data.data.total;
 				state.page = action.payload.data.data.page;
 				state.size = action.payload.data.data.size;
@@ -103,18 +104,50 @@ export const notificationsSlice = createSlice({
 				if (action.payload.data.code !== 200) {
 					return;
 				}
-				state.notifications.push(action.payload.data);
+
+				state.items.push({
+					id: action.payload.data.data.id,
+					campaign_topic: JSON.parse(action.payload.config.data).campaign_topic,
+					title: JSON.parse(action.payload.config.data).title,
+					body: JSON.parse(action.payload.config.data).body,
+					image: JSON.parse(action.payload.config.data).image,
+					schedule_display: JSON.parse(action.payload.config.data).schedule_display,
+					is_active: true,
+				});
 				state.total += 1;
 				state.page = Math.ceil(state.total / state.size);
-			}).addCase(recallCampaign.fulfilled, (state, action) => {
+			}).addCase(recallCampaignAdmin.fulfilled, (state, action) => {
 				if (action.payload.status !== 200) {
 					return;
 				}
-				const index = state.notifications.findIndex(x => x.id === JSON.parse(action.payload.config.data).id);
-				state.notifications[index].is_active = false;
-				state.notifications[index].updated_at = new Date().toISOString();
-				state.notifications[index].recall_reason = JSON.parse(action.payload.config.data).recall_reason
-			})
+				const index = state.items.findIndex(x => x.id === JSON.parse(action.payload.config.data).notification_id);
+				state.items[index].is_active = false;
+				state.items[index].updated_at = new Date().toISOString();
+				state.items[index].recall_reason = JSON.parse(action.payload.config.data).recall_reason
+			}).addCase(getNotificationCount.fulfilled, (state, action) => {
+				if (action.payload.data.code !== 200) {
+					return;
+				}
+				state.count = action.payload.data.data.total;
+			}).addCase(markAllRead.fulfilled, (state, action) => {
+				if (action.payload.status !== 200) {
+					return;
+				}
+				state.items = state.items.map(x => {
+					x.unread = false;
+					return x;
+				});
+				state.count = 0;
+			}).addCase(getNotifications.fulfilled, (state, action) => {
+				if (action.payload.status !== 200) {
+					return;
+				}
+				state.items = action.payload.data.data.items;
+				state.total = action.payload.data.data.total;
+				state.page = action.payload.data.data.page;
+				state.size = action.payload.data.data.size;
+				state.has_more = action.payload.data.data.has_more;
+			});
 	},
 	reducers: {}
 });

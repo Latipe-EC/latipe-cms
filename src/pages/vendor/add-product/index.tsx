@@ -80,7 +80,7 @@ const AddProduct = () => {
 	const toast = useToast();
 	const navigate = useNavigate();
 
-	const handleDrop = (acceptedFiles: unknown) => {
+	const handleDrop = (acceptedFiles: any) => {
 		setImages((prevFiles) => [...prevFiles, ...acceptedFiles]);
 	};
 

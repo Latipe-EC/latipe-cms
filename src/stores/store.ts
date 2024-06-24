@@ -13,6 +13,7 @@ import commissionReducer from './slices/commissions-slice';
 import paymentReducer from './slices/payment-slice';
 import deliveryReducer from './slices/deliveries-slice';
 import promotionReducer from './slices/promotions-slice';
+import notificationReducer from './slices/notification-slice';
 
 import { persistReducer, persistStore, } from 'redux-persist'
 
@@ -39,6 +40,7 @@ export const rootReducer = combineReducers({
 	payments: paymentReducer,
 	deliveries: deliveryReducer,
 	promotions: promotionReducer,
+	notifications: notificationReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

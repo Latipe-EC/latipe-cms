@@ -22,7 +22,6 @@ const ProductReview: React.FC<ProductReviewProps> = ({
 	storeId
 }) => {
 
-
 	const averageStar = rating ? rating.reduce((total, b, index) => total + b * (index + 1), 0) / Math.max(rating.reduce((total, b) => total + b, 0), 1)
 		: 0;
 

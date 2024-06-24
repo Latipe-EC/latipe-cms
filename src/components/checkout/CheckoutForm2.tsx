@@ -260,7 +260,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 			}
 
 			const vouchers = res.data.data.items;
-			if (vouchers.some(x => x.status === VoucherStatus.INACTIVE)
+			if (vouchers.some(x => x.status !== VoucherStatus.ACTIVE)
 				|| vouchers.some(x => x.voucher_counts === 0)
 				|| vouchers.some(x => x.voucher_counts === 0)
 				|| vouchers.some(x => x.count_usable === 0)

@@ -44,7 +44,6 @@ export interface CheckVoucherData {
 	items: ItemVoucher[]
 }
 
-
 export interface ApplyVoucherReponse {
 	is_success: boolean
 	items: ItemVoucher[]
@@ -66,6 +65,7 @@ export interface ItemVoucher {
 	updated_at: string
 	count_usable?: number
 	real_discount?: RealDiscount
+	total_counts?: number
 }
 
 export interface RealDiscount {

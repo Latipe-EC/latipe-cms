@@ -81,7 +81,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
 		reader.onloadend = () => {
 			setImage(reader.result);
 			// Call your API to get the product after the image is uploaded
-
+			setProducts(null)
 		};
 
 		if (file) {

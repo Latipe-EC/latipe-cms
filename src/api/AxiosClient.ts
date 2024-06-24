@@ -112,7 +112,7 @@ import {
 	CreateCommissionRequest,
 	UpdateCommissionRequest
 } from '@interfaces/commission';
-import { CampaignDetail, CreateCampaignRequest, GeneralCampaignAdminResponse, ListCampaignDetail, NewDeviceRequest, NewDeviceResponse, RecallCampaignRequest } from '@/api/interface/notification';
+import { CampaignDetail, CountNotificationUser, CreateCampaignRequest, CreateCapaign, GeneralCampaignAdminResponse, ListCampaignDetail, NewDeviceRequest, NewDeviceResponse, RecallCampaignRequest } from '@/api/interface/notification';
 import { isMobile } from 'react-device-detect';
 
 export type QueryParamsType = Record<string | number, unknown>;
@@ -1179,6 +1179,14 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				body: request
 			}),
 
+		createVoucherVendor: (request: createVoucherRequest) =>
+			this.request<unknown>({
+				path: `/vouchers/store`,
+				method: 'POST',
+				type: ContentType.Json,
+				body: request
+			}),
+
 		getById: (id: string) =>
 			this.request<unknown>({
 				path: `/vouchers/${id}`,
@@ -1202,6 +1210,22 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			})
 		},
 
+		getAllVendorPromotion: (params: Record<string, string>) => {
+			const queryParams = new URLSearchParams(params).toString();
+			return this.request<ListVoucherReponse>({
+				path: `/vouchers/store?${queryParams}`,
+				method: 'GET',
+				type: ContentType.Json,
+			})
+		},
+
+		getVendorPromotionByCode: (code: string) =>
+			this.request<unknown>({
+				path: `/vouchers/store/code/${code}`,
+				method: 'GET',
+				type: ContentType.Json,
+			}),
+
 		getVoucherUser: (params: Record<string, string>) => {
 			const queryParams = new URLSearchParams(params).toString();
 			return this.request<ListVoucherReponse>({
@@ -1209,8 +1233,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				method: 'GET',
 				type: ContentType.Json,
 			})
-		}
-		,
+		},
 
 		checkVoucher: (request: CheckingVoucherRequest) =>
 			this.request<CheckVoucherReponse>({
@@ -1230,6 +1253,15 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				}
 			}),
 
+		updateVendorStatusVoucher: (request: UpdateStatusVoucher) =>
+			this.request<CheckVoucherReponse>({
+				path: `/vouchers/store/code/${request.code}`,
+				method: 'PATCH',
+				type: ContentType.Json,
+				body: {
+					status: request.status
+				}
+			}),
 	}
 	payment = {
 		checkPaymentOrder: (id: string) =>
@@ -1345,8 +1377,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			}),
 
 		createCampaign: (body: CreateCampaignRequest) =>
-			this.request<GeneralCampaignAdminResponse>({
-				baseURL: `http://127.0.0.1:5050/api/v1`,
+			this.request<GeneralCampaignAdminResponse<CreateCapaign>>({
+				baseURL: `http://localhost:5050/api/v1`,
 				path: `/notifications/admin/notify-campaign`,
 				method: 'POST',
 				type: ContentType.Json,
@@ -1374,7 +1406,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			}),
 
 		getNotificationCount: () =>
-			this.request<NewDeviceResponse>({
+			this.request<GeneralCampaignAdminResponse<CountNotificationUser>>({
 				baseURL: `http://127.0.0.1:5050/api/v1`,
 				path: `/notifications/user/total/unread`,
 				method: 'GET',

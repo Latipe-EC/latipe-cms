@@ -31,6 +31,7 @@ const Shop = lazy(() => import('@pages/shop/[id]'));
 const SupportTicketDetails = lazy(() => import('@pages/support-tickets/[id]'));
 const TicketList = lazy(() => import('@pages/support-tickets/index'));
 const Paypal = lazy(() => import('@pages/paypal/Paypal'));
+const Notificaions = lazy(() => import('@/pages/notifications'));
 
 // vendor pages
 const DashboardVendor = lazy(() => import('@pages/vendor/dashboard/index'));
@@ -48,6 +49,7 @@ const BankVendor = lazy(() => import('@pages/vendor/bank/index'));
 const ValidWithdraw = lazy(() => import('@pages/vendor/bank/valid_withdraw'));
 const WithdrawSuccess = lazy(() => import('@pages/vendor/bank/withdraw-success'));
 const RegisterStore = lazy(() => import('@pages/vendor/register'));
+const VoucherVendor = lazy(() => import('@pages/vendor/voucher/[id]'));
 
 // admin pages
 const DashboardAdmin = lazy(() => import('@components/layout/admin/AdminLayout'));
@@ -133,6 +135,7 @@ function App() {
 									<Route path="checkout" element={<CheckoutAlternative />} />
 									{/* <Route path="checkout" element={<Checkout />} /> */}
 									<Route path="promotions" element={<Promotion />} />
+									<Route path="notifications" element={<Notificaions />} />
 
 									<Route path="login" element={<LoginPage />} />
 									<Route path="payment" element={<CheckoutPage />} />
@@ -207,6 +210,7 @@ function App() {
 									<Route path="analysis" element={<AnalyzeVendor />} />
 									<Route path="bank" element={<BankVendor />} />
 									<Route path="products/ban" element={<BanProductsVendor />} />
+									<Route path="vouchers" element={<VoucherVendor />} />
 								</Route>
 
 								<Route path="/vendor/" element={

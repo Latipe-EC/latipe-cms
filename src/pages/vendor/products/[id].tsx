@@ -278,7 +278,7 @@ const ProductDetailVendor = () => {
 			return;
 		}
 		if (productVariants.length === 0) {
-			setProductClassifications([{ name: '0', quantity: 0, price: 0, promotionalPrice: 0, sku: '' }]);
+			setProductClassifications([{ quantity: 0, price: 0, promotionalPrice: 0, sku: '' }]);
 		} else {
 			const newProductClassification = [...productClassifications];
 			newProductClassification.flatMap((item, index) => [item, {
@@ -312,8 +312,6 @@ const ProductDetailVendor = () => {
 		if (index === 0) {
 			if (newProductVariants.length === 1) {
 				newProductClassification.push({
-					name:
-						(index * newProductVariants[index].options.length + 1).toString(),
 					quantity: 0, price: 0, sku: ''
 				});
 			} else {
@@ -330,8 +328,7 @@ const ProductDetailVendor = () => {
 		if (index === 1) {
 			for (let i = 0; i < newProductVariants[0].options.length; i++) {
 				newProductClassification.splice(i * newProductVariants[0].options.length + i, 0, {
-					name:
-						'',
+
 					quantity: 0, price: 0, sku: '', promotionalPrice: 0
 				});
 			}
@@ -643,7 +640,7 @@ const ProductDetailVendor = () => {
 							</Box>
 						</AccordionButton>
 						<AccordionPanel ml={2}>
-							{attributeValuesController.length > 0 && (
+							{attributeValues.length > 0 && (
 								<AttributeRenderForm attributes={attributeValues}
 									onChange={handleAttributeChange}></AttributeRenderForm>
 							)}

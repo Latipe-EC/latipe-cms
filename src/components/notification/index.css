@@ -1,0 +1,30 @@
+.ck .ck-content {
+	height: 400px;
+	border: 2px solid #4CAF50; /* Green border */
+	border-radius: 10px; /* Rounded border */
+}
+
+/* This targets the content area of CKEditor */
+.ck.ck-content {
+/* This will change the width and color of the scrollbar */
+scrollbar-width: thin;
+scrollbar-color: rgba(155, 155, 155, 0.7) transparent;
+}
+
+/* This targets the scrollbar thumb (the part you drag) */
+.ck.ck-content::-webkit-scrollbar-thumb {
+background-color: rgba(155, 155, 155, 0.7);
+border-radius: 10px;
+}
+.ck .ck-editor__main{
+	border: none;
+}
+/* This targets the scrollbar track (the part the thumb moves along) */
+.ck.ck-content::-webkit-scrollbar-track {
+background: transparent;
+}
+
+.ck.ck-editor__editable_inline {
+	border: 2px solid rgba(71, 165, 142, 0.7) !important;
+	border-radius: 10px !important;
+}

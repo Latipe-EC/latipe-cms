@@ -67,7 +67,7 @@ const CustomerDashboardNavigation = () => {
 
 const linkList = [
 	{
-		title: "DASHBOARD",
+		title: "Sửa Hồ Sơ",
 		list: [
 			{
 				href: "/orders",

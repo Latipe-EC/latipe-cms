@@ -25,6 +25,7 @@ export const DiscountType = {
 export const VoucherType = {
 	DELIVERY: 1,
 	PRODUCT: 2,
+	STORE: 3
 };
 
 export const PaymentMethodName = {
@@ -72,6 +73,7 @@ export enum TitleToast {
 	ADD_VOUCHER = 'Thêm voucher',
 	LOGIN = 'Đăng nhập',
 	ADD_CAMPAIGN = 'Thêm chiến dịch',
+	RECALL_CAMPAIGN = 'Thu hồi chiến dịch',
 }
 
 export enum ContentToast {
@@ -101,6 +103,8 @@ export enum ContentToast {
 	LOGIN_ERROR = 'Đăng nhập thất bại',
 	ADD_CAMPAIGN_SUCCESS = 'Thêm chiến dịch thành công',
 	ADD_CAMPAIGN_ERROR = 'Thêm chiến dịch thất bại',
+	RECALL_CAMPAIGN_SUCCESS = 'Thu hồi chiến dịch thành công',
+	RECALL_CAMPAIGN_ERROR = 'Thu hồi chiến dịch thất bại',
 }
 
 export enum ToastStatus {
@@ -217,7 +221,8 @@ export enum Title {
 
 export enum VoucherStatus {
 	ACTIVE = 1,
-	INACTIVE = 0,
+	INACTIVE = -1,
+	PENDING = 0,
 }
 
 export enum Page {

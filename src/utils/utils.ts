@@ -90,6 +90,19 @@ export function getPaymentMethod(method: string): number {
 	return method === PaymentMethodName.COD ? 1 : method === PaymentMethodName.PayPal ? 2 : 3;
 }
 
+export function formatDateTime(dateString: string) {
+	const date = new Date(dateString);
+
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const day = String(date.getDate()).padStart(2, '0');
+	const hours = String(date.getHours()).padStart(2, '0');
+	const minutes = String(date.getMinutes()).padStart(2, '0');
+	const seconds = String(date.getSeconds()).padStart(2, '0');
+
+	return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
 export const handleApiCallWithToast =
 	(
 		dispatch,
@@ -119,6 +132,7 @@ export const handleApiCallWithToast =
 		dispatch(apiCall(request))
 			.unwrap()
 			.then((res) => {
+				console.log(res);
 				toast.close(loadingToastId);
 				if (res.status.toString().includes("20")) {
 					toast({
@@ -261,3 +275,4 @@ export const isBlank = (str: string) => !str || /^\s*$/.test(str);
 
 export const isNotBlank = (str: string) => str && !/^\s*$/.test(str);
 
+export const removeTagHtml = (str: string) => str.replace(/<[^>]*>/g, '');

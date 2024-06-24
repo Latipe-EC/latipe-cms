@@ -23,6 +23,15 @@ export const
 	);
 
 export const
+	createVoucherVendor = createAsyncThunk(
+		'promotions/createVoucherVendor',
+		async (request: createVoucherRequest) => {
+			const response = await api.promotion.createVoucherVendor(request);
+			return response;
+		}
+	);
+
+export const
 	getById = createAsyncThunk(
 		'promotions/getById',
 		async (id: string) => {
@@ -41,6 +50,16 @@ export const
 	);
 
 export const
+	getVendorPromotionByCode = createAsyncThunk(
+		'promotions/getVendorPromotionByCode',
+		async (code: string) => {
+			const response = await api.promotion.getVendorPromotionByCode(code);
+			return response;
+		}
+	);
+
+
+export const
 	getAllPromotion = createAsyncThunk(
 		'promotions/getAll',
 		async (params: Record<string, string>) => {
@@ -54,6 +73,22 @@ export const
 			return response;
 		}
 	);
+
+export const
+	getAllVendorPromotion = createAsyncThunk(
+		'promotions/getAll',
+		async (params: Record<string, string>) => {
+			if (params["filters[voucher_type][$eq]"] == "0") {
+				delete params["filters[voucher_type][$eq]"];
+			}
+			if (params["filters[is_expired][$eq]"] == "0") {
+				delete params["filters[is_expired][$eq]"];
+			}
+			const response = await api.promotion.getAllVendorPromotion(params);
+			return response;
+		}
+	);
+
 export const
 	getVoucherUser = createAsyncThunk(
 		'promotions/get_voucher_user',
@@ -87,6 +122,14 @@ export const
 		}
 	);
 
+export const
+	updateVendorStatusVoucher = createAsyncThunk(
+		'promotions/update-status-voucher',
+		async (request: UpdateStatusVoucher) => {
+			const response = await api.promotion.updateVendorStatusVoucher(request);
+			return response;
+		}
+	);
 
 export const promotionSlice = createSlice({
 	name: 'promotion',

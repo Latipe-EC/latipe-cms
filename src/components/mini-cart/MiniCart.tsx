@@ -68,6 +68,8 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
 			dispatch(getMyCart({ skip: 0, limit: 10 }))
 		};
 	}, []);
+
+
 	return (
 		<StyledMiniCart>
 			<div className="cart-list">

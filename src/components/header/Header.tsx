@@ -1,6 +1,6 @@
 import IconButton from "../buttons/IconButton";
 import Image from "../Image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "../Box";
 import Categories from "../categories/Categories";
 import Container from "../Container";
@@ -10,13 +10,19 @@ import MiniCart from "../mini-cart/MiniCart";
 import SearchBox from "../search-box/SearchBox";
 import Login from "../sessions/Login";
 import Sidenav from "../sidenav/Sidenav";
-import { Tiny } from "../Typography";
+import { H6, Paragraph, Tiny } from "../Typography";
 import StyledHeader from "./HeaderStyle";
 import UserLoginDialog from "./UserLoginDialog";
 import MenuItem from "../MenuItem";
 import Menu from "../Menu";
 import { useNavigate } from "react-router-dom";
-import { RootState, useAppSelector } from "@stores/store";
+import { AppThunkDispatch, RootState, useAppSelector } from "@stores/store";
+import { Button, useToast } from "@chakra-ui/react";
+import { useDispatch } from "react-redux";
+import { getNotificationCount, getNotifications, markAllRead } from "@/stores/slices/notification-slice";
+import { removeTagHtml } from "@/utils/utils";
+import { NotificationModal } from "@/components/notification/NotificationModal";
+import { CampaignDetail } from "@/api/interface/notification";
 
 type HeaderProps = {
 	isFixed?: boolean;
@@ -25,9 +31,23 @@ type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
 	const [open, setOpen] = useState(false);
-	const toggleSidenav = () => setOpen(!open);
 	const navigate = useNavigate();
+	const dispatch = useDispatch<AppThunkDispatch>();
+	const notifications = useAppSelector((state: RootState) => state.notifications);
+	const [showNotificationModal, setShowNotificationModal] = useState(false);
 	const REACT_STARTER_AUTH = JSON.parse(localStorage.getItem("REACT_STARTER_AUTH"));
+	const [selectNotification, setSelectNotification] = useState<CampaignDetail>();
+
+	const toast = useToast();
+
+	const toggleSidenav = () => {
+		if (!REACT_STARTER_AUTH || !REACT_STARTER_AUTH.isAuthenticated) {
+			navigate('/login');
+			return;
+		}
+		setOpen(!open)
+	};
+
 
 	const logout = () => {
 		localStorage.clear();
@@ -35,10 +55,25 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
 	}
 	const carts = useAppSelector((state: RootState) => state.carts);
 
-
 	const redirect = (path: string) => {
 		navigate(path);
 	}
+
+	const handleMarkAllAsRead = () => {
+		dispatch(markAllRead())
+			.unwrap()
+			.then(res => {
+				if (res.status !== 200) {
+					toast({
+						title: "Có lỗi xảy ra",
+						description: "Vui lòng thử lại",
+						status: "error",
+						duration: 3000,
+						isClosable: true,
+					});
+				}
+			});
+	};
 
 	const cartHandle = (
 		<FlexBox ml="20px" alignItems="flex-start">
@@ -64,6 +99,15 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
 			)}
 		</FlexBox>
 	);
+
+	useEffect(() => {
+		dispatch((getNotifications({
+			page: '1',
+			size: '5'
+		})))
+
+		dispatch(getNotificationCount())
+	}, []);
 
 	return (
 		<StyledHeader className={className}>
@@ -129,7 +173,99 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
 						</UserLoginDialog>
 
 					}
+					{REACT_STARTER_AUTH && REACT_STARTER_AUTH.isAuthenticated &&
+						<Menu
+							className="notification-dropdown"
+							direction="right"
+							handler={
+								<IconButton ml="1rem" bg="gray.200" p="8px">
+									<Icon size="28px">notification</Icon>
+									{notifications.count > 0 && (
+										<Box
+											className="notification-count"
+											position="absolute"
+											top="-2px"
+											right="-2px"
+											bg="primary.main"
+											color="white"
+											borderRadius="50%"
+											width="20px"
+											height="20px"
+											display="flex"
+											alignItems="center"
+											justifyContent="center"
+											fontSize="12px"
+											fontWeight="600"
+										>
+											{notifications.count > 10 ? '10+' : notifications.count}
+										</Box>
+									)}
+								</IconButton>
+							}
+						>
+							{notifications.items && notifications.items.length !== 0 && notifications.items.slice(0, 10).map((notification, index) => (<MenuItem>
+								<Box maxHeight="400px" overflow="auto">
 
+									<Box
+										key={index}
+										p="1rem"
+										borderBottom="1px solid"
+										borderColor="gray.200"
+										width="100%"
+										bg={!notification.unread ? 'gray.100' : 'white'}
+										_hover={{
+											bg: 'gray.100',
+										}}
+										cursor="pointer"
+										onClick={() => {
+											setShowNotificationModal(true);
+											setSelectNotification(notification);
+										}}
+									>
+										<FlexBox width="300px" alignItems="center" mb="0.5rem">
+											<Image src={notification.image} alt={notification.title} width="40px" height="40px" mr="1rem" />
+											<Box flexGrow={1}>
+												<H6 fontSize="14px" mb="0.25rem" fontWeight={!notification.readAt ? 'bold' : 'normal'}>
+													{notification.title}
+												</H6>
+												<Paragraph fontSize="12px" color={!notification.unread ? 'gray.600' : 'text.muted'}>
+													{removeTagHtml(notification.body).length > 40
+														? `${removeTagHtml(notification.body).slice(0, 40)}...`
+														: removeTagHtml(notification.body)}
+												</Paragraph>
+											</Box>
+										</FlexBox>
+									</Box>
+
+								</Box>
+							</MenuItem>))}
+							<FlexBox justifyContent="space-between" alignItems="center" p="1rem">
+								<Button
+									variant="solid"
+									colorScheme="blue"
+									_hover={{
+										bg: 'blue.600',
+									}}
+									onClick={(() => navigate('/notifications'))}
+									mr="1rem"
+								>
+									Xem tất cả
+								</Button>
+								<Button
+									variant="outline"
+									colorScheme="blue"
+									onClick={handleMarkAllAsRead}
+									isDisabled={notifications.items.length === 0}
+									_hover={{
+										bg: 'blue.50',
+									}}
+								>
+									Đánh dấu đã đọc
+								</Button>
+							</FlexBox>
+						</Menu>}
+
+					<NotificationModal isOpen={showNotificationModal} onClose={() => setShowNotificationModal(false)} notification={selectNotification} />
 
 					<Sidenav
 						handle={cartHandle}

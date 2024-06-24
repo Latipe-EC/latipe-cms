@@ -24,7 +24,6 @@ const Pagination: React.FC<PaginationProps> = ({
 	const handlePageChange = async (page) => {
 		if (onChange) onChange(page.selected);
 	};
-	console.log(currentPage);
 
 	return (
 		<StyledPagination {...props}>

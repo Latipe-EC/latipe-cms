@@ -1,13 +1,18 @@
 import { ItemVoucher } from "@/api/interface/promotion";
+import { Chip } from "@/components/Chip";
 import FlexBox from "@/components/FlexBox";
+import Typography, { H5, Small } from "@/components/Typography";
+import Hidden from "@/components/hidden/Hidden";
 import Pagination from "@/components/pagination/Pagination";
-import VoucherRoww from "@/pages/vendor/voucher/VoucherRow";
+import VoucherRow from "@/pages/vendor/voucher/VoucherRow";
 import { createVoucherVendor, getAllVendorPromotion, updateVendorStatusVoucher } from "@/stores/slices/promotions-slice";
 import { AppThunkDispatch, RootState, useAppSelector } from "@/stores/store";
 import { Action, ContentToast, DiscountType, PaymentMethodName, TitleToast, VoucherStatus, VoucherType } from "@/utils/constants";
 import { handleApiCallWithToast } from "@/utils/utils";
-import { WarningIcon } from "@chakra-ui/icons";
-import { Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Grid, Icon, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Spinner, Text, Textarea, useToast } from "@chakra-ui/react";
+import { ViewIcon, WarningIcon } from "@chakra-ui/icons";
+import { Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Grid, Icon, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Spinner, Table, Tbody, Td, Text, Textarea, Thead, Tr, useToast } from "@chakra-ui/react";
+import { format } from "date-fns";
+import { vi } from "date-fns/locale";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
@@ -19,7 +24,8 @@ const templateVoucher: ItemVoucher = {
 	detail: '',
 	discount_data: {
 		discount_type: 0,
-		shipping_value: 0
+		shipping_value: 0,
+		discount_percent: 0
 	},
 	voucher_require: {
 		min_require: 0,
@@ -45,6 +51,8 @@ const VoucherList = () => {
 	const [modalConfirm, setModalConfirm] = useState(null);
 	const toast = useToast();
 	const promotions = useAppSelector((state: RootState) => state.promotions);
+	const [modalAfterAdd, setModalAfterAdd] = useState(null);
+	const [discount_percent, setDiscountPercent] = useState(0);
 
 	useEffect(() => {
 		dispatch(getAllVendorPromotion({
@@ -87,6 +95,8 @@ const VoucherList = () => {
 			() => {
 				setShowModalPromotion(false);
 				setPromotion(templateVoucher);
+				setDiscountPercent(0);
+				setModalAfterAdd(req.voucher_code);
 			})
 
 	}
@@ -110,13 +120,13 @@ const VoucherList = () => {
 
 		setShowModalPromotion(false);
 		setPromotion(templateVoucher);
+		setDiscountPercent(0);
 		setModalConfirm(null);
 	}
 
 	const checkAddVoucher = (): boolean => {
 		const statedTime = new Date(promotion.stated_time);
 		const endedTime = new Date(promotion.ended_time);
-		console.log(statedTime === endedTime);
 		return (promotion.voucher_code.trim() === '' ||
 			promotion.voucher_counts <= 0 ||
 			promotion.detail.trim() === '' ||
@@ -143,6 +153,7 @@ const VoucherList = () => {
 	const handleShowDetail = (voucher: ItemVoucher) => {
 		setPromotion(voucher);
 		setShowModalPromotion(true);
+		setDiscountPercent(voucher.discount_data.discount_percent);
 	}
 
 	return (
@@ -171,6 +182,7 @@ const VoucherList = () => {
 						colorScheme="teal"
 						onClick={() => {
 							setPromotion(templateVoucher);
+							setDiscountPercent(0);
 							setShowModalPromotion(true);
 						}}
 					>
@@ -179,11 +191,65 @@ const VoucherList = () => {
 				</Box>
 			</Flex>
 			<Box alignItems="center">
-				{promotions.data && promotions.data.map((item) => (
-					<VoucherRoww voucher={item} showDetail={handleShowDetail} />
-				))}
+				<Table variant="simple">
+					<Thead>
+						<Tr>
+							<Td>Mã Voucher</Td>
+							<Td>Số lượng</Td>
+							<Td>Số lượng còn lại</Td>
+							<Td>Thời gian kết thúc</Td>
+							<Td>Trạng thái</Td>
+							<Td>Chi tiết</Td>
+						</Tr>
+					</Thead>
+					<Tbody>
+						{promotions.data && promotions.data.map((voucher) => (
+							<Tr onClick={() => { setShowModalPromotion(true); setPromotion(voucher) }}>
+								<Td  >
+									<H5 m="6px" textAlign="left">
+										{voucher.voucher_code}
+									</H5>
+								</Td>
+								<Td>
+									<Flex justifyContent="center" alignItems="center">
+										<Chip p="0.25rem 1rem" bg={`success.light`}>
+											<Small textAlign="center" color={`success.main`}>{voucher.voucher_counts}</Small>
+										</Chip>
+									</Flex>
+								</Td>
+								<Td>
+									<Flex justifyContent="center" alignItems="center">
+										<Chip p="0.25rem 1rem" bg={`success.light`}>
+											<Small textAlign="center" color={`success.main`}>{voucher.total_counts - voucher.voucher_counts}</Small>
+										</Chip>
+									</Flex>
+								</Td>
+								<Td>
+									<Typography className="flex-grow pre" m="6px" textAlign="left">
+										{format(new Date(voucher.ended_time), "dd, MMM yyyy hh:mm:ss", { locale: vi })}
+									</Typography>
+								</Td>
+								<Td>
+									<Flex justifyContent="center" alignItems="center">
+										<Chip p="0.25rem 1rem" bg={`${voucher.status === VoucherStatus.ACTIVE ? 'success' : 'error'}.light`}>
+											<Small textAlign="center" color={`${voucher.status === VoucherStatus.ACTIVE ? 'success' : 'error'}.main`}>{voucher.status === VoucherStatus.ACTIVE ? "hoạt động" : "vô hiệu"}</Small>
+										</Chip>
+									</Flex>
+								</Td>
+								<Td>
+									<Hidden flex="0 0 0 !important" down={769}>
+										<Typography textAlign="center" color="text.muted">
+											<IconButton size="small" aria-label="View details" icon={<ViewIcon />}>
+											</IconButton>
+										</Typography>
+									</Hidden>
+								</Td>
+							</Tr>
+						))}
+					</Tbody>
+				</Table>
 				{promotions.data && promotions.data.length > 0 &&
-					<FlexBox justifyContent="center">
+					<FlexBox justifyContent="center" my={4}>
 						<Pagination
 							pageCount={Math.ceil(promotions.pagination.total)}
 							onChange={(data) => {
@@ -270,14 +336,14 @@ const VoucherList = () => {
 									type='datetime-local'
 									value={new Date(promotion.stated_time).toISOString().slice(0, 16)}
 									onChange={(e) => {
+										setPromotion({
+											...promotion,
+											stated_time: e.target.value
+										});
 										const selectedDate = new Date(e.target.value);
 										const currentDate = new Date();
 										currentDate.setMinutes(currentDate.getMinutes() + 15);
 										if (selectedDate > currentDate && selectedDate < new Date(promotion.ended_time)) {
-											setPromotion({
-												...promotion,
-												stated_time: e.target.value
-											});
 											setEndDateError('');
 											setStartDateError('');
 										} else if (selectedDate <= currentDate) {
@@ -377,32 +443,18 @@ const VoucherList = () => {
 													<FormLabel>Tỉ lệ</FormLabel>
 													<Input
 														type='number'
-														value={promotion.discount_data.discount_percent}
-														min="0.01"
-														max="1"
-														step="0.01"
-														onChange={(e) => {
-															const value = e.target.value;
-															if (value === '') {
-																setPromotion({
-																	...promotion,
-																	discount_data: {
-																		...promotion.discount_data,
-																		discount_percent: parseFloat(value)
-																	}
-																});
-															} else {
-																const floatValue = parseFloat(value);
-																if (floatValue <= 1) {
-																	setPromotion({
-																		...promotion,
-																		discount_data: {
-																			...promotion.discount_data,
-																			discount_percent: floatValue
-																		}
-																	});
+														value={discount_percent}
+														onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+															if (parseFloat(e.target.value) > 1 || parseFloat(e.target.value) < 0)
+																return;
+															setDiscountPercent(parseFloat(e.target.value));
+															setPromotion({
+																...promotion,
+																discount_data: {
+																	...promotion.discount_data,
+																	discount_percent: parseFloat(e.target.value)
 																}
-															}
+															});
 														}}
 													/>
 												</FormControl>
@@ -492,6 +544,15 @@ const VoucherList = () => {
 							>
 								{Action.RECALL}
 							</Button>}
+
+							{promotion.id && promotion.status === VoucherStatus.PENDING && < Button colorScheme="red"
+								onClick={() => {
+									handleUpdate(promotion.voucher_code, VoucherStatus.ACTIVE)
+									setShowModalPromotion(false);
+								}}
+							>
+								{Action.ACTIVE}
+							</Button>}
 							{!promotion.id && < Button colorScheme="red" onClick={handleCreate}
 								isDisabled={checkAddVoucher()}
 							>
@@ -531,6 +592,44 @@ const VoucherList = () => {
 								<Button colorScheme="green"
 									onClick={() => handleUpdate(promotion.voucher_code, VoucherStatus.INACTIVE)}>
 									Xác nhận
+								</Button>
+							</Flex>
+						</ModalFooter>
+					</ModalContent>
+				</Modal>}
+
+			{modalAfterAdd &&
+				<Modal isOpen={modalAfterAdd !== null} onClose={() => {
+					setModalAfterAdd(null)
+				}} isCentered>
+					<ModalOverlay />
+					<ModalContent>
+						<ModalHeader style={{
+							fontWeight: 'bold',
+							fontSize: '20px',
+							color: 'gray.800',
+							textAlign: "center",
+							marginTop: '20px'
+						}}>
+							Thông báo
+						</ModalHeader>
+						<ModalCloseButton />
+						<ModalBody>
+							<Text textAlign='center' fontSize={'x-large'}>Bạn có muốn kích hoạt voucher này luôn không?</Text>
+						</ModalBody>
+						<ModalFooter>
+							<Flex justifyContent="center" alignItems="center" mt={4}>
+								<Button colorScheme="red" mr={4} onClick={() => {
+									setModalAfterAdd(null)
+								}}>
+									{Action.CANCEL}
+								</Button>
+								<Button colorScheme="green"
+									onClick={() => {
+										handleUpdate(modalAfterAdd, VoucherStatus.ACTIVE);
+										setModalAfterAdd(null)
+									}}>
+									{Action.CONFIRM}
 								</Button>
 							</Flex>
 						</ModalFooter>

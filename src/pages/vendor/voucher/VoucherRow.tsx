@@ -15,7 +15,7 @@ export interface VoucherRowVendorProps {
 	showDetail: (voucher: ItemVoucher) => void;
 }
 
-const VoucherRoww: React.FC<VoucherRowVendorProps> = ({ voucher, showDetail }) => {
+const VoucherRow: React.FC<VoucherRowVendorProps> = ({ voucher, showDetail }) => {
 	return (
 		<TableRow onClick={() => { showDetail(voucher) }} my="1rem" padding="6px 18px"
 			_hover={{
@@ -59,4 +59,4 @@ const VoucherRoww: React.FC<VoucherRowVendorProps> = ({ voucher, showDetail }) =
 	);
 };
 
-export default VoucherRoww;
+export default VoucherRow;

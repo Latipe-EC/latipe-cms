@@ -73,8 +73,7 @@ const ShopIntroCard: React.FC<ShopIntroCardProps> = ({ store }) => {
 							<FlexBox alignItems="center" mb="14px">
 								<Rating color="warn" value={store.ratings.reduce((a, b, index) => a + b * (index + 1), 0) / store.ratings.reduce((a, b) => a + b, 0)} outof={5} readonly />
 								<Small color="text.muted" pl="0.75rem" display="block">
-									{store.ratings.reduce((a, b, index) => a + b * (index + 1), 0) / store.ratings.reduce((a, b) => a + b, 0)} ({store.ratings.reduce((a, b) => a + b, 0)} đánh giá)
-								</Small>
+									{(store.ratings.reduce((a, b, index) => a + b * (index + 1), 0) / store.ratings.reduce((a, b) => a + b, 0)).toFixed(1)} ({store.ratings.reduce((a, b) => a + b, 0)} đánh giá)								</Small>
 							</FlexBox>
 
 							<FlexBox color="text.muted" mb="8px" maxWidth="270px">

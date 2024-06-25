@@ -142,6 +142,7 @@ export enum Action {
 	ORDER = 'Đặt hàng',
 	RECALL = 'Thu hồi',
 	RECALLED = 'Đã thu hồi',
+	ACTIVE = 'Kích hoạt',
 }
 
 export enum Content {

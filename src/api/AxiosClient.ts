@@ -93,6 +93,7 @@ import {
 	ApplyVoucherRequest,
 	CheckVoucherReponse,
 	CheckingVoucherRequest,
+	CreateVoucherResponse,
 	ListVoucherReponse,
 	TotalAmountReponse,
 	UpdateStatusVoucher,
@@ -1180,7 +1181,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			}),
 
 		createVoucherVendor: (request: createVoucherRequest) =>
-			this.request<unknown>({
+			this.request<CreateVoucherResponse>({
 				path: `/vouchers/store`,
 				method: 'POST',
 				type: ContentType.Json,

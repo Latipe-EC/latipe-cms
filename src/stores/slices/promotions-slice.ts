@@ -76,7 +76,7 @@ export const
 
 export const
 	getAllVendorPromotion = createAsyncThunk(
-		'promotions/getAll',
+		'promotions/getAllVendorPromotion',
 		async (params: Record<string, string>) => {
 			if (params["filters[voucher_type][$eq]"] == "0") {
 				delete params["filters[voucher_type][$eq]"];
@@ -167,7 +167,24 @@ export const promotionSlice = createSlice({
 					_id: action.payload.data,
 					...request
 				});
-			})
+			}).addCase(getAllVendorPromotion.fulfilled, (state, action) => {
+				state.data = action.payload.data.data.items ? action.payload.data.data.items : [];
+				state.pagination = {
+					total: action.payload.data.data.total,
+					size: action.payload.data.data.page,
+					page: action.payload.data.data.size,
+				};
+
+			}).addCase(createVoucherVendor.fulfilled, (state, action) => {
+				if (action.payload.status !== 200) return;
+				const request = action.meta.arg;
+				state.data.push({
+					...request,
+					id: action.payload.data.data,
+					voucher_counts: request.voucher_counts,
+					total_counts: request.voucher_counts,
+				});
+			});
 	},
 	reducers: {}
 });

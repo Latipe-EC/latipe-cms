@@ -68,6 +68,12 @@ export interface ItemVoucher {
 	total_counts?: number
 }
 
+export interface CreateVoucherResponse {
+	code: number,
+	message: string,
+	data: string
+}
+
 export interface RealDiscount {
 	totalPrice: number
 	deliveries: string[]

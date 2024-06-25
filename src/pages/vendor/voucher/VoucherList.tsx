@@ -4,7 +4,6 @@ import FlexBox from "@/components/FlexBox";
 import Typography, { H5, Small } from "@/components/Typography";
 import Hidden from "@/components/hidden/Hidden";
 import Pagination from "@/components/pagination/Pagination";
-import VoucherRow from "@/pages/vendor/voucher/VoucherRow";
 import { createVoucherVendor, getAllVendorPromotion, updateVendorStatusVoucher } from "@/stores/slices/promotions-slice";
 import { AppThunkDispatch, RootState, useAppSelector } from "@/stores/store";
 import { Action, ContentToast, DiscountType, PaymentMethodName, TitleToast, VoucherStatus, VoucherType } from "@/utils/constants";
@@ -204,7 +203,7 @@ const VoucherList = () => {
 					</Thead>
 					<Tbody>
 						{promotions.data && promotions.data.map((voucher) => (
-							<Tr onClick={() => { setShowModalPromotion(true); setPromotion(voucher) }}>
+							<Tr onClick={() => { handleShowDetail(voucher) }}>
 								<Td  >
 									<H5 m="6px" textAlign="left">
 										{voucher.voucher_code}

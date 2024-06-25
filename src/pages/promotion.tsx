@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { Box, Flex, IconButton, Text, useToast, Input, Button, Stack, Heading, SimpleGrid } from "@chakra-ui/react";
 import DashboardPageHeader from "@components/layout/DashboardPageHeader";
 import { getVoucherUser } from "@stores/slices/promotions-slice";
-import { ListVoucherReponse } from "@interfaces/promotion";
+import { ItemVoucher, ListVoucherReponse } from "@interfaces/promotion";
 import { CopyIcon, SearchIcon } from "@chakra-ui/icons";
 
 const Promotion = () => {
@@ -31,7 +31,7 @@ const Promotion = () => {
 		return () => { };
 	}, []);
 
-	const filterVouchers = (vouchers: any[], type: number) => {
+	const filterVouchers = (vouchers: ItemVoucher[], type: number) => {
 		return vouchers
 			.filter((voucher) => voucher.voucher_type === type)
 			.filter((voucher) =>

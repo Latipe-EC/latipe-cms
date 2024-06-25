@@ -78,7 +78,6 @@ const OrderSuccess = lazy(() => import('@pages/order-success'));
 const IndexPage = lazy(() => import('@pages/index'));
 const LoginPage = lazy(() => import('@pages/login'));
 const CheckoutPage = lazy(() => import('@pages/payment'));
-const ShopList = lazy(() => import('@pages/shops'));
 const SignUpPage = lazy(() => import('@pages/signup'));
 const WishList = lazy(() => import('@pages/wish-list'));
 const PaymentSuccess = lazy(() => import('@pages/payment-success'));
@@ -139,7 +138,7 @@ function App() {
 
 									<Route path="login" element={<LoginPage />} />
 									<Route path="payment" element={<CheckoutPage />} />
-									<Route path="shops" element={<ShopList />} />
+									{/* <Route path="shops" element={<ShopList />} /> */}
 									<Route path="signup" element={<SignUpPage />} />
 									<Route path="orders/success" element={<OrderSuccess />} />
 									<Route path="payment-success" element={<PaymentSuccess />} />

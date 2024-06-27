@@ -343,7 +343,8 @@ export interface StatusParamRequest {
 
 export interface StatusBodyRequest {
 	body: {
-		item_id: string
+		item_id: string,
+		status: number
 	},
 	id: string
 }
@@ -432,4 +433,29 @@ export interface OrderItemStore {
 	product_name: string
 	image: string
 	name_option: string
+}
+
+export interface StatisticRevenueDistributionAdminResponse {
+	code: number
+	error_code: string
+	message: string
+	data: {
+		query_date: string,
+		platform_fee: number,
+		platform_voucher: number,
+		total_shipping: number,
+		profit: number
+	}
+}
+export interface StatisticRevenueDistributionStoreResponse {
+	code: number
+	error_code: string
+	message: string
+	data: {
+		query_date: string,
+		revenue: number,
+		store_voucher: number,
+		platform_fee: number,
+		profit: number
+	}
 }

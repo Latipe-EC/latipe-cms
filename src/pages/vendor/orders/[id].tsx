@@ -24,7 +24,7 @@ import {
 } from "@stores/slices/orders-slice";
 import { Chip } from "@components/Chip";
 import { Tooltip } from "@chakra-ui/react";
-import { Action, Content, Title } from "@/utils/constants";
+import { Action, Content, OrderStatus, Title } from "@/utils/constants";
 import { vi } from "date-fns/locale";
 import { getColorStatusOrder, getStrStatusOrder } from "@/utils/utils";
 
@@ -49,6 +49,7 @@ const OrderDetails = () => {
 			id: response.data.order_id,
 			body: {
 				item_id: response.data.order_items[0].item_id,
+				status: OrderStatus.ORDER_CANCEL_BY_STORE
 			}
 		})).unwrap().then((res) => {
 			if (res.data.error_code) {
@@ -61,11 +62,12 @@ const OrderDetails = () => {
 		});
 	}
 
-	const handleConfirmOrder = (item: OrderItemStore) => {
+	const handleConfirmOrder = (item: OrderItemStore, status: number) => {
 		dispatch(updateOrderItemStatusByStore({
 			id: response.data.order_id,
 			body: {
 				item_id: item.item_id,
+				status,
 			}
 		})).unwrap().then((res) => {
 			if (res.data.error_code) {
@@ -170,12 +172,23 @@ const OrderDetails = () => {
 									</FlexBox>)
 							}
 
-							{response.data.status !== 7 && item.is_prepared === 0 && (
+							{response.data.status === OrderStatus.ORDER_CREATED && item.is_prepared === 0 && (
 								<FlexBox flex="0 0 0 !important" m="6px" alignItems="center">
 									<Tooltip label="Confirm Order" fontSize="md">
 										<Button bg="green" color="white"
-											onClick={() => handleConfirmOrder(item)}
+											onClick={() => handleConfirmOrder(item, OrderStatus.ORDER_PREPARED)}
 										>{Action.CONFIRM}</Button>
+									</Tooltip>
+								</FlexBox>
+							)
+							}
+
+							{response.data.status === OrderStatus.ORDER_PREPARED && item.is_prepared === 0 && (
+								<FlexBox flex="0 0 0 !important" m="6px" alignItems="center">
+									<Tooltip label="Confirm Order" fontSize="md">
+										<Button bg="green" color="white"
+											onClick={() => handleConfirmOrder(item, OrderStatus.ORDER_DELIVERY)}
+										>{Action.CONFIRM_DELIVERY}</Button>
 									</Tooltip>
 								</FlexBox>
 							)
@@ -266,7 +279,7 @@ const OrderDetails = () => {
 										" Thanh toán bằng paypal" : " Thanh toán bằng ví Latipe"}</Typography>
 							</Card>
 
-							{response && response.data.status === 1 &&
+							{response && response.data.status === OrderStatus.ORDER_CREATED &&
 								<Button variant="contained" color="primary" ml="auto"
 									onClick={handleCancelOrder}
 								>

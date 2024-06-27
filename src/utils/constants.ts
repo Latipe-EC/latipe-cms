@@ -125,6 +125,7 @@ export enum Action {
 	ADD = 'Thêm',
 	BACK = 'Quay lại',
 	CONFIRM = 'Xác nhận',
+	CONFIRM_DELIVERY = 'Xác nhận giao hàng',
 	CANCEL_ORDER = 'Hủy đơn hàng',
 	CANCEL = 'Hủy',
 	CLOSE = 'Đóng',

@@ -2,6 +2,8 @@ import {
 	CountAllOrderResponse,
 	CreateOrderV2Request,
 	GetTotalCommissionAdminResponse,
+	StatisticRevenueDistributionAdminResponse,
+	StatisticRevenueDistributionStoreResponse,
 	UpdateOrderByDeliveryRequest
 } from './interface/order';
 import { PagedResultResponse } from '@interfaces/PagedResultResponse';
@@ -133,6 +135,7 @@ export interface FullRequestParams
 	format?: ResponseType;
 	/** request body */
 	body?: unknown;
+	responseType?: ResponseType;
 }
 
 export type RequestParams = Omit<FullRequestParams, 'body' | 'method' | 'query' | 'path'>;
@@ -151,6 +154,7 @@ export enum ContentType {
 	FormData = 'multipart/form-data',
 	UrlEncoded = 'application/x-www-form-urlencoded',
 	Text = 'text/plain',
+	Blob = 'blob',
 }
 
 export class HttpClient<SecurityDataType = unknown> {
@@ -250,6 +254,7 @@ export class HttpClient<SecurityDataType = unknown> {
 		query,
 		format,
 		body,
+		responseType,
 		...params
 	}: FullRequestParams): Promise<AxiosResponse<T>> => {
 		const secureParams =
@@ -258,7 +263,7 @@ export class HttpClient<SecurityDataType = unknown> {
 				(await this.securityWorker(this.securityData))) ||
 			{};
 		const requestParams = this.mergeRequestParams(params, secureParams);
-		const responseFormat = format || this.format || undefined;
+		const responseFormat = responseType ? responseType : format || this.format || undefined;
 
 		if (type === ContentType.FormData && body && body !== null && typeof body === 'object') {
 			body = this.createFormData(body as Record<string, unknown>);
@@ -929,6 +934,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				type: ContentType.Json,
 			}),
 	}
+
 	order = {
 
 		createOrder: (request: CreateOrderRequest) =>
@@ -997,7 +1003,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 		updateOrderItemStatusByStore:
 			(request: StatusBodyRequest) => this.request<UpdateOrderItemStatusByStoreResponse>({
 				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
-				path: `/store/${request.id}/items`,
+				path: `/store/${request.id}/status`,
 				method: 'PATCH',
 				type: ContentType.Json,
 				body: request.body
@@ -1012,7 +1018,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		cancelOrderItem: (request: StatusBodyRequest) => this.request<UpdateOrderItemStatusByStoreResponse>({
 			baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
-			path: `/store/${request.id}/items`,
+			path: `/store/${request.id}/status`,
 			method: 'DELETE',
 			type: ContentType.Json,
 			body: request.body
@@ -1101,6 +1107,13 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			type: ContentType.Json,
 		}),
 
+		getDeliveryOrderDetail: (id: string) => this.request<AdminOrderDetailResponse>({
+			baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+			path: `/delivery/${id}`,
+			method: 'GET',
+			type: ContentType.Json,
+		}),
+
 		getTotalOrderInMonthAdmin:
 			(params: QueryParamsType) => this.request<GetTotalOrderInMonthResponse>({
 				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
@@ -1162,7 +1175,54 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			method: 'GET',
 			type: ContentType.Json,
 		}),
+
+		getRevenueDistributionByStore:
+			(params: QueryParamsType) => this.request<StatisticRevenueDistributionStoreResponse>({
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/statistic/store/revenue-distribution`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+
+		getRevenueDistributionByAdmin:
+			(params: QueryParamsType) => this.request<StatisticRevenueDistributionAdminResponse>({
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/statistic/admin/revenue-distribution`,
+				method: 'GET',
+				type: ContentType.Json,
+				query: {
+					...params
+				}
+			}),
+
+		getBusinessReportByAdmin:
+			(params: QueryParamsType) => this.request<Blob>({
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/statistic/admin/business-report`,
+				method: 'GET',
+				type: ContentType.Blob,
+				query: {
+					...params
+				},
+				responseType: 'blob',
+			}),
+
+		getBusinessReportByStore:
+			(params: QueryParamsType) => this.request<Blob>({
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/statistic/store/business-report`,
+				method: 'GET',
+				type: ContentType.Blob,
+				query: {
+					...params
+				},
+				responseType: 'blob',
+			}),
 	}
+
 	promotion = {
 		applyVoucher: (request: ApplyVoucherRequest) =>
 			this.request<ApplyVoucherReponse>({
@@ -1264,6 +1324,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				}
 			}),
 	}
+
 	payment = {
 		checkPaymentOrder: (id: string) =>
 			this.request<CheckPaymentOrderResponse>({

@@ -57,7 +57,7 @@ const OrderDetailAdmin = () => {
 						alignItems="center"
 					>
 						<Typography fontSize="14px" color="text.muted" mr="4px">
-							Order ID:
+							Mã đơn hàng:
 						</Typography>
 						<Typography fontSize="14px" fontWeight={"bold"}>{id.toUpperCase()}</Typography>
 					</FlexBox>

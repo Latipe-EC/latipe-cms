@@ -66,6 +66,11 @@ export const convertDateYYYYMMDD = (date) => {
 	return dateString
 };
 
+export const convertDateYYYYMM = (date) => {
+	const dateString = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}`;
+	return dateString
+};
+
 export function convertDateTimeYYYYMMDD(dateString: string): string {
 	const date = new Date(dateString);
 	const year = date.getFullYear();
@@ -276,3 +281,17 @@ export const isBlank = (str: string) => !str || /^\s*$/.test(str);
 export const isNotBlank = (str: string) => str && !/^\s*$/.test(str);
 
 export const removeTagHtml = (str: string) => str.replace(/<[^>]*>/g, '');
+
+export const downloadFile = (blob: Blob, fileName: string) => {
+
+
+	const url = window.URL.createObjectURL(blob);
+	const link = document.createElement('a');
+	link.href = url;
+	link.setAttribute('download', fileName);
+	document.body.appendChild(link);
+	link.click();
+	document.body.removeChild(link);
+	window.URL.revokeObjectURL(url);
+
+}

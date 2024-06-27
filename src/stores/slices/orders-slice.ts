@@ -174,6 +174,15 @@ export const
 	);
 
 export const
+	getDeliveryOrderDetail = createAsyncThunk(
+		'orders/getDeliveryOrderDetail',
+		async (id: string) => {
+			const response = await api.order.getDeliveryOrderDetail(id);
+			return response;
+		}
+	);
+
+export const
 	getTotalOrderInMonthAdmin = createAsyncThunk(
 		'orders/getTotalOrderInMonthAdmin',
 		async (params: QueryParamsType) => {
@@ -226,6 +235,44 @@ export const
 			return response;
 		}
 	);
+
+export const
+	getRevenueDistributionByStore = createAsyncThunk(
+		'orders/getRevenueDistributionByStore',
+		async (params: QueryParamsType) => {
+			const response = await api.order.getRevenueDistributionByStore(params);
+			return response;
+		}
+	);
+
+
+export const
+	getRevenueDistributionByAdmin = createAsyncThunk(
+		'orders/getRevenueDistributionByAdmin',
+		async (params: QueryParamsType) => {
+			const response = await api.order.getRevenueDistributionByAdmin(params);
+			return response;
+		}
+	);
+
+export const
+	getBusinessReportByAdmin = createAsyncThunk(
+		'orders/getBusinessReportByAdmin',
+		async (params: QueryParamsType) => {
+			const response = await api.order.getBusinessReportByAdmin(params);
+			return response;
+		}
+	);
+
+export const
+	getBusinessReportByStore = createAsyncThunk(
+		'orders/getBusinessReportByStore',
+		async (params: QueryParamsType) => {
+			const response = await api.order.getBusinessReportByStore(params);
+			return response;
+		}
+	);
+
 export const orderSlice = createSlice({
 	name: 'order',
 	initialState: {

@@ -1,7 +1,7 @@
 import ReactApexChart from 'react-apexcharts';
 
 
-type MiniCartProps = {
+type PieChartListProductProps = {
 	data: {
 		product_name: string;
 		total: number;
@@ -10,7 +10,7 @@ type MiniCartProps = {
 };
 
 
-const PieChartListProduct = ({ data }: MiniCartProps) => {
+const PieChartListProduct = ({ data }: PieChartListProductProps) => {
 	const series = data.map(item => item.total);
 	const labels = data.map(item => {
 		const words = item.product_name.split(' ');
@@ -35,7 +35,7 @@ const PieChartListProduct = ({ data }: MiniCartProps) => {
 			}
 		}],
 		chart: {
-			width: 380 // change this to a number
+			width: 600
 		},
 		states: {
 			hover: {
@@ -57,7 +57,7 @@ const PieChartListProduct = ({ data }: MiniCartProps) => {
 
 	return (
 		<ReactApexChart options={options} series={series} type="pie" width='100%'
-			height='55%' />
+			height='100%' />
 	);
 };
 

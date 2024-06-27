@@ -13,31 +13,34 @@ import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "@stores/store";
 import { useEffect, useState } from "react";
 import { AdminOrderDetailResponse } from "@interfaces/order";
-import { getAdminOrderDetail, updateStatusOrderByDelivery } from "@stores/slices/orders-slice";
+import { getAdminOrderDetail, getDeliveryOrderDetail, updateStatusOrderByDelivery } from "@stores/slices/orders-slice";
 import { Chip } from "@components/Chip";
 import { Button, Flex } from "@chakra-ui/react";
 import { vi } from "date-fns/locale";
 import { getColorStatusOrder, getStrStatusOrder } from "@/utils/utils";
+import { OrderStatus } from "@/utils/constants";
 
 const OrderDetailDelivery = () => {
 
 	const { id } = useParams();
 	const dispatch = useDispatch<AppThunkDispatch>();
 	const navigate = useNavigate();
-	const [response, setResponse] = useState<AdminOrderDetailResponse>();
+	const [response, setResponse] = useState<AdminOrderDetailResponse>(null);
 
 	useEffect(() => {
-		dispatch(getAdminOrderDetail(id)).unwrap().then((res) => {
+		dispatch(getDeliveryOrderDetail(id)).unwrap().then((res) => {
 			if (res.data.error_code) {
 				navigate("/401");
 				return;
 			}
 			setResponse(res.data);
+			console.log("12312 " + res.data.data.order.status);
+
 		});
 	}, []);
 
 	const handleUpdateStatus = (status) => {
-		if (response.data.order.status === 3) {
+		if (response.data.order.status === OrderStatus.ORDER_PREPARED) {
 			dispatch(updateStatusOrderByDelivery({
 				id: response.data.order.order_id,
 				status: status
@@ -74,6 +77,7 @@ const OrderDetailDelivery = () => {
 					Quay lại
 				</Button>
 			</Box>
+
 			<Card p="0px" mb="30px" overflow="hidden">
 				<TableRow bg="gray.200" p="12px" boxShadow="none" borderRadius={0}>
 					<FlexBox
@@ -83,11 +87,11 @@ const OrderDetailDelivery = () => {
 						alignItems="center"
 					>
 						<Typography fontSize="14px" color="text.muted" mr="4px">
-							Order ID:
+							Mã đơn hàng:
 						</Typography>
 						<Typography fontSize="14px" fontWeight={"bold"}>{id.toUpperCase()}</Typography>
 					</FlexBox>
-					{response &&
+					{response && response.data &&
 						<FlexBox
 							className="pre"
 							flex="0 0 0 !important"
@@ -112,7 +116,7 @@ const OrderDetailDelivery = () => {
 				</TableRow>
 
 				<Box py="0.5rem">
-					{response && response.data.order.order_items.map((item) => (
+					{response && response.data && response.data.order.order_items.map((item) => (
 						<FlexBox
 							px="1rem"
 							py="0.5rem"
@@ -159,7 +163,7 @@ const OrderDetailDelivery = () => {
 				</Box>
 			</Card>
 
-			{response &&
+			{response && response.data &&
 				<Grid container spacing={6}>
 					<Grid item lg={6} md={6} xs={12} style={{ display: 'flex' }}>
 						<Card p="20px 30px" mb="1.5rem" style={{ flexGrow: 1 }}>
@@ -222,7 +226,7 @@ const OrderDetailDelivery = () => {
 
 				</Grid>
 			}
-			{response && (response.data.order.status === 3) &&
+			{response && (response.data.order.status === OrderStatus.ORDER_PREPARED) &&
 				<Flex direction="row" justifyContent="space-between">
 					<Button
 						bg="red"
@@ -250,6 +254,7 @@ const OrderDetailDelivery = () => {
 				</Flex>
 			}
 		</Box>
+
 	);
 }
 

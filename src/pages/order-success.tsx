@@ -2,10 +2,14 @@ import { Text } from "@chakra-ui/react";
 import Button from "@components/buttons/Button";
 import FlexBox from "@components/FlexBox";
 import Image from "@components/Image";
+import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
 const OrderSuccess = () => {
 	const navigate = useNavigate();
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, [])
 
 	const handleGoBack = async () => {
 		navigate("/search");

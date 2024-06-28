@@ -15,7 +15,7 @@ import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "@stores/store";
 import { useEffect, useState } from "react";
 import {
-	OrderItemStore, StoreOrderDetailResponse
+	StoreOrderDetailResponse
 } from "@interfaces/order";
 import {
 	cancelOrderItem,
@@ -24,7 +24,7 @@ import {
 } from "@stores/slices/orders-slice";
 import { Chip } from "@components/Chip";
 import { Tooltip } from "@chakra-ui/react";
-import { Action, Content, OrderStatus, Title } from "@/utils/constants";
+import { Action, Content, OrderStatus, Prepare, Title } from "@/utils/constants";
 import { vi } from "date-fns/locale";
 import { getColorStatusOrder, getStrStatusOrder } from "@/utils/utils";
 
@@ -45,10 +45,10 @@ const OrderDetails = () => {
 	}, []);
 
 	const handleCancelOrder = () => {
-		dispatch(cancelOrderItem({
+		dispatch(updateOrderItemStatusByStore({
 			id: response.data.order_id,
 			body: {
-				item_id: response.data.order_items[0].item_id,
+				message: Content.CANCEL_ORDER_SUCCESS,
 				status: OrderStatus.ORDER_CANCEL_BY_STORE
 			}
 		})).unwrap().then((res) => {
@@ -57,16 +57,16 @@ const OrderDetails = () => {
 				return;
 			}
 			const newResponse = { ...response };
-			newResponse.data.status = 7;
+			newResponse.data.status = OrderStatus.ORDER_CANCEL_BY_STORE;
 			setResponse(newResponse);
 		});
 	}
 
-	const handleConfirmOrder = (item: OrderItemStore, status: number) => {
+	const handleConfirmOrder = (status: number) => {
 		dispatch(updateOrderItemStatusByStore({
 			id: response.data.order_id,
 			body: {
-				item_id: item.item_id,
+				message: Content.CONFIRM_ORDER_SUCCESS,
 				status,
 			}
 		})).unwrap().then((res) => {
@@ -75,10 +75,9 @@ const OrderDetails = () => {
 				return;
 			}
 			const newResponse = { ...response };
+			newResponse.data.status = status;
 			newResponse.data.order_items = newResponse.data.order_items.map((i) => {
-				if (i.item_id === item.item_id) {
-					i.is_prepared = 1;
-				}
+				i.is_prepared = Prepare.YES;
 				return i;
 			});
 			setResponse(newResponse);
@@ -172,27 +171,9 @@ const OrderDetails = () => {
 									</FlexBox>)
 							}
 
-							{response.data.status === OrderStatus.ORDER_CREATED && item.is_prepared === 0 && (
-								<FlexBox flex="0 0 0 !important" m="6px" alignItems="center">
-									<Tooltip label="Confirm Order" fontSize="md">
-										<Button bg="green" color="white"
-											onClick={() => handleConfirmOrder(item, OrderStatus.ORDER_PREPARED)}
-										>{Action.CONFIRM}</Button>
-									</Tooltip>
-								</FlexBox>
-							)
-							}
 
-							{response.data.status === OrderStatus.ORDER_PREPARED && item.is_prepared === 0 && (
-								<FlexBox flex="0 0 0 !important" m="6px" alignItems="center">
-									<Tooltip label="Confirm Order" fontSize="md">
-										<Button bg="green" color="white"
-											onClick={() => handleConfirmOrder(item, OrderStatus.ORDER_DELIVERY)}
-										>{Action.CONFIRM_DELIVERY}</Button>
-									</Tooltip>
-								</FlexBox>
-							)
-							}
+
+
 						</FlexBox>
 					))}
 				</Box>
@@ -279,13 +260,28 @@ const OrderDetails = () => {
 										" Thanh toán bằng paypal" : " Thanh toán bằng ví Latipe"}</Typography>
 							</Card>
 
-							{response && response.data.status === OrderStatus.ORDER_CREATED &&
-								<Button variant="contained" color="primary" ml="auto"
-									onClick={handleCancelOrder}
-								>
-									{Action.CANCEL_ORDER}
-								</Button>
-							}
+							{response && response.data.status === OrderStatus.ORDER_CREATED && (
+								<FlexBox justifyContent="flex-end" alignItems="center" gap="20px">
+									<Button style={{ color: 'white', marginRight: '20px' }}
+										variant="contained"
+										color="error" // Changed to 'error' for a red theme color
+										onClick={handleCancelOrder}
+										aria-label="Cancel Order"
+									>
+										{Action.CANCEL_ORDER}
+									</Button>
+									<Tooltip label="Confirm Order" fontSize="md">
+										<Button style={{ color: 'white' }}
+											variant="contained"
+											color="success"
+											onClick={() => handleConfirmOrder(OrderStatus.ORDER_PREPARED)}
+											aria-label="Confirm Order"
+										>
+											{Action.CONFIRM}
+										</Button>
+									</Tooltip>
+								</FlexBox>
+							)}
 						</Grid>
 					)}
 

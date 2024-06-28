@@ -4,12 +4,19 @@ export const LoadingOverlay = ({ isLoading }) => {
 	return (
 		<Modal isOpen={isLoading} isCentered onClose={() => { }}>
 			<ModalOverlay
-				bg="blackAlpha.300"
+				bg="blackAlpha.500" // Increased opacity for better visibility
 				display="flex"
 				alignItems="center"
 				justifyContent="center"
 			>
-				<Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
+				<Spinner
+					thickness="6px"
+					speed="0.65s"
+					emptyColor="gray.200"
+					color="blue.500"
+					size="xl"
+					label="Loading..." // Accessibility improvement
+				/>
 			</ModalOverlay>
 		</Modal>
 	);

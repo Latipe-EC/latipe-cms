@@ -52,7 +52,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
 		if (cartSelected.length === 0) {
 			return;
 		}
-		navigate(`/checkout?cartIds=${cartSelected.join(',')}`)
+		window.location.href = `/checkout?cartIds=${cartSelected.join(',')}`;
 	}
 
 	const getTotalPrice = () => {
@@ -230,6 +230,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
 						color="primary"
 						m="1rem 1rem 0.75rem"
 						onClick={toggleSidenav}
+						disabled={cartSelected.length === 0}
 					>
 						<Typography fontWeight={600} onClick={() => handleBuyNow()}>
 							Mua ngay (₫{getTotalPrice().toLocaleString('vi-VN')})

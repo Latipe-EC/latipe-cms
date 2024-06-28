@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "@stores/store";
 import { useEffect, useState } from "react";
 import { AdminOrderDetailResponse } from "@interfaces/order";
-import { getAdminOrderDetail, getDeliveryOrderDetail, updateStatusOrderByDelivery } from "@stores/slices/orders-slice";
+import { getDeliveryOrderDetail, updateStatusOrderByDelivery } from "@stores/slices/orders-slice";
 import { Chip } from "@components/Chip";
 import { Button, Flex } from "@chakra-ui/react";
 import { vi } from "date-fns/locale";
@@ -39,29 +39,19 @@ const OrderDetailDelivery = () => {
 		});
 	}, []);
 
-	const handleUpdateStatus = (status) => {
-		if (response.data.order.status === OrderStatus.ORDER_PREPARED) {
-			dispatch(updateStatusOrderByDelivery({
-				id: response.data.order.order_id,
-				status: status
-			})).unwrap().then((res) => {
-				if (res.data.error_code) {
-					navigate("/401");
-					return;
-				}
-				const newResponse = { ...response };
-				newResponse.data.order.status = status;
-				setResponse(newResponse);
-			});
-		} else if (response.data.order.status === 4) {
-			dispatch(getAdminOrderDetail(id)).unwrap().then((res) => {
-				if (res.data.error_code) {
-					navigate("/401");
-					return;
-				}
-				setResponse(res.data);
-			});
-		}
+	const handleUpdateStatus = (status: number) => {
+		dispatch(updateStatusOrderByDelivery({
+			id: response.data.order.order_id,
+			status: status
+		})).unwrap().then((res) => {
+			if (res.data.error_code) {
+				navigate("/401");
+				return;
+			}
+			const newResponse = { ...response };
+			newResponse.data.order.status = status;
+			setResponse(newResponse);
+		});
 	};
 	return (
 		<Box
@@ -231,7 +221,7 @@ const OrderDetailDelivery = () => {
 					<Button
 						bg="red"
 						color="white"
-						onClick={() => handleUpdateStatus(7)}
+						onClick={() => handleUpdateStatus(OrderStatus.ORDER_CANCEL_BY_DELI)}
 						p={4}
 						borderRadius="md"
 						_hover={{ bg: "red.400" }}
@@ -242,7 +232,35 @@ const OrderDetailDelivery = () => {
 					<Button
 						bg="green"
 						color="white"
-						onClick={() => handleUpdateStatus(4)}
+						onClick={() => handleUpdateStatus(OrderStatus.ORDER_DELIVERY)}
+						p={4}
+						borderRadius="md"
+						ml={2}
+						_hover={{ bg: "green.400" }}
+					// _hover={{ filter: "blur(2px)" }}
+					>
+						Đã tiếp nhận đơn hàng
+					</Button>
+				</Flex>
+			}
+
+			{response && (response.data.order.status === OrderStatus.ORDER_DELIVERY) &&
+				<Flex direction="row" justifyContent="space-between">
+					<Button
+						bg="red"
+						color="white"
+						onClick={() => handleUpdateStatus(OrderStatus.ORDER_CANCEL_USER_REJECT)}
+						p={4}
+						borderRadius="md"
+						_hover={{ bg: "red.400" }}
+						mr={2}
+					>
+						Người mua không nhận hàng
+					</Button>
+					<Button
+						bg="green"
+						color="white"
+						onClick={() => handleUpdateStatus(OrderStatus.ORDER_SHIPPING_FINISH)}
 						p={4}
 						borderRadius="md"
 						ml={2}

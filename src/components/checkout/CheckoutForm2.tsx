@@ -30,6 +30,7 @@ import {
 	RadioGroup,
 	Spinner,
 	Text,
+	Button as ButtonCharkra,
 	Tooltip,
 } from "@chakra-ui/react";
 import { FaSync } from "react-icons/fa";
@@ -40,10 +41,10 @@ import Divider from "@components/Divider";
 import './Checkout2.css';
 import { getListDelivery } from "@stores/slices/deliveries-slice";
 import { checkVoucher } from "@stores/slices/promotions-slice";
-import { CloseIcon } from "@chakra-ui/icons";
+import { AddIcon, CloseIcon } from "@chakra-ui/icons";
 import { createOrderV2 } from "@stores/slices/orders-slice";
 import { Action, ContentAlter, DiscountType, ErrorMessage, PaymentMethodName, TitleAlter, VoucherStatus, VoucherType, paymentMethodList } from "@/utils/constants";
-import { getPaymentMethod } from "@/utils/utils";
+import { getPaymentMethod, isBlank } from "@/utils/utils";
 import { RealDiscount } from "@/api/interface/promotion";
 import { PromotionData } from "@/api/interface/order";
 import { removeCartItem } from "@/stores/slices/carts-slice";
@@ -174,11 +175,11 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 	}
 
 	// Display voucher price
-	const renderVoucherPrice = (voucher): RealDiscount => {
+	const renderVoucherPrice = (voucher, totalMoneyStore = 0, discountFromStore = 0): RealDiscount => {
 
 		const result = {
 			totalPrice: 0,
-			deliveries: []
+			deliveries: [],
 		}
 		let totalPrice = 0;
 
@@ -219,6 +220,7 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 					}
 				}
 			}
+
 			// case 2: voucher usable is greater than delivery
 			else {
 				for (const key in sortedObjPriceDelivery) {
@@ -232,12 +234,23 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 			result.totalPrice = totalPrice;
 			return result;
 		}
+		// Voucher discount store
+		else if (voucher.voucher_type === VoucherType.STORE) {
+			const { discount_type, discount_percent, discount_value, maximum_value } = voucher.discount_data;
+			const discount = discount_type === DiscountType.PERCENT_DISCOUNT ?
+				discount_percent * totalMoneyStore : discount_value;
+			result.totalPrice = maximum_value ? Math.min(discount, maximum_value) : discount;
+			console.log(
+				discount, maximum_value
+			);
+			return result;
+		}
 		// Voucher discount product
 		else {
 			const { discount_type, discount_percent, discount_value, maximum_value } = voucher.discount_data;
 			const discount = discount_type === DiscountType.PERCENT_DISCOUNT ?
-				discount_percent * getTotalPrice : discount_value;
-			result.totalPrice = Math.min(discount, maximum_value);
+				discount_percent * (getTotalPrice - Math.min(totalMoneyStore, discountFromStore)) : discount_value;
+			result.totalPrice = maximum_value ? Math.min(discount, maximum_value) : discount;
 			return result;
 		}
 
@@ -251,8 +264,9 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 			return;
 		}
 
+		const req = [...vouchers.map(x => x.voucher_code), voucher];
 		dispatch(checkVoucher({
-			vouchers: [...vouchers.map(x => x.voucher_code), voucher]
+			vouchers: req
 		})).unwrap().then((res) => {
 			if (res.status !== 200) {
 				setErrorVoucher(ErrorMessage.INVALID_VOUCHER);
@@ -260,8 +274,15 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 			}
 
 			const vouchers = res.data.data.items;
+
+			// check amount voucher
+			if (req.length !== vouchers.length) {
+				setErrorVoucher(ErrorMessage.INVALID_VOUCHER);
+				return;
+			}
+
+			// check voucher usable
 			if (vouchers.some(x => x.status !== VoucherStatus.ACTIVE)
-				|| vouchers.some(x => x.voucher_counts === 0)
 				|| vouchers.some(x => x.voucher_counts === 0)
 				|| vouchers.some(x => x.count_usable === 0)
 			) {
@@ -269,12 +290,78 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 				return;
 			}
 
-			/// Check voucher
-			for (const v of vouchers) {
-				if (v.voucher_require && v.voucher_require.min_require > 0) {
-					if (getTotalPrice < v.voucher_require.min_require) {
+			// check voucher valid
+			const voucherStore = vouchers.filter(x => x.voucher_type === VoucherType.STORE);
+			if (voucherStore.length > 1) {
+				setErrorVoucher(ErrorMessage.INVALID_VOUCHER);
+				return;
+			}
+
+			const voucherDelivery = vouchers.filter(x => x.voucher_type === VoucherType.DELIVERY);
+			if (voucherDelivery.length > 1) {
+				setErrorVoucher(ErrorMessage.INVALID_VOUCHER);
+				return;
+			}
+
+			const voucherProduct = vouchers.filter(x => x.voucher_type === VoucherType.PRODUCT);
+			if (voucherProduct.length > 1) {
+				setErrorVoucher(ErrorMessage.INVALID_VOUCHER);
+				return;
+			}
+
+			// check voucher store
+
+			let discountStore: RealDiscount = null;
+			let totalMoneyProductByVoucherStore = 0;
+			if (voucherStore.length > 0) {
+				const tmpVoucherStore = voucherStore[0];
+
+				if (!products.some(x => x.storeId === tmpVoucherStore.owner_voucher)) {
+					setErrorVoucher(ErrorMessage.INVALID_VOUCHER);
+					return;
+				}
+
+				const prodStores = products.filter(x => x.storeId === tmpVoucherStore.owner_voucher);
+				totalMoneyProductByVoucherStore = prodStores.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+				if (tmpVoucherStore.voucher_require && tmpVoucherStore.voucher_require.min_require > 0) {
+					if (totalMoneyProductByVoucherStore < tmpVoucherStore.voucher_require.min_require) {
 						setErrorVoucher(ErrorMessage.VOUCHER_REQUIRE_NOT_MET);
 						return;
+					}
+
+					if (tmpVoucherStore.voucher_require.payment_method
+						&& tmpVoucherStore.voucher_require.payment_method !== getPaymentMethod(methodPayment)) {
+						setErrorVoucher(ErrorMessage.VOUCHER_REQUIRE_NOT_MET);
+						return;
+					}
+
+					if (tmpVoucherStore.count_usable === 0) {
+						setErrorVoucher(ErrorMessage.VOUCHER_USED);
+						return;
+					}
+				}
+				// set back to store voucher
+				discountStore = renderVoucherPrice(tmpVoucherStore);
+				vouchers[vouchers.findIndex(x => x.voucher_type === VoucherType.STORE)].real_discount = discountStore;
+			}
+
+
+			for (const v of vouchers) {
+				if (v.voucher_type === VoucherType.STORE) {
+					continue;
+				}
+				if (v.voucher_require && v.voucher_require.min_require > 0) {
+					if (v.voucher_type === VoucherType.PRODUCT) {
+						if (getTotalPrice - Math.min(totalMoneyProductByVoucherStore, discountStore ? discountStore.totalPrice : 0) < v.voucher_require.min_require) {
+							setErrorVoucher(ErrorMessage.VOUCHER_REQUIRE_NOT_MET);
+							return;
+						}
+					} else {
+						if (getTotalPrice < v.voucher_require.min_require) {
+							setErrorVoucher(ErrorMessage.VOUCHER_REQUIRE_NOT_MET);
+							return;
+						}
 					}
 				}
 
@@ -287,9 +374,14 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 					setErrorVoucher(ErrorMessage.VOUCHER_USED);
 					return;
 				}
-				v.real_discount = renderVoucherPrice(v);
-			}
 
+				if (v.voucher_type === VoucherType.PRODUCT) {
+					v.real_discount = renderVoucherPrice(v, totalMoneyProductByVoucherStore, discountStore ? discountStore.totalPrice : 0);
+
+				} else {
+					v.real_discount = renderVoucherPrice(v);
+				}
+			}
 
 			setVouchers([...vouchers]);
 			setErrorVoucher("");
@@ -516,9 +608,14 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 											<H5 className="title" fontSize="14px" onClick={() => navigate(`/products/${item.productId}`)}>
 												{item.productName}
 											</H5>
-											<Tiny color="text.muted">
-												{item.price.toFixed(2)}₫ x {item.quantity}
-											</Tiny>
+											<Flex justifyContent={'space-between'} my={2}>
+												<Tiny color="text.muted">
+													{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)} x {item.quantity}
+												</Tiny>
+												<Tiny color="text.muted">
+													Thuộc tính: {item.nameOption}
+												</Tiny>
+											</Flex>
 											<Typography
 												fontWeight={600}
 												fontSize="14px"
@@ -534,8 +631,8 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 							))}
 							{!deliveries || deliveries.length === 0 && <Box mt={2} color="red">Vui lòng chọn địa chỉ nhận hàng</Box>}
 							{deliveries && deliveries.length > 0 &&
-								<Box my={2} key="k-b-del">
-									<Box>Hình thức giao hàng</Box>
+								<Box mt={4} my={2} key="k-b-del">
+									<Box><strong>Hình thức giao hàng</strong></Box>
 									<Grid container spacing={6} key="container-delivery">
 										{deliveries.map((item, ind) => (
 											<Grid item md={4} sm={6} xs={12} key={`del-grid-${ind}`}>
@@ -623,17 +720,16 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 						))}
 					</Grid>
 
-					<Paragraph
-						className="cursor-pointer"
-						color="primary.main"
-						mt="1.5rem"
-						lineHeight="2"
+
+					<ButtonCharkra
+						leftIcon={<AddIcon />}
+						colorScheme="teal"
+						variant="solid"
 						onClick={toggleHasVoucher}
-						fontWeight="medium"
-						fontSize="lg"
+						mt="1.5rem"
 					>
-						Thêm voucher.
-					</Paragraph>
+						Thêm voucher
+					</ButtonCharkra>
 					{vouchers.length > 0 &&
 						vouchers.map((voucher, index) => (
 							<Flex key={`vou-${index}`} direction="row" alignItems="center" mb={2}>
@@ -663,7 +759,6 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 							</Flex>
 						))
 					}
-					{errorVoucher && <Text color="red.500">{errorVoucher}</Text>}
 					{hasVoucher && (
 						<>
 							<FlexBox mt="0.5rem" maxWidth="500px">
@@ -680,17 +775,18 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 									type="button"
 									ml="1rem"
 									onClick={() => {
-										if (voucher === "")
+										if (isBlank(voucher))
 											return
 										handleAddVoucher(voucher);
 										setVoucher("")
 									}}
-									disabled={voucher === ""}
+									disabled={isBlank(voucher)}
 								>
 									{Action.APPLY}
 								</Button>
 							</FlexBox></>
 					)}
+					{errorVoucher && <Text color="red.500">{errorVoucher}</Text>}
 
 					<Button
 						variant="contained"

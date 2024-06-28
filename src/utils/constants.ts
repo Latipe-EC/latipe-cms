@@ -189,6 +189,8 @@ export enum Content {
 	CANCLED = 'Đã hủy',
 	REFUND = 'Trả hàng/hoàn tiền',
 	SEARCH_NOW = 'Tìm kiếm ngay',
+	CONFIRM_ORDER_SUCCESS = 'Xác nhận đơn hàng thành công',
+	CANCEL_ORDER_SUCCESS = 'Hủy đơn hàng thành công',
 }
 
 export enum Title {
@@ -250,6 +252,12 @@ export class OrderStatus {
 	public static readonly ORDER_CANCEL_BY_DELI: number = -5;
 	public static readonly ORDER_CANCEL_USER_REJECT: number = -7;
 	public static readonly ORDER_FAILED: number = -1;
+}
+
+export class Prepare {
+	public static readonly YES: number = 1;
+	public static readonly NO: number = 0;
+
 }
 
 

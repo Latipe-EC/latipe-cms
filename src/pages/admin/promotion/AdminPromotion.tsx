@@ -38,7 +38,7 @@ import FlexBox from '@components/FlexBox';
 
 // import { DiscountData, ItemVoucher, VoucherRequire } from '../../../api/interface/promotion';
 import { createVoucher, getAllPromotion, updateStatusVoucher } from '@stores/slices/promotions-slice';
-import { convertDateTimeYYYYMMDD, handleApiCallWithToast } from "../../../utils/utils";
+import { checkContainSpace, convertDateTimeYYYYMMDD, deepTrim, handleApiCallWithToast } from "../../../utils/utils";
 import { Chip } from '@components/Chip';
 import { Small } from '@components/Typography';
 import { Action, ContentToast, DiscountType, PaymentMethodName, TitleToast, VoucherStatus, VoucherType } from '@/utils/constants';
@@ -232,7 +232,26 @@ const PromotionsAdmin = () => {
 	);
 
 	const handleCreate = () => {
-		const req = { ...promotion }
+		const startDate = new Date(promotion.stated_time);
+		const endDate = new Date(promotion.ended_time);
+
+		if (checkContainSpace(promotion.voucher_code)) {
+			toast({
+				title: TitleToast.ERROR,
+				description: "Mã voucher không được chứa khoảng trắng",
+				status: "error",
+				duration: 2000,
+				isClosable: true,
+				position: "top-right",
+			})
+			return;
+		}
+
+		const req = {
+			...promotion,
+			stated_time: startDate.toISOString().slice(0, 16),
+			ended_time: endDate.toISOString().slice(0, 16)
+		}
 		if (req.voucher_require.payment_method === 0) {
 			req.voucher_require = {
 				...req.voucher_require,
@@ -242,7 +261,7 @@ const PromotionsAdmin = () => {
 
 		handleApiCallWithToast(dispatch,
 			createVoucher,
-			req,
+			deepTrim(req),
 			null,
 			TitleToast.ADD_VOUCHER,
 			TitleToast.SUCCESS,
@@ -477,8 +496,8 @@ const PromotionsAdmin = () => {
 								<FormControl my={4} isInvalid={!!startDateError} isRequired>
 									<FormLabel>Ngày bắt đầu</FormLabel>
 									<Input
-										type='date'
-										value={new Date(promotion.stated_time).toISOString().slice(0, 10)}
+										type="datetime-local"
+										value={new Date(promotion.stated_time).toISOString().slice(0, 16)}
 										onChange={(e) => {
 											if (new Date(e.target.value) < new Date(promotion.ended_time)) {
 												setPromotion({
@@ -500,8 +519,8 @@ const PromotionsAdmin = () => {
 								<FormControl my={4} isInvalid={!!endDateError} isRequired>
 									<FormLabel>Ngày kết thúc</FormLabel>
 									<Input
-										type='date'
-										value={new Date(promotion.ended_time).toISOString().slice(0, 10)}
+										type="datetime-local"
+										value={new Date(promotion.ended_time).toISOString().slice(0, 16)}
 										onChange={(e) => {
 											if (new Date(e.target.value) > new Date(promotion.stated_time)) {
 												setPromotion({

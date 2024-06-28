@@ -7,7 +7,7 @@ import Pagination from "@/components/pagination/Pagination";
 import { createVoucherVendor, getAllVendorPromotion, updateVendorStatusVoucher } from "@/stores/slices/promotions-slice";
 import { AppThunkDispatch, RootState, useAppSelector } from "@/stores/store";
 import { Action, ContentToast, DiscountType, PaymentMethodName, TitleToast, VoucherStatus, VoucherType } from "@/utils/constants";
-import { handleApiCallWithToast } from "@/utils/utils";
+import { checkContainSpace, handleApiCallWithToast } from "@/utils/utils";
 import { ViewIcon, WarningIcon } from "@chakra-ui/icons";
 import { Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Grid, Icon, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Spinner, Table, Tbody, Td, Text, Textarea, Thead, Tr, useToast } from "@chakra-ui/react";
 import { format } from "date-fns";
@@ -65,6 +65,18 @@ const VoucherList = () => {
 	const handleCreate = () => {
 		const startDate = new Date(promotion.stated_time);
 		const endDate = new Date(promotion.ended_time);
+
+		if (checkContainSpace(promotion.voucher_code)) {
+			toast({
+				title: TitleToast.ERROR,
+				description: "Mã voucher không được chứa khoảng trắng",
+				status: "error",
+				duration: 2000,
+				isClosable: true,
+				position: "top-right",
+			})
+			return;
+		}
 
 		const req = {
 			...promotion,

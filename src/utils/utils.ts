@@ -123,8 +123,13 @@ export const handleApiCallWithToast =
 		toast,
 		Spinner,
 		CallbackSuccess = null,
-		CallbackError = null
+		CallbackError = null,
+		CallbackStart = null,
+		CallbackFinnaly = null
 	) => {
+
+		if (CallbackStart)
+			CallbackStart();
 		const loadingToastId = toast({
 			title: titleProccess,
 			description: Spinner,
@@ -178,6 +183,10 @@ export const handleApiCallWithToast =
 				});
 				if (CallbackError)
 					CallbackError();
+			}).finally(() => {
+				if (CallbackFinnaly) {
+					CallbackFinnaly();
+				}
 			});
 	};
 
@@ -190,7 +199,7 @@ export const getStrStatusOrder = (status: number): string => {
 		case OrderStatus.ORDER_PREPARED:
 			return "Đang chuẩn bị đơn hàng";
 		case OrderStatus.ORDER_DELIVERY:
-			return "Đang trên đường vận chu1yển";
+			return "Đang trên đường vận chuyển";
 		case OrderStatus.ORDER_SHIPPING_FINISH:
 			return "Vận chuyển thành công";
 		case OrderStatus.ORDER_COMPLETED:
@@ -284,7 +293,6 @@ export const removeTagHtml = (str: string) => str.replace(/<[^>]*>/g, '');
 
 export const downloadFile = (blob: Blob, fileName: string) => {
 
-
 	const url = window.URL.createObjectURL(blob);
 	const link = document.createElement('a');
 	link.href = url;
@@ -293,5 +301,24 @@ export const downloadFile = (blob: Blob, fileName: string) => {
 	link.click();
 	document.body.removeChild(link);
 	window.URL.revokeObjectURL(url);
+}
 
+export const deepTrim = (obj: unknown) => {
+	if (typeof obj === 'string') {
+		return obj.trim();
+	} else if (Array.isArray(obj)) {
+		return obj.map(deepTrim);
+	} else if (typeof obj === 'object' && obj !== null) {
+		return Object.keys(obj).reduce((acc, key) => {
+			acc[key] = deepTrim(obj[key]);
+			return acc;
+		}, {} as Record<string, unknown>);
+	} else {
+		return obj;
+	}
+}
+
+// Define and export the checkContainSpace function
+export function checkContainSpace(str: string): boolean {
+	return /\s/.test(str);
 }

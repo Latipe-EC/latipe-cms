@@ -24,16 +24,18 @@ const CheckoutSummary2: React.FC<CheckoutSummary2Props> = ({
 	const [totalPrice, setTotalPrice] = useState(0);
 	const [feeDelivery, setFeeDelivery] = useState(0);
 	const [sale, setSale] = useState(0);
+	const [saleFromStore, setSaleFromStore] = useState(0);
 
 	useEffect(() => {
 		setPriceProduct(calcTotalPrice());
-		setTotalPrice(calcTotalPrice() + calcPriceDelivery() - saleProduct());
+		setTotalPrice(calcTotalPrice() + calcPriceDelivery() - calcSaleProduct());
 	}, [products]);
 
 	useEffect(() => {
-		setSale(saleProduct());
+		setSale(calcSaleProduct());
 		setFeeDelivery(calcPriceDelivery());
-		setTotalPrice(calcTotalPrice() + calcPriceDelivery() - saleProduct());
+		setTotalPrice(calcTotalPrice() + calcPriceDelivery() - calcSaleProduct() - calcDiscountStore());
+		setSaleFromStore(calcDiscountStore());
 	}, [vouchers]);
 
 	useEffect(() => {
@@ -44,7 +46,7 @@ const CheckoutSummary2: React.FC<CheckoutSummary2Props> = ({
 		}
 
 		setFeeDelivery(calcPriceDelivery());
-		setTotalPrice(calcTotalPrice() + calcPriceDelivery() - saleProduct());
+		setTotalPrice(calcTotalPrice() + calcPriceDelivery() - calcSaleProduct());
 	}, [listDeliveries]);
 
 	const calcTotalPrice = () => {
@@ -61,12 +63,18 @@ const CheckoutSummary2: React.FC<CheckoutSummary2Props> = ({
 			voucherDelivery[0].real_discount.totalPrice;
 	}
 
-	const saleProduct = () => {
+	const calcSaleProduct = () => {
 		const voucherProd = vouchers.filter(item => item.voucher_type === VoucherType.PRODUCT);
 		if (voucherProd.length === 0) return 0;
 		return voucherProd[0].real_discount.totalPrice;
 	}
 
+	const calcDiscountStore = () => {
+		const voucherStore = vouchers.filter(item => item.voucher_type === VoucherType.STORE);
+		if (voucherStore.length === 0) return 0;
+		return voucherStore[0].real_discount.totalPrice;
+
+	}
 	return (
 		<Box>
 			<Typography color="secondary.900" fontWeight="700" mb="1.5rem">
@@ -112,9 +120,14 @@ const CheckoutSummary2: React.FC<CheckoutSummary2Props> = ({
 					feeDelivery).toLocaleString('vi-VN')}₫</Typography>
 			</FlexBox>
 
-			<FlexBox justifyContent="space-between" alignItems="center" mb="1.5rem">
+			<FlexBox justifyContent="space-between" alignItems="center" mb="0.5rem">
 				<Typography color="text.hint">Giảm giá sản phẩm:</Typography>
 				<Typography fontWeight="700">{sale.toLocaleString('vi-VN')}₫</Typography>
+			</FlexBox>
+
+			<FlexBox justifyContent="space-between" alignItems="center" mb="1.5rem">
+				<Typography color="text.hint">Giảm giá từ cửa hàng:</Typography>
+				<Typography fontWeight="700">{saleFromStore.toLocaleString('vi-VN')}₫</Typography>
 			</FlexBox>
 
 			<Divider bg="gray.300" mb="0.5rem" />

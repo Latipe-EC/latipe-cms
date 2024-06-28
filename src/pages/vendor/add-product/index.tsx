@@ -56,6 +56,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Path, ContentToast, TitleToast } from "@/utils/constants";
 import { handleApiCallWithToast, isBlank } from "@/utils/utils";
+import { LoadingOverlay } from "@/components/loading/LoadingOverlay";
 
 const AddProduct = () => {
 
@@ -79,6 +80,7 @@ const AddProduct = () => {
 	const dispatch = useDispatch<AppThunkDispatch>();
 	const toast = useToast();
 	const navigate = useNavigate();
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleDrop = (acceptedFiles: any) => {
 		setImages((prevFiles) => [...prevFiles, ...acceptedFiles]);
@@ -363,12 +365,20 @@ const AddProduct = () => {
 			ContentToast.ADD_PRODUCT_ERROR,
 			navigate,
 			toast,
-			<Spinner />)
-
+			<Spinner />,
+			null,
+			null,
+			() => {
+				setIsLoading(true)
+			}, () => {
+				setIsLoading(false)
+			})
 	}
 
 	return (
 		<Box py={8}>
+			<LoadingOverlay isLoading={isLoading} />
+
 			<Modal size={"6xl"} isOpen={isModalCateOpen} onClose={() => {
 				setModalCateOpen(false);
 				setSelectedCategory([])

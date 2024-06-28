@@ -97,7 +97,7 @@ const OrderDetails = () => {
 		dispatch(cancelOrder({ order_id: selectedOrder })).unwrap().then((res) => {
 			if (res.status === 200) {
 				const newOrder = { ...orderDetail };
-				newOrder.order.status = 0;
+				newOrder.order.status = OrderStatus.ORDER_CANCEL_BY_USER;
 				setOrderDetail(newOrder);
 			} else {
 				toast({

@@ -81,11 +81,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 
 	const handleAddToCart = () => {
 
-		if (product.productVariants.length > 0 && (product.productVariants.length
-			!== selectOption.length || selectOption === null)) {
-			return;
-		}
-
 		handleApiCallWithToast(dispatch,
 			addToCart,
 			{
@@ -113,14 +108,39 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 
 		const newSelectOption = [...selectOption];
 		newSelectOption[index] = val;
-		if ((index === 1 && selectOption.length === 1) || selectOption.length === 2) {
-			const optionsTwo = product.productVariants.length === 2 ?
-				product.productVariants[1].options.length : 1;
-			const indexFinal = newSelectOption[0] *
-				optionsTwo + (newSelectOption.length === 2 ? newSelectOption[1] : 0);
+		// if selectOption empty 
+		if (selectOption.length === 0 || (selectOption.length === 1 && selectOption[index] !== undefined)) {
+
 			setSelectedImage({
 				id: 999999,
-				value: product.productVariants[0].options[newSelectOption[0]].image,
+				value: product.productVariants[index].options[val].image ? product.productVariants[index].options[val].image : product.images[0],
+			});
+			let finalIndex = 0;
+
+			if (index === 0) {
+				finalIndex = newSelectOption[index] * product.productVariants[index].options.length
+			} else {
+				finalIndex = val;
+			}
+
+			if (product.productVariants.length === 2) {
+				setSelectQuantity(product.productClassifications[finalIndex].quantity);
+				setSelectPrice(product.productClassifications[finalIndex].price);
+				setSelectPromotionPrice(product.productClassifications[finalIndex].promotionalPrice);
+				setSelectClassification(product.productClassifications[finalIndex].id);
+			}
+			else {
+				setSelectQuantity(product.productClassifications[val].quantity);
+				setSelectPrice(product.productClassifications[val].price);
+				setSelectPromotionPrice(product.productClassifications[val].promotionalPrice);
+				setSelectClassification(product.productClassifications[val].id);
+			}
+			// if product have already 1 option
+		} else {
+			const indexFinal = newSelectOption[0] * product.productVariants[1].options.length + newSelectOption[1];
+			setSelectedImage({
+				id: 999999,
+				value: product.productVariants[0].options[newSelectOption[0]].image ? product.productVariants[0].options[newSelectOption[0]].image : product.images[0],
 			});
 			setSelectQuantity(
 				product.productClassifications[indexFinal].quantity
@@ -130,11 +150,10 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 				product.productClassifications[indexFinal].promotionalPrice
 			);
 			setSelectClassification(product.productClassifications[indexFinal].id);
-			setQuantity(1);
-		} else {
-			setSelectClassification(product.productClassifications[index].id);
 		}
 
+
+		setQuantity(1);
 		setSelectOption(newSelectOption);
 
 	};
@@ -145,7 +164,8 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 		if (user && user.role === "ADMIN")
 			return false
 		if (product.productVariants.length > 0) {
-			if (selectOption.length !== product.productVariants.length)
+			console.log(selectOption);
+			if (selectOption.filter(item => item !== undefined).length !== product.productVariants.length)
 				return false;
 		}
 		return true;
@@ -321,7 +341,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 						<ButtonCharkra
 							onClick={handleAddToCart}
 							leftIcon={<Icon as={FaShoppingCart} children={""} />}
-							disabled={!handleCheckValid()}
+							isDisabled={!handleCheckValid()}
 							bg="#FDF3F4"
 							color={"red"}
 							mr="1rem"

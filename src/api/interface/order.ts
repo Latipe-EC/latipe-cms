@@ -343,7 +343,7 @@ export interface StatusParamRequest {
 
 export interface StatusBodyRequest {
 	body: {
-		item_id: string,
+		message: string,
 		status: number
 	},
 	id: string

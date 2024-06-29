@@ -61,7 +61,7 @@ const CheckoutAlternative = () => {
 	return (
 		<Container my="1.5rem">
 			<Grid container spacing={6}>
-				<Grid item lg={8} md={8} xs={12}>
+				<Grid key={`checkout-alter-`} item lg={8} md={8} xs={12}>
 					<CheckoutForm2
 						products={products}
 						vouchers={vouchers}

@@ -274,7 +274,6 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 			}
 
 			const vouchers = res.data.data.items;
-
 			// check amount voucher
 			if (req.length !== vouchers.length) {
 				setErrorVoucher(ErrorMessage.INVALID_VOUCHER);
@@ -309,8 +308,8 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 				return;
 			}
 
-			// check voucher store
 
+			// check voucher store
 			let discountStore: RealDiscount = null;
 			let totalMoneyProductByVoucherStore = 0;
 			if (voucherStore.length > 0) {

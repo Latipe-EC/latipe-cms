@@ -8,6 +8,7 @@ import PersistProvider from './stores/providers/persist-provider.tsx'
 import { getMessaging, getToken } from 'firebase/messaging'
 import { getApp, getApps, initializeApp } from 'firebase/app';
 import { Api } from '@/api/AxiosClient.ts'
+import { generateUUID } from '@/utils/utils.ts'
 
 const firebaseConfig = {
 	apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -41,12 +42,18 @@ if ('serviceWorker' in navigator) {
 					vapidKey: 'BLL1-N2my4yJIqckvQUV3tt-Pj40dWOv0bokqfi8z-YdRpRW4-tz0gzT3HOF_V4yOTsQbPo1yfWMQu6TjCR-kpo'
 				}).then(async (currentToken) => {
 					if (currentToken) {
-						const res = await api.notification.registerNewDevice({
+
+						if (localStorage.getItem('device_notification_token') === currentToken) {
+							return;
+						}
+
+						await api.notification.registerNewDevice({
 							"device_info": navigator.userAgent,
 							"device_token": currentToken,
 							"device_type": 1
 						})
-						console.log(res);
+						localStorage.setItem('device_notification_token', currentToken);
+						localStorage.setItem('browser_id', generateUUID());
 
 					} else {
 						// Show permission request UI

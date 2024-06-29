@@ -2,6 +2,7 @@ import {
 	CountAllOrderResponse,
 	CreateOrderV2Request,
 	GetTotalCommissionAdminResponse,
+	RefundOrderRequest,
 	StatisticRevenueDistributionAdminResponse,
 	StatisticRevenueDistributionStoreResponse,
 	UpdateOrderByDeliveryRequest
@@ -969,6 +970,16 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			this.request<unknown>({
 				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
 				path: `/user/cancel`,
+				method: 'PATCH',
+				type: ContentType.Json,
+				body: request
+			}),
+
+
+		refundOrder: (request: RefundOrderRequest) =>
+			this.request<unknown>({
+				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				path: `/user/refund`,
 				method: 'PATCH',
 				type: ContentType.Json,
 				body: request

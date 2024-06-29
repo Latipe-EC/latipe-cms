@@ -98,7 +98,7 @@ const Login: React.FC = () => {
 					mb="0.75rem"
 					name="email"
 					placeholder="exmple@mail.com"
-					label="Email or Điện thoại Number"
+					label="Email hoặc Điện thoại"
 					type="email"
 					fullwidth
 					onBlur={handleBlur}
@@ -112,7 +112,7 @@ const Login: React.FC = () => {
 					placeholder="*********"
 					autoComplete="on"
 					type={passwordVisibility ? "text" : "password"}
-					label="Password"
+					label="Mật khẩu"
 					fullwidth
 					endAdornment={
 						<IconButton
@@ -141,33 +141,8 @@ const Login: React.FC = () => {
 					type="submit"
 					fullwidth
 				>
-					Login
+					Đăng nhập
 				</Button>
-
-				<Box mb="1rem">
-					<Divider width="200px" mx="auto" />
-					<FlexBox justifyContent="center" mt="-14px">
-						<Span color="text.muted" bg="body.paper" px="1rem">
-							on
-						</Span>
-					</FlexBox>
-				</Box>
-
-				<FlexBox
-					justifyContent="center"
-					alignItems="center"
-					bg="#3B5998"
-					borderRadius={5}
-					height="40px"
-					color="white"
-					cursor="pointer"
-					mb="0.75rem"
-				>
-					<Icon variant="small" defaultcolor="auto" mr="0.5rem">
-						facebook-filled-white
-					</Icon>
-					<Small fontWeight="600">Continue with Facebook</Small>
-				</FlexBox>
 
 				<FlexBox justifyContent="center" mb="1.25rem">
 					<SemiSpan>Chưa có tài khoản?</SemiSpan>
@@ -186,7 +161,7 @@ const Login: React.FC = () => {
 				<H6 ml="0.5rem" borderBottom="1px solid" borderColor="gray.900"
 					cursor="pointer"
 					onClick={() => navigate("/forgot-password")}>
-					Reset ngay
+					Lấy lại ngay
 				</H6>
 			</FlexBox>
 		</StyledSessionCard>

@@ -11,6 +11,9 @@ export interface CancelOrderRequest {
 	order_id: string
 }
 
+export interface RefundOrderRequest {
+	order_id: string
+}
 
 export interface Address {
 	address_id: string

@@ -20,7 +20,7 @@ import { AppThunkDispatch, RootState, useAppSelector } from "@stores/store";
 import { Button, useToast } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 import { getNotificationCount, getNotifications, markAllRead } from "@/stores/slices/notification-slice";
-import { removeTagHtml } from "@/utils/utils";
+import { generateUUID, removeTagHtml } from "@/utils/utils";
 import { NotificationModal } from "@/components/notification/NotificationModal";
 import { CampaignDetail } from "@/api/interface/notification";
 
@@ -204,41 +204,41 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
 							direction="right"
 							handler={notificationHandler}
 						>
-							{notifications.items && notifications.items.length !== 0 && notifications.items.slice(0, 10).map((notification, index) => (<MenuItem>
-								<Box maxHeight="400px" overflow="auto">
-									<Box
-										key={index}
-										p="1rem"
-										borderBottom="1px solid"
-										borderColor="gray.200"
-										width="100%"
-										bg={!notification.unread ? 'gray.100' : 'white'}
-										_hover={{
-											bg: 'gray.100',
-										}}
-										cursor="pointer"
-										onClick={() => {
-											setShowNotificationModal(true);
-											setSelectNotification(notification);
-										}}
-									>
-										<FlexBox width="300px" alignItems="center" mb="0.5rem">
-											<Image src={notification.image} alt={notification.title} width="40px" height="40px" mr="1rem" />
-											<Box flexGrow={1}>
-												<H6 fontSize="14px" mb="0.25rem" fontWeight={!notification.readAt ? 'bold' : 'normal'}>
-													{notification.title}
-												</H6>
-												<Paragraph fontSize="12px" color={!notification.unread ? 'gray.600' : 'text.muted'}>
-													{removeTagHtml(notification.body).length > 40
-														? `${removeTagHtml(notification.body).slice(0, 40)}...`
-														: removeTagHtml(notification.body)}
-												</Paragraph>
-											</Box>
-										</FlexBox>
+							{notifications.items && notifications.items.length !== 0
+								&& notifications.items.slice(0, 10).map((notification, index) => (<MenuItem key={generateUUID()} >
+									<Box maxHeight="400px" overflow="auto">
+										<Box
+											key={index}
+											p="1rem"
+											borderBottom="1px solid"
+											borderColor="gray.200"
+											width="100%"
+											bg={!notification.unread ? 'gray.100' : 'white'}
+											_hover={{
+												bg: 'gray.100',
+											}}
+											cursor="pointer"
+											onClick={() => {
+												setShowNotificationModal(true);
+												setSelectNotification(notification);
+											}}
+										>
+											<FlexBox width="300px" alignItems="center" mb="0.5rem">
+												<Image src={notification.image} alt={notification.title} width="40px" height="40px" mr="1rem" />
+												<Box flexGrow={1}>
+													<H6 fontSize="14px" mb="0.25rem" fontWeight={!notification.readAt ? 'bold' : 'normal'}>
+														{notification.title}
+													</H6>
+													<Paragraph fontSize="12px" color={!notification.unread ? 'gray.600' : 'text.muted'}>
+														{removeTagHtml(notification.body).length > 40
+															? `${removeTagHtml(notification.body).slice(0, 40)}...`
+															: removeTagHtml(notification.body)}
+													</Paragraph>
+												</Box>
+											</FlexBox>
+										</Box>
 									</Box>
-
-								</Box>
-							</MenuItem>))}
+								</MenuItem>))}
 							<FlexBox justifyContent="space-between" alignItems="center" p="1rem">
 								<Button
 									variant="solid"

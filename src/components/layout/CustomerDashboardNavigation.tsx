@@ -1,5 +1,5 @@
 import Box from "../Box";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
 import Typography from "../Typography";
@@ -8,17 +8,22 @@ import { useDispatch } from "react-redux";
 import { countMyAddress } from "@stores/slices/user-slice";
 import { countMyOrder } from "@stores/slices/orders-slice";
 import { AppThunkDispatch, RootState, useAppSelector } from "@stores/store";
+import { generateUUID } from "@/utils/utils";
 
 const CustomerDashboardNavigation = () => {
 	const pathname = window.location.pathname;
 	const dispatch = useDispatch<AppThunkDispatch>();
-
-	dispatch(countMyAddress());
-	dispatch(countMyOrder());
-
 	const user = useAppSelector((state: RootState) => state.user);
-
 	const order = useAppSelector((state: RootState) => state.order);
+	let loading = false;
+
+	useEffect(() => {
+		if (loading) return;
+		dispatch(countMyAddress());
+		dispatch(countMyOrder());
+		loading = true;
+	}, [dispatch]);
+
 
 	const getCount = (title: string) => {
 		switch (title) {
@@ -36,7 +41,7 @@ const CustomerDashboardNavigation = () => {
 	return (
 		<DashboardNavigationWrapper px="0px" pb="1.5rem" color="gray.900">
 			{linkList.map((item) => (
-				<Fragment key={item.title}>
+				<Fragment key={generateUUID()}>
 					<Typography p="26px 30px 1rem" color="text.muted" fontSize="12px">
 						{item.title}
 					</Typography>
@@ -44,9 +49,9 @@ const CustomerDashboardNavigation = () => {
 						<StyledDashboardNav
 							isCurrentPath={pathname.includes(item.href)}
 							href={item.href}
-							key={item.title}
 							px="1.5rem"
 							mb="1.25rem"
+							key={generateUUID()}
 						>
 							<FlexBox alignItems="center">
 								<Box className="dashboard-nav-icon-holder">

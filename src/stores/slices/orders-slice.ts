@@ -4,6 +4,7 @@ import {
 	CancelOrderRequest,
 	CreateOrderRequest,
 	CreateOrderV2Request,
+	RefundOrderRequest,
 	StatusBodyRequest,
 	UpdateOrderByDeliveryRequest
 } from '@interfaces/order';
@@ -47,6 +48,14 @@ export const
 		}
 	);
 
+export const
+	refundOrder = createAsyncThunk(
+		'orders/refundOrder',
+		async (request: RefundOrderRequest) => {
+			const response = await api.order.refundOrder(request);
+			return response;
+		}
+	);
 export const
 	countMyOrder = createAsyncThunk(
 		'orders/countMyOrder',

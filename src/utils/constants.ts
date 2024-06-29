@@ -144,6 +144,7 @@ export enum Action {
 	RECALL = 'Thu hồi',
 	RECALLED = 'Đã thu hồi',
 	ACTIVE = 'Kích hoạt',
+	REFUND = 'Trả hàng/hoàn tiền',
 }
 
 export enum Content {

@@ -31,6 +31,7 @@ import { useDispatch } from "react-redux";
 import { addMyAddress, deleteMyAddress, getMyAddress } from "@stores/slices/user-slice";
 import { District, Province, Ward } from "@interfaces/user";
 import { useNavigate } from "react-router-dom";
+import { generateUUID } from "@/utils/utils";
 
 
 const AddressList = () => {
@@ -236,7 +237,7 @@ const AddressList = () => {
 			/>
 
 			{addresses.map((address) => (
-				<TableRow my="1rem" padding="6px 18px">
+				<TableRow key={generateUUID()} my="1rem" padding="6px 18px">
 					<Typography className="pre" m="6px" textAlign="left">
 						{address.contactName}
 					</Typography>
@@ -271,7 +272,7 @@ const AddressList = () => {
 						textAlign: "center",
 						marginTop: '20px'
 					}}>
-						Add New Address
+						Thêm địa chỉ mới
 					</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody ref={formRef}>
@@ -279,7 +280,7 @@ const AddressList = () => {
 						<FormControl isRequired isInvalid={contactName === ""}>
 							<FormLabel>Tên</FormLabel>
 							<Input value={contactName} onChange={handleContactNameChange} required />
-							<FormErrorMessage>contact name is required</FormErrorMessage>
+							<FormErrorMessage>tên không được trống</FormErrorMessage>
 						</FormControl>
 
 						<FormControl isRequired isInvalid={phoneError !== ""}>

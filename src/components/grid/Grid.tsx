@@ -1,6 +1,7 @@
 import React, { Children, cloneElement, ReactElement } from "react";
 import { FlexboxProps } from "styled-system";
 import StyledGrid from "./GridStyle";
+import { generateUUID } from "@/utils/utils";
 
 export interface GridProps {
 	container?: boolean;
@@ -26,10 +27,13 @@ const Grid: React.FC<GridProps & FlexboxProps> = ({ children, ...props }) => {
 	if (props.container) {
 		childList = Children.map(children, (child) => {
 			if (React.isValidElement<ChildProps>(child)) {
+				const uniqueKey = child.key || generateUUID();
+
 				return cloneElement(child, {
 					spacing: props.spacing,
 					horizontal_spacing: props.horizontal_spacing,
 					vertical_spacing: props.vertical_spacing,
+					key: uniqueKey, // Assign the uniqueKey
 				});
 			}
 			return child;

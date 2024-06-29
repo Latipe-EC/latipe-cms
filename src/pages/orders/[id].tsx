@@ -16,7 +16,7 @@ import { format } from "date-fns";
 import { Fragment, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "@stores/store";
-import { cancelOrder, getOrderById } from "@stores/slices/orders-slice";
+import { cancelOrder, getOrderById, refundOrder } from "@stores/slices/orders-slice";
 import { DataGetOrderById, OrderItem } from "@interfaces/order";
 import {
 	Button as ButtonChakra,
@@ -73,6 +73,7 @@ const OrderDetails = () => {
 	const [ratingStar, setRatingStar] = useState<number>();
 	const [detailRating, setDetailRating] = useState<RatingResponse>(null);
 	const [viewRating, setViewRating] = useState<OrderItem>(null);
+	const [showRefundModal, setShowRefundModal] = useState(false);
 
 	useEffect(() => {
 		dispatch(getOrderById(id)).unwrap().then((res) => {
@@ -92,6 +93,25 @@ const OrderDetails = () => {
 			setProfile(res.data)
 		});
 	}, []);
+
+	const handleRefundOrder = () => {
+		dispatch(refundOrder({ order_id: selectedOrder })).unwrap().then((res) => {
+			if (res.status === 200) {
+				const newOrder = { ...orderDetail };
+				newOrder.order.status = OrderStatus.ORDER_CANCEL_BY_USER;
+				setOrderDetail(newOrder);
+			} else {
+				toast({
+					title: "Hoàn tiền thất bại",
+					description: "Xin vui lòng thử lại sau.",
+					status: "error",
+					duration: 5000,
+					isClosable: true,
+				});
+			}
+			setShowRefundModal(false);
+		})
+	};
 
 	const handleCancleOrder = () => {
 		dispatch(cancelOrder({ order_id: selectedOrder })).unwrap().then((res) => {
@@ -404,6 +424,26 @@ const OrderDetails = () => {
 						</ModalContent>
 					</Modal>}
 
+
+				{showRefundModal &&
+					<Modal isOpen={showRefundModal} onClose={() => setShowRefundModal(false)}
+						isCentered
+						size={"xl"}>
+						<ModalOverlay />
+						<ModalContent>
+							<ModalHeader>Bạn có chắc muốn hoàn tiền không ?</ModalHeader>
+							<ModalCloseButton />
+							<ModalFooter>
+								<ButtonChakra colorScheme="red" variant="ghost"
+									onClick={() => setShowRefundModal(false)} mr={2}>{Action.CANCEL}</ButtonChakra>
+								<ButtonChakra
+									colorScheme="green" mr={3} onClick={handleRefundOrder}>
+									{Action.REFUND}
+								</ButtonChakra>
+							</ModalFooter>
+						</ModalContent>
+					</Modal>}
+
 				{displayModalCancelOrder &&
 					<Modal isOpen={displayModalCancelOrder}
 						onClose={() => setDisplayModalCancelOrder(null)} isCentered>
@@ -498,8 +538,7 @@ const OrderDetails = () => {
 						>{Content.BUY_AGAIN}</ButtonChakra>
 					</FlexCharkra>
 					{statusPaymentOrder &&
-
-						orderDetail.order.status <= 3 && (
+						orderDetail.order.status == OrderStatus.ORDER_CREATED && (
 							<FlexCharkra justifyContent={size.width < breakpoint ? "center" : "flex-end"}
 								mt={2}
 								onClick={() => {
@@ -509,6 +548,21 @@ const OrderDetails = () => {
 							>
 								<ButtonChakra width="30%" bg="white" color="black" borderRadius="0"
 									border="1px solid gray">{Action.CANCEL_ORDER}</ButtonChakra>
+							</FlexCharkra>
+						)
+					}
+					{
+						orderDetail.order.status == OrderStatus.ORDER_SHIPPING_FINISH && (
+							<FlexCharkra justifyContent={size.width < breakpoint ? "center" : "flex-end"}
+								mt={2}
+								onClick={() => {
+									setSelectedOrder(orderDetail.order.order_id);
+									setShowRefundModal(true)
+								}}
+							>
+								<ButtonChakra width="30%" bg="white" color="black" borderRadius="0"
+
+									border="1px solid gray">{Action.REFUND}</ButtonChakra>
 							</FlexCharkra>
 						)
 					}

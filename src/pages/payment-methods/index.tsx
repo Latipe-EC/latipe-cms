@@ -1,3 +1,4 @@
+import { generateUUID } from "@/utils/utils";
 import Button from "@components/buttons/Button";
 import IconButton from "@components/buttons/IconButton";
 import Card from "@components/Card";
@@ -11,7 +12,7 @@ import Typography, { H5 } from "@components/Typography";
 
 const AddressList = () => {
 	return (
-		<div>
+		<div key={generateUUID()}>
 			<DashboardPageHeader
 				title="Payment Methods"
 				iconName="credit-card_filled"

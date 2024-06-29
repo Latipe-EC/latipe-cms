@@ -10,7 +10,7 @@ import MiniCart from "../mini-cart/MiniCart";
 import SearchBox from "../search-box/SearchBox";
 import Login from "../sessions/Login";
 import Sidenav from "../sidenav/Sidenav";
-import { H6, Paragraph, Tiny } from "../Typography";
+import { H6, Paragraph } from "../Typography";
 import StyledHeader from "./HeaderStyle";
 import UserLoginDialog from "./UserLoginDialog";
 import MenuItem from "../MenuItem";
@@ -76,29 +76,54 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
 	};
 
 	const cartHandle = (
-		<FlexBox ml="20px" alignItems="flex-start">
-			<IconButton bg="gray.200" p="12px">
-				<Icon size="20px">bag</Icon>
-			</IconButton>
-
-			{!!carts.count && (
-				<FlexBox
-					borderRadius="300px"
-					bg="error.main"
-					px="5px"
-					py="2px"
+		<IconButton ml="1rem" bg="gray.200" p="8px" style={{ position: 'relative' }}> {/* Ensure IconButton has position: 'relative' */}
+			<Icon size="28px">bag</Icon>
+			{carts.count > 0 && (
+				<Box
+					className="cart-count"
+					position="absolute" // Change this to 'absolute'
+					top="-2px"
+					right="-2px"
+					bg="primary.main"
+					color="white"
+					borderRadius="50%"
+					width="20px"
+					height="20px"
+					display="flex"
 					alignItems="center"
 					justifyContent="center"
-					ml="-1rem"
-					mt="-9px"
+					fontSize="12px"
+					fontWeight="600"
 				>
-					<Tiny color="white" fontWeight="600">
-						{carts.count}
-					</Tiny>
-				</FlexBox>
+					{carts.count > 100 ? '100+' : carts.count}
+				</Box>
 			)}
-		</FlexBox>
+		</IconButton>
 	);
+
+	const notificationHandler = (<IconButton ml="1rem" bg="gray.200" p="8px">
+		<Icon size="28px">notification</Icon>
+		{notifications.count > 0 && (
+			<Box
+				className="notification-count"
+				position="absolute"
+				top="-2px"
+				right="-2px"
+				bg="primary.main"
+				color="white"
+				borderRadius="50%"
+				width="20px"
+				height="20px"
+				display="flex"
+				alignItems="center"
+				justifyContent="center"
+				fontSize="12px"
+				fontWeight="600"
+			>
+				{notifications.count > 10 ? '10+' : notifications.count}
+			</Box>
+		)}
+	</IconButton>)
 
 	useEffect(() => {
 		dispatch((getNotifications({
@@ -177,35 +202,10 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
 						<Menu
 							className="notification-dropdown"
 							direction="right"
-							handler={
-								<IconButton ml="1rem" bg="gray.200" p="8px">
-									<Icon size="28px">notification</Icon>
-									{notifications.count > 0 && (
-										<Box
-											className="notification-count"
-											position="absolute"
-											top="-2px"
-											right="-2px"
-											bg="primary.main"
-											color="white"
-											borderRadius="50%"
-											width="20px"
-											height="20px"
-											display="flex"
-											alignItems="center"
-											justifyContent="center"
-											fontSize="12px"
-											fontWeight="600"
-										>
-											{notifications.count > 10 ? '10+' : notifications.count}
-										</Box>
-									)}
-								</IconButton>
-							}
+							handler={notificationHandler}
 						>
 							{notifications.items && notifications.items.length !== 0 && notifications.items.slice(0, 10).map((notification, index) => (<MenuItem>
 								<Box maxHeight="400px" overflow="auto">
-
 									<Box
 										key={index}
 										p="1rem"

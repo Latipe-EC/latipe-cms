@@ -2,7 +2,6 @@ import React from 'react';
 import { Image } from 'react-bootstrap';
 import styled from 'styled-components';
 import {
-	layout,
 	border,
 	BorderProps,
 	color,
@@ -17,21 +16,15 @@ type LazyImageProps =
 	& BorderProps
 	& SpaceProps
 	& ColorProps
-	& LayoutProps
+	& LayoutProps;
 
-
-const LazyImage = styled(({ borderRadius, ...props }: LazyImageProps) => {
-	return <Image style={{
-		borderRadius: borderRadius ? borderRadius.toString() : undefined,
-		objectFit: 'cover',
-	}} {...props} />;
+const LazyImage = styled(({ ...props }: LazyImageProps) => {
+	return <Image {...props} />;
 }) <React.ImgHTMLAttributes<HTMLImageElement>>`
-		display: block;
-		${color}
-		${space}
-		${border}
-		${layout} // Add this line
-
-	`;
+  display: block;
+  ${color}
+  ${space}
+  ${border}
+`;
 
 export default LazyImage;

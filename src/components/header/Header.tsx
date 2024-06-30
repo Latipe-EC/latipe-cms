@@ -255,7 +255,7 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
 									variant="outline"
 									colorScheme="blue"
 									onClick={handleMarkAllAsRead}
-									isDisabled={notifications.items.length === 0}
+									isDisabled={!notifications.items || notifications.items.length === 0}
 									_hover={{
 										bg: 'blue.50',
 									}}

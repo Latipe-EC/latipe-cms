@@ -54,7 +54,7 @@ import { createProduct } from "@stores/slices/products-slice";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { Path, ContentToast, TitleToast } from "@/utils/constants";
+import { Path, ContentToast, TitleToast, Action } from "@/utils/constants";
 import { handleApiCallWithToast, isBlank } from "@/utils/utils";
 import { LoadingOverlay } from "@/components/loading/LoadingOverlay";
 
@@ -175,6 +175,11 @@ const AddProduct = () => {
 	const handleCategorySelect = (category, order) => {
 		const newSelectedListCategory = [...selectedCategory];
 		newSelectedListCategory.splice(order, newSelectedListCategory.length - order);
+		console.log([...newSelectedListCategory, {
+			id: category.id,
+			name: category.name,
+			attributes: category.attributes
+		}]);
 		setSelectedCategory([...newSelectedListCategory, {
 			id: category.id,
 			name: category.name,
@@ -182,15 +187,18 @@ const AddProduct = () => {
 		}]);
 		const newCategory = [...categories];
 		newCategory.splice(order + 1, newCategory.length - order);
+
 		dispatch(getChildsCategory(category.id)).unwrap().then((payload) => {
 			if (payload.data.length !== 0) {
 				setCategories([...newCategory, { categories: [...payload.data], order }]);
+
 				setDisableButtonSaveCategory(true)
 			} else {
 				setCategories([...newCategory]);
 				setDisableButtonSaveCategory(false);
 			}
 		});
+
 	}
 	const handleAddProductVariant = () => {
 		if (productVariants.length >= 2) {
@@ -449,13 +457,13 @@ const AddProduct = () => {
 								setSelectedCategory([])
 							}}
 						>
-							Close
+							{Action.CLOSE}
 						</Button>
 						<Button variant={!disableButtonSaveCategory ? 'ghost' : 'unstyled'}
 							color={!disableButtonSaveCategory ? 'green' : 'gray.200'}
 							isDisabled={disableButtonSaveCategory}
 							onClick={handleSaveCategoriesSelect}
-						>Save</Button>
+						>	{Action.SAVE}</Button>
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
@@ -523,7 +531,7 @@ const AddProduct = () => {
 								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Danh mục hàng hóa</FormLabel>
 								<InputGroup>
 									<Input
-										placeholder="category"
+										placeholder="Chọn hàng hóa"
 										value={selectedCategory.map((cate) => cate.name).join(' -> ')}
 										onChange={handleChangeName}
 										onClick={() => {

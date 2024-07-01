@@ -25,6 +25,7 @@
 		"@vitejs/plugin-react": "^4.0.4",
 		"apexcharts": "^3.35.2",
 		"axios": "^1.5.1",
+		"chakra-react-select": "^4.9.0",
 		"chart.js": "^4.4.1",
 		"clsx": "^1.1.1",
 		"date-fns": "^2.21.1",

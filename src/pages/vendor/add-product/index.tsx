@@ -8,6 +8,7 @@ import {
 	Divider,
 	Flex,
 	FormControl,
+	FormHelperText,
 	FormLabel,
 	IconButton,
 	Image,
@@ -27,6 +28,7 @@ import {
 	NumberInput,
 	NumberInputField,
 	NumberInputStepper,
+	Select,
 	Spinner,
 	Switch,
 	Table,
@@ -39,6 +41,11 @@ import {
 	useToast,
 	VStack
 } from "@chakra-ui/react";
+
+
+import {
+	Select as ChakraReactSelect,
+} from "chakra-react-select";
 import DropZone from "@components/DropZone";
 import DashboardPageHeader from "@components/layout/DashboardPageHeader";
 import './index.css'
@@ -81,6 +88,8 @@ const AddProduct = () => {
 	const toast = useToast();
 	const navigate = useNavigate();
 	const [isLoading, setIsLoading] = useState(false);
+	const [featuresImage, setFeaturesImage] = useState([]);
+
 
 	const handleDrop = (acceptedFiles: any) => {
 		setImages((prevFiles) => [...prevFiles, ...acceptedFiles]);
@@ -123,6 +132,7 @@ const AddProduct = () => {
 			}
 		}
 	}, [name, description, images, selectedCategory, productVariants.length, price, inventory, productClassifications]);
+
 	useEffect(() => {
 		if (isModalCateOpen) {
 			if (categories.length === 0) {
@@ -138,7 +148,6 @@ const AddProduct = () => {
 			}
 		}
 	}, [isModalCateOpen]);
-
 
 	const handleSearch = debounce(() => {
 		if (isModalCateOpen) {
@@ -163,6 +172,9 @@ const AddProduct = () => {
 		handleSearch();
 	}, [searchText]);
 
+	useEffect(() => {
+
+	}, [images]);
 
 	const handleAttributeChange = ({ index, value }) => {
 		setAttributeValues((prevAttributes) =>
@@ -200,6 +212,7 @@ const AddProduct = () => {
 		});
 
 	}
+
 	const handleAddProductVariant = () => {
 		if (productVariants.length >= 2) {
 			return;
@@ -230,6 +243,7 @@ const AddProduct = () => {
 
 		setProductVariants([...productVariants, newProductVariant]);
 	}
+
 	const handleProductVariantNameChange = (index: number, name: string) => {
 		const newProductVariants = [...productVariants];
 		newProductVariants[index].name = name;
@@ -349,6 +363,7 @@ const AddProduct = () => {
 			description,
 			promotionalPrice,
 			price,
+			indexFeatures: featuresImage,
 			categories: selectedCategory.map((category) => category.id),
 			isPublished,
 			quantity: inventory,
@@ -570,6 +585,43 @@ const AddProduct = () => {
 										</div>
 									</div>
 								)}
+							</FormControl>
+
+							<FormControl isInvalid={isInvalid}>
+								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Chọn ảnh đặc trưng</FormLabel>
+
+								<FormHelperText>Chọn tối đa 2 ảnh. Trong trường hợp có 1 ảnh trở lên, phải chọn 2 ảnh.</FormHelperText>
+								{images && images.length > 0 && (
+									<ChakraReactSelect
+										isMulti
+										menuPortalTarget={document.body} // Render the dropdown menu within a portal targeting the body
+										styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }} // Adjust z-index as needed
+										value={featuresImage.map(value => ({ label: `Ảnh ${parseInt(value, 10) + 1}`, value: value.toString() }))}
+										options={images.map((image, index) => ({
+											label: `Ảnh ${index + 1}`,
+											value: index.toString(),
+										}))}
+										onChange={(selectedOptions) => {
+											let value = selectedOptions.map(option => option.value);
+
+											// If more than one image is available
+											if (images.length > 1) {
+												// Enforce selection of exactly two images if more than one image is available
+												if (value.length > 2) {
+													value = value.slice(0, 2); // Keep only the first two selections
+												} else if (value.length < 2) {
+													// Optionally, handle the case where less than two images are selected
+													// e.g., show a message to the user
+												}
+											}
+											// If only one image is available, the logic above allows any selection,
+											// which effectively means the user can only select one image.
+
+											setFeaturesImage(value);
+										}}
+									/>
+								)}
+
 							</FormControl>
 
 							<FormControl isInvalid={isInvalid}>

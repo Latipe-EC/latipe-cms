@@ -164,6 +164,8 @@ export interface CreateProductRequest {
 	 * @memberof CreateProductRequest
 	 */
 	'detailsProduct'?: Array<AttributeValue>;
+
+	indexFeatures?: Array<number>;
 }
 
 export interface AttributeValue {
@@ -1004,6 +1006,7 @@ export interface UpdateProductRequest {
 	'imagesFile'?: Array<File>;
 	'defaultValue'?: ProductResponse;
 	'originalFiles'?: Array<originalFiles>;
+	indexFeatures?: Array<number>;
 }
 
 export interface originalFiles {

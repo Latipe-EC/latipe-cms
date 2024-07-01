@@ -8,6 +8,7 @@ import {
 	Divider,
 	Flex,
 	FormControl,
+	FormHelperText,
 	FormLabel,
 	IconButton,
 	Image,
@@ -39,6 +40,9 @@ import {
 	useToast,
 	VStack
 } from "@chakra-ui/react";
+import {
+	Select as ChakraReactSelect,
+} from "chakra-react-select";
 import DropZone from "@components/DropZone";
 import DashboardPageHeader from "@components/layout/DashboardPageHeader";
 import './index.css'
@@ -92,6 +96,7 @@ const ProductDetailVendor = () => {
 	const maxLength = 210;
 	const isInvalid = name.length > maxLength;
 	const [defaultValue, setDefaultValue] = useState<ProductResponse>();
+	const [featuresImage, setFeaturesImage] = useState([]);
 
 	useEffect(() => {
 		if (id) {
@@ -119,6 +124,11 @@ const ProductDetailVendor = () => {
 						setImages(blobs == null ? [] : blobs);
 						setSelectedCategory(product.categories);
 						setAttributeValues(product.detailsProduct);
+						console.log(product.indexFeatures);
+
+						if (product.indexFeatures) {
+							setFeaturesImage(product.indexFeatures);
+						}
 						blobs = [];
 						if (product.productVariants.length > 0) {
 							urls = product.productVariants[0].options.map(x => x.image);
@@ -412,6 +422,7 @@ const ProductDetailVendor = () => {
 			name,
 			description,
 			promotionalPrice,
+			indexFeatures: featuresImage,
 			price,
 			categories: selectedCategory.map((category) => category.id),
 			isPublished,
@@ -623,6 +634,44 @@ const ProductDetailVendor = () => {
 										</div>
 									</div>
 								)}
+							</FormControl>
+
+							<FormControl isInvalid={isInvalid}>
+								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Chọn ảnh đặc trưng</FormLabel>
+
+								<FormHelperText>Chọn tối đa 2 ảnh. Trong trường hợp có 1 ảnh trở lên, phải chọn 2 ảnh.</FormHelperText>
+								{images && images.length > 0 && (
+									<ChakraReactSelect
+										isMulti
+										menuPortalTarget={document.body} // Render the dropdown menu within a portal targeting the body
+										styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }} // Adjust z-index as needed
+										value={featuresImage.map(value => ({ label: `Ảnh ${parseInt(value, 10) + 1}`, value: value.toString() }))}
+										options={images.map((image, index) => ({
+											label: `Ảnh ${index + 1}`,
+											value: index,
+										}))}
+										onChange={(selectedOptions) => {
+											let value = selectedOptions.map(option => option.value);
+
+											// If more than one image is available
+											if (images.length > 1) {
+												// Enforce selection of exactly two images if more than one image is available
+												if (value.length > 2) {
+													value = value.slice(0, 2); // Keep only the first two selections
+												} else if (value.length < 2) {
+													// Optionally, handle the case where less than two images are selected
+													// e.g., show a message to the user
+												}
+											}
+											// If only one image is available, the logic above allows any selection,
+											// which effectively means the user can only select one image.
+
+											console.log(value);
+											setFeaturesImage(value);
+										}}
+									/>
+								)}
+
 							</FormControl>
 
 							<FormControl isInvalid={isInvalid}>

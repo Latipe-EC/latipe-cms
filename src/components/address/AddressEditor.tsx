@@ -76,8 +76,8 @@ const AddressEditor = () => {
 				toast.close(loadingToastId)
 				if (res.status.toString().includes("20")) {
 					toast({
-						title: 'Success!',
-						description: "Update address success",
+						title: 'Thành công!',
+						description: "Cập nhật thành công",
 						status: 'success',
 						duration: 2000,
 						isClosable: true,
@@ -85,8 +85,8 @@ const AddressEditor = () => {
 					})
 				} else {
 					toast({
-						title: 'Error!',
-						description: "Update address failed",
+						title: 'Lỗi!',
+						description: "Cập nhật thất bại",
 						status: 'error',
 						duration: 2000,
 						isClosable: true,
@@ -194,11 +194,11 @@ const AddressEditor = () => {
 					<FormControl isRequired isInvalid={address.contactName === ""} mb={4}>
 						<FormLabel>Tên người nhận</FormLabel>
 						<Input value={address.contactName} onChange={handleContactNameChange} required />
-						<FormErrorMessage>contact name is required</FormErrorMessage>
+						<FormErrorMessage>Tên liên hệ không được trống</FormErrorMessage>
 					</FormControl>
 
 					<FormControl isRequired isInvalid={phoneError !== ""} mb={4}>
-						<FormLabel>Phone</FormLabel>
+						<FormLabel>Số điện thoại</FormLabel>
 						<Input pattern="[0-9]{10}" value={address.phone} onChange={handlePhoneChange}
 							required />
 						<FormErrorMessage>{phoneError}</FormErrorMessage>
@@ -207,7 +207,7 @@ const AddressEditor = () => {
 					<FormControl isRequired isInvalid={province === null} mb={4}>
 						<FormLabel>Tỉnh/Thành phố</FormLabel>
 						<Select value={JSON.stringify(province)} onChange={handleProvinceChange} required>
-							<option value="">Select a province</option>
+							<option value="">Chọn tỉnh/tp</option>
 							{Object.values(provinces).map((p) => (
 								<option key={p.code} value={JSON.stringify(p)}>
 									{p.name_with_type}
@@ -219,7 +219,7 @@ const AddressEditor = () => {
 					<FormControl isRequired isInvalid={district === null} mb={4}>
 						<FormLabel>Tên huyện</FormLabel>
 						<Select value={JSON.stringify(district)} onChange={handleDistrictChange} required>
-							<option value="">Select a district</option>
+							<option value="">Chọn huyện</option>
 							{filteredDistricts.map((d) => (
 								<option key={d.code} value={JSON.stringify(d)}>
 									{d.name_with_type}
@@ -231,7 +231,7 @@ const AddressEditor = () => {
 					<FormControl isRequired isInvalid={ward === null} mb={4}>
 						<FormLabel>Tên xã</FormLabel>
 						<Select value={JSON.stringify(ward)} onChange={handleWardChange} required>
-							<option value="">Select a ward</option>
+							<option value="">Chọn xã</option>
 							{filteredWards.map((w) => (
 								<option key={w.code} value={JSON.stringify(w)}>
 									{w.name_with_type}
@@ -244,7 +244,7 @@ const AddressEditor = () => {
 						<FormLabel>Địa chỉ chi tiết</FormLabel>
 						<Input value={address.detailAddress} onChange={handleDetailAddressChange} required />
 						<FormErrorMessage>
-							detail address is required
+							Địa chỉ chi tiết không được để trống
 						</FormErrorMessage>
 					</FormControl>
 

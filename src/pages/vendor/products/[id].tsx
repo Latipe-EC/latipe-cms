@@ -478,7 +478,7 @@ const ProductDetailVendor = () => {
 									<InputLeftElement pointerEvents="none">
 										{/* <Icon as={SearchIcon} color="gray.300" /> */}
 									</InputLeftElement>
-									<Input placeholder="Search" value={searchText}
+									<Input placeholder="Tìm kiếm" value={searchText}
 										onChange={(e) => setSearchText(e.target.value)} />
 								</InputGroup>
 							</FormControl>
@@ -722,7 +722,7 @@ const ProductDetailVendor = () => {
 												Giá khuyến mãi
 											</FormLabel>
 											<Input
-												placeholder="Promotional Price"
+												placeholder="Giá khuyến mãi"
 												type="number"
 												min="0"
 												value={promotionalPrice}
@@ -734,7 +734,7 @@ const ProductDetailVendor = () => {
 												Giá
 											</FormLabel>
 											<Input
-												placeholder="Price"
+												placeholder="Giá"
 												type="number"
 												min="0"
 												value={price}
@@ -747,7 +747,7 @@ const ProductDetailVendor = () => {
 												Kho
 											</FormLabel>
 											<Input
-												placeholder="Storage"
+												placeholder="Kho hàng"
 												type="number"
 												min="0"
 												value={inventory}
@@ -1013,7 +1013,7 @@ const ProductDetailVendor = () => {
 																			<Tr key={`price-unique${valueIndex}${index}`}>
 																				<InputGroup>
 																					<Input
-																						placeholder="price"
+																						placeholder="Giá"
 																						type="number"
 																						value={productClassifications[index * productVariants[productVariants.length - 1].options.length + valueIndex].price}
 																						min="0"
@@ -1048,7 +1048,7 @@ const ProductDetailVendor = () => {
 																			<Tr key={`pricePromotional-unique${valueIndex}${index}`}>
 																				<InputGroup>
 																					<Input
-																						placeholder="Promotional Price"
+																						placeholder="Giá khuyến mãi"
 																						type="number"
 																						min="0"
 																						value={productClassifications[index * productVariants[productVariants.length - 1].options.length + valueIndex].promotionalPrice}
@@ -1133,7 +1133,7 @@ const ProductDetailVendor = () => {
 																	<Tr key={`price${index}`}>
 																		<InputGroup>
 																			<Input
-																				placeholder="price"
+																				placeholder="Giá"
 																				type="number"
 																				min="0"
 																				value={productClassifications[index].price}
@@ -1163,7 +1163,7 @@ const ProductDetailVendor = () => {
 																	<Tr key={`promotionalPrice${index}`}>
 																		<InputGroup>
 																			<Input
-																				placeholder="price"
+																				placeholder="Giá"
 																				type="number"
 																				min="0"
 																				value={productClassifications[index].promotionalPrice}
@@ -1191,7 +1191,7 @@ const ProductDetailVendor = () => {
 																<Td>
 																	<Tr key={`store${index}`}>
 																		<Input
-																			placeholder="inventory"
+																			placeholder="kho"
 																			type="number"
 																			min="0"
 																			value={productClassifications[index].quantity}

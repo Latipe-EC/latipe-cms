@@ -190,7 +190,7 @@ const TransactionsAdmin = () => {
 				<Box>
 					<InputGroup>
 						<InputLeftElement pointerEvents="none" children={<MdSearch />} />
-						<Input type="text" placeholder="Search" onChange={handleSearchChange} max="100" />
+						<Input type="text" placeholder="Tìm kiếm" onChange={handleSearchChange} max="100" />
 					</InputGroup>
 				</Box>
 				<Box>

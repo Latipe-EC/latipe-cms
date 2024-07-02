@@ -104,7 +104,7 @@ const Signup: React.FC = () => {
 					mb="0.75rem"
 					name="firstName"
 					label="Tên"
-					placeholder="firstName"
+					placeholder="Tên"
 					fullwidth
 					onBlur={handleBlur}
 					onChange={handleChange}
@@ -115,7 +115,7 @@ const Signup: React.FC = () => {
 					mb="0.75rem"
 					name="lastName"
 					label="Họ"
-					placeholder="lastName"
+					placeholder="Họ"
 					fullwidth
 					onBlur={handleBlur}
 					onChange={handleChange}
@@ -288,21 +288,38 @@ const initialValues = {
 };
 
 const formSchema = yup.object().shape({
-	name: yup.string().required("${path} is required"),
-	email: yup.string().email("invalid email").required("${path} is required"),
-	password: yup.string().required("${path} is required"),
+	name: yup.string().required("${path} là bắt buộc"),
+	email: yup.string().email("email không hợp lệ").required("${path} là bắt buộc"),
+	password: yup.string().required("${path} là bắt buộc"),
 	re_password: yup
 		.string()
-		.oneOf([yup.ref("password"), null], "Passwords must match")
-		.required("Please re-type password"),
+		.oneOf([yup.ref("password"), null], "Mật khẩu phải trùng khớp")
+		.required("Vui lòng nhập lại mật khẩu"),
 	agreement: yup
 		.bool()
 		.test(
 			"agreement",
-			"You have to agree with our Terms and Conditions!",
+			"Bạn phải đồng ý với Điều khoản và Điều kiện của chúng tôi!",
 			(value) => value === true
 		)
-		.required("You have to agree with our Terms and Conditions!"),
+		.required("Bạn phải đồng ý với Điều khoản và Điều kiện của chúng tôi!"),
+	birthday: yup
+		.date()
+		.required("Ngày sinh là bắt buộc")
+		.test(
+			"age",
+			"Tuổi phải lớn hơn 6 và nhỏ hơn 150 tuổi",
+			(value) => {
+				const today = new Date();
+				const birthDate = new Date(value);
+				let age = today.getFullYear() - birthDate.getFullYear();
+				const m = today.getMonth() - birthDate.getMonth();
+				if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+					age--;
+				}
+				return age > 6 && age < 150;
+			}
+		),
 });
 
 export default Signup;

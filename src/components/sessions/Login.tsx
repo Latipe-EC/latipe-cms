@@ -1,14 +1,12 @@
 import { useFormik } from "formik";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import * as yup from "yup";
-import Box from "../Box";
 import Button from "../buttons/Button";
 import IconButton from "../buttons/IconButton";
-import Divider from "../Divider";
 import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
 import TextField from "../text-field/TextField";
-import { H3, H5, H6, SemiSpan, Small, Span } from "../Typography";
+import { H3, H5, H6, SemiSpan } from "../Typography";
 import { StyledSessionCard } from "./SessionStyle";
 import { useDispatch } from "react-redux";
 import { createAuthenticationToken } from "@stores/slices/auth-slice";
@@ -26,6 +24,10 @@ const Login: React.FC = () => {
 	}, []);
 	const dispatch = useDispatch<AppThunkDispatch>();
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, []);
 
 	const handleFormSubmit = async (values) => {
 

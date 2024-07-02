@@ -28,7 +28,6 @@ import {
 	NumberInput,
 	NumberInputField,
 	NumberInputStepper,
-	Select,
 	Spinner,
 	Switch,
 	Table,
@@ -425,7 +424,7 @@ const AddProduct = () => {
 									<InputLeftElement pointerEvents="none">
 										{/* <Icon as={SearchIcon} color="gray.300" /> */}
 									</InputLeftElement>
-									<Input placeholder="Search" value={searchText}
+									<Input placeholder="Tìm kiếm" value={searchText}
 										onChange={(e) => setSearchText(e.target.value)} />
 								</InputGroup>
 							</FormControl>
@@ -574,10 +573,8 @@ const AddProduct = () => {
 										<div className="image-preview-container">
 											{images.map((previewImage, index) => (
 												<div key={index} className="image-preview">
-													<Image src={URL.createObjectURL(previewImage)}
-														boxSize='150px' />
-													<button className="remove-image-button" type="button"
-														onClick={() => handleRemove(index)}>
+													<Image src={URL.createObjectURL(previewImage)} boxSize='280px' />
+													<button className="remove-image-button" type="button" onClick={() => handleRemove(index)}>
 														x
 													</button>
 												</div>
@@ -672,11 +669,12 @@ const AddProduct = () => {
 												Giá khuyến mãi
 											</FormLabel>
 											<Input
-												placeholder="Promotional Price"
+												placeholder="Giá khuyến mãi"
 												type="number"
 												min="1"
 												value={promotionalPrice}
-												onChange={(event) => setPromotionalPrice(parseInt(event.target.value))}
+												onChange={(event) =>
+													setPromotionalPrice(parseInt(event.target.value))}
 											/>
 										</FormControl>
 										<FormControl mt={4} w="40%">
@@ -684,7 +682,7 @@ const AddProduct = () => {
 												Giá
 											</FormLabel>
 											<Input
-												placeholder="Price"
+												placeholder="Giá"
 												type="number"
 												min="1"
 												value={price}
@@ -697,7 +695,7 @@ const AddProduct = () => {
 												Kho
 											</FormLabel>
 											<Input
-												placeholder="Storage"
+												placeholder="Kho hàng"
 												type="number"
 												min="0"
 												value={inventory}
@@ -964,7 +962,7 @@ const AddProduct = () => {
 																			<Tr key={`price-unique${valueIndex}${index}`}>
 																				<InputGroup>
 																					<Input
-																						placeholder="price"
+																						placeholder="Giá"
 																						type="number"
 																						value={productClassifications[index * productVariants[productVariants.length - 1].options.length + valueIndex].price}
 																						onChange={(event) =>
@@ -1000,7 +998,7 @@ const AddProduct = () => {
 																			<Tr key={`pricePromotional-unique${valueIndex}${index}`}>
 																				<InputGroup>
 																					<Input
-																						placeholder="Promotional Price"
+																						placeholder="Giá khuyến mãi"
 																						type="number"
 																						value={productClassifications[index * productVariants[productVariants.length - 1].options.length + valueIndex].promotionalPrice}
 																						onChange={(event) =>
@@ -1094,7 +1092,7 @@ const AddProduct = () => {
 																	<Tr key={`price${index}`}>
 																		<InputGroup>
 																			<Input
-																				placeholder="price"
+																				placeholder="Giá"
 																				type="number"
 																				value={productClassifications[index].price}
 																				onChange={(event) =>
@@ -1127,7 +1125,7 @@ const AddProduct = () => {
 																	<Tr key={`promotionalPrice${index}`}>
 																		<InputGroup>
 																			<Input
-																				placeholder="price"
+																				placeholder="Giá"
 																				type="number"
 																				min="1"
 																				value={productClassifications[index].promotionalPrice}
@@ -1159,7 +1157,7 @@ const AddProduct = () => {
 																}}>
 																	<Tr key={`store${index}`}>
 																		<Input
-																			placeholder="inventory"
+																			placeholder="kho"
 																			type="number" min="0"
 																			value={productClassifications[index].quantity}
 																			onChange={(event) =>

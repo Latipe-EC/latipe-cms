@@ -311,7 +311,7 @@ const CategoriesAdmin = () => {
 					<InputGroup>
 						<InputLeftElement pointerEvents="none" children={<MdSearch />}
 						/>
-						<Input type="text" placeholder="Search" onChange={handleSearchChange} />
+						<Input type="text" placeholder="Tìm kiếm" onChange={handleSearchChange} />
 					</InputGroup>
 				</Box>
 				<Button leftIcon={<AddIcon />} colorScheme='blue' variant='outline'

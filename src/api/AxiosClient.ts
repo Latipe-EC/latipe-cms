@@ -118,6 +118,7 @@ import {
 } from '@interfaces/commission';
 import { CampaignDetail, CountNotificationUser, CreateCampaignRequest, CreateCapaign, GeneralCampaignAdminResponse, ListCampaignDetail, NewDeviceRequest, NewDeviceResponse, RecallCampaignRequest } from '@/api/interface/notification';
 import { isMobile } from 'react-device-detect';
+import { SIEResponse } from '@/api/interface/sie';
 
 export type QueryParamsType = Record<string | number, unknown>;
 
@@ -1511,6 +1512,19 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 				path: `/notifications/user/${id}`,
 				method: 'GET',
 				type: ContentType.Json
+			}),
+	}
+
+	SIE = {
+		search: (data: {
+			image_request: File
+		}) =>
+			this.request<SIEResponse>({
+				baseURL: `http://127.0.0.1:8100`,
+				path: `/api/v1/sie/search`,
+				method: 'POST',
+				body: data,
+				type: ContentType.FormData,
 			}),
 	}
 }

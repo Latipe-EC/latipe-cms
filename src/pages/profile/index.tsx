@@ -171,7 +171,7 @@ const Profile = () => {
 											(
 												<Flex width="80%">
 													<Input
-														placeholder="First Name"
+														placeholder="Tên đăng nhập"
 														isDisabled={profile.isChangeUsername}
 														value={profile.username}
 														onChange={(e) => setProfile({

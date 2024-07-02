@@ -110,7 +110,7 @@ export default function DeliveryPage() {
 							pointerEvents="none"
 							children={<SearchIcon color="gray.300" />}
 						/>
-						<Input type="search" placeholder="Search"
+						<Input type="search" placeholder="Tìm kiếm"
 							maxLength={30}
 							value={search}
 							onChange={(e) => {

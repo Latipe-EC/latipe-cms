@@ -331,7 +331,7 @@ const AddressList = () => {
 							<FormLabel>Địa chỉ chi tiết</FormLabel>
 							<Input value={detailAddress} onChange={handleDetailAddressChange} required />
 							<FormErrorMessage>
-								detail address is required
+								Địa chỉ chi tiết không được để trống
 							</FormErrorMessage>
 						</FormControl>
 					</ModalBody>

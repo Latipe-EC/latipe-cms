@@ -332,7 +332,7 @@ const AccountSettings = () => {
 										setStore(newStore);
 									}}
 									required />
-								<FormErrorMessage>contact name is required</FormErrorMessage>
+								<FormErrorMessage>Tên liên hệ không được trống</FormErrorMessage>
 							</FormControl>
 						</Grid>
 
@@ -398,7 +398,7 @@ const AccountSettings = () => {
 										setStore(newStore);
 									}} required />
 								<FormErrorMessage>
-									detail address is required
+									Địa chỉ chi tiết không được để trống
 								</FormErrorMessage>
 							</FormControl>
 						</Grid>

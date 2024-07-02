@@ -11,7 +11,7 @@ import ProductFilterCard from "@components/products/ProductFilterCard";
 import Select from "@components/Select";
 import Sidenav from "@components/sidenav/Sidenav";
 import { H5, Paragraph } from "@components/Typography";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useWindowSize from "../../../hooks/useWindowSize";
 import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -35,7 +35,7 @@ const ProductSearchResult = () => {
 	const keyword = params.get('keyword');
 	const sortType = params.get('sortType');
 
-	const [view, setView] = useState("grid");
+	const [view] = useState("grid");
 	const [result, setResult] = useState<ProductListGetVm>();
 	const [currentPage, setCurrentPage] = useState(parseInt(page ? (parseInt(page) - 1).toString() : "0"));
 	const [sortTypeState, setSortTypeState] = useState(sortType);
@@ -88,13 +88,6 @@ const ProductSearchResult = () => {
 	const size = useWindowSize();
 	const isTablet = size.width < 1025;
 
-	const toggleView = useCallback(
-		(v) => () => {
-			setView(v);
-		},
-		[]
-	);
-
 	const handlePageChange = (data: number) => {
 		setCurrentPage(data);
 		window.scrollTo(0, 0);
@@ -146,33 +139,11 @@ const ProductSearchResult = () => {
 								onChange={(e) => {
 									handleFilterChange(e);
 								}}
-								placeholder="Short by"
+								placeholder="Sắp xếp"
 								defaultValue={sortOptions[0]}
 								options={sortOptions}
 							/>
 						</Box>
-
-						<Paragraph color="text.muted" mr="0.5rem">
-							Chế độ xem:
-						</Paragraph>
-						<IconButton size="small" onClick={toggleView("grid")}>
-							<Icon
-								variant="small"
-								defaultcolor="auto"
-								color={view === "grid" ? "primary" : "inherit"}
-							>
-								grid
-							</Icon>
-						</IconButton>
-						<IconButton size="small" onClick={toggleView("list")}>
-							<Icon
-								variant="small"
-								defaultcolor="auto"
-								color={view === "list" ? "primary" : "inherit"}
-							>
-								menu
-							</Icon>
-						</IconButton>
 
 						{isTablet && (
 							<Sidenav
@@ -222,9 +193,9 @@ const ProductSearchResult = () => {
 };
 
 const sortOptions = [
-	{ label: "Relevance", value: "Relevance" },
-	{ label: "Date", value: "Date" },
-	{ label: "Price Low to High", value: "Price Low to High" },
-	{ label: "Price High to Low", value: "Price High to Low" },
+	{ label: "Liên quan", value: "Relevance" },
+	{ label: "Ngày mới nhất", value: "Date" },
+	{ label: "Giá thấp đến cao", value: "Price Low to High" },
+	{ label: "Giá cao đến thấp", value: "Price High to Low" },
 ];
 export default ProductSearchResult;

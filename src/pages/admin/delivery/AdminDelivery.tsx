@@ -56,7 +56,7 @@ const DeliveriesAdmin = () => {
 			dispatch(getAdminListDelivery())
 				.unwrap().then((res) => {
 					if (res.status !== 200) {
-						navigate('/401')
+						navigate('/500')
 						return;
 					}
 					setResponse(res.data);
@@ -134,14 +134,14 @@ const DeliveriesAdmin = () => {
 		],
 		[response]
 	);
-
+	
 	const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow } = useTable(
 		{
 			columns,
 			data: response,
 			initialState: { pageIndex: 0 },
 			manualPagination: true,
-			pageCount: response.length,
+			pageCount: response?.length,
 			manualSortBy: true,
 		},
 		useSortBy,

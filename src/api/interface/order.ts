@@ -365,7 +365,20 @@ export interface AdminOrderDetailResponse {
 }
 
 export interface DataAdminOrderDetail {
-	order: AdminOrderDetail
+	order_id: string
+	amount: number
+	shipping_discount: number
+	item_discount: number
+	sub_total: number
+	net_price: number
+	status: number
+	payment_method: number
+	voucher_code: string
+	created_at: string
+	updated_at: string
+	delivery: DeliveryGetOrderById
+	order_items: OrderItem[]
+	order_status: StatusAdminOrderDetail[]
 }
 
 export interface AdminOrderDetail {

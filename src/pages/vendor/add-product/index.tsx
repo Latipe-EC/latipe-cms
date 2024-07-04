@@ -506,7 +506,7 @@ const AddProduct = () => {
 								<InputGroup>
 									<Input
 										name="name"
-										placeholder="Name"
+										placeholder="Tên"
 										value={name}
 										maxLength={maxLength}
 										onChange={handleChangeName}
@@ -587,12 +587,13 @@ const AddProduct = () => {
 							<FormControl isInvalid={isInvalid}>
 								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Chọn ảnh đặc trưng</FormLabel>
 
-								<FormHelperText>Chọn tối đa 2 ảnh. Trong trường hợp có 1 ảnh trở lên, phải chọn 2 ảnh.</FormHelperText>
+								<FormHelperText mb={2}>Chọn tối đa 2 ảnh. Trong trường hợp có 1 ảnh trở lên, phải chọn 2 ảnh.</FormHelperText>
 								{images && images.length > 0 && (
 									<ChakraReactSelect
 										isMulti
-										menuPortalTarget={document.body} // Render the dropdown menu within a portal targeting the body
-										styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }} // Adjust z-index as needed
+										placeholder="Chọn ảnh đặc trưng"
+										menuPortalTarget={document.body}
+										styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
 										value={featuresImage.map(value => ({ label: `Ảnh ${parseInt(value, 10) + 1}`, value: value.toString() }))}
 										options={images.map((image, index) => ({
 											label: `Ảnh ${index + 1}`,
@@ -600,20 +601,11 @@ const AddProduct = () => {
 										}))}
 										onChange={(selectedOptions) => {
 											let value = selectedOptions.map(option => option.value);
-
-											// If more than one image is available
 											if (images.length > 1) {
-												// Enforce selection of exactly two images if more than one image is available
 												if (value.length > 2) {
-													value = value.slice(0, 2); // Keep only the first two selections
-												} else if (value.length < 2) {
-													// Optionally, handle the case where less than two images are selected
-													// e.g., show a message to the user
+													value = value.slice(0, 2);
 												}
 											}
-											// If only one image is available, the logic above allows any selection,
-											// which effectively means the user can only select one image.
-
 											setFeaturesImage(value);
 										}}
 									/>

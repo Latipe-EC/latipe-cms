@@ -1441,7 +1441,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 	notification = {
 		registerNewDevice: (params: NewDeviceRequest) =>
 			this.request<NewDeviceResponse>({
-				baseURL: `http://127.0.0.1:5050/api/v1`,
+				baseURL: `http://localhost:8181/api/v1`,
 				path: `/notifications/user/register-device`,
 				method: 'POST',
 				type: ContentType.Json,
@@ -1452,7 +1452,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		createCampaign: (body: CreateCampaignRequest) =>
 			this.request<GeneralCampaignAdminResponse<CreateCapaign>>({
-				baseURL: `http://localhost:5050/api/v1`,
+				baseURL: `http://localhost:8181/api/v1`,
 				path: `/notifications/admin/notify-campaign`,
 				method: 'POST',
 				type: ContentType.Json,
@@ -1461,7 +1461,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		recallCampaign: (body: RecallCampaignRequest) =>
 			this.request<GeneralCampaignAdminResponse>({
-				baseURL: `http://127.0.0.1:5050/api/v1`,
+				baseURL: `http://localhost:8181/api/v1`,
 				path: `/notifications/admin/notify-campaign`,
 				method: 'DELETE',
 				type: ContentType.Json,
@@ -1470,7 +1470,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getCampaignAdmin: (params: QueryParamsType) =>
 			this.request<GeneralCampaignAdminResponse<ListCampaignDetail>>({
-				baseURL: `http://127.0.0.1:5050/api/v1`,
+				baseURL: `http://localhost:8181/api/v1`,
 				path: `/notifications/admin/notify-campaign`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -1481,7 +1481,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getNotificationCount: () =>
 			this.request<GeneralCampaignAdminResponse<CountNotificationUser>>({
-				baseURL: `http://127.0.0.1:5050/api/v1`,
+				baseURL: `http://localhost:8181/api/v1`,
 				path: `/notifications/user/total/unread`,
 				method: 'GET',
 				type: ContentType.Json
@@ -1489,7 +1489,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		markAllRead: () =>
 			this.request<GeneralCampaignAdminResponse>({
-				baseURL: `http://127.0.0.1:5050/api/v1`,
+				baseURL: `http://localhost:8181/api/v1`,
 				path: `/notifications/user/markAsRead`,
 				method: 'PATCH',
 				type: ContentType.Json
@@ -1497,7 +1497,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getNotifications: (params: QueryParamsType) =>
 			this.request<GeneralCampaignAdminResponse<ListCampaignDetail>>({
-				baseURL: `http://127.0.0.1:5050/api/v1`,
+				baseURL: `http://localhost:8181/api/v1`,
 				path: `/notifications/user`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -1508,7 +1508,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getNotificationDetail: (id: string) =>
 			this.request<GeneralCampaignAdminResponse<CampaignDetail>>({
-				baseURL: `http://127.0.0.1:5050/api/v1`,
+				baseURL: `http://localhost:8181/api/v1`,
 				path: `/notifications/user/${id}`,
 				method: 'GET',
 				type: ContentType.Json

@@ -559,7 +559,7 @@ const ProductDetailVendor = () => {
 								<InputGroup>
 									<Input
 										name="name"
-										placeholder="Name"
+										placeholder="Tên"
 										value={name}
 										maxLength={maxLength}
 										onChange={handleChangeName}
@@ -595,7 +595,7 @@ const ProductDetailVendor = () => {
 								<FormLabel fontWeight="bold" fontSize="sm" mt={4}>Danh mục</FormLabel>
 								<InputGroup>
 									<Input
-										placeholder="category"
+										placeholder="Danh mục"
 										value={selectedCategory.map((cate) => cate.name).join(' -> ')}
 										onChange={handleChangeName}
 										onClick={() => {

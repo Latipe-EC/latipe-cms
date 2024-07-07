@@ -125,14 +125,14 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 
 			if (product.productVariants.length === 2) {
 				setSelectQuantity(product.productClassifications[finalIndex].quantity);
-				setSelectPrice(product.productClassifications[finalIndex].price);
-				setSelectPromotionPrice(product.productClassifications[finalIndex].promotionalPrice);
+				setSelectPrice(parseInt(String(product.productClassifications[finalIndex].price)));
+				setSelectPromotionPrice(parseInt(String(product.productClassifications[finalIndex].promotionalPrice)));
 				setSelectClassification(product.productClassifications[finalIndex].id);
 			}
 			else {
 				setSelectQuantity(product.productClassifications[val].quantity);
-				setSelectPrice(product.productClassifications[val].price);
-				setSelectPromotionPrice(product.productClassifications[val].promotionalPrice);
+				setSelectPrice(parseInt(String(product.productClassifications[val].price)));
+				setSelectPromotionPrice(parseInt(String(product.productClassifications[val].promotionalPrice)));
 				setSelectClassification(product.productClassifications[val].id);
 			}
 			// if product have already 1 option
@@ -145,10 +145,10 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 			setSelectQuantity(
 				product.productClassifications[indexFinal].quantity
 			);
-			setSelectPrice(product.productClassifications[indexFinal].price);
+			setSelectPrice(parseInt(String(product.productClassifications[indexFinal].price)));
 			setSelectPromotionPrice(
-				product.productClassifications[indexFinal].promotionalPrice
-			);
+				parseInt(String(product.productClassifications[indexFinal].promotionalPrice
+				)));
 			setSelectClassification(product.productClassifications[indexFinal].id);
 		}
 

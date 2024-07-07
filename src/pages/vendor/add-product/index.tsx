@@ -221,16 +221,6 @@ const AddProduct = () => {
 
 		if (productVariants.length === 0) {
 			newProductClassifications = [{ quantity: 0, price: 0, promotionalPrice: 0, sku: '' }];
-		} else {
-			newProductClassifications = newProductClassifications.flatMap((item, index) => [
-				item,
-				{
-					name: (index + 2).toString(),
-					quantity: 0,
-					price: 0,
-					sku: ''
-				}
-			]);
 		}
 
 		setProductClassifications(newProductClassifications);
@@ -251,7 +241,7 @@ const AddProduct = () => {
 
 	const handleAddProductVariantValue = (index: number) => {
 		const newProductVariants = [...productVariants];
-		const newProductClassification = [...productClassifications];
+		const lenVarFirst = productVariants.length === 2 ? productVariants[1].options.length : 0;
 
 		const newOption = {
 			value: '',
@@ -269,22 +259,30 @@ const AddProduct = () => {
 
 		if (index === 0) {
 			if (newProductVariants.length === 1) {
-				newProductClassification.push(newClassification);
+				setProductClassifications([...productClassifications, { ...newClassification }]);
 			} else {
-				const classifications = newProductVariants[1].options.map(() => newClassification);
-				newProductClassification.push(...classifications);
+				const classifications = newProductVariants[1].options.map(() => { return { ...newClassification } });
+				setProductClassifications([...productClassifications, ...classifications]);
 			}
 		}
 
-		if (index === 1) {
-			const insertPositions = Array.from({ length: newProductVariants[0].options.length }, (_, i) => i * newProductVariants[0].options.length + i);
-			for (const position of insertPositions) {
-				newProductClassification.splice(position, 0, newClassification);
+		else if (index === 1) {
+			console.log("lenVarFirst: ", lenVarFirst);
+			let count = 0;
+			const newProductClassification = []
+			for (let i = 0; i < productClassifications.length; i++) {
+				if (count === lenVarFirst) {
+					newProductClassification.push({ ...newClassification });
+					count = 0;
+				}
+				newProductClassification.push({ ...productClassifications[i] });
+				count++;
 			}
+			newProductClassification.push({ ...newClassification });
+			setProductClassifications(newProductClassification);
 		}
 
 		setProductVariants(newProductVariants);
-		setProductClassifications(newProductClassification);
 	}
 
 	const handleProductVariantValueChange = (index: number, valueIndex: number, value: string) => {
@@ -306,19 +304,39 @@ const AddProduct = () => {
 
 	const handleRemoveProductVariantValue = (index: number, valueIndex: number) => {
 		const newProductVariants = [...productVariants];
-		const productVariant = newProductVariants[index];
-		if (productVariant.options.length === 1) {
+
+		if (newProductVariants[index].options.length === 1) {
 			return;
 		}
 
-		const newProductClassification = [...productClassifications];
-		newProductClassification.splice(valueIndex, 1);
-		if (productVariant.options.length === 2) {
-			newProductClassification.splice(valueIndex + productVariants[index].options.length - 1, 1);
-		}
-		setProductClassifications(newProductClassification);
+		if (index === 0) {
+			const newProductClassification = [...productClassifications];
+			if (productVariants.length === 1)
+				newProductClassification.splice(valueIndex, 1);
+			else {
+				newProductClassification.splice(valueIndex * productVariants[1].options.length, productVariants[1].options.length);
+			}
+			setProductClassifications(newProductClassification);
 
-		productVariant.options.splice(valueIndex, 1);
+		} else {
+			const newProductClassification = [];
+			const lenVarFirst = productVariants[1].options.length;
+			let count = valueIndex;
+			for (let i = 0; i < productClassifications.length; i++) {
+				if (i !== count) {
+					newProductClassification.push({ ...productClassifications[i] });
+				} else {
+					count += lenVarFirst;
+				}
+			}
+			setProductClassifications(newProductClassification);
+		}
+
+		newProductVariants[index] = {
+			...productVariants[index],
+			options: newProductVariants[index].options.filter((_, i) => i !== valueIndex)
+		};
+
 		setProductVariants(newProductVariants);
 	};
 
@@ -595,7 +613,7 @@ const AddProduct = () => {
 										menuPortalTarget={document.body}
 										styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
 										value={featuresImage.map(value => ({ label: `Ảnh ${parseInt(value, 10) + 1}`, value: value.toString() }))}
-										options={images.map((image, index) => ({
+										options={images.map((_, index) => ({
 											label: `Ảnh ${index + 1}`,
 											value: index.toString(),
 										}))}
@@ -697,7 +715,7 @@ const AddProduct = () => {
 									</>
 								)}
 								{productVariants.length > 0 && productVariants.map((productVariant, index) => (
-									<Box key={index} mt={4} bg="gray.100" p={4}>
+									<Box key={`productVariants${index}`} mt={4} bg="gray.100" p={4}>
 										<Box display="flex" justifyContent="space-between" alignItems="center">
 											<FormLabel fontWeight="bold" fontSize="xl" mb={0}>
 												Nhóm phân loại hàng {index + 1}
@@ -727,7 +745,7 @@ const AddProduct = () => {
 												<Box mt={2}>
 													<Flex w="100%" alignItems="center" mb={2} flexWrap="wrap">
 														{productVariant.options.map((value, valueIndex) => (
-															<InputGroup w="50%">
+															<InputGroup w="50%" key={`InputGroup${valueIndex}`}>
 																<Input
 																	borderColor='gray.600'
 																	placeholder="Giá trị"
@@ -769,7 +787,6 @@ const AddProduct = () => {
 									<Table mt={8}  >
 										<Thead h="100px">
 											<Tr>
-												{/* Header */}
 												<Th
 													bg="green.200"
 													borderBottom="1px"
@@ -923,16 +940,17 @@ const AddProduct = () => {
 															}} />
 													</Td>
 													{
-														productVariants.length === 2 && (
+														productVariants.length === 2
+														&& productVariants[0].options.length * productVariants[1].options.length === productClassifications.length && (
 															<>
-																<Td style={{
+																<Td key={`td1${index}`} style={{
 																	borderRight: "2px solid #ddd",
 																	borderBottom: "2px solid #ddd"
 																}}>
-																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+																	{productVariants[1].options.map((item, valueIndex) =>
 																		item !== null && item.value !== '' && (
 																			<>
-																				<Tr key={`classd2${valueIndex}`}>
+																				<Tr key={`classd2${index + valueIndex}`}>
 																					<Input
 																						value={item.value}
 																						maxLength={maxLength}
@@ -949,17 +967,17 @@ const AddProduct = () => {
 																	borderRight: "2px solid #ddd",
 																	borderBottom: "2px solid #ddd"
 																}}>
-																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+																	{productVariants[1].options.map((item, valueIndex) =>
 																		item !== null && item.value !== '' && (
 																			<Tr key={`price-unique${valueIndex}${index}`}>
 																				<InputGroup>
 																					<Input
 																						placeholder="Giá"
 																						type="number"
-																						value={productClassifications[index * productVariants[productVariants.length - 1].options.length + valueIndex].price}
+																						value={productClassifications[index * productVariants[1].options.length + valueIndex].price}
 																						onChange={(event) =>
 																							handleProductClassificationChange(
-																								index * productVariants[productVariants.length - 1].options.length + valueIndex,
+																								index * productVariants[1].options.length + valueIndex,
 																								'price',
 																								event.target.value
 																							)
@@ -985,17 +1003,17 @@ const AddProduct = () => {
 																	borderRight: "2px solid #ddd",
 																	borderBottom: "2px solid #ddd"
 																}}>
-																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+																	{productVariants[1].options.map((item, valueIndex) =>
 																		item !== null && item.value !== '' && (
 																			<Tr key={`pricePromotional-unique${valueIndex}${index}`}>
 																				<InputGroup>
 																					<Input
 																						placeholder="Giá khuyến mãi"
 																						type="number"
-																						value={productClassifications[index * productVariants[productVariants.length - 1].options.length + valueIndex].promotionalPrice}
+																						value={productClassifications[index * productVariants[1].options.length + valueIndex].promotionalPrice}
 																						onChange={(event) =>
 																							handleProductClassificationChange(
-																								index * productVariants[productVariants.length - 1].options.length + valueIndex,
+																								index * productVariants[1].options.length + valueIndex,
 																								'promotionalPrice',
 																								event.target.value
 																							)
@@ -1021,14 +1039,14 @@ const AddProduct = () => {
 																	borderRight: "2px solid #ddd",
 																	borderBottom: "2px solid #ddd"
 																}}>
-																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+																	{productVariants[1].options.map((item, valueIndex) =>
 																		item !== null && item.value !== '' && (
 																			<Tr key={`quantity${valueIndex}${index}`}>
 																				<NumberInput step={1} defaultValue={0} min={0} mb={2}
-																					value={productClassifications[index * productVariants[productVariants.length - 1].options.length + valueIndex].quantity}
+																					value={productClassifications[index * productVariants[1].options.length + valueIndex].quantity}
 																					onChange={(value) =>
 																						handleProductClassificationChange(
-																							index * productVariants[productVariants.length - 1].options.length + valueIndex,
+																							index * productVariants[1].options.length + valueIndex,
 																							'quantity',
 																							value
 																						)
@@ -1048,15 +1066,15 @@ const AddProduct = () => {
 																	borderRight: "2px solid #ddd",
 																	borderBottom: "2px solid #ddd"
 																}}>
-																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+																	{productVariants[1].options.map((item, valueIndex) =>
 																		item !== null && item.value !== '' && (
 																			<Tr key={`sku${valueIndex}${index}`}>
 																				<Input
 																					placeholder="sku"
-																					value={productClassifications[index * productVariants[productVariants.length - 1].options.length + valueIndex].sku}
+																					value={productClassifications[index * productVariants[1].options.length + valueIndex].sku}
 																					onChange={(event) =>
 																						handleProductClassificationChange(
-																							index * productVariants[productVariants.length - 1].options.length + valueIndex,
+																							index * productVariants[1].options.length + valueIndex,
 																							'sku',
 																							event.target.value
 																						)
@@ -1073,10 +1091,11 @@ const AddProduct = () => {
 													}
 
 													{
-														productVariants.length === 1 &&
+														productVariants.length === 1 && productVariants[0].options.length === productClassifications.length &&
 														item !== null && item.value !== '' && (
 															<>
 																<Td
+																	key={`price111${index}`}
 																	style={{
 																		borderRight: "2px solid #ddd",
 																		borderBottom: "2px solid #ddd"

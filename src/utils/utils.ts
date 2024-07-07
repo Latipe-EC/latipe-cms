@@ -333,3 +333,13 @@ export function generateUUID() {
 	});
 	return uuid;
 }
+
+export const formatCurrency = (value: number) => {
+	return new Intl.NumberFormat('vi-VN', { style: 'decimal' }).format(value);
+};
+
+export const parseCurrencyToNumber = (value: string) => {
+	return parseInt(value.replace(/\./g, ''), 10);
+};
+
+export const parseNumericValue = (value) => parseInt(value.replace(/\./g, ''), 10)

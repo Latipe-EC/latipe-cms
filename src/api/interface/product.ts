@@ -300,13 +300,13 @@ export interface ProductClassification {
 	 * @type {number}
 	 * @memberof ProductClassification
 	 */
-	'price'?: number;
+	'price'?: number | string;
 	/**
 	 *
 	 * @type {number}
 	 * @memberof ProductClassification
 	 */
-	'promotionalPrice'?: number;
+	'promotionalPrice'?: number | string;
 	/**
 	 *
 	 * @type {string}

@@ -1,7 +1,6 @@
 import React, { Children, cloneElement, ReactElement } from "react";
 import { FlexboxProps } from "styled-system";
 import StyledGrid from "./GridStyle";
-import { generateUUID } from "@/utils/utils";
 
 export interface GridProps {
 	container?: boolean;

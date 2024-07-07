@@ -283,69 +283,77 @@ const ProductDetailVendor = () => {
 		});
 	}
 
-	const handleAddProductVariant = () => {
-		if (productVariants.length >= 2) {
-			return;
-		}
-		if (productVariants.length === 0) {
-			setProductClassifications([{ quantity: 0, price: 0, promotionalPrice: 0, sku: '' }]);
-		} else {
-			const newProductClassification = [...productClassifications];
-			newProductClassification.flatMap((item, index) => [item, {
-				name:
-					(index + 2).toString(),
-				quantity: 0, price: 0, sku: ''
-			}])
-			setProductClassifications(newProductClassification);
-
-		}
-		setProductVariants([...productVariants, {
-			name: '',
-			options: [{ value: '', file: new File([new Blob()], 'Upload', { type: 'image/png' }) }]
-		}]);
-	}
-
 	const handleProductVariantNameChange = (index: number, name: string) => {
 		const newProductVariants = [...productVariants];
 		newProductVariants[index].name = name;
 		setProductVariants(newProductVariants);
 	};
 
+	const handleAddProductVariant = () => {
+		if (productVariants.length >= 2) {
+			return;
+		}
+
+		let newProductClassifications = [...productClassifications];
+
+		if (productVariants.length === 0) {
+			newProductClassifications = [{ quantity: 0, price: 0, promotionalPrice: 0, sku: '' }];
+		}
+
+		setProductClassifications(newProductClassifications);
+
+		const newProductVariant = {
+			name: '',
+			options: [{ value: '', file: new File([new Blob()], 'Upload', { type: 'image/png' }) }]
+		};
+
+		setProductVariants([...productVariants, newProductVariant]);
+	}
+
 	const handleAddProductVariantValue = (index: number) => {
 		const newProductVariants = [...productVariants];
-		const newProductClassification = [...productClassifications];
+		const lenVarFirst = productVariants.length === 2 ? productVariants[1].options.length : 0;
 
-		newProductVariants[index].options.push({
+		const newOption = {
 			value: '',
 			file: new File([new Blob()], 'Upload', { type: 'image/png' })
-		});
+		};
+
+		newProductVariants[index].options.push(newOption);
+
+		const newClassification = {
+			quantity: 0,
+			price: 0,
+			sku: '',
+			promotionalPrice: 0
+		};
+
 		if (index === 0) {
 			if (newProductVariants.length === 1) {
-				newProductClassification.push({
-					quantity: 0, price: 0, sku: ''
-				});
+				setProductClassifications([...productClassifications, { ...newClassification }]);
 			} else {
-				const newClassification = newProductVariants[1]
-					.options.map(() => {
-						return {
-							name: '',
-							quantity: 0, price: 0, sku: '', promotionalPrice: 0
-						}
-					});
-				newProductClassification.push(...newClassification);
+				const classifications = newProductVariants[1].options.map(() => { return { ...newClassification } });
+				setProductClassifications([...productClassifications, ...classifications]);
 			}
 		}
-		if (index === 1) {
-			for (let i = 0; i < newProductVariants[0].options.length; i++) {
-				newProductClassification.splice(i * newProductVariants[0].options.length + i, 0, {
 
-					quantity: 0, price: 0, sku: '', promotionalPrice: 0
-				});
+		else if (index === 1) {
+			console.log("lenVarFirst: ", lenVarFirst);
+			let count = 0;
+			const newProductClassification = []
+			for (let i = 0; i < productClassifications.length; i++) {
+				if (count === lenVarFirst) {
+					newProductClassification.push({ ...newClassification });
+					count = 0;
+				}
+				newProductClassification.push({ ...productClassifications[i] });
+				count++;
 			}
+			newProductClassification.push({ ...newClassification });
+			setProductClassifications(newProductClassification);
 		}
-		setProductClassifications(newProductClassification);
+
 		setProductVariants(newProductVariants);
-
 	}
 
 	const handleProductVariantValueChange = (index: number, valueIndex: number, value: string) => {
@@ -353,6 +361,7 @@ const ProductDetailVendor = () => {
 		newProductVariants[index].options[valueIndex].value = value;
 		setProductVariants(newProductVariants);
 	};
+
 
 	const handleRemoveProductVariant = (index: number) => {
 		const newProductVariants = [...productVariants];
@@ -365,21 +374,42 @@ const ProductDetailVendor = () => {
 		setProductVariants(newProductVariants);
 	};
 
+
 	const handleRemoveProductVariantValue = (index: number, valueIndex: number) => {
 		const newProductVariants = [...productVariants];
-		const productVariant = newProductVariants[index];
-		if (productVariant.options.length === 1) {
+
+		if (newProductVariants[index].options.length === 1) {
 			return;
 		}
 
-		const newProductClassification = [...productClassifications];
-		newProductClassification.splice(valueIndex, 1);
-		if (productVariant.options.length === 2) {
-			newProductClassification.splice(valueIndex + productVariants[index].options.length - 1, 1);
-		}
-		setProductClassifications(newProductClassification);
+		if (index === 0) {
+			const newProductClassification = [...productClassifications];
+			if (productVariants.length === 1)
+				newProductClassification.splice(valueIndex, 1);
+			else {
+				newProductClassification.splice(valueIndex * productVariants[1].options.length, productVariants[1].options.length);
+			}
+			setProductClassifications(newProductClassification);
 
-		productVariant.options.splice(valueIndex, 1);
+		} else {
+			const newProductClassification = [];
+			const lenVarFirst = productVariants[1].options.length;
+			let count = valueIndex;
+			for (let i = 0; i < productClassifications.length; i++) {
+				if (i !== count) {
+					newProductClassification.push({ ...productClassifications[i] });
+				} else {
+					count += lenVarFirst;
+				}
+			}
+			setProductClassifications(newProductClassification);
+		}
+
+		newProductVariants[index] = {
+			...productVariants[index],
+			options: newProductVariants[index].options.filter((_, i) => i !== valueIndex)
+		};
+
 		setProductVariants(newProductVariants);
 	};
 
@@ -646,7 +676,7 @@ const ProductDetailVendor = () => {
 										menuPortalTarget={document.body} // Render the dropdown menu within a portal targeting the body
 										styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }} // Adjust z-index as needed
 										value={featuresImage.map(value => ({ label: `Ảnh ${parseInt(value, 10) + 1}`, value: value.toString() }))}
-										options={images.map((image, index) => ({
+										options={images.map((_, index) => ({
 											label: `Ảnh ${index + 1}`,
 											value: index,
 										}))}
@@ -981,13 +1011,13 @@ const ProductDetailVendor = () => {
 																}
 															}} />
 													</Td>
-													{
-														productVariants.length === 2 && (
+													{productVariants.length === 2
+														&& productVariants[0].options.length * productVariants[1].options.length === productClassifications.length && (
 															<>
 																<Td style={{
 																	borderRight: "2px solid #ddd",
 																}}>
-																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+																	{productVariants[1].options.map((item, valueIndex) =>
 																		item !== null && item.value !== '' && (
 																			<>
 																				<Tr style={{
@@ -1008,7 +1038,7 @@ const ProductDetailVendor = () => {
 																<Td style={{
 																	borderRight: "2px solid #ddd",
 																}}>
-																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+																	{productVariants[1].options.map((item, valueIndex) =>
 																		item !== null && item.value !== '' && (
 																			<Tr key={`price-unique${valueIndex}${index}`}>
 																				<InputGroup>
@@ -1043,7 +1073,7 @@ const ProductDetailVendor = () => {
 																<Td style={{
 																	borderRight: "2px solid #ddd",
 																}}>
-																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+																	{productVariants[1].options.map((item, valueIndex) =>
 																		item !== null && item.value !== '' && (
 																			<Tr key={`pricePromotional-unique${valueIndex}${index}`}>
 																				<InputGroup>
@@ -1078,7 +1108,7 @@ const ProductDetailVendor = () => {
 																<Td style={{
 																	borderRight: "2px solid #ddd",
 																}}>
-																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+																	{productVariants[1].options.map((item, valueIndex) =>
 																		item !== null && item.value !== '' && (
 																			<Tr key={`quantity${valueIndex}${index}`}>
 																				<NumberInput step={1} defaultValue={0} min={0} mb={2}
@@ -1101,7 +1131,7 @@ const ProductDetailVendor = () => {
 																		))}
 																</Td>
 																<Td>
-																	{productVariants.length === 2 && productVariants[1].options.map((item, valueIndex) =>
+																	{productVariants[1].options.map((item, valueIndex) =>
 																		item !== null && item.value !== '' && (
 																			<Tr key={`sku${valueIndex}${index}`}>
 																				<Input
@@ -1126,7 +1156,7 @@ const ProductDetailVendor = () => {
 													}
 
 													{
-														productVariants.length === 1 &&
+														productVariants.length === 1 && productVariants[0].options.length === productClassifications.length &&
 														item !== null && item.value !== '' && (
 															<>
 																<Td>

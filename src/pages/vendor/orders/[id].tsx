@@ -18,7 +18,6 @@ import {
 	StoreOrderDetailResponse
 } from "@interfaces/order";
 import {
-	cancelOrderItem,
 	getStoreOrderDetail,
 	updateOrderItemStatusByStore
 } from "@stores/slices/orders-slice";

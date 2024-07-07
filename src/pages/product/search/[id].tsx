@@ -8,7 +8,6 @@ import Icon from "@components/icon/Icon";
 import ProductCard1List from "@components/products/ProductCard1List";
 import ProductCard9List from "@components/products/ProductCard9List";
 import ProductFilterCard from "@components/products/ProductFilterCard";
-import Select from "@components/Select";
 import Sidenav from "@components/sidenav/Sidenav";
 import { H5, Paragraph } from "@components/Typography";
 import { useEffect, useState } from "react";
@@ -20,6 +19,7 @@ import { searchProduct } from "@stores/slices/search-slice";
 import { ProductListGetVm } from "../../../api/interface/search";
 import { Center, Spinner, Text } from "@chakra-ui/react";
 import { Content } from "@/utils/constants";
+import { Select } from "chakra-react-select";
 
 const ProductSearchResult = () => {
 	const dispatch = useDispatch<AppThunkDispatch>();

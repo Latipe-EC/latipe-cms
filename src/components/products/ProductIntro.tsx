@@ -86,7 +86,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 			{
 				productId: product.id,
 				quantity: quantity,
-				productOptionId: selectClassification
+				productOptionId: selectClassification ? selectClassification : product.productClassifications[0].id
 			},
 			null,
 			TitleToast.ADD_TO_CART,

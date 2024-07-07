@@ -176,7 +176,7 @@ const initialValues = {
 };
 
 const formSchema = yup.object().shape({
-	email: yup.string().email("invalid email").required("${path} is required"),
+	email: yup.string().email("Email không đúng định dạng").required("${path} is required"),
 	password: yup.string().required("${path} is required"),
 });
 

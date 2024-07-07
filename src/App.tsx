@@ -184,7 +184,7 @@ function App() {
 									<Route path="address/:id" element={<AddressUpdater />} />
 									<Route path="orders" element={<Orders />} />
 									<Route path="orders/:id" element={<OrderDetails />} />
-									<Route path="payment-paypal/:id" element={<Paypal />} />
+									<Route path="payment-paypal" element={<Paypal />} />
 									<Route path="payment-methods" element={<AddressList />} />
 									<Route path="payment-methods/add" element={<PaymentMethodEditor />} />
 									<Route path="wish-list" element={<WishList />} />

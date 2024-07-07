@@ -949,7 +949,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		createOrderV2: (request: CreateOrderV2Request) =>
 			this.request<CreateOrderResponse>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/user`,
 				method: 'POST',
 				type: ContentType.Json,
@@ -959,7 +959,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 		getMyOrder: (query: Record<string, string>) => {
 			const queryParams = new URLSearchParams(query).toString();
 			return this.request<GetMyOrderResponse>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://localhost:5000/api/v2/orders`,
 				path: `/user?${queryParams}`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -969,7 +969,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		cancelOrder: (request: CancelOrderRequest) =>
 			this.request<unknown>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `http://localhost:5000/api/v2/orders`,
 				path: `/user/cancel`,
 				method: 'PATCH',
 				type: ContentType.Json,

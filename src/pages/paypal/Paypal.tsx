@@ -2,24 +2,25 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AppThunkDispatch } from "@stores/store";
-import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { CapturePayment } from "../../api/interface/payment";
 import { payByPaypal, totalAmount } from "@stores/slices/payment-slice";
+import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 export default function Paypal() {
 	const dispatch = useDispatch<AppThunkDispatch>();
 	const navigate = useNavigate();
-	const [total, setTotal] = useState<number>();
+	const [total, setTotal] = useState<number>(null);
 	const params = new URLSearchParams(location.search);
 	const ids: string = params.get('ids');
-	useEffect(() => {
 
-		params
+
+	useEffect(() => {
 		dispatch(totalAmount({
-			orderIds: ids.split(',')
+			orderIds: [ids.split(',')[0]]
 		})).unwrap().then((res) => {
-			if (res.status !== 200) {
+			if (res.status === 200) {
 				setTotal(res.data.amount)
+				return res.data.amount;
 			} else
 				navigate('/404');
 		});
@@ -34,7 +35,7 @@ export default function Paypal() {
 					breakdown: {
 						item_total: {
 							currency_code: "USD",
-							value: (total / 25000).toFixed(2), // This should be the total cost of all items
+							value: (total / 25000).toFixed(2),
 						},
 					},
 				},
@@ -46,7 +47,7 @@ export default function Paypal() {
 		actions.order.capture().then((response: CapturePayment) => {
 			if (response.status === "COMPLETED") {
 				dispatch(payByPaypal({
-					orderIds: ids.split(','),
+					orderIds: [ids.split(',')[0]],
 					id: response.id,
 					status: response.status,
 					email: response.payer.email_address,
@@ -61,7 +62,7 @@ export default function Paypal() {
 
 	return (
 		<div>
-			<PayPalScriptProvider options={{
+			{total && <PayPalScriptProvider options={{
 				clientId: "AaRyHTbiuujPUm3OnRzxaLpq_AEd1amZZ0faxsZA307puscnRCacHVHGd4LHU3ATYfK9F5JrJQ4bEL_c",
 				components: "buttons",
 				currency: "USD",
@@ -73,6 +74,7 @@ export default function Paypal() {
 					onApprove={(data, actions) => onApproveOrder(data, actions)}
 				/>
 			</PayPalScriptProvider>
+			}
 		</div>
 	);
 }

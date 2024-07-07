@@ -32,6 +32,7 @@ import {
 	Text,
 	Button as ButtonCharkra,
 	Tooltip,
+	AlertDialogFooter,
 } from "@chakra-ui/react";
 import { FaSync } from "react-icons/fa";
 import { useDispatch } from "react-redux";
@@ -812,14 +813,20 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 				isCentered
 			>
 				<AlertDialogOverlay>
-					<AlertDialogContent style={{ backgroundColor: '#92b55e' }}>
-						<AlertDialogHeader fontSize='lg' fontWeight='bold'>
+					<AlertDialogContent style={{ backgroundColor: '#f0f0f0', padding: '24px', borderRadius: '10px', border: '1px solid #007bff' }}>
+						<AlertDialogHeader fontSize='xl' fontWeight='bold' style={{ display: 'flex', alignItems: 'center', color: '#007bff' }}>
+							<Icon name="warning" style={{ marginRight: '12px', fontSize: '50px', color: '#ffcc00' }} />
 							{TitleAlter.WARNING_TITLE}
 						</AlertDialogHeader>
-						<AlertDialogBody style={{ fontSize: '15px', color: '#ffffff' }}>
+						<AlertDialogBody style={{ fontSize: '18px', color: '#333', marginTop: '12px' }}>
 							{messageAlter}
 						</AlertDialogBody>
-
+						{/* Action Buttons */}
+						<AlertDialogFooter>
+							<Button onClick={() => setIsAlterOpen(false)} style={{ marginRight: '12px', backgroundColor: '#007bff', color: '#ffffff', fontSize: '16px', padding: '6px 12px', borderRadius: '4px' }}>
+								Đóng
+							</Button>
+						</AlertDialogFooter>
 					</AlertDialogContent>
 				</AlertDialogOverlay>
 			</AlertDialog>

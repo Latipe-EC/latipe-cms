@@ -159,7 +159,7 @@ const initialValues = {
 const checkoutSchema = yup.object().shape({
 	first_name: yup.string().required("required"),
 	last_name: yup.string().required("required"),
-	email: yup.string().email("invalid email").required("required"),
+	email: yup.string().email("Email không đúng định dạng").required("required"),
 	contact: yup.string().required("required"),
 	birth_date: yup.date().required("invalid date"),
 });

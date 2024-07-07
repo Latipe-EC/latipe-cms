@@ -334,9 +334,9 @@ export function generateUUID() {
 	return uuid;
 }
 
-export const formatCurrency = (value: number) => {
-	return new Intl.NumberFormat('vi-VN', { style: 'decimal' }).format(value);
-};
+export const formatCurrencyVN = (inputString: string): string => {
+	return parseInt(inputString).toLocaleString('vi-VN');
+}
 
 export const parseCurrencyToNumber = (value: string) => {
 	return parseInt(value.replace(/\./g, ''), 10);

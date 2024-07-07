@@ -15,10 +15,13 @@ export default function Paypal() {
 	const dispatch = useDispatch<AppThunkDispatch>();
 	const navigate = useNavigate();
 
+	console.log(orderId);
 
 	useEffect(() => {
+
 		dispatch(getOrderById(orderId)).unwrap().then((res) => {
 			if (!res.data.error_code) {
+				console.log(res.data.data.order.amount.toString());
 				window.paypal
 					.Buttons({
 						createOrder: (_, actions) => {

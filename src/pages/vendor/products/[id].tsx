@@ -64,8 +64,9 @@ import { getProductById, updateProduct } from "@stores/slices/products-slice";
 import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { handleApiCallWithToast, truncateFilename } from "../../../utils/utils";
+import { handleApiCallWithToast, parseNumericValue, truncateFilename } from "../../../utils/utils";
 import { Path, ContentToast, TitleToast } from "@/utils/constants";
+import { LoginResponse } from "@/api/interface/auth";
 
 
 const ProductDetailVendor = () => {
@@ -75,7 +76,7 @@ const ProductDetailVendor = () => {
 	const [images, setImages] = useState([]);
 	const [name, setName] = useState('');
 	const [description, setDescription] = useState('');
-	const [price, setPrice] = useState(0);
+	const [price, setPrice] = useState("0");
 	const [inventory, setInventory] = useState(0);
 	const [isModalCateOpen, setModalCateOpen] = useState(false);
 	const [searchText, setSearchText] = useState('');
@@ -86,7 +87,7 @@ const ProductDetailVendor = () => {
 	const [selectedCategory, setSelectedCategory] = useState([]);
 	const [disableButtonSaveCategory, setDisableButtonSaveCategory] = useState(false);
 	const [step, setStep] = useState([0, 1, 2]);
-	const [promotionalPrice, setPromotionalPrice] = useState(0);
+	const [promotionalPrice, setPromotionalPrice] = useState("0");
 	const [disableSaveProduct, setDisableSaveProduct] = useState(true);
 	const [fileOriginal, setFileOriginal] = useState([]);
 	const dispatch = useDispatch<AppThunkDispatch>();
@@ -98,7 +99,19 @@ const ProductDetailVendor = () => {
 	const [defaultValue, setDefaultValue] = useState<ProductResponse>();
 	const [featuresImage, setFeaturesImage] = useState([]);
 
+
+
 	useEffect(() => {
+		const REACT_STARTER_AUTH: LoginResponse = JSON.parse(localStorage.getItem("REACT_STARTER_AUTH"));
+		if (!REACT_STARTER_AUTH) {
+			navigate("/login");
+			return;
+		}
+		if (REACT_STARTER_AUTH.role !== "VENDOR") {
+			navigate("/register-store");
+			return;
+		}
+
 		if (id) {
 			dispatch(getProductById(id)).unwrap().then((res) => {
 				if (res.status.toString().startsWith('2')) {
@@ -118,14 +131,13 @@ const ProductDetailVendor = () => {
 						}
 						setName(product.name);
 						setDescription(product.description);
-						setPrice(product.price);
+						setPrice(parseInt(product.price).toLocaleString('vi-VN'))
+						setPromotionalPrice(parseInt(product.promotionalPrice).toLocaleString('vi-VN'))
 						setInventory(product.quantity);
 						setIsPublished(product.isPublished);
 						setImages(blobs == null ? [] : blobs);
 						setSelectedCategory(product.categories);
 						setAttributeValues(product.detailsProduct);
-						console.log(product.indexFeatures);
-
 						if (product.indexFeatures) {
 							setFeaturesImage(product.indexFeatures);
 						}
@@ -159,8 +171,6 @@ const ProductDetailVendor = () => {
 							promotionalPrice: productClassification.promotionalPrice ? productClassification.promotionalPrice : 0
 
 						})));
-
-						setPromotionalPrice(product.promotionalPrice);
 						setDisableSaveProduct(false);
 						setDefaultValue(product);
 					}
@@ -171,6 +181,9 @@ const ProductDetailVendor = () => {
 				}
 			});
 		}
+
+		return () => {
+		};
 	}, []);
 
 	useEffect(() => {
@@ -421,13 +434,13 @@ const ProductDetailVendor = () => {
 		const newProductClassification = [...productClassifications];
 		switch (key) {
 			case 'price':
-				newProductClassification[index][key as 'price'] = value as number;
+				newProductClassification[index][key as 'price'] = value;
 				break;
 			case 'quantity':
 				newProductClassification[index][key as 'quantity'] = value as number;
 				break;
 			case 'promotionalPrice':
-				newProductClassification[index][key as 'promotionalPrice'] = value as number;
+				newProductClassification[index][key as 'promotionalPrice'] = value;
 				break;
 			case 'sku':
 				newProductClassification[index][key as 'sku'] = value as string;
@@ -446,14 +459,13 @@ const ProductDetailVendor = () => {
 	}
 
 	const handleSaveProduct = () => {
-		console.log(isPublished);
 		const request: UpdateProductRequest = {
 			id,
 			name,
 			description,
-			promotionalPrice,
+			promotionalPrice: parseNumericValue(promotionalPrice),
+			price: parseNumericValue(price),
 			indexFeatures: featuresImage,
-			price,
 			categories: selectedCategory.map((category) => category.id),
 			isPublished,
 			quantity: inventory,
@@ -462,7 +474,11 @@ const ProductDetailVendor = () => {
 				value: attribute.value ? attribute.value : attribute.defaultValue ? attribute.defaultValue : 'Khong co',
 			})),
 			productVariants,
-			productClassifications,
+			productClassifications: productClassifications.map((item) => ({
+				...item,
+				price: parseNumericValue(item.price),
+				promotionalPrice: parseNumericValue(item.promotionalPrice),
+			})),
 			imagesFile: images,
 			defaultValue,
 			originalFiles: fileOriginal
@@ -756,7 +772,14 @@ const ProductDetailVendor = () => {
 												type="number"
 												min="0"
 												value={promotionalPrice}
-												onChange={(event) => setPromotionalPrice(parseInt(event.target.value))}
+												onChange={(event) => {
+													let { value } = event.target;
+													// Remove all periods from the input value
+													value = value.replace(/\./g, '');
+													const pattern = /^[0-9]+$/; if (pattern.test(value) || value === '') {
+														setPromotionalPrice(parseInt(value).toLocaleString('vi-VN'))
+													}
+												}}
 											/>
 										</FormControl>
 										<FormControl mt={4} w="40%">
@@ -768,7 +791,14 @@ const ProductDetailVendor = () => {
 												type="number"
 												min="0"
 												value={price}
-												onChange={(event) => setPrice(parseInt(event.target.value))}
+												onChange={(event) => {
+													let { value } = event.target;
+													// Remove all periods from the input value
+													value = value.replace(/\./g, '');
+													const pattern = /^[0-9]+$/; if (pattern.test(value) || value === '') {
+														setPrice(parseInt(value).toLocaleString('vi-VN'))
+													}
+												}}
 											/>
 										</FormControl>
 
@@ -1044,16 +1074,23 @@ const ProductDetailVendor = () => {
 																				<InputGroup>
 																					<Input
 																						placeholder="Giá"
-																						type="number"
+																						type="text"
 																						value={productClassifications[index * productVariants[productVariants.length - 1].options.length + valueIndex].price}
 																						min="0"
-																						onChange={(event) =>
-																							handleProductClassificationChange(
-																								index * productVariants[productVariants.length - 1].options.length + valueIndex,
-																								'price',
-																								event.target.value
-																							)
-																						}
+																						onChange={(event) => {
+																							let { value } = event.target;
+																							// Remove all periods from the input value
+																							value = value.replace(/\./g, '');
+
+																							const pattern = /^[0-9]+$/;
+																							if (pattern.test(value) || value === '') { // Allow the value if it matches the pattern or is an empty string
+																								handleProductClassificationChange(
+																									index * productVariants[1].options.length + valueIndex,
+																									'price',
+																									parseInt(value).toLocaleString('vi-VN')
+																								);
+																							}
+																						}}
 																						maxLength={maxLength}
 																						overflow="hidden"
 																						mb={2}
@@ -1079,16 +1116,23 @@ const ProductDetailVendor = () => {
 																				<InputGroup>
 																					<Input
 																						placeholder="Giá khuyến mãi"
-																						type="number"
+																						type="text"
 																						min="0"
 																						value={productClassifications[index * productVariants[productVariants.length - 1].options.length + valueIndex].promotionalPrice}
-																						onChange={(event) =>
-																							handleProductClassificationChange(
-																								index * productVariants[productVariants.length - 1].options.length + valueIndex,
-																								'promotionalPrice',
-																								event.target.value
-																							)
-																						}
+																						onChange={(event) => {
+																							let { value } = event.target;
+																							// Remove all periods from the input value
+																							value = value.replace(/\./g, '');
+
+																							const pattern = /^[0-9]+$/;
+																							if (pattern.test(value) || value === '') {
+																								handleProductClassificationChange(
+																									index * productVariants[1].options.length + valueIndex,
+																									'promotionalPrice',
+																									parseInt(value).toLocaleString('vi-VN')
+																								);
+																							}
+																						}}
 																						maxLength={maxLength}
 																						overflow="hidden"
 																						mb={2}
@@ -1164,16 +1208,23 @@ const ProductDetailVendor = () => {
 																		<InputGroup>
 																			<Input
 																				placeholder="Giá"
-																				type="number"
+																				type="text"
 																				min="0"
 																				value={productClassifications[index].price}
-																				onChange={(event) =>
-																					handleProductClassificationChange(
-																						index,
-																						'price',
-																						event.target.value
-																					)
-																				}
+																				onChange={(event) => {
+																					let { value } = event.target;
+																					// Remove all periods from the input value
+																					value = value.replace(/\./g, '');
+																					const pattern = /^[0-9]+$/;
+
+																					if (pattern.test(value) || value === '') { // Allow the value if it matches the pattern or is an empty string
+																						handleProductClassificationChange(
+																							index,
+																							'price',
+																							parseInt(value).toLocaleString('vi-VN')
+																						);
+																					}
+																				}}
 																				maxLength={maxLength}
 																				pr="4rem"
 																				overflow="hidden"
@@ -1197,13 +1248,20 @@ const ProductDetailVendor = () => {
 																				type="number"
 																				min="0"
 																				value={productClassifications[index].promotionalPrice}
-																				onChange={(event) =>
-																					handleProductClassificationChange(
-																						index,
-																						'promotionalPrice',
-																						event.target.value
-																					)
-																				}
+																				onChange={(event) => {
+																					let { value } = event.target;
+																					// Remove all periods from the input value
+																					value = value.replace(/\./g, '');
+
+																					const pattern = /^[0-9]+$/;
+																					if (pattern.test(value) || value === '') { // Allow the value if it matches the pattern or is an empty string
+																						handleProductClassificationChange(
+																							index,
+																							'promotionalPrice',
+																							parseInt(value).toLocaleString('vi-VN')
+																						);
+																					}
+																				}}
 																				maxLength={maxLength}
 																				pr="4rem"
 																				overflow="hidden"

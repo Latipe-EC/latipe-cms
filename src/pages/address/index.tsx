@@ -302,10 +302,10 @@ const AddressList = () => {
 						</FormControl>
 
 						<FormControl isRequired isInvalid={district === null}>
-							<FormLabel>Tên huyện</FormLabel>
+							<FormLabel>Tên quận/huyện</FormLabel>
 							<Select value={JSON.stringify(district)} onChange={handleDistrictChange}
 								disabled={!province} required>
-								<option value="">Chọn huyện</option>
+								<option value="">Chọn quận/huyện</option>
 								{filteredDistricts.map((d) => (
 									<option key={d.code} value={JSON.stringify(d)}>
 										{d.name_with_type}
@@ -318,7 +318,7 @@ const AddressList = () => {
 							<FormLabel>Tên xã</FormLabel>
 							<Select value={JSON.stringify(ward)} onChange={handleWardChange}
 								disabled={!district} required>
-								<option value="">Chọn quận</option>
+								<option value="">Chọn xã</option>
 								{filteredWards.map((w) => (
 									<option key={w.code} value={JSON.stringify(w)}>
 										{w.name_with_type}

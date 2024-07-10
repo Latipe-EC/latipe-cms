@@ -25,7 +25,7 @@ const api = new Api();
 
 if ('serviceWorker' in navigator) {
 	window.addEventListener('load', () => {
-		navigator.serviceWorker.register('./firebase-messaging-sw.js').then(registration => {
+		navigator.serviceWorker.register(`${window.location.origin}/firebase-messaging-sw.js`).then(registration => {
 			if (Notification.permission === 'granted') {
 				getTokenAndLog();
 			} else if (Notification.permission !== 'denied') {

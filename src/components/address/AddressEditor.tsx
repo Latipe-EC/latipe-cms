@@ -217,9 +217,9 @@ const AddressEditor = () => {
 					</FormControl>
 
 					<FormControl isRequired isInvalid={district === null} mb={4}>
-						<FormLabel>Tên huyện</FormLabel>
+						<FormLabel>Tên quận/huyện</FormLabel>
 						<Select value={JSON.stringify(district)} onChange={handleDistrictChange} required>
-							<option value="">Chọn huyện</option>
+							<option value="">Chọn quận/huyện</option>
 							{filteredDistricts.map((d) => (
 								<option key={d.code} value={JSON.stringify(d)}>
 									{d.name_with_type}

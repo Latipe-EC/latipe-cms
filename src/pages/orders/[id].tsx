@@ -242,12 +242,11 @@ const OrderDetails = () => {
 	}
 
 	const isOlderThanSevenDays = () => {
-		const date = orderDetail.order.order_status.find(x => x.message.includes(Order.OrderDeliverySuccess))
-		if (!date)
+		if (orderDetail.order.status !== OrderStatus.ORDER_COMPLETED)
 			return true;
 		const sevenDaysAgo = new Date();
 		sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-		return new Date(date.created_at) < sevenDaysAgo;
+		return new Date(orderDetail.order.created_at) < sevenDaysAgo;
 	}
 
 	const handleStatusIcon = (index: number) => {

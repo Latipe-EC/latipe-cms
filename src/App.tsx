@@ -32,6 +32,7 @@ const SupportTicketDetails = lazy(() => import('@pages/support-tickets/[id]'));
 const TicketList = lazy(() => import('@pages/support-tickets/index'));
 const Paypal = lazy(() => import('@pages/paypal/Paypal'));
 const Notificaions = lazy(() => import('@/pages/notifications'));
+const RequireRegisterVendor = lazy(() => import('@pages/require-register-vendor'));
 
 // vendor pages
 const DashboardVendor = lazy(() => import('@pages/vendor/dashboard/index'));
@@ -141,6 +142,7 @@ function App() {
 									{/* <Route path="shops" element={<ShopList />} /> */}
 									<Route path="signup" element={<SignUpPage />} />
 									<Route path="orders/success" element={<OrderSuccess />} />
+									<Route path="require-register-vendor" element={<RequireRegisterVendor />} />
 									<Route path="payment-success" element={<PaymentSuccess />} />
 									<Route path="valid-withdraw" element={<ValidWithdraw />} />
 									<Route path="withdraw-success/:token" element={<WithdrawSuccess />} />

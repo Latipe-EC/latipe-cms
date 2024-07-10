@@ -21,7 +21,7 @@ const VendorDashboard = () => {
 			return;
 		}
 		if (REACT_STARTER_AUTH.role !== "VENDOR") {
-			navigate("/register-store");
+			navigate("/require-register-vendor");
 			return;
 		}
 		return () => {

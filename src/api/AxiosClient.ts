@@ -212,6 +212,7 @@ export class HttpClient<SecurityDataType = unknown> {
 								localStorage.setItem('REACT_STARTER_AUTH', JSON.stringify({
 									accessToken: response.data.accessToken,
 									isAuthenticated: true,
+									displayName: user.displayName,
 								}));
 
 								if (response.headers['Sid']) {
@@ -959,7 +960,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 		getMyOrder: (query: Record<string, string>) => {
 			const queryParams = new URLSearchParams(query).toString();
 			return this.request<GetMyOrderResponse>({
-				baseURL: `https://localhost:5000/api/v2/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/user?${queryParams}`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -969,7 +970,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		cancelOrder: (request: CancelOrderRequest) =>
 			this.request<unknown>({
-				baseURL: `http://localhost:5000/api/v2/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/user/cancel`,
 				method: 'PATCH',
 				type: ContentType.Json,
@@ -979,7 +980,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		refundOrder: (request: RefundOrderRequest) =>
 			this.request<unknown>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/user/refund`,
 				method: 'PATCH',
 				type: ContentType.Json,
@@ -988,7 +989,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getOrderById: (id: string) =>
 			this.request<GetOrderByIdResponse>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/user/${id}`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -996,7 +997,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		countMyOrder: () =>
 			this.request<CountMyOrderResponse>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/user/total/count`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -1005,7 +1006,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 		searchStoreOrder: (params: Record<string, string>) => {
 			const queryParams = new URLSearchParams(params).toString();
 			return this.request<searchStoreOrderResponse>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/store?${queryParams}`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -1014,7 +1015,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		updateOrderItemStatusByStore:
 			(request: StatusBodyRequest) => this.request<UpdateOrderItemStatusByStoreResponse>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/store/${request.id}/status`,
 				method: 'PATCH',
 				type: ContentType.Json,
@@ -1022,14 +1023,14 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			}),
 
 		getStoreOrderDetail: (id: string) => this.request<StoreOrderDetailResponse>({
-			baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+			baseURL: `https://backend.latipe.store/api/v2/orders`,
 			path: `/store/${id}`,
 			method: 'GET',
 			type: ContentType.Json,
 		}),
 
 		cancelOrderItem: (request: StatusBodyRequest) => this.request<UpdateOrderItemStatusByStoreResponse>({
-			baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+			baseURL: `https://backend.latipe.store/api/v2/orders`,
 			path: `/store/${request.id}/status`,
 			method: 'DELETE',
 			type: ContentType.Json,
@@ -1038,7 +1039,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getTotalOrderInMonth:
 			(params: QueryParamsType) => this.request<GetTotalOrderInMonthResponse>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/statistic/store/total-order/month`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -1049,7 +1050,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getTotalOrderInYear:
 			(params: QueryParamsType) => this.request<GetTotalOrderInYear>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/statistic/store/total-order/year`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -1060,7 +1061,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getTotalCommission:
 			(params: QueryParamsType) => this.request<GetTotalCommissionResponse>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/statistic/store/total-commission`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -1071,7 +1072,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getProductBestSeller:
 			(params: QueryParamsType) => this.request<GetProductBestSellerResponse>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/statistic/store/list-of-product`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -1083,7 +1084,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 		searchOrderAdmin: (params: Record<string, string>) => {
 			const queryParams = new URLSearchParams(params).toString();
 			return this.request<searchStoreOrderResponse>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/admin?${queryParams}`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -1093,7 +1094,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 		searchOrderDelivery: (params: Record<string, string>) => {
 			const queryParams = new URLSearchParams(params).toString();
 			return this.request<searchStoreOrderResponse>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/delivery?${queryParams}`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -1102,7 +1103,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		updateStatusOrderByDelivery: (request: UpdateOrderByDeliveryRequest) => {
 			return this.request<searchStoreOrderResponse>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/delivery/${request.id}`,
 				method: 'PATCH',
 				type: ContentType.Json,
@@ -1113,14 +1114,14 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 		},
 
 		getAdminOrderDetail: (id: string) => this.request<AdminOrderDetailResponse>({
-			baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+			baseURL: `https://backend.latipe.store/api/v2/orders`,
 			path: `/admin/${id}`,
 			method: 'GET',
 			type: ContentType.Json,
 		}),
 
 		getDeliveryOrderDetail: (id: string) => this.request<AdminOrderDetailResponse>({
-			baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+			baseURL: `https://backend.latipe.store/api/v2/orders`,
 			path: `/delivery/${id}`,
 			method: 'GET',
 			type: ContentType.Json,
@@ -1128,7 +1129,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getTotalOrderInMonthAdmin:
 			(params: QueryParamsType) => this.request<GetTotalOrderInMonthResponse>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/statistic/admin/total-order/month`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -1139,7 +1140,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getTotalOrderInYearAdmin:
 			(params: QueryParamsType) => this.request<GetTotalOrderInYear>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/statistic/admin/total-order/year`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -1150,7 +1151,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getTotalCommissionAdmin:
 			(params: QueryParamsType) => this.request<GetTotalCommissionAdminResponse>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/statistic/admin/total-commission`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -1161,7 +1162,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getProductBestSellerAdmin:
 			(params: QueryParamsType) => this.request<GetProductBestSellerResponse>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/statistic/admin/list-of-product`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -1172,7 +1173,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getOrderDaysAdmin:
 			(params: QueryParamsType) => this.request<GetOrderDaysResponse>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/statistic/admin/total-order/day`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -1182,7 +1183,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			}),
 
 		countAllOrder: () => this.request<CountAllOrderResponse>({
-			baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+			baseURL: `https://backend.latipe.store/api/v2/orders`,
 			path: `/admin/total/count`,
 			method: 'GET',
 			type: ContentType.Json,
@@ -1190,7 +1191,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getRevenueDistributionByStore:
 			(params: QueryParamsType) => this.request<StatisticRevenueDistributionStoreResponse>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/statistic/store/revenue-distribution`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -1201,7 +1202,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getRevenueDistributionByAdmin:
 			(params: QueryParamsType) => this.request<StatisticRevenueDistributionAdminResponse>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/statistic/admin/revenue-distribution`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -1212,7 +1213,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getBusinessReportByAdmin:
 			(params: QueryParamsType) => this.request<Blob>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/statistic/admin/business-report`,
 				method: 'GET',
 				type: ContentType.Blob,
@@ -1224,7 +1225,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getBusinessReportByStore:
 			(params: QueryParamsType) => this.request<Blob>({
-				baseURL: `${import.meta.env.VITE_BASE_URL}/${import.meta.env.VITE_ORDER_VERSION}/orders`,
+				baseURL: `https://backend.latipe.store/api/v2/orders`,
 				path: `/statistic/store/business-report`,
 				method: 'GET',
 				type: ContentType.Blob,
@@ -1441,7 +1442,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 	notification = {
 		registerNewDevice: (params: NewDeviceRequest) =>
 			this.request<NewDeviceResponse>({
-				baseURL: `https://${import.meta.env.VITE_BASE_URL}/v1`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/v1`,
 				path: `/notifications/user/register-device`,
 				method: 'POST',
 				type: ContentType.Json,
@@ -1452,7 +1453,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		createCampaign: (body: CreateCampaignRequest) =>
 			this.request<GeneralCampaignAdminResponse<CreateCapaign>>({
-				baseURL: `https://${import.meta.env.VITE_BASE_URL}/v1`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/v1`,
 				path: `/notifications/admin/notify-campaign`,
 				method: 'POST',
 				type: ContentType.Json,
@@ -1461,7 +1462,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		recallCampaign: (body: RecallCampaignRequest) =>
 			this.request<GeneralCampaignAdminResponse>({
-				baseURL: `https://${import.meta.env.VITE_BASE_URL}/v1`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/v1`,
 				path: `/notifications/admin/notify-campaign`,
 				method: 'DELETE',
 				type: ContentType.Json,
@@ -1470,7 +1471,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getCampaignAdmin: (params: QueryParamsType) =>
 			this.request<GeneralCampaignAdminResponse<ListCampaignDetail>>({
-				baseURL: `https://${import.meta.env.VITE_BASE_URL}/v1`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/v1`,
 				path: `/notifications/admin/notify-campaign`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -1481,7 +1482,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getNotificationCount: () =>
 			this.request<GeneralCampaignAdminResponse<CountNotificationUser>>({
-				baseURL: `https://${import.meta.env.VITE_BASE_URL}/v1`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/v1`,
 				path: `/notifications/user/total/unread`,
 				method: 'GET',
 				type: ContentType.Json
@@ -1489,7 +1490,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		markAllRead: () =>
 			this.request<GeneralCampaignAdminResponse>({
-				baseURL: `https://${import.meta.env.VITE_BASE_URL}/v1`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/v1`,
 				path: `/notifications/user/markAsRead`,
 				method: 'PATCH',
 				type: ContentType.Json
@@ -1497,7 +1498,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getNotifications: (params: QueryParamsType) =>
 			this.request<GeneralCampaignAdminResponse<ListCampaignDetail>>({
-				baseURL: `https://${import.meta.env.VITE_BASE_URL}/v1`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/v1`,
 				path: `/notifications/user`,
 				method: 'GET',
 				type: ContentType.Json,
@@ -1508,7 +1509,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 
 		getNotificationDetail: (id: string) =>
 			this.request<GeneralCampaignAdminResponse<CampaignDetail>>({
-				baseURL: `https://${import.meta.env.VITE_BASE_URL}/v1`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/v1`,
 				path: `/notifications/user/${id}`,
 				method: 'GET',
 				type: ContentType.Json
@@ -1520,7 +1521,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			image_request: File
 		}) =>
 			this.request<SIEResponse>({
-				baseURL: `http://127.0.0.1:8100`,
+				baseURL: `${import.meta.env.VITE_BASE_URL}/v1`,
 				path: `/api/v1/sie/search`,
 				method: 'POST',
 				body: data,

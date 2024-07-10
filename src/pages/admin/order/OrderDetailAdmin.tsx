@@ -18,6 +18,7 @@ import { getAdminOrderDetail } from "@stores/slices/orders-slice";
 import { Chip } from "@components/Chip";
 import { vi } from "date-fns/locale";
 import { getColorStatusOrder, getStrStatusOrder } from "@/utils/utils";
+import { LoadingOverlay } from "@/components/loading/LoadingOverlay";
 
 const OrderDetailAdmin = () => {
 
@@ -25,20 +26,26 @@ const OrderDetailAdmin = () => {
 	const dispatch = useDispatch<AppThunkDispatch>();
 	const navigate = useNavigate();
 	const [response, setResponse] = useState<AdminOrderDetailResponse>();
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
+		setIsLoading(true);
 		dispatch(getAdminOrderDetail(id)).unwrap().then((res) => {
 			if (res.data.error_code) {
 				navigate("/401");
 				return;
 			}
 			setResponse(res.data);
+			console.log(response.data);
+		}).finally(() => {
+			setIsLoading(false);
 		});
 	}, []);
 
 
 	return (
 		<div>
+			<LoadingOverlay isLoading={isLoading} />
 			<DashboardPageHeader
 				title="Chi tiết đơn hàng"
 				iconName="bag_filled"
@@ -61,7 +68,7 @@ const OrderDetailAdmin = () => {
 						</Typography>
 						<Typography fontSize="14px" fontWeight={"bold"}>{id.toUpperCase()}</Typography>
 					</FlexBox>
-					{response &&
+					{response && response.data && response.data &&
 						<FlexBox
 							className="pre"
 							flex="0 0 0 !important"
@@ -69,9 +76,9 @@ const OrderDetailAdmin = () => {
 							alignItems="center"
 						>
 							<Box m="6px">
-								<Chip p="0.25rem 1rem" bg={`${getColorStatusOrder(response.data.order.status)}.light`}>
+								<Chip p="0.25rem 1rem" bg={`${getColorStatusOrder(response.data.status)}.light`}>
 									<Small textAlign="center"
-										color={`${getColorStatusOrder(response.data.order.status)}.main`}>{getStrStatusOrder(response.data.order.status)}</Small>
+										color={`${getColorStatusOrder(response.data.status)}.main`}>{getStrStatusOrder(response.data.status)}</Small>
 								</Chip>
 							</Box>
 						</FlexBox>}
@@ -86,7 +93,7 @@ const OrderDetailAdmin = () => {
 				</TableRow>
 
 				<Box py="0.5rem">
-					{response && response.data.order.order_items.map((item) => (
+					{response && response.data.order_items.map((item) => (
 						<FlexBox
 							px="1rem"
 							py="0.5rem"
@@ -120,7 +127,7 @@ const OrderDetailAdmin = () => {
 								</FlexBox>)
 							}
 
-							{/* {response.data.order.status === 1 && item.is_prepared === 1 && (
+							{/* {response.data.status === 1 && item.is_prepared === 1 && (
 								<FlexBox flex="0 0 0 !important" m="6px" alignItems="center">
 									<Typography fontSize="14px" color="text.muted">
 										Thuộc tính: {item.name_option}
@@ -139,15 +146,15 @@ const OrderDetailAdmin = () => {
 						<H5 mt="0px" mb="14px">
 							Địa chỉ giao hàng
 						</H5>
-						<H6 my="0px">{response.data.order.delivery.shipping_name} | {response.data.order.delivery.shipping_phone}
+						<H6 my="0px">{response.data.delivery.shipping_name} | {response.data.delivery.shipping_phone}
 						</H6>
-						<H6 my="0px">{response.data.order.delivery.shipping_address}
+						<H6 my="0px">{response.data.delivery.shipping_address}
 						</H6>
 					</Card>
 				</Grid>
 				<Grid item lg={6} md={6} xs={12} style={{ display: 'flex' }}>
 					<Card p="20px 30px" mb="1.5rem" style={{ flexGrow: 1 }}>
-						{response.data.order.order_status.map((item) => (
+						{response.data.order_status.map((item) => (
 							<H6 my="0px">{format(new Date(item.created_at), "HH:mm dd-MM-yyyy", { locale: vi })} | {item.message}
 							</H6>
 						))}
@@ -169,7 +176,7 @@ const OrderDetailAdmin = () => {
 										Tiền hàng:
 									</Typography>
 									<H6 my="0px">{
-										response.data.order.amount.toLocaleString('vi-VN')}₫
+										response.data.amount.toLocaleString('vi-VN')}₫
 									</H6>
 								</FlexBox>
 								<FlexBox
@@ -181,7 +188,7 @@ const OrderDetailAdmin = () => {
 										Phí ship:
 									</Typography>
 									<H6 my="0px">{
-										response.data.order.delivery.cost.toLocaleString("vi-VN")}₫
+										response.data.delivery.cost.toLocaleString("vi-VN")}₫
 									</H6>
 								</FlexBox>
 
@@ -194,7 +201,7 @@ const OrderDetailAdmin = () => {
 										Phí nền tảng:
 									</Typography>
 									<H6 my="0px">{
-										response.data.order.commission_detail.system_fee.toLocaleString("vi-VN")}₫ ({Math.ceil(response.data.order.commission_detail.system_fee / response.data.order.store_order_amount * 100)}%)
+										response.data.commission_detail.system_fee.toLocaleString("vi-VN")}₫ ({Math.ceil(response.data.commission_detail.system_fee / response.data.store_order_amount * 100)}%)
 									</H6>
 								</FlexBox> */}
 
@@ -207,14 +214,14 @@ const OrderDetailAdmin = () => {
 										Tiền shop nhận được:
 									</Typography>
 									<H6 my="0px">{
-										response.data.order.commission_detail.amount_received.toLocaleString("vi-VN")}₫
+										response.data.commission_detail.amount_received.toLocaleString("vi-VN")}₫
 									</H6>
 								</FlexBox> */}
 
 								<Divider mb="0.5rem" />
 
 								<Typography
-									fontSize="14px">{response.data.order.payment_method === 1 ? " Thanh toán khi nhận hàng" : response.data.order.payment_method === 2 ?
+									fontSize="14px">{response.data.payment_method === 1 ? " Thanh toán khi nhận hàng" : response.data.payment_method === 2 ?
 										" Thanh toán bằng paypal" : " Thanh toán bằng ví Latipe"}</Typography>
 							</Card>
 

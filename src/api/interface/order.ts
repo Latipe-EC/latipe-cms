@@ -361,7 +361,7 @@ export interface AdminOrderDetailResponse {
 	code: number
 	error_code: string
 	message: string
-	data: DataAdminOrderDetail
+	data: AdminOrderDetail
 }
 
 export interface DataAdminOrderDetail {

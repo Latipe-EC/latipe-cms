@@ -108,7 +108,7 @@ const ProductDetailVendor = () => {
 			return;
 		}
 		if (REACT_STARTER_AUTH.role !== "VENDOR") {
-			navigate("/register-store");
+			navigate("/require-register-vendor");
 			return;
 		}
 
@@ -192,7 +192,7 @@ const ProductDetailVendor = () => {
 			return;
 		}
 		if (productVariants.length === 0) {
-			if (price === 0 || inventory === 0) {
+			if (parseNumericValue(price) === 0 || inventory === 0) {
 				setDisableSaveProduct(true);
 				return;
 			}

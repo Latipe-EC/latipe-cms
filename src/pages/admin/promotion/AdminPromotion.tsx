@@ -38,7 +38,7 @@ import FlexBox from '@components/FlexBox';
 
 // import { DiscountData, ItemVoucher, VoucherRequire } from '../../../api/interface/promotion';
 import { createVoucher, getAllPromotion, updateStatusVoucher } from '@stores/slices/promotions-slice';
-import { checkContainSpace, convertDateTimeYYYYMMDD, deepTrim, handleApiCallWithToast } from "../../../utils/utils";
+import { checkContainSpace, convertDateTimeYYYYMMDD, convertDateTimeYYYYMMDDHHMM, deepTrim, handleApiCallWithToast } from "../../../utils/utils";
 import { Chip } from '@components/Chip';
 import { Small } from '@components/Typography';
 import { Action, ContentToast, DiscountType, PaymentMethodName, TitleToast, VoucherStatus, VoucherType } from '@/utils/constants';
@@ -497,7 +497,8 @@ const PromotionsAdmin = () => {
 									<FormLabel>Ngày bắt đầu</FormLabel>
 									<Input
 										type="datetime-local"
-										value={new Date(promotion.stated_time).toISOString().slice(0, 16)}
+										value={convertDateTimeYYYYMMDDHHMM(promotion.stated_time)
+										}
 										onChange={(e) => {
 											if (new Date(e.target.value) < new Date(promotion.ended_time)) {
 												setPromotion({
@@ -520,7 +521,7 @@ const PromotionsAdmin = () => {
 									<FormLabel>Ngày kết thúc</FormLabel>
 									<Input
 										type="datetime-local"
-										value={new Date(promotion.ended_time).toISOString().slice(0, 16)}
+										value={convertDateTimeYYYYMMDDHHMM(promotion.ended_time)}
 										onChange={(e) => {
 											if (new Date(e.target.value) > new Date(promotion.stated_time)) {
 												setPromotion({
@@ -530,7 +531,7 @@ const PromotionsAdmin = () => {
 												setEndDateError('');
 												setStartDateError('');
 											} else {
-												setEndDateError('End date must be greater than start date');
+												setEndDateError('Ngày kết thúc phải lớn hơn ngày bắt đầu');
 											}
 										}}
 									/>

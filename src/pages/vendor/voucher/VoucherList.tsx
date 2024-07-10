@@ -7,7 +7,7 @@ import Pagination from "@/components/pagination/Pagination";
 import { createVoucherVendor, getAllVendorPromotion, updateVendorStatusVoucher } from "@/stores/slices/promotions-slice";
 import { AppThunkDispatch, RootState, useAppSelector } from "@/stores/store";
 import { Action, ContentToast, DiscountType, PaymentMethodName, TitleToast, VoucherStatus, VoucherType } from "@/utils/constants";
-import { checkContainSpace, handleApiCallWithToast } from "@/utils/utils";
+import { checkContainSpace, convertDateTimeYYYYMMDDHHMM, handleApiCallWithToast } from "@/utils/utils";
 import { ViewIcon, WarningIcon } from "@chakra-ui/icons";
 import { Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Grid, Icon, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Spinner, Table, Tbody, Td, Text, Textarea, Thead, Tr, useToast } from "@chakra-ui/react";
 import { format } from "date-fns";
@@ -345,7 +345,9 @@ const VoucherList = () => {
 								<FormLabel>Ngày bắt đầu</FormLabel>
 								<Input
 									type='datetime-local'
-									value={new Date(promotion.stated_time).toISOString().slice(0, 16)}
+									value={
+										convertDateTimeYYYYMMDDHHMM(promotion.stated_time)
+									}
 									onChange={(e) => {
 										setPromotion({
 											...promotion,
@@ -354,7 +356,7 @@ const VoucherList = () => {
 										const selectedDate = new Date(e.target.value);
 										const currentDate = new Date();
 										currentDate.setMinutes(currentDate.getMinutes() + 15);
-										if (selectedDate > currentDate && selectedDate < new Date(promotion.ended_time)) {
+										if (!promotion.ended_time || (selectedDate > currentDate && selectedDate < new Date(promotion.ended_time))) {
 											setEndDateError('');
 											setStartDateError('');
 										} else if (selectedDate <= currentDate) {
@@ -373,10 +375,10 @@ const VoucherList = () => {
 								<FormLabel>Ngày kết thúc</FormLabel>
 								<Input
 									type='datetime-local'
-									value={new Date(promotion.ended_time).toISOString().slice(0, 16)}
+									value={convertDateTimeYYYYMMDDHHMM(promotion.ended_time)}
 									onChange={(e) => {
 										const selectedDate = new Date(e.target.value);
-										if (selectedDate > new Date(promotion.stated_time)) {
+										if (!promotion.stated_time || selectedDate > new Date(promotion.stated_time)) {
 											setPromotion({
 												...promotion,
 												ended_time: e.target.value
@@ -384,7 +386,7 @@ const VoucherList = () => {
 											setEndDateError('');
 											setStartDateError('');
 										} else {
-											setEndDateError('End date and time must be greater than start date and time');
+											setEndDateError('Ngày kết thúc phải lớn hơn ngày bắt đầu');
 										}
 									}}
 								/>

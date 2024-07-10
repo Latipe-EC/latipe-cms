@@ -257,7 +257,6 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 
 	}
 
-
 	const handleAddVoucher = (voucher) => {
 
 		if (vouchers.map(x => x.voucher_code).includes(voucher)) {
@@ -450,12 +449,14 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 					return;
 				}
 				navigate('/orders/success')
+			} else {
+				throw new Error();
 			}
 		}).catch(() => {
 			setIsLoading(false);
 			setIsAlterOpen(true);
 			setMessageAlter(ErrorMessage.ORDER_FAILED);
-		});
+		}).finally(() => { });
 
 	}
 

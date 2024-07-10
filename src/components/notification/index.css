@@ -25,6 +25,5 @@ background: transparent;
 }
 
 .ck.ck-editor__editable_inline {
-	border: 2px solid rgba(71, 165, 142, 0.7) !important;
-	border-radius: 10px !important;
+	border: none !important;
 }

@@ -1,4 +1,3 @@
-import LazyImage from '../LazyImage';
 import React, { useState } from 'react';
 import { CSSProperties } from 'styled-components';
 import Box from '../Box';
@@ -10,7 +9,7 @@ import ProductIntro from '../products/ProductIntro';
 import Rating from '../rating/Rating';
 import { SemiSpan } from '../Typography';
 import { StyledProductCard1 } from './ProductCardStyle';
-import { Center, Spinner, Text, Tooltip } from '@chakra-ui/react';
+import { Center, Image, Spinner, Text, Tooltip } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
 import { AppThunkDispatch } from '../../stores/store';
 import { getProductById } from '../../stores/slices/products-slice';
@@ -20,7 +19,7 @@ import { ProductDetailResponse } from '@interfaces/product';
 export interface ProductCard1Props extends CardProps {
 	className?: string;
 	style?: CSSProperties;
-	images?: unknown[];
+	images?: string[];
 	name?: string;
 	price?: number;
 	ratings?: number;
@@ -76,12 +75,13 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 				</FlexBox>
 
 				<a href={`/products/${id}`}>
-					<LazyImage
+					<Image
+
 						src={images[0]}
 						width="100%"
 						height="250px"
-						layout="responsive"
 						alt={name}
+						objectFit="cover"
 					/>
 				</a>
 			</div>

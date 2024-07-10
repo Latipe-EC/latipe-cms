@@ -1,5 +1,4 @@
 import { Chip } from "../Chip";
-import Image from "../Image";
 import React, { Fragment, useCallback, useState } from "react";
 import { CSSProperties } from "styled-components";
 import Box from "../Box";
@@ -15,6 +14,7 @@ import NavLink from "../nav-link/NavLink";
 import Rating from "../rating/Rating";
 import { H5, SemiSpan } from "../Typography";
 import { StyledProductCard9 } from "./ProductCardStyle";
+import { Image } from "@chakra-ui/react";
 
 export interface ProductCard9Props {
 	className?: string;
@@ -99,7 +99,9 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
 							src={imgUrl}
 							alt={title}
 							width="100%"
+							height="250px"
 							borderRadius="0.5rem"
+							objectFit="cover"
 						/>
 					</Box>
 				</Grid>

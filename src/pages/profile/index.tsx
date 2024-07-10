@@ -260,9 +260,9 @@ const Profile = () => {
 												setProfile({ ...profile, gender: value })}
 										>
 											<Stack direction="row">
-												<Radio value="Male">Male</Radio>
-												<Radio value="Female">Female</Radio>
-												<Radio value="Other">Other</Radio>
+												<Radio value="Male">Nam</Radio>
+												<Radio value="Female">Nữ</Radio>
+												<Radio value="Other">Khác</Radio>
 											</Stack>
 										</RadioGroup>
 									</Flex>

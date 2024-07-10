@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 import { Box, Code, Flex, IconButton, Text, useToast } from "@chakra-ui/react";
 import { CopyIcon, InfoIcon } from "@chakra-ui/icons";
 import { VoucherModal } from "@/pages/shop/VoucherModal";
+import { getAllVendorPromotion } from "@/stores/slices/promotions-slice";
 
 const Shop = () => {
 
@@ -25,75 +26,75 @@ const Shop = () => {
 	const [showModalVoucher, setShowModalVoucher] = useState(false);
 	const [selectedVoucher, setSelectedVoucher] = useState(null);
 
-	useEffect(() => {
-		setVouchers([
-			{
-				voucher_code: "VOUCHER1",
-				detail: "Chi tiết voucher 1",
-				stated_time: "2022-01-01",
-				ended_time: "2022-12-31",
-				voucher_require: {
-					min_require: 100000,
-					max_voucher_per_user: 5,
-				},
-				discount_data: {
-					discount_type: 0, // FIXED_DISCOUNT
-					discount_value: 50000,
-				},
-			},
-			{
-				voucher_code: "VOUCHER2",
-				detail: "Chi tiết voucher 2",
-				stated_time: "2022-01-01",
-				ended_time: "2022-12-31",
-				voucher_require: {
-					min_require: 200000,
-					max_voucher_per_user: 3,
-				},
-				discount_data: {
-					discount_type: 1, // PERCENT_DISCOUNT
-					discount_percent: 10,
-					maximum_value: 50000,
-				},
-			},
-			{
-				voucher_code: "VOUCHER3",
-				detail: "Chi tiết voucher 3",
-				stated_time: "2022-01-01",
-				ended_time: "2022-12-31",
-				voucher_require: {
-					min_require: 300000,
-					max_voucher_per_user: 2,
-				},
-				discount_data: {
-					discount_type: 1, // PERCENT_DISCOUNT
-					discount_percent: 20,
-					maximum_value: 100000,
-				},
-			},
-		])
-		// dispatch(getV(
-		// 	{
-		// 		id,
-		// 		params: {
-		// 			skip: 0,
-		// 			limit: 12,
-		// 		}
-		// 	})).unwrap().then((res) => {
-		// 		if (res.status.toString().startsWith('2')) {
-		// 			setResult(res.data);
-		// 			return;
-		// 		}
+	// useEffect(() => {
+	// 	setVouchers([
+	// 		{
+	// 			voucher_code: "VOUCHER1",
+	// 			detail: "Chi tiết voucher 1",
+	// 			stated_time: "2022-01-01",
+	// 			ended_time: "2022-12-31",
+	// 			voucher_require: {
+	// 				min_require: 100000,
+	// 				max_voucher_per_user: 5,
+	// 			},
+	// 			discount_data: {
+	// 				discount_type: 0, // FIXED_DISCOUNT
+	// 				discount_value: 50000,
+	// 			},
+	// 		},
+	// 		{
+	// 			voucher_code: "VOUCHER2",
+	// 			detail: "Chi tiết voucher 2",
+	// 			stated_time: "2022-01-01",
+	// 			ended_time: "2022-12-31",
+	// 			voucher_require: {
+	// 				min_require: 200000,
+	// 				max_voucher_per_user: 3,
+	// 			},
+	// 			discount_data: {
+	// 				discount_type: 1, // PERCENT_DISCOUNT
+	// 				discount_percent: 10,
+	// 				maximum_value: 50000,
+	// 			},
+	// 		},
+	// 		{
+	// 			voucher_code: "VOUCHER3",
+	// 			detail: "Chi tiết voucher 3",
+	// 			stated_time: "2022-01-01",
+	// 			ended_time: "2022-12-31",
+	// 			voucher_require: {
+	// 				min_require: 300000,
+	// 				max_voucher_per_user: 2,
+	// 			},
+	// 			discount_data: {
+	// 				discount_type: 1, // PERCENT_DISCOUNT
+	// 				discount_percent: 20,
+	// 				maximum_value: 100000,
+	// 			},
+	// 		},
+	// 	])
+	// 	// dispatch(getV(
+	// 	// 	{
+	// 	// 		id,
+	// 	// 		params: {
+	// 	// 			skip: 0,
+	// 	// 			limit: 12,
+	// 	// 		}
+	// 	// 	})).unwrap().then((res) => {
+	// 	// 		if (res.status.toString().startsWith('2')) {
+	// 	// 			setResult(res.data);
+	// 	// 			return;
+	// 	// 		}
 
-		// 	});
-		// dispatch(getStoreById(id)).unwrap().then((res) => {
-		// 	if (res.status.toString().startsWith('2')) {
-		// 		setProfileStore(res.data);
-		// 		return;
-		// 	}
+	// 	// 	});
+	// 	// dispatch(getStoreById(id)).unwrap().then((res) => {
+	// 	// 	if (res.status.toString().startsWith('2')) {
+	// 	// 		setProfileStore(res.data);
+	// 	// 		return;
+	// 	// 	}
 
-		// });
-	}, []);
+	// 	// });
+	// }, []);
 
 	useEffect(() => {
 		dispatch(getProductStore(
@@ -108,8 +109,19 @@ const Shop = () => {
 					setResult(res.data);
 					return;
 				}
-
 			});
+
+		dispatch(getAllVendorPromotion(
+			{
+				"page": "1",
+				"size": "10"
+			})).unwrap().then((res) => {
+				if (res.status.toString().startsWith('2')) {
+					setVouchers(res.data.data.items);
+					return;
+				}
+			});
+
 		dispatch(getStoreById(id)).unwrap().then((res) => {
 			if (res.status.toString().startsWith('2')) {
 				setProfileStore(res.data);
@@ -117,6 +129,7 @@ const Shop = () => {
 			}
 
 		});
+
 	}, [currentPage]);
 
 	const handlePageChange = (data: number) => {
@@ -131,7 +144,7 @@ const Shop = () => {
 
 			<Grid container spacing={6}>
 				<Grid item md={12} xs={12}>
-					{vouchers.length > 0 && (
+					{vouchers && vouchers.length > 0 && (
 						<Box border="1px" borderColor="gray.200" borderRadius="md" p="4" boxShadow="lg">
 							<Text fontSize="2xl" mb="4" fontWeight="bold" color="teal.500">Khuyến mãi của shop</Text>
 							<Flex overflowX="auto">

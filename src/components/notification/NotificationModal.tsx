@@ -18,37 +18,31 @@ export const NotificationModal = ({ isOpen, onClose, notification }) => {
 						</Flex>
 						<ModalCloseButton />
 						<ModalBody overflowY="auto">
-							<Box mb={4} display="flex" justifyContent="center">
-								{notification.image && (
-									<Box mr={4}>
-										<Image boxSize="300px" src={notification.image} alt={notification.title} borderRadius="md" />
-									</Box>
-								)}
-							</Box>
 							<Box mb={4}>
-								<Text fontSize="sm" color="gray.500">
+								<Text fontSize="sm" color="gray.500" textAlign="center">
 									Ngày tạo: {new Date(notification.created_at).toLocaleDateString()}
 								</Text>
 							</Box>
-							<Box mb={4}>
-								<CKEditor
-									editor={ClassicEditor}
-									data={notification.body}
-									config={{
-										toolbar: [],
-										removePlugins: ['CKFinderUploadAdapter', 'CKFinder', 'EasyImage', 'Image', 'ImageCaption', 'ImageStyle', 'ImageToolbar', 'ImageUpload', 'MediaEmbed'],
-										placeholder: 'Type your text here...',
-										ckfinder: {
-											uploadUrl: ''
-										}
-									}}
-									disabled={true}
-								/>
+							<Box >
+								<Box flex={1} display="flex" alignItems="center" justifyContent="center" height="100%">
+									<Box mb={4}>
+										<CKEditor
+											editor={ClassicEditor}
+											data={notification.body}
+											config={{
+												toolbar: [],
+												removePlugins: ['CKFinderUploadAdapter', 'CKFinder', 'EasyImage', 'Image', 'ImageCaption', 'ImageStyle', 'ImageToolbar', 'ImageUpload', 'MediaEmbed'],
+												placeholder: 'Type your text here...',
+												ckfinder: {
+													uploadUrl: ''
+												}
+											}}
+											disabled={true}
+										/>
+									</Box>
+								</Box>
 							</Box>
 						</ModalBody>
-						<ModalFooter>
-							<Button colorScheme="teal" onClick={onClose}>{Action.CLOSE}</Button>
-						</ModalFooter>
 					</ModalContent>
 				</Modal>
 			)}

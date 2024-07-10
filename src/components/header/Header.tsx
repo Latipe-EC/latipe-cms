@@ -128,7 +128,7 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
 	useEffect(() => {
 		dispatch((getNotifications({
 			page: '1',
-			size: '5'
+			size: '4'
 		})))
 
 		dispatch(getNotificationCount())

@@ -65,11 +65,6 @@ const Section3: React.FC = () => {
 					))}
 				</Grid>
 
-				{/* <a
-          href="https://themeforest.net/item/bonik-react-ecommerce-template/31837448?ref=bonik"
-          target="_blank"
-          rel="noreferrer noopener"
-        > */}
 				<a href="https://1.envato.market/oeNbNe">
 					<Button
 						variant="contained"

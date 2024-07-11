@@ -24,7 +24,7 @@ const RequireRegisterVendor = () => {
 			px="0.5rem"
 		>
 			<Image
-				src="/assets/images/order/order_success.svg"
+				src="/assets/images/register_now.jpg"
 				width="10%"
 				mb="1rem"
 			/>

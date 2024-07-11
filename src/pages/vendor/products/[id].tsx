@@ -231,9 +231,21 @@ const ProductDetailVendor = () => {
 	}, [searchText]);
 
 	async function createBlobFromUrl(url: string): Promise<Blob> {
-		const response = await fetch(url);
-		const data = await response.blob();
-		return data;
+		try {
+			const response = await fetch(url);
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+			const data = await response.blob();
+			return data;
+		} catch (error) {
+			console.error('Error fetching the image:', error);
+			// Fallback to a default image
+			// Example: A small transparent PNG as a base64 string
+			const defaultImageUrl = `${window.location.origin}/not_found_img.jpg`;
+			const defaultImageBlob = await fetch(defaultImageUrl).then(res => res.blob());
+			return defaultImageBlob;
+		}
 	}
 
 	const handleSearch = debounce(() => {

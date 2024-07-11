@@ -52,7 +52,6 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 		});
 	};
 
-
 	return (
 		<StyledProductCard1 {...props}>
 			<div className="image-holder" style={{ height: "100%" }}>
@@ -91,7 +90,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 						<a href={`/products/${id}`}>
 							<Tooltip label={name} placement="top">
 								<Text isTruncated fontWeight="600" fontSize="14px" mb="0.25rem">
-									{name}
+									{name.length > 30 ? `${name.substring(0, 30)}...` : name}
 								</Text>
 							</Tooltip>
 						</a>

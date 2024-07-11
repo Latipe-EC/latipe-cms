@@ -253,7 +253,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({ product }) => {
 						{selectPromotionPrice && selectPromotionPrice > 0 ? (
 							<>
 								<H1 color="primary.main" mb="4px" lineHeight="1">
-									<del>₫{selectPrice.toLocaleString('vi-VN')}</del>
+									<del>₫{selectPrice.toLocaleString('vi-VN')}</del> -
 									₫{selectPromotionPrice.toLocaleString('vi-VN')}
 								</H1>
 								<Badge ml='2' bg="green.500" color="white" fontSize='1.2em' mt="-4"

@@ -28,7 +28,6 @@ import { LoadingOverlay } from "@/components/loading/LoadingOverlay";
 const StatisticAdmin = () => {
 
 	const date = new Date();
-	const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
 
 	const dispatch = useDispatch<AppThunkDispatch>();
 	const navigate = useNavigate();
@@ -36,11 +35,11 @@ const StatisticAdmin = () => {
 	const [statisticMonth, setStatisticMonth] = useState<GetTotalOrderInMonthResponse>();
 	const [statisticYear, setStatisticYear] = useState<GetTotalOrderInYear>();
 	const [statisticCommission, setStatisticCommission] = useState<DataGetTotalCommissionAdmin>();
-	const [dateMonth, setDateMonth] = useState(firstDayOfMonth);
-	const [dateYear, setDateYear] = useState(firstDayOfMonth);
-	const [revenueDate, setRevenueDate] = useState(firstDayOfMonth);
+	const [dateMonth, setDateMonth] = useState(date);
+	const [dateYear, setDateYear] = useState(date);
+	const [revenueDate, setRevenueDate] = useState(date);
 
-	const [commissionStartMonth, setCommissionStartMonth] = useState(firstDayOfMonth);
+	const [commissionStartMonth, setCommissionStartMonth] = useState(date);
 	const [revenueDistribution, setRevenueDistribution] = useState<StatisticRevenueDistributionAdminResponse>();
 	const [isLoading, setIsLoading] = useState(false);
 	const toast = useToast();

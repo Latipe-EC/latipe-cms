@@ -38,7 +38,7 @@ import FlexBox from '@components/FlexBox';
 
 // import { DiscountData, ItemVoucher, VoucherRequire } from '../../../api/interface/promotion';
 import { createVoucher, getAllPromotion, updateStatusVoucher } from '@stores/slices/promotions-slice';
-import { checkContainSpace, convertDateTimeYYYYMMDD, convertDateTimeYYYYMMDDHHMM, deepTrim, handleApiCallWithToast } from "../../../utils/utils";
+import { checkContainSpace, convertDateTimeYYYYMMDD, convertDateTimeYYYYMMDDHHMM, deepTrim, handleApiCallWithToast, parseNumericValue } from "../../../utils/utils";
 import { Chip } from '@components/Chip';
 import { Small } from '@components/Typography';
 import { Action, ContentToast, DiscountType, PaymentMethodName, TitleToast, VoucherStatus, VoucherType } from '@/utils/constants';
@@ -165,10 +165,10 @@ const PromotionsAdmin = () => {
 				Cell: ({ row }) => {
 					const item = row.original;
 					return (
-						<Button colorScheme={item.status === VoucherStatus.PENDING ? 'green' : 'red'} onClick={() => {
-							item.status === VoucherStatus.PENDING ? handleUpdate(item.voucher_code, 1) : setModalConfirm(item.voucher_code);
+						<Button colorScheme={getColorStatus(item.status)} onClick={() => {
+							handleUpdateStatusVoucher(item.voucher_code, item.status)
 						}}>
-							{item.status === VoucherStatus.PENDING ? 'Kích hoạt' : 'Vô hiệu hóa'}
+							{getNameStatus(item.status)}
 						</Button>
 					);
 				},
@@ -234,6 +234,15 @@ const PromotionsAdmin = () => {
 	const handleCreate = () => {
 		const startDate = new Date(promotion.stated_time);
 		const endDate = new Date(promotion.ended_time);
+		const discount_data = {
+			...promotion.discount_data,
+			discount_value: parseNumericValue(promotion.discount_data.discount_value),
+			maximum_value: parseNumericValue(promotion.discount_data.maximum_value)
+		}
+		const voucher_require = {
+			...promotion.voucher_require,
+			min_require: parseNumericValue(promotion.voucher_require.min_require)
+		}
 
 		if (checkContainSpace(promotion.voucher_code)) {
 			toast({
@@ -249,9 +258,12 @@ const PromotionsAdmin = () => {
 
 		const req = {
 			...promotion,
+			voucher_require,
+			discount_data,
 			stated_time: startDate.toISOString().slice(0, 16),
 			ended_time: endDate.toISOString().slice(0, 16)
 		}
+
 		if (req.voucher_require.payment_method === 0) {
 			req.voucher_require = {
 				...req.voucher_require,
@@ -280,18 +292,19 @@ const PromotionsAdmin = () => {
 	}
 
 	const handleUpdate = (code: string, status: number) => {
+		const voucher_code = modalConfirm ? modalConfirm : code;
 		handleApiCallWithToast(dispatch,
 			updateStatusVoucher,
 			{
-				code,
+				code: voucher_code,
 				status
 			},
 			null,
-			TitleToast.ADD_VOUCHER,
+			TitleToast.UPDATE_VOUCHER,
 			TitleToast.SUCCESS,
-			ContentToast.ADD_VOUCHER_SUCCESS,
+			ContentToast.UPDATE_VOUCHER_SUCCESS,
 			TitleToast.ERROR,
-			ContentToast.ADD_VOUCHER_ERROR,
+			ContentToast.UPDATE_VOUCHER_ERROR,
 			null,
 			toast,
 			<Spinner />,
@@ -312,7 +325,7 @@ const PromotionsAdmin = () => {
 			promotion.voucher_counts <= 0 ||
 			promotion.detail.trim() === '' ||
 			!promotion.voucher_require.min_require ||
-			promotion.voucher_require.min_require <= 0 ||
+			parseNumericValue(promotion.voucher_require.min_require) <= 0 ||
 			!promotion.voucher_require.max_voucher_per_user ||
 			promotion.voucher_require.max_voucher_per_user <= 0 ||
 			promotion.stated_time === null ||
@@ -323,12 +336,39 @@ const PromotionsAdmin = () => {
 				promotion.discount_data.shipping_value <= 0 :
 				(promotion.discount_data.discount_type ===
 					DiscountType.FIXED_DISCOUNT ?
-					promotion.discount_data.discount_value < 0 :
+					parseNumericValue(promotion.discount_data.discount_value) < 0 :
 					(promotion.discount_data.discount_percent <= 0 ||
 						promotion.discount_data.discount_percent > 1 ||
-						promotion.discount_data.maximum_value < 0
+						parseNumericValue(promotion.discount_data.maximum_value) < 0
 					)
 				)))
+	}
+
+	const getColorStatus = (status: number) => {
+		switch (status) {
+			case VoucherStatus.ACTIVE:
+				return 'red';
+			default:
+				return 'green';
+		}
+	}
+
+	const getNameStatus = (status: number) => {
+		switch (status) {
+			case VoucherStatus.ACTIVE:
+				return 'Vô hiệu hóa';
+			default:
+				return 'Kích hoạt';
+		}
+	}
+
+	const handleUpdateStatusVoucher = (code: string, status: number) => {
+		switch (status) {
+			case VoucherStatus.ACTIVE:
+				return setModalConfirm(code);
+			default:
+				return handleUpdate(code, VoucherStatus.ACTIVE);
+		}
 	}
 
 	return (
@@ -496,17 +536,23 @@ const PromotionsAdmin = () => {
 								<FormControl my={4} isInvalid={!!startDateError} isRequired>
 									<FormLabel>Ngày bắt đầu</FormLabel>
 									<Input
-										type="datetime-local"
-										value={convertDateTimeYYYYMMDDHHMM(promotion.stated_time)
+										type='datetime-local'
+										value={
+											convertDateTimeYYYYMMDDHHMM(promotion.stated_time)
 										}
 										onChange={(e) => {
-											if (new Date(e.target.value) < new Date(promotion.ended_time)) {
-												setPromotion({
-													...promotion,
-													stated_time: e.target.value
-												});
+											setPromotion({
+												...promotion,
+												stated_time: e.target.value
+											});
+											const selectedDate = new Date(e.target.value);
+											const currentDate = new Date();
+											currentDate.setMinutes(currentDate.getMinutes() + 15);
+											if (!promotion.ended_time || (selectedDate > currentDate && selectedDate < new Date(promotion.ended_time))) {
 												setEndDateError('');
 												setStartDateError('');
+											} else if (selectedDate <= currentDate) {
+												setStartDateError('Ngày và giờ bắt đầu phải lớn hơn ngày và giờ hiện tại ít nhất 15 phút');
 											} else {
 												setStartDateError('Ngày bắt đầu phải nhỏ hơn ngày kết thúc');
 											}
@@ -582,18 +628,35 @@ const PromotionsAdmin = () => {
 												<FormControl my={4} isRequired>
 													<FormLabel>Giảm giá trực tiếp</FormLabel>
 													<Input
-														type='number'
+														type='text'
 														value={promotion.discount_data.discount_value}
 														min={promotion.discount_data.discount_type
 															=== DiscountType.FIXED_DISCOUNT ? "1" : "0.01"}
 														max={promotion.discount_data.discount_type
 															=== DiscountType.FIXED_DISCOUNT ? "1000000000" : "1"}
-														onChange={(e) => setPromotion({
-															...promotion, discount_data: {
-																...promotion.discount_data,
-																discount_value: parseInt(e.target.value)
+														onChange={(e) => {
+															let { value } = e.target;
+															value = value.replace(/\./g, '');
+															const pattern = /^[0-9]+$/;
+															const real_value = parseFloat(value)
+															if (real_value > 100000000)
+																return;
+															if (pattern.test(value) || value === '') {
+																setPromotion({
+																	...promotion, discount_data: {
+																		...promotion.discount_data,
+																		discount_value: !isNaN(real_value) ? real_value.toLocaleString('vi-VN') : 0
+																	}
+																})
+															} else {
+																setPromotion({
+																	...promotion, discount_data: {
+																		...promotion.discount_data,
+																		discount_value: 0
+																	}
+																})
 															}
-														})}
+														}}
 													/>
 												</FormControl> :
 												<>
@@ -615,16 +678,34 @@ const PromotionsAdmin = () => {
 													<FormControl my={4} isRequired>
 														<FormLabel>Giảm tối đa</FormLabel>
 														<Input
-															type='number'
+															type='text'
 															value={promotion.discount_data.maximum_value}
 															min="1"
-															onChange={(e) => setPromotion({
-																...promotion,
-																discount_data: {
-																	...promotion.discount_data,
-																	maximum_value: parseInt(e.target.value)
+															onChange={(e) => {
+																let { value } = e.target;
+																value = value.replace(/\./g, '');
+																const pattern = /^[0-9]+$/;
+																const real_value = parseFloat(value)
+																if (real_value > 100000000)
+																	return;
+																if (pattern.test(value) || value === '') {
+																	setPromotion({
+																		...promotion,
+																		discount_data: {
+																			...promotion.discount_data,
+																			maximum_value: isNaN(real_value) ? real_value.toLocaleString('vi-VN') : 0
+																		}
+																	})
+																} else {
+																	setPromotion({
+																		...promotion,
+																		discount_data: {
+																			...promotion.discount_data,
+																			maximum_value: 0
+																		}
+																	})
 																}
-															})}
+															}}
 														/>
 													</FormControl>
 												</>
@@ -639,13 +720,28 @@ const PromotionsAdmin = () => {
 									<FormControl isRequired>
 										<FormLabel>Giá tối thiểu</FormLabel>
 										<Input
-											type='number'
+											type='text'
 											value={promotion.voucher_require.min_require}
 											min="1"
-											onChange={(e) => setPromotion({
-												...promotion,
-												voucher_require: { ...promotion.voucher_require, min_require: parseInt(e.target.value) }
-											})}
+											onChange={(e) => {
+												let { value } = e.target;
+												value = value.replace(/\./g, '');
+												const pattern = /^[0-9]+$/;
+												const real_value = parseFloat(value)
+												if (real_value > 100000000)
+													return;
+												if (pattern.test(value) || value === '') {
+													setPromotion({
+														...promotion,
+														voucher_require: { ...promotion.voucher_require, min_require: !isNaN(real_value) ? real_value.toLocaleString('vi-VN') : 0 }
+													})
+												} else {
+													setPromotion({
+														...promotion,
+														voucher_require: { ...promotion.voucher_require, min_require: 0 }
+													})
+												}
+											}}
 										/>
 									</FormControl>
 									<FormControl isRequired my={4}>

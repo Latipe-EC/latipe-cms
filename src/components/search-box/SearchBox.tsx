@@ -208,7 +208,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
 												src={product.image_urls[0]}
 												alt={product.product_name}
 												width="100%" // Adjust width to fill the container
-												height="auto" // Adjust height automatically to maintain aspect ratio
+												height="250px" // Adjust height automatically to maintain aspect ratio
 												objectFit="cover" // Ensure the image covers the space without distortion
 												transition="transform 0.2s" // Smooth transition for the image
 												_hover={{
@@ -216,7 +216,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
 												}}
 											/>
 											<Text fontWeight="bold" mt={2} mb={2} textAlign="center" fontSize="sm">
-												{product.product_name}
+												{product.product_name.length > 30 ? `${product.product_name.substring(0, 30)}...` : product.product_name}
 											</Text>
 										</Box>
 									))}

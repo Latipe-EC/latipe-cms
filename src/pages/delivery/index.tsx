@@ -2,6 +2,7 @@
 // Layout components
 import {
 	Box,
+	Icon,
 	Input,
 	InputGroup,
 	InputLeftElement,
@@ -11,7 +12,8 @@ import {
 	TabPanel,
 	TabPanels,
 	Tabs,
-	Text
+	Text,
+	useMediaQuery
 } from '@chakra-ui/react';
 import { AppThunkDispatch } from '@stores/store';
 import { useDispatch } from 'react-redux';
@@ -27,9 +29,10 @@ import OrderRowDelivery from '@components/orders/OrderRowDelivery';
 import { useEffect, useState } from 'react';
 import DashboardPageHeader from '@components/layout/DashboardPageHeader';
 import { getParamStatusOrder } from '@/utils/utils';
+import { MdCancel, MdCheckCircle, MdDoneAll, MdList, MdLocalShipping, MdMoneyOff, MdPendingActions } from 'react-icons/md';
+import { LoadingOverlay } from '@/components/loading/LoadingOverlay';
 
 export default function DeliveryPage() {
-	// states and functions
 	const user = JSON.parse(localStorage.getItem('REACT_STARTER_AUTH'));
 
 	const dispatch = useDispatch<AppThunkDispatch>();
@@ -41,6 +44,8 @@ export default function DeliveryPage() {
 	const [currentPage, setCurrentPage] = useState(params.get('page') ? params.get('page') : "1");
 	const filter = params.get('filter');
 	const [search, setSearch] = useState("");
+	const [isMobile] = useMediaQuery('(max-width: 768px)');
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		handleGetListOrder();
@@ -76,6 +81,7 @@ export default function DeliveryPage() {
 
 	const handleGetListOrder = () => {
 		const paramFilter = getParamStatusOrder(indexTab);
+		setLoading(true);
 
 		dispatch(searchOrderDelivery({
 			"size": "7",
@@ -86,6 +92,8 @@ export default function DeliveryPage() {
 			setOrderList(res.data);
 		}).catch(() => {
 			navigate("/502")
+		}).finally(() => {
+			setLoading(false);
 		});
 	}
 
@@ -121,13 +129,13 @@ export default function DeliveryPage() {
 					<Tabs onChange={(index) => setTabIndex(index)}
 						position="relative" variant="unstyled">
 						<TabList display="flex">
-							<Tab flex="1">Tất cả</Tab>
-							<Tab flex="1">Chờ xác nhận</Tab>
-							<Tab flex="1">Đã xác nhận</Tab>
-							<Tab flex="1">Chờ giao hàng</Tab>
-							<Tab flex="1">Hoàn thành</Tab>
-							<Tab flex="1">Đã hủy</Tab>
-							<Tab flex="1">Trả hàng/hoàn tiền</Tab>
+							<Tab flex="1">{isMobile ? <Icon as={MdList} /> : 'Tất cả'}</Tab>
+							<Tab flex="1">{isMobile ? <Icon as={MdPendingActions} /> : 'Chờ xác nhận'}</Tab>
+							<Tab flex="1">{isMobile ? <Icon as={MdCheckCircle} /> : 'Đã xác nhận'}</Tab>
+							<Tab flex="1">{isMobile ? <Icon as={MdLocalShipping} /> : 'Chờ giao hàng'}</Tab>
+							<Tab flex="1">{isMobile ? <Icon as={MdDoneAll} /> : 'Hoàn thành'}</Tab>
+							<Tab flex="1">{isMobile ? <Icon as={MdCancel} /> : 'Đã hủy'}</Tab>
+							<Tab flex="1">{isMobile ? <Icon as={MdMoneyOff} /> : 'Trả hàng/hoàn tiền'}</Tab>
 						</TabList>
 
 						<TabIndicator
@@ -148,7 +156,10 @@ export default function DeliveryPage() {
 
 						</TabPanels>
 					</Tabs>
-					{orderList && orderList.data.items.length === 0 &&
+
+					{loading && <LoadingOverlay isLoading={loading} />}
+
+					{!loading && orderList && orderList.data.items.length === 0 &&
 						<FlexBox justifyContent="center" alignItems="center"
 							mt="2.5rem" height={"xl"}>
 							<Text
@@ -159,7 +170,7 @@ export default function DeliveryPage() {
 						</FlexBox>
 					}
 				</FlexBox>
-				{orderList && orderList.data.items.length > 0 &&
+				{!loading && orderList && orderList.data.items.length > 0 &&
 					<FlexBox justifyContent="center" mt="auto">
 						<Pagination
 							pageCount={Math.ceil(orderList.data.total)}

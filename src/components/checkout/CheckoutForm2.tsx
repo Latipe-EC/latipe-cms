@@ -45,7 +45,7 @@ import { checkVoucher } from "@stores/slices/promotions-slice";
 import { AddIcon, CloseIcon } from "@chakra-ui/icons";
 import { createOrderV2 } from "@stores/slices/orders-slice";
 import { Action, ContentAlter, DiscountType, ErrorMessage, PaymentMethodName, TitleAlter, VoucherStatus, VoucherType, paymentMethodList } from "@/utils/constants";
-import { getPaymentMethod, isBlank } from "@/utils/utils";
+import { getPaymentMethod, isBlank, parseNumericValue } from "@/utils/utils";
 import { RealDiscount } from "@/api/interface/promotion";
 import { PromotionData } from "@/api/interface/order";
 import { removeCartItem } from "@/stores/slices/carts-slice";
@@ -98,7 +98,6 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 			src_code: products.map(x => x.cityOrProvinceId),
 			dest_code: selectAddress ? selectAddress.cityOrProvinceId : 0,
 		})).unwrap().then((res) => {
-			console.log(res.data);
 			setDeliveries(res.data);
 		});
 	}, [selectAddress]);
@@ -241,9 +240,6 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 			const discount = discount_type === DiscountType.PERCENT_DISCOUNT ?
 				discount_percent * totalMoneyStore : discount_value;
 			result.totalPrice = maximum_value ? Math.min(discount, maximum_value) : discount;
-			console.log(
-				discount, maximum_value
-			);
 			return result;
 		}
 		// Voucher discount product
@@ -323,8 +319,8 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 				const prodStores = products.filter(x => x.storeId === tmpVoucherStore.owner_voucher);
 				totalMoneyProductByVoucherStore = prodStores.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-				if (tmpVoucherStore.voucher_require && tmpVoucherStore.voucher_require.min_require > 0) {
-					if (totalMoneyProductByVoucherStore < tmpVoucherStore.voucher_require.min_require) {
+				if (tmpVoucherStore.voucher_require && parseNumericValue(tmpVoucherStore.voucher_require.min_require) > 0) {
+					if (totalMoneyProductByVoucherStore < parseNumericValue(tmpVoucherStore.voucher_require.min_require)) {
 						setErrorVoucher(ErrorMessage.VOUCHER_REQUIRE_NOT_MET);
 						return;
 					}
@@ -350,14 +346,14 @@ const CheckoutForm2 = ({ products, vouchers, setVouchers, setListDeliveries, lis
 				if (v.voucher_type === VoucherType.STORE) {
 					continue;
 				}
-				if (v.voucher_require && v.voucher_require.min_require > 0) {
+				if (v.voucher_require && parseNumericValue(v.voucher_require.min_require) > 0) {
 					if (v.voucher_type === VoucherType.PRODUCT) {
-						if (getTotalPrice - Math.min(totalMoneyProductByVoucherStore, discountStore ? discountStore.totalPrice : 0) < v.voucher_require.min_require) {
+						if (getTotalPrice - Math.min(totalMoneyProductByVoucherStore, discountStore ? discountStore.totalPrice : 0) < parseNumericValue(v.voucher_require.min_require)) {
 							setErrorVoucher(ErrorMessage.VOUCHER_REQUIRE_NOT_MET);
 							return;
 						}
 					} else {
-						if (getTotalPrice < v.voucher_require.min_require) {
+						if (getTotalPrice < parseNumericValue(v.voucher_require.min_require)) {
 							setErrorVoucher(ErrorMessage.VOUCHER_REQUIRE_NOT_MET);
 							return;
 						}

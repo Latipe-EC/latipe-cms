@@ -87,6 +87,7 @@ export interface Order {
 	item_discount: number
 	shipping_discount: number
 	sub_total: number
+	store_discount: number
 	status: number
 	payment_method: number
 	created_at: string
@@ -203,6 +204,7 @@ export interface DataStoreOrderDetail {
 	order_id: string
 	store_order_amount: number
 	status: number
+	store_discount: number
 	payment_method: number
 	created_at: string
 	updated_at: string
@@ -364,6 +366,15 @@ export interface AdminOrderDetailResponse {
 	data: AdminOrderDetail
 }
 
+
+export interface DeliveryOrderDetailResponse {
+	code: number
+	error_code: string
+	message: string
+	data: DataAdminOrderDetail
+}
+
+
 export interface DataAdminOrderDetail {
 	order: AdminOrderDetail
 }
@@ -374,6 +385,7 @@ export interface AdminOrderDetail {
 	shipping_discount: number
 	item_discount: number
 	sub_total: number
+	store_discount: number
 	net_price: number
 	status: number
 	payment_method: number
@@ -383,6 +395,7 @@ export interface AdminOrderDetail {
 	delivery: DeliveryGetOrderById
 	order_items: OrderItem[]
 	order_status: StatusAdminOrderDetail[]
+	commission_detail: CommissionDetail
 }
 
 export interface StatusAdminOrderDetail {

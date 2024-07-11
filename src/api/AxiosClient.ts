@@ -1,6 +1,7 @@
 import {
 	CountAllOrderResponse,
 	CreateOrderV2Request,
+	DeliveryOrderDetailResponse,
 	GetTotalCommissionAdminResponse,
 	RefundOrderRequest,
 	StatisticRevenueDistributionAdminResponse,
@@ -212,7 +213,6 @@ export class HttpClient<SecurityDataType = unknown> {
 								localStorage.setItem('REACT_STARTER_AUTH', JSON.stringify({
 									accessToken: response.data.accessToken,
 									isAuthenticated: true,
-									displayName: user.displayName,
 								}));
 
 								if (response.headers['Sid']) {
@@ -1120,7 +1120,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			type: ContentType.Json,
 		}),
 
-		getDeliveryOrderDetail: (id: string) => this.request<AdminOrderDetailResponse>({
+		getDeliveryOrderDetail: (id: string) => this.request<DeliveryOrderDetailResponse>({
 			baseURL: `${import.meta.env.VITE_BASE_URL}/v2/orders`,
 			path: `/delivery/${id}`,
 			method: 'GET',

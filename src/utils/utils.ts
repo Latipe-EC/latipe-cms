@@ -2,6 +2,7 @@ import { OrderStatus, PaymentMethodName, ToastStatus } from "@/utils/constants";
 import { themeGet } from "@styled-system/theme-get";
 import { differenceInMinutes } from "date-fns";
 import { ceil } from "lodash";
+import { MdCancel, MdCheckCircle, MdDoneAll, MdError, MdLocalShipping, MdMoneyOff } from "react-icons/md";
 
 export const getTheme = (query: string, fallback?: string) =>
 	themeGet(query, fallback);
@@ -232,6 +233,35 @@ export const getStrStatusOrder = (status: number): string => {
 	}
 }
 
+export const getOrderStatusIcon = (status: number) => {
+	switch (status) {
+		case OrderStatus.ORDER_SYSTEM_PROCESS:
+			return MdLocalShipping;
+		case OrderStatus.ORDER_CREATED:
+			return MdCheckCircle;
+		case OrderStatus.ORDER_PREPARED:
+			return MdLocalShipping;
+		case OrderStatus.ORDER_DELIVERY:
+			return MdLocalShipping;
+		case OrderStatus.ORDER_SHIPPING_FINISH:
+			return MdDoneAll;
+		case OrderStatus.ORDER_COMPLETED:
+			return MdCheckCircle;
+		case OrderStatus.ORDER_REFUND:
+			return MdMoneyOff;
+		case OrderStatus.ORDER_CANCEL_BY_USER:
+		case OrderStatus.ORDER_CANCEL_BY_ADMIN:
+		case OrderStatus.ORDER_CANCEL_BY_STORE:
+		case OrderStatus.ORDER_CANCEL_BY_DELI:
+		case OrderStatus.ORDER_CANCEL_USER_REJECT:
+			return MdCancel;
+		case OrderStatus.ORDER_FAILED:
+			return MdError;
+		default:
+			return MdError;
+	}
+};
+
 export const getColorStatusOrder = (status) => {
 	switch (status) {
 		case OrderStatus.ORDER_SYSTEM_PROCESS:
@@ -353,4 +383,9 @@ export const parseCurrencyToNumber = (value: string) => {
 	return parseInt(value.replace(/\./g, ''), 10);
 };
 
-export const parseNumericValue = (value) => parseInt(value.replace(/\./g, ''), 10)
+export const parseNumericValue = (value) => {
+	if (value) {
+		return parseFloat(value.replace(/\./g, ''))
+	}
+	return null;
+}

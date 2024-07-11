@@ -14,7 +14,7 @@ export interface createVoucherRequest {
 }
 
 export interface VoucherRequire {
-	min_require: number
+	min_require?: number | string
 }
 
 export interface UpdateStatusVoucher {
@@ -81,8 +81,8 @@ export interface RealDiscount {
 export interface DiscountData {
 	discount_type: number
 	discount_percent?: number
-	maximum_value?: number
-	discount_value?: number
+	maximum_value?: number | string
+	discount_value?: number | string
 	shipping_value?: number
 }
 
@@ -101,7 +101,7 @@ export interface ListVoucherData {
 }
 
 export interface VoucherRequire {
-	min_require: number
+	min_require?: number | string
 	payment_method?: number
 	max_voucher_per_user: number
 }

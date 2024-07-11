@@ -7,7 +7,7 @@ import Pagination from "@/components/pagination/Pagination";
 import { createVoucherVendor, getAllVendorPromotion, updateVendorStatusVoucher } from "@/stores/slices/promotions-slice";
 import { AppThunkDispatch, RootState, useAppSelector } from "@/stores/store";
 import { Action, ContentToast, DiscountType, PaymentMethodName, TitleToast, VoucherStatus, VoucherType } from "@/utils/constants";
-import { checkContainSpace, convertDateTimeYYYYMMDDHHMM, handleApiCallWithToast } from "@/utils/utils";
+import { checkContainSpace, convertDateTimeYYYYMMDDHHMM, handleApiCallWithToast, parseNumericValue } from "@/utils/utils";
 import { ViewIcon, WarningIcon } from "@chakra-ui/icons";
 import { Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Grid, Icon, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Spinner, Table, Tbody, Td, Text, Textarea, Thead, Tr, useToast } from "@chakra-ui/react";
 import { format } from "date-fns";
@@ -65,6 +65,15 @@ const VoucherList = () => {
 	const handleCreate = () => {
 		const startDate = new Date(promotion.stated_time);
 		const endDate = new Date(promotion.ended_time);
+		const discount_data = {
+			...promotion.discount_data,
+			discount_value: parseNumericValue(promotion.discount_data.discount_value),
+			maximum_value: parseNumericValue(promotion.discount_data.maximum_value)
+		}
+		const voucher_require = {
+			...promotion.voucher_require,
+			min_require: parseNumericValue(promotion.voucher_require.min_require)
+		}
 
 		if (checkContainSpace(promotion.voucher_code)) {
 			toast({
@@ -82,8 +91,11 @@ const VoucherList = () => {
 			...promotion,
 			voucher_type: VoucherType.STORE,
 			stated_time: startDate.toISOString().slice(0, 16),
-			ended_time: endDate.toISOString().slice(0, 16)
+			ended_time: endDate.toISOString().slice(0, 16),
+			voucher_require,
+			discount_data
 		}
+
 		if (req.voucher_require.payment_method === 0) {
 			req.voucher_require = {
 				...req.voucher_require,
@@ -120,11 +132,11 @@ const VoucherList = () => {
 				status
 			},
 			null,
-			TitleToast.ADD_VOUCHER,
+			TitleToast.UPDATE_VOUCHER,
 			TitleToast.SUCCESS,
-			ContentToast.ADD_VOUCHER_SUCCESS,
+			ContentToast.UPDATE_VOUCHER_SUCCESS,
 			TitleToast.ERROR,
-			ContentToast.ADD_VOUCHER_ERROR,
+			ContentToast.UPDATE_VOUCHER_ERROR,
 			null,
 			toast,
 			<Spinner />)
@@ -142,7 +154,7 @@ const VoucherList = () => {
 			promotion.voucher_counts <= 0 ||
 			promotion.detail.trim() === '' ||
 			!promotion.voucher_require.min_require ||
-			promotion.voucher_require.min_require <= 0 ||
+			parseNumericValue(promotion.voucher_require.min_require) <= 0 ||
 			!promotion.voucher_require.max_voucher_per_user ||
 			promotion.voucher_require.max_voucher_per_user <= 0 ||
 			promotion.stated_time === null ||
@@ -153,10 +165,10 @@ const VoucherList = () => {
 				promotion.discount_data.shipping_value <= 0 :
 				(promotion.discount_data.discount_type ===
 					DiscountType.FIXED_DISCOUNT ?
-					promotion.discount_data.discount_value < 0 :
+					parseNumericValue(promotion.discount_data.discount_value) < 0 :
 					(promotion.discount_data.discount_percent <= 0 ||
 						promotion.discount_data.discount_percent > 1 ||
-						promotion.discount_data.maximum_value < 0
+						parseNumericValue(promotion.discount_data.maximum_value) < 0
 					)
 				)))
 	}
@@ -207,8 +219,8 @@ const VoucherList = () => {
 						<Tr>
 							<Td>Mã Voucher</Td>
 							<Td>Số lượng</Td>
-							<Td>Số lượng còn lại</Td>
-							<Td>Thời gian kết thúc</Td>
+							<Td>Còn lại</Td>
+							<Td>Hết hạn</Td>
 							<Td>Trạng thái</Td>
 							<Td>Chi tiết</Td>
 						</Tr>
@@ -437,18 +449,36 @@ const VoucherList = () => {
 											<FormControl my={4} isRequired>
 												<FormLabel>Giảm giá trực tiếp</FormLabel>
 												<Input
-													type='number'
+													type='text'
 													value={promotion.discount_data.discount_value}
 													min={promotion.discount_data.discount_type
 														=== DiscountType.FIXED_DISCOUNT ? "1" : "0.01"}
 													max={promotion.discount_data.discount_type
 														=== DiscountType.FIXED_DISCOUNT ? "1000000000" : "1"}
-													onChange={(e) => setPromotion({
-														...promotion, discount_data: {
-															...promotion.discount_data,
-															discount_value: parseInt(e.target.value)
+													onChange={(e) => {
+														let { value } = e.target;
+														value = value.replace(/\./g, '');
+														const pattern = /^[0-9]+$/;
+														const real_value = parseFloat(value)
+														if (real_value > 100000000)
+															return;
+														if (pattern.test(value) || value === '') {
+															setPromotion({
+																...promotion, discount_data: {
+																	...promotion.discount_data,
+																	discount_value: !isNaN(real_value) ? real_value.toLocaleString('vi-VN') : 0
+																}
+															})
+														} else {
+															setPromotion({
+																...promotion, discount_data: {
+																	...promotion.discount_data,
+																	discount_value: 0
+																}
+															})
+
 														}
-													})}
+													}}
 												/>
 											</FormControl> :
 											<>
@@ -474,16 +504,34 @@ const VoucherList = () => {
 												<FormControl my={4} isRequired>
 													<FormLabel>Giảm tối đa</FormLabel>
 													<Input
-														type='number'
+														type='text'
 														value={promotion.discount_data.maximum_value}
 														min="1"
-														onChange={(e) => setPromotion({
-															...promotion,
-															discount_data: {
-																...promotion.discount_data,
-																maximum_value: parseInt(e.target.value)
+														onChange={(e) => {
+															let { value } = e.target;
+															value = value.replace(/\./g, '');
+															const pattern = /^[0-9]+$/;
+															const real_value = parseFloat(value)
+															if (real_value > 100000000)
+																return;
+															if (pattern.test(value) || value === '') {
+																setPromotion({
+																	...promotion,
+																	discount_data: {
+																		...promotion.discount_data,
+																		maximum_value: isNaN(real_value) ? real_value.toLocaleString('vi-VN') : 0
+																	}
+																})
+															} else {
+																setPromotion({
+																	...promotion,
+																	discount_data: {
+																		...promotion.discount_data,
+																		maximum_value: 0
+																	}
+																})
 															}
-														})}
+														}}
 													/>
 												</FormControl>
 											</>
@@ -497,13 +545,28 @@ const VoucherList = () => {
 								<FormControl isRequired>
 									<FormLabel>Giá tối thiểu</FormLabel>
 									<Input
-										type='number'
+										type='text'
 										value={promotion.voucher_require.min_require}
 										min="1"
-										onChange={(e) => setPromotion({
-											...promotion,
-											voucher_require: { ...promotion.voucher_require, min_require: parseInt(e.target.value) }
-										})}
+										onChange={(e) => {
+											let { value } = e.target;
+											value = value.replace(/\./g, '');
+											const pattern = /^[0-9]+$/;
+											const real_value = parseFloat(value)
+											if (real_value > 100000000)
+												return;
+											if (pattern.test(value) || value === '') {
+												setPromotion({
+													...promotion,
+													voucher_require: { ...promotion.voucher_require, min_require: !isNaN(real_value) ? real_value.toLocaleString('vi-VN') : 0 }
+												})
+											} else {
+												setPromotion({
+													...promotion,
+													voucher_require: { ...promotion.voucher_require, min_require: 0 }
+												})
+											}
+										}}
 									/>
 								</FormControl>
 								<FormControl isRequired my={4}>

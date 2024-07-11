@@ -33,15 +33,14 @@ import { countAllStore } from '@stores/slices/stores-slice';
 const HomeAdmin = () => {
 
 	const date = new Date();
-	const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
 	const brandColor = useColorModeValue('brand.500', 'white');
 
 	const dispatch = useDispatch<AppThunkDispatch>();
 	const navigate = useNavigate();
 	const [responseOrder, setResponseOrder] = useState<GetOrderDaysResponse>();
 	const [responseProduct, setResponseProduct] = useState<GetProductBestSellerResponse>();
-	const [dateProuct, setDateProduct] = useState(firstDayOfMonth);
-	const [dateOrder, setDateOrder] = useState(firstDayOfMonth);
+	const [dateProuct, setDateProduct] = useState(date);
+	const [dateOrder, setDateOrder] = useState(date);
 	const [countProductFilter, setCountProductFilter] = useState(10);
 	const options = [...Array(10)].map((_, i) => i + 1);
 
@@ -203,7 +202,7 @@ const HomeAdmin = () => {
 								))}
 							</Select>
 							<Input
-								w="10%"
+								w={"40"}
 								type="date"
 								value={dateProuct.toISOString().slice(0, 10)}
 								onChange={handleDateChange}
@@ -221,7 +220,7 @@ const HomeAdmin = () => {
 								Doanh thu theo ngày
 							</Text>
 							<Input
-								w="10%"
+								w={"40"}
 								type="date"
 								value={dateOrder.toISOString().slice(0, 10)}
 								onChange={(e) => {

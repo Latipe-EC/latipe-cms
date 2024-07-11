@@ -57,7 +57,7 @@ const Login: React.FC = () => {
 						return;
 					}
 					navigate("/");
-				}, 2000);
+				}, 1000);
 			},
 			(res) => {
 				if (res.data.detail.includes("verified")) {

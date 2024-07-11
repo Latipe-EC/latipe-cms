@@ -53,7 +53,7 @@ const Products = () => {
 					setOrderBy(orderBy === "createdDate" ? "-createdDate" : "createdDate");
 				}} cursor="pointer">
 					<Typography mr="0.25rem"
-					>Sort by date</Typography>
+					>Sắp xếp theo ngày</Typography>
 					<IconButton
 						variant="contained"
 					>

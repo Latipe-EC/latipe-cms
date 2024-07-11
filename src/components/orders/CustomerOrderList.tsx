@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import DashboardPageHeader from "../layout/DashboardPageHeader";
 import OrderRow from "./OrderRow";
-import { Box, Tab, TabIndicator, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
+import { Box, Icon, Tab, TabIndicator, TabList, TabPanel, TabPanels, Tabs, Text, useMediaQuery } from "@chakra-ui/react";
 import { AppThunkDispatch } from '@stores/store';
 import { useDispatch } from 'react-redux';
 import { getMyOrder } from '../../stores/slices/orders-slice';
@@ -10,7 +10,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import FlexBox from '@components/FlexBox';
 import Pagination from '@components/pagination/Pagination';
 import { getParamStatusOrder } from '@/utils/utils';
-import { Content } from '@/utils/constants';
+import { MdCancel, MdCheckCircle, MdDoneAll, MdList, MdLocalShipping, MdMoneyOff, MdPendingActions } from 'react-icons/md';
+import { LoadingOverlay } from '@/components/loading/LoadingOverlay';
 
 export interface CustomerOrderListProps {
 }
@@ -23,7 +24,8 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
 	const params = new URLSearchParams(location.search);
 	const filter = params.get('filter');
 	const navigate = useNavigate();
-
+	const [isMobile] = useMediaQuery('(max-width: 768px)');
+	const [loading, setLoading] = useState(false);
 	const [currentPage, setCurrentPage] = useState(params.get('page') ? params.get('page') : "1");
 
 	useEffect(() => {
@@ -42,7 +44,7 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
 
 	const handleGetListOrder = () => {
 		const paramFilter = getParamStatusOrder(indexTab);
-
+		setLoading(true);
 		dispatch(getMyOrder({
 			"size": "5",
 			"page": currentPage,
@@ -51,6 +53,8 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
 			setOrderList(res.data);
 		}).catch(() => {
 			navigate("/502")
+		}).finally(() => {
+			setLoading(false);
 		});
 	}
 
@@ -60,13 +64,13 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
 				<DashboardPageHeader title="Đơn hàng của tôi" iconName="bag_filled" />
 				<Tabs onChange={(index) => setTabIndex(index)} position="relative" variant="unstyled">
 					<TabList display="flex">
-						<Tab flex="1">{Content.ALL}</Tab>
-						<Tab flex="1">{Content.WAIT_FOR_PAY}</Tab>
-						<Tab flex="1">{Content.SHIPPING}</Tab>
-						<Tab flex="1">{Content.WAIT_FOR_DELIVERY}</Tab>
-						<Tab flex="1">{Content.COMPLETE}</Tab>
-						<Tab flex="1">{Content.CANCLED}</Tab>
-						<Tab flex="1">{Content.REFUND}</Tab>
+						<Tab flex="1">{isMobile ? <Icon as={MdList} /> : 'Tất cả'}</Tab>
+						<Tab flex="1">{isMobile ? <Icon as={MdPendingActions} /> : 'Chờ xác nhận'}</Tab>
+						<Tab flex="1">{isMobile ? <Icon as={MdCheckCircle} /> : 'Đã xác nhận'}</Tab>
+						<Tab flex="1">{isMobile ? <Icon as={MdLocalShipping} /> : 'Chờ giao hàng'}</Tab>
+						<Tab flex="1">{isMobile ? <Icon as={MdDoneAll} /> : 'Hoàn thành'}</Tab>
+						<Tab flex="1">{isMobile ? <Icon as={MdCancel} /> : 'Đã hủy'}</Tab>
+						<Tab flex="1">{isMobile ? <Icon as={MdMoneyOff} /> : 'Trả hàng/hoàn tiền'}</Tab>
 					</TabList>
 					<TabIndicator
 						mt="-1.5px"
@@ -85,7 +89,10 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
 
 					</TabPanels>
 				</Tabs>
-				{orderList && orderList.data.items.length === 0 &&
+
+				{loading && <LoadingOverlay isLoading={loading} />}
+
+				{!loading && orderList && orderList.data.items.length === 0 &&
 					<FlexBox justifyContent="center" alignItems="center" mt="2.5rem" height={"xl"}>
 						<Text
 							fontSize="x-large"
@@ -95,7 +102,8 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
 					</FlexBox>
 				}
 			</FlexBox>
-			{orderList && orderList.data.items.length > 0 &&
+
+			{!loading && orderList && orderList.data.items.length > 0 &&
 				<FlexBox justifyContent="center" mt="2.5rem">
 					<Pagination
 						pageCount={Math.ceil(orderList.data.total)}

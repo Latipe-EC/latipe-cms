@@ -252,6 +252,16 @@ const OrderDetails = () => {
 									</H6>
 								</FlexBox>
 
+								<FlexBox
+									justifyContent="space-between"
+									alignItems="center"
+									mb="0.5rem"
+								>
+									<Typography fontSize="14px" color="text.hint">
+										{Title.ORDER_DISCOUNT_STORE}:
+									</Typography>
+									<H6 my="0px">{response.data.store_discount ? response.data.store_discount.toLocaleString('vi-VN') : 0}₫</H6>
+								</FlexBox>
 								<Divider mb="0.5rem" />
 
 								<Typography

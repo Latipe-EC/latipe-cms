@@ -56,14 +56,10 @@ if ('serviceWorker' in navigator) {
 						localStorage.setItem('browser_id', generateUUID());
 
 					} else {
-						// Show permission request UI
 						console.log('No registration token available. Request permission to generate one.');
-						// ...
 					}
 				}).catch((err) => {
 					console.log('An error occurred while retrieving token. ', err);
-					// show a message and UI element to let the user know what went wrong
-					// ...
 				});
 			}
 		});

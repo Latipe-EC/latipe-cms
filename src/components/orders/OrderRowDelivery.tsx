@@ -10,7 +10,8 @@ import Typography, { H5, Small } from "../Typography";
 import { ItemSearchStoreOrder } from "@interfaces/order";
 import { useNavigate } from "react-router-dom";
 import { vi } from "date-fns/locale";
-import { getColorStatusOrder, getStrStatusOrder } from "@/utils/utils";
+import { getColorStatusOrder, getOrderStatusIcon, getStrStatusOrder } from "@/utils/utils";
+import { Tooltip, useMediaQuery, Icon as CharkraIcon } from "@chakra-ui/react";
 
 export interface OrderRowDeliveryProps {
 	order: ItemSearchStoreOrder;
@@ -19,6 +20,7 @@ export interface OrderRowDeliveryProps {
 const OrderRowDelivery: React.FC<OrderRowDeliveryProps> = ({ order }) => {
 
 	const navigate = useNavigate();
+	const [isMobile] = useMediaQuery('(max-width: 768px)');
 
 	const handleNavigateOrderDetail = () => {
 		navigate(`/delivery/orders/${order.order_id}`);
@@ -35,8 +37,14 @@ const OrderRowDelivery: React.FC<OrderRowDeliveryProps> = ({ order }) => {
 			</H5>
 			<Box display="flex" justifyContent="center">
 				<Chip p="0.25rem 1rem" bg={`${getColorStatusOrder(order.status)}.light`}>
-					<Small textAlign="center"
-						color={`${getColorStatusOrder(order.status)}.main`}>{getStrStatusOrder(order.status)}</Small>
+					{isMobile ?
+						<Tooltip label={getStrStatusOrder(order.status)} aria-label="A tooltip">
+							<CharkraIcon as={getOrderStatusIcon(order.status)} />
+						</Tooltip> :
+						<Small textAlign="center"
+							color={`${getColorStatusOrder(order.status)}.main`}>{getStrStatusOrder(order.status)}
+						</Small>
+					}
 				</Chip>
 			</Box>
 			<Typography className="flex-grow pre" m="6px" textAlign="left">

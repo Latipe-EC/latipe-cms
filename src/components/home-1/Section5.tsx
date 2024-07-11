@@ -35,7 +35,7 @@ const Section5: React.FC = () => {
 			<Card p="1rem">
 				<Grid container spacing={6}>
 					{resultList && resultList.map((item) => (
-						<Grid item lg={2} md={3} sm={4} xs={6} key={item.id}>
+						<Grid item lg={3} md={3} sm={6} xs={6} key={item.id}>
 							<ProductCard2 {...item} />
 						</Grid>
 					))}

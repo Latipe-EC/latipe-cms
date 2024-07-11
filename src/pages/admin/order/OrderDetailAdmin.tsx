@@ -19,6 +19,7 @@ import { Chip } from "@components/Chip";
 import { vi } from "date-fns/locale";
 import { getColorStatusOrder, getStrStatusOrder } from "@/utils/utils";
 import { LoadingOverlay } from "@/components/loading/LoadingOverlay";
+import { Title } from "@/utils/constants";
 
 const OrderDetailAdmin = () => {
 
@@ -192,7 +193,7 @@ const OrderDetailAdmin = () => {
 									</H6>
 								</FlexBox>
 
-								{/* <FlexBox
+								<FlexBox
 									justifyContent="space-between"
 									alignItems="center"
 									mb="0.5rem"
@@ -201,11 +202,22 @@ const OrderDetailAdmin = () => {
 										Phí nền tảng:
 									</Typography>
 									<H6 my="0px">{
-										response.data.commission_detail.system_fee.toLocaleString("vi-VN")}₫ ({Math.ceil(response.data.commission_detail.system_fee / response.data.store_order_amount * 100)}%)
+										response.data.commission_detail.system_fee.toLocaleString("vi-VN")}₫ ({Math.ceil(response.data.commission_detail.system_fee / (response.data.commission_detail.system_fee + response.data.commission_detail.amount_received) * 100)}%)
 									</H6>
-								</FlexBox> */}
+								</FlexBox>
 
-								{/* <FlexBox
+								<FlexBox
+									justifyContent="space-between"
+									alignItems="center"
+									mb="0.5rem"
+								>
+									<Typography fontSize="14px" color="text.hint">
+										{Title.ORDER_DISCOUNT_STORE}:
+									</Typography>
+									<H6 my="0px">{response.data.store_discount ? response.data.store_discount.toLocaleString('vi-VN') : 0}₫</H6>
+								</FlexBox>
+
+								<FlexBox
 									justifyContent="space-between"
 									alignItems="center"
 									mb="0.5rem"
@@ -216,7 +228,8 @@ const OrderDetailAdmin = () => {
 									<H6 my="0px">{
 										response.data.commission_detail.amount_received.toLocaleString("vi-VN")}₫
 									</H6>
-								</FlexBox> */}
+								</FlexBox>
+
 
 								<Divider mb="0.5rem" />
 

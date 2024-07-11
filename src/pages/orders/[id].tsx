@@ -50,7 +50,7 @@ import {
 	updateRating
 } from "@stores/slices/ratings-slice";
 import { RatingResponse } from "@interfaces/rating";
-import { Action, Content, Order, OrderStatus, PaymentMethodName, Title } from "@/utils/constants";
+import { Action, Content, OrderStatus, PaymentMethodName, Title } from "@/utils/constants";
 import { vi } from "date-fns/locale";
 import { getPaymentMethod } from "@/utils/utils";
 
@@ -763,6 +763,7 @@ const OrderDetails = () => {
 							</Typography>
 							<H6 my="0px">{orderDetail.order.item_discount.toLocaleString('vi-VN')}₫</H6>
 						</FlexBox>
+
 						<FlexBox
 							justifyContent="space-between"
 							alignItems="center"
@@ -772,6 +773,17 @@ const OrderDetails = () => {
 								{Title.ORDER_DISCOUNT_FEE_SHIPPING}:
 							</Typography>
 							<H6 my="0px">{orderDetail.order.shipping_discount.toLocaleString('vi-VN')}₫</H6>
+						</FlexBox>
+
+						<FlexBox
+							justifyContent="space-between"
+							alignItems="center"
+							mb="0.5rem"
+						>
+							<Typography fontSize="14px" color="text.hint">
+								{Title.ORDER_DISCOUNT_STORE}:
+							</Typography>
+							<H6 my="0px">{orderDetail.order.store_discount ? orderDetail.order.store_discount.toLocaleString('vi-VN') : 0}₫</H6>
 						</FlexBox>
 
 						<Divider mb="0.5rem" />

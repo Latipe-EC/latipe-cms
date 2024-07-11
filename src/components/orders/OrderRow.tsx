@@ -2,7 +2,6 @@ import { format } from "date-fns";
 import React from "react";
 import Box from "../Box";
 import IconButton from "../buttons/IconButton";
-import { Chip } from "../Chip";
 import Hidden from "../hidden/Hidden";
 import Icon from "../icon/Icon";
 import TableRow from "../TableRow";
@@ -10,7 +9,9 @@ import Typography, { H5, Small } from "../Typography";
 import { DaumGMO } from "@interfaces/order";
 import { useNavigate } from "react-router-dom";
 import { vi } from "date-fns/locale";
-import { getColorStatusOrder, getStrStatusOrder } from "@/utils/utils";
+import { getColorStatusOrder, getOrderStatusIcon, getStrStatusOrder } from "@/utils/utils";
+import { useMediaQuery, Icon as CharkraIcon, Tooltip } from "@chakra-ui/react";
+import { Chip } from "@/components/Chip";
 
 export interface OrderRowProps {
 	order: DaumGMO;
@@ -19,6 +20,7 @@ export interface OrderRowProps {
 const OrderRow: React.FC<OrderRowProps> = ({ order }) => {
 
 	const navigate = useNavigate();
+	const [isMobile] = useMediaQuery('(max-width: 768px)');
 
 	const handleNavigateOrderDetail = () => {
 		navigate(`/orders/${order.order_id}`);
@@ -31,12 +33,18 @@ const OrderRow: React.FC<OrderRowProps> = ({ order }) => {
 			}}
 		>
 			<H5 m="6px" textAlign="left">
-				{order.order_id}
+				{order.order_id.toUpperCase()}
 			</H5>
-			<Box m="6px">
+			<Box m="6px" display={isMobile ? "flex" : ""} justifyContent="center">
 				<Chip p="0.25rem 1rem" bg={`${getColorStatusOrder(order.status)}.light`}>
-					<Small textAlign="center"
-						color={`${getColorStatusOrder(order.status)}.main`}>{getStrStatusOrder(order.status)}</Small>
+					{isMobile ?
+						<Tooltip label={getStrStatusOrder(order.status)} aria-label="A tooltip">
+							<CharkraIcon as={getOrderStatusIcon(order.status)} />
+						</Tooltip> :
+						<Small textAlign="center"
+							color={`${getColorStatusOrder(order.status)}.main`}>{getStrStatusOrder(order.status)}
+						</Small>
+					}
 				</Chip>
 			</Box>
 			<Typography className="flex-grow pre" m="6px" textAlign="left">

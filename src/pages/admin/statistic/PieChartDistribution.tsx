@@ -12,7 +12,6 @@ type PieChartDistributionProps = {
 
 const PieChartDistribution = ({ data }: PieChartDistributionProps) => {
 
-	console.log(data);
 	const series = [data.platform_fee, data.platform_voucher, data.total_shipping, data.profit];
 	const labels = ['Phí nền tảng', 'Khuyến mãi', 'Phí ship', 'Lợi nhuận'];
 

@@ -32,7 +32,7 @@ import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import ImageUpload from '@/components/upload-image/ImageUpload';
-import { formatDateTime, handleApiCallWithToast, isBlank } from '@/utils/utils';
+import { convertDateTimeYYYYMMDDHHMM, formatDateTime, handleApiCallWithToast, isBlank } from '@/utils/utils';
 import { createCampaign, getCampaignAdmin, recallCampaignAdmin } from '@/stores/slices/notification-slice';
 import { Chip } from '@/components/Chip';
 import { Small } from '@/components/Typography';
@@ -395,7 +395,7 @@ const CampaignsAdmin = () => {
 						<Box m={4}>
 							<FormControl id="campaign_code" isRequired>
 								<FormLabel>Nội dung</FormLabel>
-								<Box height="450px">
+								<Box height="250px">
 									<CKEditor
 										editor={ClassicEditor}
 										data={selectCampaign.body}
@@ -431,7 +431,7 @@ const CampaignsAdmin = () => {
 								<Input
 									required
 									type="datetime-local"
-									value={selectCampaign.schedule_display}
+									value={convertDateTimeYYYYMMDDHHMM(selectCampaign.schedule_display)}
 									onChange={(e) => setSelectCampaign({
 										...selectCampaign,
 										schedule_display: e.target.value

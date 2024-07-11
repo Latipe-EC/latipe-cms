@@ -12,20 +12,20 @@ import { format } from "date-fns";
 import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "@stores/store";
 import { useEffect, useState } from "react";
-import { AdminOrderDetailResponse } from "@interfaces/order";
 import { getDeliveryOrderDetail, updateStatusOrderByDelivery } from "@stores/slices/orders-slice";
 import { Chip } from "@components/Chip";
 import { Button, Flex } from "@chakra-ui/react";
 import { vi } from "date-fns/locale";
 import { getColorStatusOrder, getStrStatusOrder } from "@/utils/utils";
 import { OrderStatus } from "@/utils/constants";
+import { DeliveryOrderDetailResponse } from "@/api/interface/order";
 
 const OrderDetailDelivery = () => {
 
 	const { id } = useParams();
 	const dispatch = useDispatch<AppThunkDispatch>();
 	const navigate = useNavigate();
-	const [response, setResponse] = useState<AdminOrderDetailResponse>(null);
+	const [response, setResponse] = useState<DeliveryOrderDetailResponse>(null);
 
 	useEffect(() => {
 		dispatch(getDeliveryOrderDetail(id)).unwrap().then((res) => {

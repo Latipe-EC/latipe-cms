@@ -1522,7 +1522,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 		}) =>
 			this.request<SIEResponse>({
 				baseURL: `${import.meta.env.VITE_BASE_URL}/v1`,
-				path: `/api/v1/sie/search`,
+				path: `/sie/search`,
 				method: 'POST',
 				body: data,
 				type: ContentType.FormData,

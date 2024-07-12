@@ -12,8 +12,7 @@ import { AppThunkDispatch } from "@stores/store";
 import { autoComplete } from "@stores/slices/search-slice";
 import { useNavigate } from "react-router-dom";
 import { Action, Content } from "@/utils/constants";
-import { Button, Center, Heading, Image, Icon as IconCharkra, SimpleGrid, Text, VStack, Flex } from "@chakra-ui/react";
-import styled from "styled-components";
+import { Button, Center, Heading, Image, Icon as IconCharkra, SimpleGrid, Text, VStack, Flex, Modal, ModalContent, ModalFooter, ModalHeader } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa";
 import { Api } from "@/api/AxiosClient";
 import { LoadingOverlay } from "@/components/loading/LoadingOverlay";
@@ -21,27 +20,6 @@ import { LoadingOverlay } from "@/components/loading/LoadingOverlay";
 export interface SearchBoxProps {
 }
 
-const Modal = styled.div`
-  position: fixed;
-  z-index: 1050;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ModalContent = styled.div`
-  background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 50%;
-`;
 
 const SearchBox: React.FC<SearchBoxProps> = () => {
 	const [resultList, setResultList] = useState([]);
@@ -137,13 +115,28 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
 			</StyledSearchBox>
 
 			{modalOpen && (
-				<Modal>
-					<ModalContent>
+				<Modal isOpen={modalOpen} onClose={() => {
+					setModalOpen(false)
+				}} isCentered>
+					<ModalContent sx={{
+						maxHeight: "70vh", // Sets the maximum height of the modal content
+						overflowY: "auto", // Allows vertical scrolling if the content exceeds the max height
+						maxWidth: "70vw", // Sets the width to 70% of the viewport width
 
-						<VStack spacing={4} align="stretch">
+					}}>
+						<ModalHeader style={{
+							fontWeight: 'bold',
+							fontSize: '20px',
+							color: 'gray.800',
+							textAlign: "center",
+							marginTop: '20px'
+						}}>
 							<Heading size="lg" textAlign="center" mb={4}>
 								Sản phẩm tương tự
 							</Heading>
+						</ModalHeader>
+						<VStack spacing={4} align="stretch">
+
 							<button
 								onClick={() => setModalOpen(false)}
 								style={{
@@ -183,7 +176,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
 							)}
 
 							{products.length > 0 ? (
-								<SimpleGrid columns={{ sm: 2, md: 3, lg: 5 }} spacing={5}>
+								<SimpleGrid columns={{ sm: 2, md: 3, lg: 3 }} spacing={5}>
 									{products.map((product) => (
 										<Box
 											key={product.id}
@@ -204,17 +197,19 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
 											}}
 											overflow="hidden" // Ensures content does not overflow the rounded borders
 										>
-											<Image
-												src={product.image_urls[0]}
-												alt={product.product_name}
-												width="100%" // Adjust width to fill the container
-												height="250px" // Adjust height automatically to maintain aspect ratio
-												objectFit="cover" // Ensure the image covers the space without distortion
-												transition="transform 0.2s" // Smooth transition for the image
-												_hover={{
-													transform: 'scale(1.1)', // Slightly enlarges the image on hover
-												}}
-											/>
+											<Box display="flex" justifyContent="center" alignItems="center">
+												<Image
+													src={product.image_urls[0]}
+													alt={product.product_name}
+													width="250px" // Adjust width to fill the container
+													height="250px" // Adjust height automatically to maintain aspect ratio
+													objectFit="cover" // Ensure the image covers the space without distortion
+													transition="transform 0.2s" // Smooth transition for the image
+													_hover={{
+														transform: 'scale(1.1)', // Slightly enlarges the image on hover
+													}}
+												/>
+											</Box>
 											<Text fontWeight="bold" mt={2} mb={2} textAlign="center" fontSize="sm">
 												{product.product_name.length > 30 ? `${product.product_name.substring(0, 30)}...` : product.product_name}
 											</Text>
@@ -229,18 +224,21 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
 								)
 							)}
 						</VStack>
-						<Flex justifyContent="end" mt={4}>
-							<Button
-								colorScheme="blue"
-								onClick={() => setModalOpen(false)}
-								width="fit-content"
-								alignSelf="center"
-							>
-								{Action.CLOSE}
-							</Button>
-						</Flex>
 
+						<ModalFooter>
+							<Flex justifyContent="end" mt={4}>
+								<Button
+									colorScheme="blue"
+									onClick={() => setModalOpen(false)}
+									width="fit-content"
+									alignSelf="center"
+								>
+									{Action.CLOSE}
+								</Button>
+							</Flex>
+						</ModalFooter>
 					</ModalContent>
+
 				</Modal>
 			)}
 

@@ -320,7 +320,6 @@ const PromotionsAdmin = () => {
 	const checkAddVoucher = (): boolean => {
 		const statedTime = new Date(promotion.stated_time);
 		const endedTime = new Date(promotion.ended_time);
-		console.log(statedTime === endedTime);
 		return (promotion.voucher_code.trim() === '' ||
 			promotion.voucher_counts <= 0 ||
 			promotion.detail.trim() === '' ||

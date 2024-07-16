@@ -383,9 +383,11 @@ export const parseCurrencyToNumber = (value: string) => {
 	return parseInt(value.replace(/\./g, ''), 10);
 };
 
-export const parseNumericValue = (value) => {
-	if (value) {
+export const parseNumericValue = (value): number => {
+	if (!value) { return 0; }
+	if (value && typeof value.replace === 'function') {
 		return parseFloat(value.replace(/\./g, ''))
 	}
-	return null;
+
+	return 0;
 }

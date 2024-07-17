@@ -81,8 +81,7 @@ const StatisticAdmin = () => {
 	}, [revenueDate]);
 
 	useEffect(() => {
-
-		dispatch(getTotalOrderInYearAdmin({ date: convertDateYYYYMMDD(dateYear) })).unwrap().then(res => {
+		dispatch(getTotalOrderInYearAdmin(dateYear.getFullYear().toString())).unwrap().then(res => {
 			if (res.status !== 200) {
 				navigate("/401");
 				return;
@@ -192,7 +191,7 @@ const StatisticAdmin = () => {
 				<Input
 					w="10%"
 					type="date"
-					value={revenueDate.toISOString().slice(0, 10)}
+					value={dateMonth.toISOString().slice(0, 10)}
 					onChange={(e) => {
 						setDateMonth(new Date(e.target.value))
 					}}

@@ -12,7 +12,7 @@ import { useParams } from "react-router-dom";
 import { Box, Code, Flex, IconButton, Text, useToast } from "@chakra-ui/react";
 import { CopyIcon, InfoIcon } from "@chakra-ui/icons";
 import { VoucherModal } from "@/pages/shop/VoucherModal";
-import { getAllVendorPromotion } from "@/stores/slices/promotions-slice";
+import { getVoucherUser } from "@/stores/slices/promotions-slice";
 
 const Shop = () => {
 
@@ -111,10 +111,11 @@ const Shop = () => {
 				}
 			});
 
-		dispatch(getAllVendorPromotion(
+		dispatch(getVoucherUser(
 			{
 				"page": "1",
-				"size": "10"
+				"size": "10",
+				"filters[owner_voucher][$eq]": id,
 			})).unwrap().then((res) => {
 				if (res.status.toString().startsWith('2')) {
 					setVouchers(res.data.data.items);

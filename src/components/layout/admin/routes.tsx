@@ -9,6 +9,7 @@ import {
 	MdPayment,
 	MdPerson,
 	MdProductionQuantityLimits,
+	MdSettings,
 	MdStarRate,
 	MdStore
 } from 'react-icons/md';
@@ -99,6 +100,13 @@ const routes = [
 		layout: '/admin',
 		path: '/campaigns',
 		icon: <Icon as={MdCampaign} width='20px' height='20px' color='inherit' />,
+		component: ''
+	},
+	{
+		name: 'Cấu hình',
+		layout: '/admin',
+		path: '/campaigns',
+		icon: <Icon as={MdSettings} width='20px' height='20px' color='inherit' />,
 		component: ''
 	}
 	,

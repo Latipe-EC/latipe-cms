@@ -1049,14 +1049,11 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			}),
 
 		getTotalOrderInYear:
-			(params: QueryParamsType) => this.request<GetTotalOrderInYear>({
+			(year) => this.request<GetTotalOrderInYear>({
 				baseURL: `${import.meta.env.VITE_BASE_URL}/v2/orders`,
-				path: `/statistic/store/total-order/year`,
+				path: `/statistic/store/total-order/year=${year}`,
 				method: 'GET',
-				type: ContentType.Json,
-				query: {
-					...params
-				}
+				type: ContentType.Json
 			}),
 
 		getTotalCommission:
@@ -1139,14 +1136,11 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			}),
 
 		getTotalOrderInYearAdmin:
-			(params: QueryParamsType) => this.request<GetTotalOrderInYear>({
+			(year: string) => this.request<GetTotalOrderInYear>({
 				baseURL: `${import.meta.env.VITE_BASE_URL}/v2/orders`,
-				path: `/statistic/admin/total-order/year`,
+				path: `/statistic/admin/total-order/year?year=${year}`,
 				method: 'GET',
-				type: ContentType.Json,
-				query: {
-					...params
-				}
+				type: ContentType.Json
 			}),
 
 		getTotalCommissionAdmin:

@@ -122,8 +122,8 @@ export const
 export const
 	getTotalOrderInYear = createAsyncThunk(
 		'orders/getTotalOrderInYear',
-		async (params: QueryParamsType) => {
-			const response = await api.order.getTotalOrderInYear(params);
+		async (year) => {
+			const response = await api.order.getTotalOrderInYear(year);
 			return response;
 		}
 	);
@@ -203,8 +203,8 @@ export const
 export const
 	getTotalOrderInYearAdmin = createAsyncThunk(
 		'orders/getTotalOrderInYearAdmin',
-		async (params: QueryParamsType) => {
-			const response = await api.order.getTotalOrderInYearAdmin(params);
+		async (year: string) => {
+			const response = await api.order.getTotalOrderInYearAdmin(year);
 			return response;
 		}
 	);

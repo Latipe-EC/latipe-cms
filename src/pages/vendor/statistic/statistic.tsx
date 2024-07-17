@@ -143,7 +143,7 @@ const StatisticVendor = () => {
 
 	useEffect(() => {
 
-		dispatch(getTotalOrderInYear({ date: convertDateYYYYMMDD(dateYear) })).unwrap().then(res => {
+		dispatch(getTotalOrderInYear(dateYear.getFullYear().toString())).unwrap().then(res => {
 			if (res.status !== 200) {
 				navigate("/401");
 				return;

@@ -1049,9 +1049,9 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
 			}),
 
 		getTotalOrderInYear:
-			(year) => this.request<GetTotalOrderInYear>({
+			(year: string) => this.request<GetTotalOrderInYear>({
 				baseURL: `${import.meta.env.VITE_BASE_URL}/v2/orders`,
-				path: `/statistic/store/total-order/year=${year}`,
+				path: `/statistic/store/total-order/year?year=${year}`,
 				method: 'GET',
 				type: ContentType.Json
 			}),

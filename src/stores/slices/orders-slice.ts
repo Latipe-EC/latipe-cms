@@ -122,7 +122,7 @@ export const
 export const
 	getTotalOrderInYear = createAsyncThunk(
 		'orders/getTotalOrderInYear',
-		async (year) => {
+		async (year: string) => {
 			const response = await api.order.getTotalOrderInYear(year);
 			return response;
 		}

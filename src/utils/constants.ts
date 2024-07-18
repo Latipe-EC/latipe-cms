@@ -37,7 +37,6 @@ export const PaymentMethodName = {
 export const paymentMethodList = [
 	{ name: PaymentMethodName.COD, icon: FaMoneyBillWave, color: "#a0a832" },
 	{ name: PaymentMethodName.PayPal, icon: FaPaypal, color: "#3265a8" },
-	{ name: PaymentMethodName.Wallet, icon: FaWallet, color: "#32a86d" },
 ];
 
 export const ErrorMessage = {

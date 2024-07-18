@@ -20,8 +20,6 @@ export const createProduct = createAsyncThunk(
 				listImage.push(file.data.url);
 			}
 		}
-		input.imagesFile = null;
-		input.images = listImage;
 
 		if (input.productVariants.length > 0) {
 			for (let i = 0; i < input.productVariants[0].options.length; i++) {
@@ -30,7 +28,6 @@ export const createProduct = createAsyncThunk(
 				input.productVariants[0].options[i].file = null;
 			}
 		}
-		console.log(input);
 		const response = await api.product.addProduct(input);
 		return response;
 	}

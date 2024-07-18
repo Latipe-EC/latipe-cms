@@ -232,19 +232,28 @@ const ProductDetailVendor = () => {
 
 	async function createBlobFromUrl(url: string): Promise<Blob> {
 		try {
-			const response = await fetch(url);
+			const secureUrl = url.replace(/^http:/, 'https:');
+			const response = await fetch(secureUrl);
 			if (!response.ok) {
-				throw new Error('Network response was not ok');
+				throw new Error(`HTTP error! status: ${response.status}`);
 			}
 			const data = await response.blob();
 			return data;
 		} catch (error) {
 			console.error('Error fetching the image:', error);
 			// Fallback to a default image
-			// Example: A small transparent PNG as a base64 string
 			const defaultImageUrl = `${window.location.origin}/not_found_img.jpg`;
-			const defaultImageBlob = await fetch(defaultImageUrl).then(res => res.blob());
-			return defaultImageBlob;
+			try {
+				const defaultImageResponse = await fetch(defaultImageUrl);
+				if (!defaultImageResponse.ok) {
+					throw new Error(`HTTP error! status: ${defaultImageResponse.status}`);
+				}
+				const defaultImageBlob = await defaultImageResponse.blob();
+				return defaultImageBlob;
+			} catch (defaultError) {
+				console.error('Error fetching the default image:', defaultError);
+				throw defaultError;
+			}
 		}
 	}
 
